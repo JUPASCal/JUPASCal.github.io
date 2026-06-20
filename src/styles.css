@@ -1325,45 +1325,102 @@ button {
 }
 
 .advisor-empty {
-  padding: var(--space-5);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
+  padding: var(--space-6);
+  /* Two-up so the wide console panel isn't half-empty: intro (eyebrow + headline
+     + lede) on the LEFT, the "what we'll check" list filling the RIGHT, and the
+     footnote spanning both at the bottom. */
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  grid-template-areas:
+    "intro checks"
+    "foot  foot";
+  align-items: start;
+  gap: var(--space-5) var(--space-6);
 }
 
-.advisor-empty h2 {
-  font-size: 1.15rem;
+/* Stack on a narrow console (small laptop / scaled-down) so the columns don't cram. */
+@media (max-width: 1024px) {
+  .advisor-empty {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "intro"
+      "checks"
+      "foot";
+  }
+}
+
+.advisor-empty-intro { grid-area: intro; }
+.advisor-empty-checks { grid-area: checks; }
+
+/* Tighter tracking than the global eyebrow — 0.06em reads loose on the Chinese
+   labels here ("風險分析" / "系統會自動檢查"); 0.03em still spaces the English caps. */
+.advisor-empty .eyebrow {
+  margin: 0 0 var(--space-2);
+  letter-spacing: 0.03em;
+}
+
+/* .advisor-empty.panel beats the generic `.panel h2/h3` rules (same class count
+   otherwise → they'd win on order). */
+.advisor-empty.panel h2 {
+  margin: 0 0 var(--space-2);
+  font-size: 1.4rem;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
 }
 
 .advisor-empty .advisor-empty-lede {
-  color: var(--muted);
-  line-height: 1.5;
   margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.65;
 }
 
-.advisor-empty-heading {
-  font-size: 0.78rem;
+.advisor-empty .advisor-empty-heading {
+  /* Top of the right column — the column gap is the section break now. */
+  margin: 0 0 var(--space-3);
+  font-size: 0.74rem;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.03em;
   color: var(--muted);
-  margin: var(--space-2) 0 var(--space-1);
 }
 
-.advisor-empty-list {
+.advisor-empty .advisor-empty-list {
   margin: 0;
-  padding-left: 18px;
+  padding: 0;
+  list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: var(--space-2);
   color: var(--ink);
-  font-size: 0.88rem;
-  line-height: 1.5;
+  font-size: 0.92rem;
+  line-height: 1.55;
 }
 
-.advisor-empty-footnote {
+.advisor-empty .advisor-empty-list li {
+  position: relative;
+  padding-left: 28px;
+}
+
+/* CSS-drawn check (no glyph → no iOS emoji-rendering risk) in the accent colour,
+   matching the "what we'll check" framing. */
+.advisor-empty .advisor-empty-list li::before {
+  content: "";
+  position: absolute;
+  left: 7px;
+  top: 0.3em;
+  width: 5px;
+  height: 9px;
+  border: solid var(--accent);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.advisor-empty .advisor-empty-footnote {
+  grid-area: foot;
   margin: 0;
   font-size: 0.78rem;
+  line-height: 1.55;
   color: var(--muted);
   border-top: 1px solid var(--line);
   padding-top: var(--space-3);
@@ -2804,6 +2861,13 @@ select {
   background: color-mix(in srgb, var(--accent) 18%, transparent);
   color: var(--accent);
   border: 1px dashed color-mix(in srgb, var(--accent) 55%, transparent);
+}
+
+.status.is-compact {
+  min-height: 18px;
+  padding: 2px 6px;
+  font-size: 0.64rem;
+  line-height: 1;
 }
 
 .result-cards {
@@ -6780,13 +6844,6 @@ select {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.16);
 }
 
-/* Invisible icon clone on the right side of a ShareButton – balances
-   the leading icon so the label sits at the button's optical centre.
-   Kept in the layout (occupies width) but visually hidden. */
-.share-btn-icon-mirror {
-  visibility: hidden;
-}
-
 .stepper-next-btn:disabled {
   opacity: 0.38;
   cursor: not-allowed;
@@ -7876,6 +7933,40 @@ select {
     margin-left: auto;
   }
 
+  .card-badges {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-left: auto;
+    flex: 0 0 auto;
+  }
+
+  .card-badges .status {
+    margin-left: 0;
+  }
+
+  .quota-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 20px;
+    padding: 3px 7px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--ink) 6%, transparent);
+    color: var(--muted);
+    font-size: 0.68rem;
+    font-weight: 900;
+    line-height: 1;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .quota-badge.is-compact {
+    min-height: 18px;
+    padding: 2px 6px;
+    font-size: 0.64rem;
+  }
+
   .card-code {
     color: var(--accent);
     letter-spacing: 0.04em;
@@ -8036,8 +8127,12 @@ select {
     font-size: 0.72rem;
   }
 
-  .compact-results .card-topline .status {
+  .compact-results .card-badges {
     grid-column: 2;
+    margin-left: 0;
+  }
+
+  .compact-results .card-topline .status {
     margin-left: 0;
   }
 
