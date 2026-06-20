@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+*.tsbuildinfo
+.DS_Store
+.env
+.env.*
+node_modules/
+dist/
+
+# Generated audit artifact (regenerate via scripts/utils/generate_audit_report.py)
+docs/audit_report.html
+
+# Local historical archive (2023/2024 versions) — kept out of the public
+# repo; full history is preserved in the backup bundle.
+/Archives/

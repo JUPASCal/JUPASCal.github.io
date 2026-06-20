@@ -1,0 +1,70 @@
+{
+  "source": "https://admissions.hkmu.edu.hk/ug/jupas-interview/",
+  "fetched": "2026-05-22",
+  "count": 9,
+  "programmes": {
+    "JS9520": {
+      "name": "Bachelor of Education with Honours\n(Putonghua and Chinese Language Education) and Bachelor of Language Studies with Honours(Chinese Linguistic Studies)",
+      "type": "interview",
+      "timing": "post-results",
+      "date": "After release of HKDSE results",
+      "format": "Group interview (30 minutes)"
+    },
+    "JS9530": {
+      "name": "Bachelor of Education with Honours in English Language Teaching and Bachelor of English Language Studies with Honours",
+      "type": "interview",
+      "timing": "post-results",
+      "date": "After release of HKDSE results",
+      "format": "Group interview (1 hour)"
+    },
+    "JS9560": {
+      "name": "Bachelor of Education with Honours (Chinese Language Teaching) and Bachelor of Language Studies with Honours (Applied Chinese Language Studies)",
+      "type": "interview",
+      "timing": "both",
+      "date": "Either before/after release of HKDSE results",
+      "format": "Group interview (1 hour)"
+    },
+    "JS9580": {
+      "name": "Bachelor of Education with Honours in Early Childhood Education (Leadership and Special Educational Needs)",
+      "type": "interview",
+      "timing": "both",
+      "date": "Either before/after release of HKDSE results",
+      "format": "Group interview (1 hour)"
+    },
+    "JSSU40": {
+      "name": "Bachelor of Nursing with Honours in General Health Care",
+      "type": "interview",
+      "timing": "both",
+      "date": "Either before/after HKDSE results",
+      "format": "Group interview & Written test (half day)"
+    },
+    "JSSU50": {
+      "name": "Bachelor of Nursing with Honours in Mental Health Care",
+      "type": "interview",
+      "timing": "both",
+      "date": "Either before/after HKDSE results",
+      "format": "Group interview & Written test (half day)"
+    },
+    "JSSU55": {
+      "name": "Bachelor of Science with Honours in Physiotherapy",
+      "type": "interview",
+      "timing": "post-results",
+      "date": "After release of HKDSE results",
+      "format": "Individual & Group interview (half day)"
+    },
+    "JSSU66": {
+      "name": "Bachelor of Science with Honours in Diagnostic Radiography",
+      "type": "interview",
+      "timing": "post-results",
+      "date": "27 July 2026",
+      "format": "Group interview & Written test (1 hour)"
+    },
+    "JSSU67": {
+      "name": "Bachelor of Science with Honours in Medical Laboratory Science",
+      "type": "interview",
+      "timing": "post-results",
+      "date": "After release of HKDSE results",
+      "format": "Group interview (half day)"
+    }
+  }
+}

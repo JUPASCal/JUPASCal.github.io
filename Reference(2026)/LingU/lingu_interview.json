@@ -1,0 +1,61 @@
+{
+  "source": "https://www.ln.edu.hk/admissions/ug/your-future-begins-now-apply/jupas-applicants/jupas-interview-arrangement",
+  "fetched": "2026-05-22",
+  "count": 9,
+  "programmes": {
+    "JS7211": {
+      "name": "BBA (Hons) - Accounting and Corporate Governance",
+      "type": "interview",
+      "timing": "pre-results",
+      "date": "26 June 2025"
+    },
+    "JS7212": {
+      "name": "BBA (Hons) - Business Analytics and Innovation",
+      "type": "interview",
+      "timing": "pre-results",
+      "date": "26 June 2025"
+    },
+    "JS7213": {
+      "name": "BBA (Hons) - Finance",
+      "type": "interview",
+      "timing": "pre-results",
+      "date": "26 June 2025"
+    },
+    "JS7214": {
+      "name": "BBA (Hons) - Human Resource Management and Analytics",
+      "type": "interview",
+      "timing": "pre-results",
+      "date": "26 June 2025"
+    },
+    "JS7215": {
+      "name": "BBA (Hons) - Marketing and Social Media",
+      "type": "interview",
+      "timing": "pre-results",
+      "date": "26 June 2025"
+    },
+    "JS7216": {
+      "name": "BBA (Hons) in Risk and Insurance Management",
+      "type": "interview",
+      "timing": "pre-results",
+      "date": "26 June 2025"
+    },
+    "JS7301": {
+      "name": "BSocSc (Hons) - Economics",
+      "type": "interview",
+      "timing": "pre-results",
+      "date": "4 June 2025"
+    },
+    "JS7306": {
+      "name": "BSocSc (Hons) - Social and Public Policy Studies",
+      "type": "interview",
+      "timing": "pre-results",
+      "date": "4 June 2025"
+    },
+    "JS7133": {
+      "name": "BA (Hons) in Animation and Digital Arts",
+      "type": "interview",
+      "timing": "post-results",
+      "date": "Late July 2025"
+    }
+  }
+}

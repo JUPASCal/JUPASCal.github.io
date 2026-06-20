@@ -1,0 +1,1852 @@
+/* Advisor Console — the desktop / iPad-landscape two-mode canvas.
+   LEFT RAIL (profile + grades + plan) | MAIN (Analyze tab default, Browse demoted).
+   Replaces the old 3-column .desktop-workspace. Sized so the rail + the Analyze
+   panel both stay visible at iPad-landscape widths (~1024px) without wrapping
+   the analysis below the fold. Reuses .desktop-grade-column / .desktop-detail-column
+   as alias wrappers so GradeInput / DetailPanel keep their existing styling.
+   Design tokens used are the ones defined in styles.css: --surface,
+   --surface-strong, --line, --ink, --muted, --accent, --shadow, --space-*. */
+
+/* Lock the DOCUMENT when the console is on screen. The .app-shell viewport lock
+   stops the SHELL scrolling, but html/body could still rubber-band — and that
+   document-level scroll/bounce is what makes iPad Safari hide/show its toolbar.
+   Scoped with :has(.advisor-console) so OTHER desktop pages (About, the share
+   view) keep scrolling normally; the console is the only one rendered locked.
+   overscroll-behavior:none kills the rubber-band; fixed position pins it so iOS
+   can't drag the page (and thus the toolbar) at all. (:has → Safari 15.4+/2022,
+   fine for iPad; older browsers simply fall back to the previous behaviour.) */
+html:has(.advisor-console),
+html:has(.advisor-console) body {
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+html:has(.advisor-console) body {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+}
+
+.advisor-console {
+  display: grid;
+  grid-template-columns: minmax(250px, 300px) minmax(0, 1fr);
+  gap: var(--space-4);
+  align-items: stretch;
+}
+
+/* ── Viewport lock (desktop / iPad ≥921px) ───────────────────────────────
+   Lock the whole console to ONE screen so the PAGE itself never scrolls —
+   page scroll is exactly what makes iOS/iPadOS Safari hide/show its toolbar
+   on every gesture. Instead the header stays fixed and the left rail + the
+   main panel each scroll INTERNALLY. `.app-shell.layout-desktop` is only
+   rendered at ≥921px, so this needs no media query and never touches mobile. */
+.app-shell.layout-desktop {
+  height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  /* The base .app-shell padding is `24px 32px 96px` (tuned for the scrolling
+     mobile/page layout). In the height-locked console that top/bottom padding
+     becomes dead band between the app and the screen edges — the 96px bottom
+     especially read as "way too much gap". Override to a tight, balanced frame;
+     box-sizing:border-box means this padding subtracts from the 100dvh content
+     area, so the panels grow to fill the reclaimed space. */
+  padding: var(--space-4) var(--space-6);
+}
+
+/* Slim top bar on the console — the big wordmark wasted vertical space the
+   viewport lock makes precious. Trim padding + shrink the wordmark/logo. The
+   bar's floor is the controls (profile chip + info/gear); on desktop these are
+   mouse targets, not touch, so 28px is plenty — that lets the bar sit ~32px
+   tall instead of 44px. Desktop-only; the global/mobile .app-topbar is
+   untouched. !important to be immune to base/clamp + cascade-order surprises. */
+.app-shell.layout-desktop .app-topbar {
+  padding: 2px 0 !important;
+  margin-bottom: var(--space-2) !important;
+}
+
+.app-shell.layout-desktop .app-brand-name {
+  font-size: 1.1rem !important;
+}
+
+.app-shell.layout-desktop .app-brand-logo {
+  height: 16px !important;
+  width: auto !important;
+}
+
+.app-shell.layout-desktop .profile-chip-button {
+  min-height: 28px !important;
+}
+
+/* The info/gear are fixed 36×36 boxes in the base, so min-height alone can't
+   shrink them — they'd keep the bar at ~40px. Shrink the box itself. */
+.app-shell.layout-desktop .topbar-icon {
+  width: 28px !important;
+  height: 28px !important;
+  min-height: 28px !important;
+}
+
+.app-shell.layout-desktop .advisor-console {
+  flex: 1 1 auto;
+  min-height: 0; /* let the grid shrink so its columns can scroll, not the page */
+}
+
+/* The rail was a sticky/max-height column; in the locked layout it's a normal
+   flex cell that fills the height and scrolls as a whole. */
+.app-shell.layout-desktop .console-rail {
+  position: static;
+  top: auto;
+  max-height: none;
+  height: 100%;
+  min-height: 0;
+  /* The rail no longer scrolls as a whole — the profile + grade header + footer
+     stay genuinely fixed and only the grade BODY (or, when grades are collapsed,
+     the plan list) scrolls internally. This makes the header completely stable
+     instead of drifting with sticky slack. */
+  overflow: hidden;
+}
+
+/* Main area: the tab strip stays pinned (so Analyze/Browse are reachable at any
+   scroll position) and only the active panel scrolls beneath it. */
+.app-shell.layout-desktop .console-main {
+  height: 100%;
+  min-height: 0;
+}
+
+.app-shell.layout-desktop .console-panel {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+}
+
+.app-shell.layout-desktop .console-panel::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+/* ── Left rail ─────────────────────────────────────────────────────────── */
+.console-rail {
+  position: sticky;
+  top: var(--space-4);
+  /* dvh (not vh) so the rail tracks the ACTUALLY-visible viewport as iOS
+     Safari shows/hides its toolbar — using vh leaves the rail taller than the
+     screen and makes the toolbar thrash on scroll. overscroll-behavior stops
+     the rail's own scroll from chaining to the page (another toolbar trigger). */
+  max-height: calc(100dvh - var(--space-4) - 24px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  /* Hide the rail's scrollbar chrome — it was visually distracting and ate
+     layout width (shrinking the cards). The rail still scrolls via touch /
+     trackpad / wheel; only the bar is hidden. */
+  scrollbar-width: none; /* Firefox */
+  display: flex;
+  flex-direction: column;
+  /* Match .console-main's gap so the first cards of each column line up. */
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.console-rail::-webkit-scrollbar { /* WebKit / Safari / Chrome */
+  width: 0;
+  height: 0;
+}
+
+/* The profile strip (left) and the tab strip (right) are the first flex child
+   of their column, both exactly --console-header-h tall with the same column
+   gap below, so the first CARD in each column — grade panel left, analysis panel
+   right — starts at the identical Y. Margins reset so no stray heading margin
+   nudges it. */
+.advisor-console {
+  --console-header-h: 46px;
+}
+
+.console-rail-profile {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* The rail is a flex column that overflows (it scrolls), so a min-height
+     here gets shrunk away by flex — pinning a fixed height + flex-shrink:0
+     keeps this strip the exact same height as the tab strip on the right. */
+  height: var(--console-header-h);
+  flex: 0 0 auto;
+  margin: 0;
+}
+
+.console-rail-profile > * {
+  margin: 0;
+}
+
+.console-save-btn {
+  align-self: flex-start;
+}
+
+/* The grade column inside the rail drops the sticky/own-scroll it has in the
+   old layout — the rail itself is the scroll container now. */
+.console-rail .desktop-grade-column {
+  position: static;
+  max-height: none;
+  /* Fill the rail's leftover height (when grades are expanded) and host the
+     internally-scrolling grade panel. */
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+/* Grades collapsed → the column is just the heading; give the rail's height to
+   the (now-expanded) planner instead. */
+.app-shell.layout-desktop .console-rail:has(.grade-panel.mobile-collapsed) .desktop-grade-column {
+  flex: 0 0 auto;
+}
+
+/* Collapse WORKS in the console (Done → compact summarized view, Edit → expand
+   back) — same as mobile. We only restyle the summary so it reads well in the
+   narrow rail: the desktop base lays the pills out repeat(5) (= 2 rows); force
+   all 10 onto ONE row here. Everything else (the collapse toggle, the footer
+   Done, the panel-body show/hide) is left to the shared desktop rules in
+   styles.css (~1220-1287). */
+/* Flex row so the pills always fill the width regardless of how many show
+   (E3/E4/Lang are dynamic) — each takes an equal share. */
+.console-rail .desktop-grade-column .grade-title-summary {
+  display: flex;
+  gap: 3px;
+}
+
+/* Shorter summary pills + their grade digit sized to match the grade chips
+   below (was 0.92rem, bigger than the 0.72rem chips). */
+.console-rail .desktop-grade-column .grade-summary-cell {
+  flex: 1 1 0;
+  padding: 3px 2px;
+  gap: 1px;
+  border-radius: 9px;
+}
+.console-rail .desktop-grade-column .grade-summary-cell em {
+  font-size: 0.72rem;
+}
+
+/* Collapsed grade card: the shared `.grade-panel .panel-heading` has a 24px
+   bottom margin meant to separate the heading from the (now-hidden) grade grid.
+   Collapsed, that margin becomes dead space under the summary pills → tighten it. */
+.console-rail .desktop-grade-column .grade-panel.mobile-collapsed .panel-heading {
+  margin-bottom: 0;
+}
+
+/* Collapsed grade card: trim the panel's 24px padding so the box hugs the
+   summary pills, freeing vertical space for the plan list below it. */
+.console-rail .desktop-grade-column .grade-panel.mobile-collapsed {
+  padding-top: var(--space-3);
+  padding-bottom: var(--space-3);
+}
+
+/* Smaller "Input Your DSE Grades" heading + smaller Edit/Done toggle on the
+   console — the full-size step heading is oversized for the slim rail. */
+.console-rail .desktop-grade-column .step-title-content h2 {
+  font-size: 1.05rem;
+}
+
+.console-rail .desktop-grade-column .mobile-collapse-toggle {
+  padding: 4px 10px;
+  font-size: 0.78rem;
+  min-height: 0;
+}
+
+/* Grades on ONE row per subject. Stack the subject label above the chips, and
+   lay the chips out with flex so each is an EQUAL share of the row width. This
+   keeps the 8-chip DSE scale on one line AND gives CSD (only A/U) two wide
+   buttons — like the mobile flow — instead of two tiny grid cells. */
+.console-rail .desktop-grade-column .grade-grid {
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-3);
+  margin-top: 12px;
+}
+
+.console-rail .desktop-grade-column .grade-grid .field {
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 4px;
+}
+
+.console-rail .desktop-grade-column .grade-grid .field > span {
+  font-size: 0.8rem;
+}
+
+/* Match the elective dropdowns to the core-subject label size (was 1rem,
+   which read oversized next to the 0.8rem core labels) and slim the bar down
+   from the base 42px tap-target — desktop is mouse-driven and the rail space
+   is precious under the viewport lock. */
+.console-rail .desktop-grade-column .elective-row select {
+  font-size: 0.8rem;
+  min-height: 30px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.console-rail .desktop-grade-column .grade-buttons {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 4px;
+}
+
+.console-rail .desktop-grade-column .grade-buttons .grade-chip {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 5px 2px;
+  font-size: 0.72rem;
+}
+
+/* (1) The whole grade header toggles collapse — show it's tappable. */
+.console-rail .desktop-grade-column .panel-heading.is-tappable {
+  cursor: pointer;
+  user-select: none;
+}
+
+/* (2) Grade card = fixed header + internally-scrolling body + sticky footer.
+   The card fills the column; only .grade-panel-body scrolls, so the header and
+   the Reset/Done footer stay completely fixed. Collapsing hides the body (and
+   thus the footer) already. */
+.console-rail .desktop-grade-column .grade-panel {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.console-rail .desktop-grade-column .grade-panel-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.console-rail .desktop-grade-column .grade-panel-body::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+.console-rail .desktop-grade-column .grade-footer-actions {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  gap: var(--space-2);
+  margin: 0;
+  padding: var(--space-2) 0 0;
+  background: var(--surface-mix);
+  border-top: 1px solid var(--line);
+}
+/* Slimmer Reset / Done so the sticky band takes less space. */
+.console-rail .desktop-grade-column .grade-footer-actions .grade-reset-button,
+.console-rail .desktop-grade-column .grade-footer-actions .done-button {
+  min-height: 30px;
+  padding: 0 var(--space-2);
+  font-size: 0.78rem;
+  border-radius: 8px;
+}
+
+/* ── Compact preference plan (console-only PreferencePlanner) ───────────── */
+/* Compact one-line heading: title + a count chip, instead of the old
+   eyebrow / title / subtitle stack that ate ~3 lines of the rail. */
+/* .panel.preference-planner-panel has specificity (0,3,0) so it beats
+   the general .console-rail .panel (0,2,0) rule — padding-top wins.
+   min-height prevents the panel being flex-crushed below one full heading
+   row (top-pad + h2 + bottom-pad ≈ 56px), which was leaving the text with
+   no visible space below it. */
+.console-rail .panel.preference-planner-panel {
+  gap: var(--space-2);
+  padding-top: 16px;
+  /* don't let the rail's flex shrink the panel below its content */
+  flex-shrink: 0;
+}
+
+/* ── Programme-choices collapses while grades are EXPANDED ───────────────
+   When the grade card is open it owns the rail; the planner shrinks to JUST
+   its "Programme choices (n)" heading (no search, no list, no subtitle) so it
+   doesn't get flex-crushed into an unreadable sliver. Once grades collapse
+   (the normal advisor state) the planner expands fully again — handled by the
+   :has(.grade-panel.mobile-collapsed) rules further down.
+   Selector targets the rail WITHOUT a collapsed grade panel = grades expanded.
+   !important beats the base .planner-quickadd-trigger{display:flex} / .plan-list
+   {display:flex} that sit later in this file. */
+.app-shell.layout-desktop .console-rail:not(:has(.grade-panel.mobile-collapsed)) .planner-quickadd-trigger,
+.app-shell.layout-desktop .console-rail:not(:has(.grade-panel.mobile-collapsed)) .plan-list,
+.app-shell.layout-desktop .console-rail:not(:has(.grade-panel.mobile-collapsed)) .planner-subtitle {
+  display: none !important;
+}
+
+/* Hide the "STEP 1" eyebrow on the console grade card — it's redundant in the
+   advisor layout and added height. (Mobile keeps it.) */
+.console-rail .desktop-grade-column .grade-panel .panel-heading .eyebrow {
+  display: none;
+}
+
+/* Section titles ("Core Subjects" / "Electives") inherit base .panel h3
+   margin (0 0 24px). Tighten to 12px top+bottom in the console to save
+   vertical space in the narrow rail. */
+.console-rail .desktop-grade-column .grade-section-title {
+  margin: 12px 0 0;
+}
+
+/* Tighten the rule between Core Subjects / Electives (base margin 24px). */
+.console-rail .desktop-grade-column .grade-section-divider {
+  margin: 12px 0;
+}
+
+/* Tighten the Electives block top gap (base margin-top 24px). */
+.console-rail .desktop-grade-column .elective-block {
+  margin-top: 12px;
+}
+
+/* "Input Your DSE Grades" → the same small muted-uppercase section label as
+   "Programme choices", instead of the big serif h2. */
+.console-rail .desktop-grade-column .grade-panel .panel-heading .step-title-content h2 {
+  font-family: inherit;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  line-height: 1.2;
+}
+
+/* Tighten the heading → grade/summary gap (the shared rule uses a big 24px
+   gap + 24px heading margin meant for the full-size serif heading). Shrink the
+   Edit toggle so it doesn't tower over the now-small heading. */
+.console-rail .desktop-grade-column .grade-panel .panel-heading {
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+  align-items: center;
+  /* Fixed header of the grade card (the body scrolls beneath it). */
+  flex: 0 0 auto;
+}
+
+.console-rail .desktop-grade-column .grade-panel .panel-heading .grade-title-summary {
+  margin-top: var(--space-1);
+}
+
+.console-rail .desktop-grade-column .mobile-collapse-toggle {
+  min-height: 0;
+  padding: 4px 10px;
+  font-size: 0.74rem;
+}
+
+/* Match the app's section-label style (the muted uppercase ".eyebrow" used by
+   "YOUR CHANCES" / "BAND A") so the planner header reads consistently instead
+   of as a lone mismatched serif h2. */
+.console-rail .preference-planner-panel .planner-heading h2 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font-family: inherit;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.console-rail .preference-planner-panel .planner-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+/* A vertical card list that fits the narrow rail. No upper cap: it grows with
+   the picks; it scrolls internally once grades are collapsed (rule further down). */
+.plan-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* Two-line pick card tuned for the narrow rail:
+   row 1 = slot badge · code · institution · risk pill · actions
+   row 2 = full programme name (ellipsis), spanning past the slot badge.
+   grid-areas keep the name on its own full-width line instead of fighting the
+   code/tag/actions for horizontal room. */
+.plan-item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    "slot top  actions"
+    "slot name name";
+  align-items: center;
+  column-gap: 7px;
+  row-gap: 1px;
+  padding: 6px 8px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface-strong);
+}
+
+/* The shift animation is applied ONLY while a drag is active (.is-reordering on
+   the list), and never to the dragged row itself. On release the class drops, so
+   the transforms clear INSTANTLY with no transition — no animate-back "rebound"
+   (the data has already been reordered into the final positions). */
+.plan-list.is-reordering .plan-item:not(.is-dragging) {
+  transition: transform 0.16s ease;
+}
+
+/* While a drag is in progress, kill text selection across the WHOLE list (not
+   just the handle) — on iPad the finger sweeps over the code/name text and
+   would otherwise start a selection. */
+.plan-list.is-reordering,
+.plan-list.is-reordering * {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.plan-item.is-active {
+  border-color: var(--accent);
+}
+
+.plan-item.is-empty {
+  background: transparent;
+  border-style: dashed;
+  grid-template-areas: "slot name name";
+}
+
+.plan-slot {
+  grid-area: slot;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  min-width: 22px;
+  height: 100%;
+  padding: 0 5px;
+  border-radius: 6px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  font-weight: 800;
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+
+/* Draggable slot pill = the reorder handle. The grip dots + grab cursor + a
+   subtle tint make it read as "grab me to reorder" (vs the old bare badge). iOS
+   needs the -webkit- prefixes + -webkit-touch-callout:none to stop the
+   long-press text-selection/magnifier when grabbing. */
+.plan-slot.is-draggable {
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  background: var(--active);
+  border-color: color-mix(in srgb, var(--accent) 35%, var(--line));
+  color: var(--accent);
+}
+
+.plan-grip {
+  flex: 0 0 auto;
+  fill: currentColor;
+  opacity: 0.55;
+}
+
+.plan-slot-label {
+  line-height: 1;
+}
+
+.plan-slot.is-draggable:active {
+  cursor: grabbing;
+}
+
+/* The row being dragged: lifts above the others, follows the finger with no
+   transition lag, and shows the grab state. */
+.plan-item.is-dragging {
+  transition: none;
+  position: relative;
+  z-index: 3;
+  border-color: var(--accent);
+  box-shadow: var(--shadow);
+  cursor: grabbing;
+}
+
+/* The clickable wrapper places its two spans into the grid areas directly. */
+.plan-main {
+  display: contents;
+  appearance: none;
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.plan-line {
+  grid-area: top;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  cursor: pointer;
+}
+
+.plan-code {
+  font-weight: 800;
+  font-size: 0.82rem;
+  color: var(--ink);
+  flex: 0 0 auto;
+}
+
+.plan-inst {
+  font-size: 0.7rem;
+  color: var(--muted);
+  flex: 0 0 auto;
+}
+
+/* push the risk pill to the right edge and never let it stretch */
+.plan-tag {
+  margin-left: auto;
+  flex: 0 0 auto;
+}
+
+.plan-name {
+  grid-area: name;
+  font-size: 0.76rem;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.plan-empty-hint {
+  grid-area: name;
+  font-size: 0.76rem;
+  color: var(--muted);
+}
+
+/* Remove (✕) — kept (the ▲▼ arrows were dropped in favour of drag). Sits in the
+   actions grid area, top-aligned; always visible since iPad has no hover. */
+.console-rail .plan-remove {
+  grid-area: actions;
+  align-self: start;
+  width: 20px;
+  height: 20px;
+  min-height: 0;
+  padding: 0;
+  font-size: 0.68rem;
+}
+
+/* ── Plan list scrolls INTERNALLY when grades are collapsed ──────────────
+   In the normal advisor state (grades collapsed) the planner takes the rail's
+   leftover height, the heading + quick-add + share stay pinned, and only the
+   plan LIST scrolls — so picks below the fold are reachable without scrolling
+   the whole rail. When grades are EXPANDED the rail scrolls as a whole instead. */
+.app-shell.layout-desktop .console-rail:has(.grade-panel.mobile-collapsed) {
+  overflow: hidden;
+}
+
+.app-shell.layout-desktop .console-rail:has(.grade-panel.mobile-collapsed) .preference-planner-panel {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.app-shell.layout-desktop .console-rail:has(.grade-panel.mobile-collapsed) .plan-list {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  /* inner padding so an active card's border isn't clipped by the overflow */
+  padding: 1px;
+  margin: -1px;
+}
+
+.app-shell.layout-desktop .console-rail:has(.grade-panel.mobile-collapsed) .plan-list::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+/* Share buttons: in the narrow rail two side-by-side buttons truncated, so
+   stack them full-width. */
+.console-rail .planner-share {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: var(--space-2);
+}
+
+.console-rail .planner-share > * {
+  width: 100%;
+}
+
+.console-rail .planner-share button {
+  width: 100%;
+  white-space: nowrap;
+}
+
+/* ── Main area ─────────────────────────────────────────────────────────── */
+.console-main {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.console-tabs {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+  height: var(--console-header-h); /* match .console-rail-profile so cards below align */
+  flex: 0 0 auto;
+}
+
+.console-tab {
+  appearance: none;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 8px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  transition: all 0.18s ease;
+}
+
+.console-tab:hover {
+  background: var(--surface-strong);
+}
+
+/* First tab swaps between "Analysis" and "← Back to analysis"; let it size to
+   its content (compact "Analysis", wider only while in detail). */
+.console-tabs > .console-tab:first-child {
+  justify-content: center;
+}
+
+/* Back-arrow (only rendered in detail view) sits tight before the label. */
+.console-back-arrow {
+  flex: 0 0 auto;
+  width: 15px;
+  height: 15px;
+}
+
+/* Selected tab → conventional soft --active highlight + accent text, with the
+   accent-tinted outline kept (matches the rest of the app's selected-pill
+   convention instead of a loud solid-red fill). */
+.console-tab.is-active {
+  background: var(--active);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.console-tab.is-active:hover {
+  background: var(--active);
+}
+
+/* In detail view the tab is the "← Back to analysis" affordance — same
+   highlighted look as a selected tab. */
+.console-tab.is-back {
+  background: var(--active);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.console-tab.is-back:hover {
+  background: var(--active);
+}
+
+.console-tab-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: var(--surface-strong);
+  color: var(--muted);
+}
+
+.console-tab.is-active .console-tab-badge {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* Share buttons live on the tabs row, pushed to the right edge. Compact so the
+   tabs + both buttons fit the main area's width at iPad sizes. */
+.console-tabs-share {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.console-tabs-share .share-button,
+.console-tabs-share button {
+  min-height: 32px;
+  padding: 4px 12px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.console-panel {
+  min-width: 0;
+}
+
+/* ── Tighter panels in the console ──────────────────────────────────────── */
+/* Base .panel has border-radius:26px + padding:var(--space-5) — very round
+   and spacious, designed for the full-page mobile step. In the console the
+   rail is narrow and every pixel counts, so trim both. */
+.console-rail .panel {
+  border-radius: 16px;
+  padding: 16px;
+}
+/* The right-side main panels (browse, analyze) carry the same 26px radius
+   via their parent container; match them to the rail. */
+.app-shell.layout-desktop .console-panel {
+  border-radius: 16px;
+}
+/* The analyze + browse panels have inner section.panel children that inherit
+   base .panel border-radius (26px). Override to match the rail's 16px. */
+.console-analyze .panel,
+.console-browse .panel {
+  padding: 16px;
+  border-radius: 16px;
+}
+
+/* The detail drill-in: reuses the DetailPanel. The "back to analysis" affordance
+   is the Analysis tab itself, which becomes "← Analysis" while in detail view. */
+.console-detail {
+  display: flex;
+  flex-direction: column;
+}
+
+.console-detail .desktop-detail-column {
+  position: static;
+  max-height: none;
+  overflow: visible;
+}
+
+/* ── Alternative / safety suggestions (console analysis block) ──────────── */
+/* Rendered inside AnalysisBody after the findings. Reuses the .chance-row card
+   family (same border/radius/surface/hover) so it reads as one analysis, not a
+   bolted-on list. Each row: identity line (code · school · "Above UQ" tag), the
+   programme name (ellipsis), a muted "backup for…" caption, and a compact
+   accent "Add" pill — one clear action per row, no competing right-side chips. */
+.analysis-suggestions {
+  margin-top: var(--space-4);
+}
+
+.suggest-intro,
+.suggest-empty {
+  margin: 0 0 var(--space-3);
+  font-size: 0.82rem;
+}
+
+/* Mobile collapsible header (desktop omits `collapsible` and shows the static
+   .analysis-section-head instead). Styled as a tappable CARD — bordered, tinted,
+   with a chevron in an accent badge — so it clearly reads as an expandable panel
+   rather than a static section label. */
+.suggest-toggle {
+  appearance: none;
+  cursor: pointer;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin: 0;
+  padding: var(--space-3);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--line));
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--accent) 5%, var(--surface-strong));
+  text-align: left;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.suggest-toggle.open {
+  margin-bottom: var(--space-2);
+}
+/* Promote the heading from a faint eyebrow to a readable panel title. */
+.suggest-toggle .eyebrow {
+  margin: 0;
+  color: var(--ink);
+}
+.suggest-toggle-end {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex: 0 0 auto;
+}
+.suggest-toggle-end .muted {
+  font-size: 0.74rem;
+}
+/* Chevron in a circular accent badge — the clear "expand me" affordance. */
+.suggest-chevron {
+  box-sizing: border-box;
+  width: 24px;
+  height: 24px;
+  padding: 5px;
+  border-radius: 999px;
+  color: #fff;
+  background: var(--accent);
+  transition: transform 0.18s ease;
+  flex: 0 0 auto;
+}
+.suggest-toggle.open .suggest-chevron {
+  transform: rotate(180deg);
+}
+@media (hover: hover) and (pointer: fine) {
+  .suggest-toggle:hover {
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 9%, var(--surface-strong));
+  }
+}
+
+.suggest-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* Desktop console: the stacked cards leave the wide panel's right half empty, so
+   lay them out two-up. A lone card spans the full width (no awkward half card),
+   and the action row pins to the bottom so side-by-side cards align. Mobile keeps
+   the single-column flex above. */
+.console-analyze .suggest-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+.console-analyze .suggest-list > :only-child {
+  grid-column: 1 / -1;
+}
+.console-analyze .suggest-foot {
+  margin-top: auto;
+}
+
+.suggest-row {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-2);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  padding: var(--space-2) var(--space-3);
+}
+
+/* Action + stat live on a bottom row so the programme name above gets the full
+   card width (long names truncate far less). Stat on the left, Add on the right. */
+.suggest-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+/* Swap + Add live together on the right; they wrap below the stat on a narrow
+   card rather than overflowing. */
+.suggest-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-left: auto;
+}
+
+/* The whole card opens the programme detail (the "Add to plan" button inside
+   stops propagation). Highlight it on hover/focus, the same affordance the
+   per-pick chance rows use. */
+.suggest-row.is-clickable {
+  cursor: pointer;
+}
+.suggest-row.is-clickable:hover,
+.suggest-row.is-clickable:focus-visible {
+  border-color: var(--accent);
+  background: var(--hover);
+  outline: none;
+}
+
+.suggest-main {
+  min-width: 0;
+}
+
+.suggest-info {
+  min-width: 0;
+}
+
+.suggest-line {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.suggest-code {
+  font-weight: 900;
+  font-size: 0.9rem;
+  color: var(--ink);
+  flex: 0 0 auto;
+}
+
+.suggest-inst {
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  flex: 0 0 auto;
+}
+
+/* Inline with the identity (not pushed to the far edge) so it doesn't pair up
+   visually with the Add button on the right. */
+.suggest-tag {
+  flex: 0 0 auto;
+}
+
+.suggest-name {
+  margin: 2px 0 0;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.suggest-meta {
+  margin: 2px 0 0;
+  font-size: 0.74rem;
+  color: var(--muted);
+}
+
+/* Score vs median as a discrete two-cell readout instead of run-on text in the
+   caption: each side gets a tiny label over its number, split by a hairline, so
+   it reads as data (your score, comfortably clear of the median) at a glance.
+   The lighter surface-strong fill lifts it off the card. */
+.suggest-stat {
+  display: inline-flex;
+  align-items: stretch;
+  gap: 10px;
+  padding: 4px 11px;
+  border-radius: 9px;
+  border: 1px solid var(--line);
+  background: var(--surface-strong);
+  font-variant-numeric: tabular-nums;
+}
+.suggest-stat-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.15;
+}
+.suggest-stat-label {
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.suggest-stat-you {
+  font-size: 0.92rem;
+  font-weight: 900;
+  color: var(--good);
+}
+.suggest-stat-med {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: var(--ink);
+}
+.suggest-stat-div {
+  width: 1px;
+  align-self: stretch;
+  background: var(--line);
+}
+
+/* Compact accent pill — clearly the row's action without out-weighting the
+   content; fills solid on hover. */
+.suggest-add,
+.suggest-swap {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  appearance: none;
+  cursor: pointer;
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--line));
+  font-size: 0.78rem;
+  font-weight: 800;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+/* Add = outline (secondary); Swap = filled accent (primary action for a backup —
+   it replaces the reach in place). */
+.suggest-add {
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface-strong));
+  color: var(--accent);
+}
+.suggest-swap {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+.suggest-add:hover,
+.suggest-add:focus-visible {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+  outline: none;
+}
+.suggest-swap:hover,
+.suggest-swap:focus-visible {
+  background: color-mix(in srgb, var(--accent) 85%, black);
+  border-color: color-mix(in srgb, var(--accent) 85%, black);
+  outline: none;
+}
+
+/* "Show N more / fewer" reveal under the suggestion list. */
+.suggest-more {
+  appearance: none;
+  cursor: pointer;
+  margin-top: var(--space-2);
+  align-self: flex-start;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--surface-strong);
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+.suggest-more:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Mobile: keep the stat + Swap/Add on ONE row (it otherwise wrapped the buttons
+   to a second line). Compact the stat and buttons enough that even the widest
+   stat (e.g. PolyU "258.5 | 218") fits; the stat may shrink/scroll its numbers
+   before the buttons get squeezed. */
+@media (max-width: 920px) {
+  .suggest-foot {
+    flex-wrap: nowrap;
+  }
+  .suggest-actions {
+    flex-wrap: nowrap;
+    gap: 5px;
+  }
+  .suggest-stat {
+    min-width: 0;
+    padding: 3px 8px;
+    gap: 7px;
+  }
+  .suggest-stat-you,
+  .suggest-stat-med {
+    font-size: 0.8rem;
+  }
+  .suggest-add,
+  .suggest-swap {
+    padding: 6px 10px;
+    font-size: 0.72rem;
+  }
+}
+
+/* Console analysis is a plain block stack; without this the disclaimer card
+   sits flush against the panel above it (looks like one box). Matches the gap
+   the standalone analysis page gets from .share-view. */
+.console-analyze .share-disclaimer {
+  margin-top: var(--space-4);
+}
+
+/* ── Quick-add: trigger + near-fullscreen search popout ─────────────────── */
+/* The field is a TRIGGER button; tapping opens a near-fullscreen popout that is
+   PORTALED to <body> (escapes the rail's overflow:hidden + any ancestor
+   containing block) — an inline dropdown got clipped to one row and the iPad
+   keyboard covered it. */
+.planner-quickadd-trigger {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+  padding: 9px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.9rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.planner-quickadd-trigger:hover {
+  border-color: var(--accent);
+}
+
+.planner-quickadd-trigger svg {
+  flex: 0 0 auto;
+  color: var(--muted);
+}
+
+.quickadd-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: max(var(--space-4), env(safe-area-inset-top, 0px)) var(--space-4)
+           max(var(--space-4), env(safe-area-inset-bottom, 0px));
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.quickadd-sheet {
+  width: min(640px, 100%);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: var(--surface-mix);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.quickadd-sheet-bar {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.quickadd-search-icon {
+  flex: 0 0 auto;
+  display: inline-flex;
+  color: var(--muted);
+}
+
+.quickadd-close {
+  flex: 0 0 auto;
+  min-height: 42px;
+  padding: 0 16px;
+  font-weight: 700;
+}
+
+.planner-quickadd-input {
+  flex: 1 1 auto;
+  width: 100%;
+  box-sizing: border-box;
+  font: inherit;
+  font-size: 1rem; /* ≥16px so iOS doesn't zoom on focus */
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.planner-quickadd-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+/* Scroll region holds the results; the search bar above stays pinned. */
+.quickadd-results {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+.planner-quickadd-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.planner-quickadd-option {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: baseline;
+  gap: var(--space-2);
+  padding: 11px 10px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.planner-quickadd-option:hover,
+.planner-quickadd-option:active,
+.planner-quickadd-option:focus-visible {
+  background: var(--active);
+  outline: none;
+}
+
+.planner-quickadd-option b {
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+
+.planner-quickadd-name {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.planner-quickadd-option small {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.planner-quickadd-empty {
+  margin: 0;
+  padding: var(--space-3);
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+/* ── Browse tab — match the console's compact, unified styling ──────────── */
+/* The programme picker (FiltersBar + ResultsView) renders here behind the
+   "Browse" tab. Its base styling is tuned for the full-width mobile step; in the
+   console it needs the same small section-label headings, tighter padding, and
+   single-row institution pills as the rest of the console. All scoped to
+   .console-browse so mobile / standalone stay untouched. */
+
+/* Heading → small muted uppercase label (like "Programme choices"), not the
+   big serif h2. */
+.console-browse .filters-title h2 {
+  font-family: inherit;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.console-browse .filters-title-count {
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin-block-start: 0;
+}
+
+/* Sticky filters + search bar (like Step 2): as the panel scrolls, the search
+   bar and filter pills stay pinned to the top so they're always reachable while
+   the results scroll under them. Base .filters-sticky-group is display:contents;
+   make it a real sticky block. The panel (.console-browse) is the scroll
+   container; its 16px padding sets the offsets so the bar tucks to the edge. */
+/* The inner section.panel inherits base .panel `overflow:hidden`, which would
+   capture position:sticky (making the non-scrolling section the sticky context
+   and killing the effect). Let it overflow visibly so sticky binds to the
+   actual scroll container, .console-panel. Drop the inherited box-shadow too —
+   with overflow:visible it bled out as a "weird shadow" behind the sticky bar. */
+.console-browse.console-panel > .panel {
+  overflow: visible;
+  box-shadow: none;
+  /* No top border/padding offset between the scroll edge and the sticky bar,
+     so the bar pins truly flush (the 1px border was the "moves ~1px" drift).
+     The box outline moves to the scroll container itself (below) so it stays
+     fixed while the content scrolls inside it. */
+  border: none;
+  padding-top: 0;
+  background: transparent;
+}
+
+/* Box outline on the SCROLL CONTAINER (not the inner section) — a border here
+   stays fixed while results scroll inside, so we keep the framed look without
+   the 1px sticky-bar drift. */
+.console-browse.console-panel {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface-mix);
+}
+
+.app-shell.layout-desktop .console-browse.console-panel {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.app-shell.layout-desktop .console-browse.console-panel > .panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.console-browse .filters-sticky-group {
+  display: block;
+  position: static;
+  z-index: 5;
+  background: var(--surface-mix);
+  margin: 0 -16px 0;
+  padding: 16px 16px var(--space-4);
+}
+
+/* Tighter padding (base uses space-5/space-6 meant for the wide mobile step). */
+.console-browse .filters-topline {
+  grid-template-columns: 1fr;
+  gap: var(--space-2);
+  padding: 0;
+}
+
+.console-browse .filters-panel {
+  gap: var(--space-3);
+  padding: var(--space-2) 0 0;
+}
+
+/* (Filter↔table gap now lives on .filters-sticky-group's bottom padding so it
+   stays visible under the pinned bar while scrolling.) */
+
+/* ── Filter button works like Step 2; Compact removed ──────────────────── */
+/* Drop the Compact toggle in the console — the table IS the dense view here. */
+.console-browse .compact-toggle {
+  display: none;
+}
+
+.console-browse .sort-toggle,
+.console-browse .sort-panel {
+  display: none;
+}
+
+/* Filter button: icon + "Filter" label (auto width like the compact button
+   was), toggles the filter panel open/closed. */
+.console-browse .filter-toggle {
+  width: auto;
+  gap: var(--space-2);
+  padding: 0 var(--space-3);
+  font-size: 0.82rem;
+  font-weight: 850;
+}
+.console-browse .filter-toggle-label {
+  display: inline;
+}
+
+/* Points / % segmented toggle for the benchmark-diff columns. Desktop-console
+   only — it drives the table's DeltaCell, which mobile (card view) doesn't use,
+   so it's hidden everywhere else. */
+.delta-toggle { display: none; }
+.console-browse .delta-toggle {
+  display: inline-flex;
+  align-items: stretch;
+  flex: 0 0 auto;
+  height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--surface-strong);
+}
+.console-browse .delta-toggle button {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 850;
+  padding: 0 11px;
+  cursor: pointer;
+  transition: background 160ms ease, color 160ms ease;
+}
+.console-browse .delta-toggle button.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* Collapse the filter panel when closed (Step-2 behaviour): only the search
+   row + the Filter button stay; the institution pills + advanced filters hide.
+   When the panel is closed, the gap below it also collapses. */
+.console-browse .filters-panel.mobile-closed {
+  display: none;
+}
+.console-browse .filters-sticky-group:not(.filters-open) {
+  padding-bottom: 16px;
+}
+
+
+.console-browse .institution-pills {
+  /* base is `display:grid; repeat(5,…)` → forces 2 rows for 9 institutions.
+     Override to a single nowrap flex row that scrolls horizontally. */
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  min-width: 0;
+  gap: var(--space-2);
+  scrollbar-width: none;
+}
+
+.console-browse .institution-pills::-webkit-scrollbar {
+  height: 0;
+}
+
+.console-browse .institution-pills .pill {
+  flex: 0 0 auto;
+}
+
+/* Slightly smaller, denser pills to match the rail. */
+.console-browse .pill {
+  font-size: 0.78rem;
+  padding: 5px 11px;
+}
+
+/* ── Round 2 polish (owner feedback) ─────────────────────────────────────
+   (1) "All" reset inline in front of the institution pills — base
+       .institution-filter-group is flex-direction:column, so the reset
+       stacked on a row above the pills.
+   (2) Programme count inline beside the heading with a "·" separator
+       (base .filters-title is a column).
+   (3) Drop the redundant "Programme search" field label.
+   (4) Compact/Filter buttons line up with the search input — automatic once
+       the label span is gone, since .search-row is align-items:stretch and
+       .search-field then collapses to just the input.
+   (6) "Score range" on one line beside a trimmed dropdown (base
+       .score-range-filter is a column, and its select min-width:160px
+       squeezed the label). */
+
+/* (1) All + pills share one row — base is display:grid so must override to flex */
+.console-browse .institution-filter-group {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  min-width: 0;
+}
+.console-browse .institution-reset {
+  flex: 0 0 auto;
+}
+
+/* (2) heading + count on one baseline, dot between — base is block so need display:flex */
+.console-browse .filters-title {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+.console-browse .filters-title-count::before {
+  content: "·";
+  margin-right: var(--space-2);
+  color: var(--muted);
+}
+
+/* (3) hide the "Programme search" label text */
+.console-browse .search-field > span {
+  display: none;
+}
+
+/* Clear (×) button, left of the search icon. Console-only (the mobile Step-2
+   search bar is intentionally left untouched). The search icon is a background
+   image on the input at `right var(--space-3)`; the × sits just left of it and
+   the input reserves room on the right for both. */
+.search-clear { display: none; }
+.console-browse .search-field {
+  position: relative;
+}
+.console-browse .search-field input {
+  padding-right: calc(var(--space-6) + 26px);
+}
+.console-browse .search-clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 50%;
+  right: calc(var(--space-3) + 24px);
+  transform: translateY(-50%);
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: var(--surface-strong);
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 160ms ease, background 160ms ease;
+}
+.console-browse .search-clear:hover {
+  color: var(--ink);
+  background: var(--active);
+}
+
+/* (6) score-range label on one line; trim the dropdown; push to the right edge
+   of the filter row (it sits in the advanced-filters grid's 1fr track). */
+.console-browse .score-range-filter {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-2);
+  justify-self: end;
+}
+.console-browse .score-range-filter .filter-label-text {
+  white-space: nowrap;
+}
+/* The base select is 42px tall / 16px font — far taller than the 26px pills
+   next to it, so it looked oversized and crowded the table header below.
+   Match it to the pill height + the denser console look. */
+.console-browse .score-range-filter select {
+  min-width: 0;
+  flex: 0 1 190px;
+  min-height: 0;
+  height: 28px;
+  padding: 0 28px 0 11px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  background-color: var(--surface);
+}
+
+.console-browse .results-panel {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* In desktop Browse, only the results body scrolls. That gives the table header
+   one clear sticky container instead of competing with the filter block. */
+.console-browse .table-shell {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-height: none;
+}
+
+/* Fit the 8-column table into the narrow console panel: fixed layout with
+   explicit column widths so the PROGRAMME column absorbs the slack (and its
+   name truncates) while the benchmark columns (LQ/Median/UQ) stay tight. */
+.console-browse .results-table {
+  table-layout: fixed;
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.82rem;
+}
+.console-browse .results-table thead {
+  top: 0;
+}
+.console-browse .results-table thead th {
+  top: 0;
+  background: color-mix(in srgb, var(--surface-strong) 62%, var(--thead));
+  /* Hairline separator only — the soft drop shadow read as an unwanted
+     "shadow" under the header row. */
+  box-shadow: 0 1px 0 var(--line);
+}
+.console-browse .results-table th,
+.console-browse .results-table td {
+  padding: 10px 8px;
+  vertical-align: middle;
+}
+/* Center every column except the Programme name (col 1, stays left). */
+.console-browse .results-table th:not(:first-child),
+.console-browse .results-table td:not(:first-child) {
+  text-align: center;
+}
+.console-browse .results-table th:first-child,
+.console-browse .results-table td:first-child {
+  padding-left: 12px;
+}
+.console-browse .results-table th:last-child,
+.console-browse .results-table td:last-child {
+  padding-right: 12px;
+}
+/* Column widths (8 cols). Programme = auto (takes the remainder); the rest
+   fixed to just fit their content. */
+.console-browse .results-table th:nth-child(2),  /* School (short codes) */
+.console-browse .results-table td:nth-child(2) { width: 64px; }
+.console-browse .results-table th:nth-child(3),  /* Status (pill min ~92) */
+.console-browse .results-table td:nth-child(3) { width: 92px; }
+.console-browse .results-table th:nth-child(4),  /* Score (5-char number) */
+.console-browse .results-table td:nth-child(4) { width: 54px; }
+.console-browse .results-table th:nth-child(5),  /* Band */
+.console-browse .results-table td:nth-child(5) { width: 100px; }
+.console-browse .results-table th:nth-child(6),  /* LQ */
+.console-browse .results-table td:nth-child(6),
+.console-browse .results-table th:nth-child(7),  /* Median */
+.console-browse .results-table td:nth-child(7),
+.console-browse .results-table th:nth-child(8),  /* UQ */
+.console-browse .results-table td:nth-child(8) { width: 82px; }
+
+/* Flat rows — no resting tint / zebra striping. Row separation comes from the
+   base td border-bottom; hover + picked stay as interaction feedback. */
+.console-browse .results-table tbody tr {
+  background: transparent;
+}
+.console-browse .results-table tbody tr:hover,
+.console-browse .results-table tbody tr.selected {
+  background: color-mix(in srgb, var(--hover) 82%, var(--surface-strong));
+}
+.console-browse .results-table tbody tr.picked {
+  background: color-mix(in srgb, var(--active) 82%, var(--surface-strong));
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+
+.console-browse .results-table .programme-cell-head {
+  align-items: center;
+}
+
+.console-browse .results-table .pick-button {
+  width: 20px;
+  height: 20px;
+  flex-basis: 20px;
+  background: var(--surface-strong);
+}
+
+/* The resting-state rule above (0,3,0) outranks the base `.pick-button.picked`
+   (0,2,0), so without this it would also paint the PICKED box with the light
+   surface — leaving the light-coloured tick invisible on it. Restore the accent
+   fill + a white tick for the checked state. */
+.console-browse .results-table .pick-button.picked {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.console-browse .results-table .programme-cell-text strong {
+  color: var(--ink);
+  font-size: 0.86rem;
+  line-height: 1.05;
+}
+
+/* Programme name truncates within its (auto-sized) column instead of forcing
+   the table wider than the panel. */
+.console-browse .results-table .programme-cell-text {
+  min-width: 0;
+}
+.console-browse .results-table .programme-cell-text > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  white-space: normal;
+  max-width: 100%;
+  line-height: 1.25;
+}
+/* Benchmark cells (LQ/Median/UQ): raw score on top (strong), the delta stacked
+   below it (span, coloured by sign). */
+.console-browse .results-table td:nth-child(n+6) {
+  font-size: 0.78rem;
+  font-weight: 850;
+  line-height: 1.2;
+}
+.console-browse .results-table td:nth-child(n+6) strong,
+.console-browse .results-table td:nth-child(n+6) span,
+.console-browse .results-table td:nth-child(n+6) .benchmark-cell-label {
+  display: block;
+}
+/* Raw benchmark score (top line) matches the Score column size; delta below. */
+.console-browse .results-table td:nth-child(n+6) strong {
+  font-size: 0.82rem;
+}
+.console-browse .results-table td:nth-child(n+6) span {
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+/* Band pill: shrink so "Above median" fits its column without overlapping. */
+.console-browse .results-table .band {
+  font-size: 0.68rem;
+  padding: 3px 7px;
+  letter-spacing: 0;
+  /* Stay a compact pill (not a full-width block) so text-align:center actually
+     centres it in the column. */
+  display: inline-flex;
+}
+/* Status pill ("Not Eligible") likewise. */
+.console-browse .results-table .status {
+  font-size: 0.68rem;
+  line-height: 1.05;
+  white-space: normal;
+  /* Compact centred pill (not a full-width block), like the band pill. */
+  display: inline-flex;
+}
+
+/* Table headers: smaller font + truncate (never wrap to a 2nd row, never
+   overflow into the neighbouring column) so the long labels fit the tight
+   fixed-width columns. */
+.console-browse .results-table th {
+  white-space: nowrap;
+  font-size: 0.64rem;
+  letter-spacing: 0.02em;
+  overflow: hidden;
+  cursor: pointer;
+}
+.console-browse .results-table th .sort-header {
+  max-width: 100%;
+  overflow: hidden;
+}
+.console-browse .results-table th .sort-header > :first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* The active column shows its ↑/↓ arrow. In the narrow Score/School columns a
+   width:100% flex squeezes the arrow to zero, so for the active header let the
+   button shrink to its content width and overflow (centred by the th's
+   text-align) — the label+arrow spill harmlessly into the cell padding, not the
+   neighbour. The header + button overflow must be visible for that to show. */
+.console-browse .results-table th:has(.sort-header.active),
+.console-browse .results-table th .sort-header.active {
+  overflow: visible;
+}
+.console-browse .results-table th:not(:first-child) .sort-header.active {
+  width: auto;
+  max-width: none;
+  flex: 0 0 auto;
+}
+/* Don't let the flex squeeze the arrow to zero in the narrow active header. */
+.console-browse .results-table th .sort-header.active > span {
+  flex: 0 0 auto;
+  overflow: visible;
+}
+/* Centre the header label in the column. The narrow columns (Score 54px,
+   School 64px) can't fit a centred label AND a persistent sort arrow without the
+   two overlapping, so the resting "↕" indicator is hidden — the arrow only shows
+   on the active (currently-sorted) column. Inactive headers are clean, centred
+   labels; the active one shows ↑/↓ inline (a minor, single-column shift). */
+.console-browse .results-table th:not(:first-child) .sort-header {
+  width: 100%;
+  justify-content: center;
+}
+.console-browse .results-table th:not(:first-child) .sort-header:not(.active) > span {
+  display: none;
+}
+
+/* The benchmark headers ("Median Diff" etc.) are two words in a 72px column —
+   let them wrap to two lines instead of truncating ("MEDIAN DI…"). */
+.console-browse .results-table th:nth-child(n+6),
+.console-browse .results-table th:nth-child(n+6) .sort-header,
+.console-browse .results-table th:nth-child(n+6) .sort-header > :first-child {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+}
+
+/* ── Narrow iPad-landscape (~1024–1140px): tighten the rail a touch ─────── */
+@media (min-width: 921px) and (max-width: 1140px) {
+  .advisor-console {
+    grid-template-columns: minmax(232px, 272px) minmax(0, 1fr);
+    gap: var(--space-3);
+  }
+}

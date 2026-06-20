@@ -1,0 +1,1910 @@
+{
+  "JS4006": {
+    "median": {
+      "CHIN": "5*",
+      "ENGL": "3",
+      "MATH": "3",
+      "CSD": "A",
+      "Elective 1": "5*",
+      "Elective 2": "4"
+    },
+    "lq": {},
+    "uq": {
+      "CHIN": "4",
+      "ENGL": "4",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "5**",
+      "Elective 2": "4",
+      "Elective 3": "3"
+    }
+  },
+  "JS4018": {
+    "median": {
+      "CHIN": "5*",
+      "ENGL": "5",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "5*",
+      "Elective 2": "5",
+      "Elective 3": "4"
+    },
+    "lq": {
+      "CHIN": "5**",
+      "ENGL": "4",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "5*",
+      "Elective 2": "4"
+    },
+    "uq": {
+      "CHIN": "5*",
+      "ENGL": "4",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "5**",
+      "Elective 2": "5*",
+      "Elective 3": "4"
+    }
+  },
+  "JS4032": {
+    "median": {
+      "CHIN": "3",
+      "ENGL": "5",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "5*",
+      "Elective 2": "4",
+      "Elective 3": "4"
+    },
+    "lq": {},
+    "uq": {
+      "CHIN": "5*",
+      "ENGL": "5*",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "4",
+      "Elective 2": "3",
+      "Elective 3": "3"
+    }
+  },
+  "JS4044": {
+    "median": {
+      "CHIN": "4",
+      "ENGL": "4",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "5*",
+      "Elective 2": "5*",
+      "Elective 3": "4"
+    },
+    "lq": {
+      "CHIN": "5*",
+      "ENGL": "5",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "4",
+      "Elective 2": "4"
+    },
+    "uq": {
+      "CHIN": "5*",
+      "ENGL": "4",
+      "MATH": "5",
+      "CSD": "A",
+      "Elective 1": "5*",
+      "Elective 2": "4",
+      "Elective 3": "4"
+    }
+  },
+  "JS4056": {
+    "median": {
+      "CHIN": "5*",
+      "ENGL": "3",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "5*",
+      "Elective 2": "5"
+    },
+    "lq": {},
+    "uq": {
+      "CHIN": "5*",
+      "ENGL": "4",
+      "MATH": "3",
+      "CSD": "A",
+      "Elective 1": "5**",
+      "Elective 2": "5"
+    }
+  },
+  "JS4068": {
+    "median": {
+      "CHIN": "5*",
+      "ENGL": "4",
+      "MATH": "5",
+      "CSD": "A",
+      "Elective 1": "4",
+      "Elective 2": "4"
+    },
+    "lq": {
+      "CHIN": "4",
+      "ENGL": "4",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "5",
+      "Elective 2": "5",
+      "Elective 3": "4"
+    },
+    "uq": {
+      "CHIN": "4",
+      "ENGL": "5*",
+      "MATH": "5",
+      "CSD": "A",
+      "Elective 1": "5",
+      "Elective 2": "4"
+    }
+  },
+  "JS4070": {
+    "median": {
+      "CHIN": "5*",
+      "ENGL": "4",
+      "MATH": "5",
+      "CSD": "A",
+      "M1/M2": "4",
+      "Elective 1": "4",
+      "Elective 2": "3"
+    },
+    "lq": {},
+    "uq": {
+      "CHIN": "4",
+      "ENGL": "5",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "5",
+      "Elective 2": "5",
+      "Elective 3": "4"
+    }
+  },
+  "JS4082": {
+    "median": {
+      "CHIN": "5",
+      "ENGL": "5",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "5",
+      "Elective 2": "4",
+      "Elective 3": "4"
+    },
+    "lq": {
+      "CHIN": "3",
+      "ENGL": "5",
+      "MATH": "3",
+      "CSD": "A",
+      "Elective 1": "5*",
+      "Elective 2": "4",
+      "Elective 3": "3"
+    },
+    "uq": {
+      "CHIN": "4",
+      "ENGL": "4",
+      "MATH": "5",
+      "CSD": "A",
+      "Elective 1": "5*",
+      "Elective 2": "5",
+      "Elective 3": "5"
+    }
+  },
+  "JS4094": {
+    "median": {
+      "CHIN": "4",
+      "ENGL": "5",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "5*",
+      "Elective 2": "4",
+      "Elective 3": "4"
+    },
+    "lq": {},
+    "uq": {
+      "CHIN": "5",
+      "ENGL": "5",
+      "MATH": "5",
+      "CSD": "A",
+      "M1/M2": "3",
+      "Elective 1": "5",
+      "Elective 2": "3"
+    }
+  },
+  "JS4100": {
+    "median": {
+      "CHIN": "5",
+      "ENGL": "3",
+      "MATH": "3",
+      "CSD": "A",
+      "Elective 1": "5",
+      "Elective 2": "5",
+      "Elective 3": "4"
+    },
+    "lq": {
+      "CHIN": "5*",
+      "ENGL": "4",
+      "MATH": "3",
+      "CSD": "A",
+      "Elective 1": "4",
+      "Elective 2": "4",
+      "Elective 3": "4"
+    },
+    "uq": {
+      "CHIN": "5",
+      "ENGL": "5",
+      "MATH": "3",
+      "CSD": "A",
+      "Elective 1": "5",
+      "Elective 2": "4",
+      "Elective 3": "4"
+    }
+  },
+  "JS4109": {
+    "median": {
+      "CHIN": "5",
+      "ENGL": "4",
+      "MATH": "4",
+      "CSD": "A",
+      "M1/M2": "3",
+      "Elective 1": "4",
+      "Elective 2": "4",
+      "Elective 3": "4"
+    },
+    "lq": {},
+    "uq": {
+      "CHIN": "5",
+      "ENGL": "4",
+      "MATH": "3",
+      "CSD": "A",
+      "Elective 1": "5",
+      "Elective 2": "4",
+      "Elective 3": "3"
+    }
+  },
+  "JS4123": {
+    "median": {
+      "CHIN": "4",
+      "ENGL": "4",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "5*",
+      "Elective 2": "4",
+      "Elective 3": "4"
+    },
+    "lq": {
+      "CHIN": "4",
+      "ENGL": "5",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "5",
+      "Elective 2": "4",
+      "Elective 3": "2"
+    },
+    "uq": {
+      "CHIN": "5",
+      "ENGL": "5",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "5*",
+      "Elective 2": "4",
+      "Elective 3": "4"
+    }
+  },
+  "JS4136": {
+    "median": {
+      "CHIN": "4",
+      "ENGL": "3",
+      "MATH": "3",
+      "CSD": "A",
+      "Elective 1": "5*",
+      "Elective 2": "5",
+      "Elective 3": "4"
+    },
+    "lq": {},
+    "uq": {
+      "CHIN": "5*",
+      "ENGL": "3",
+      "MATH": "3",
+      "CSD": "A",
+      "Elective 1": "5",
+      "Elective 2": "5",
+      "Elective 3": "3"
+    }
+  },
+  "JS4202": {
+    "median": {
+      "CHIN": "5*",
+      "ENGL": "4",
+      "MATH": "5",
+      "CSD": "A",
+      "Elective 1": "5",
+      "Elective 2": "4",
+      "Elective 3": "4"
+    },
+    "lq": {
+      "CHIN": "4",
+      "ENGL": "4",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "5**",
+      "Elective 2": "5"
+    },
+    "uq": {
+      "CHIN": "5*",
+      "ENGL": "3",
+      "MATH": "5",
+      "CSD": "A",
+      "Elective 1": "5",
+      "Elective 2": "5",
+      "Elective 3": "4"
+    }
+  },
+  "JS4214": {
+    "median": {
+      "CHIN": "5",
+      "ENGL": "5*",
+      "MATH": "5**",
+      "CSD": "A",
+      "M1/M2": "5**",
+      "Elective 1": "5*",
+      "Elective 2": "5*",
+      "Elective 3": "5"
+    },
+    "lq": {
+      "CHIN": "5",
+      "ENGL": "5*",
+      "MATH": "5**",
+      "CSD": "A",
+      "M1/M2": "5",
+      "Elective 1": "5**",
+      "Elective 2": "5*"
+    },
+    "uq": {
+      "CHIN": "5",
+      "ENGL": "5*",
+      "MATH": "5**",
+      "CSD": "A",
+      "Elective 1": "5**",
+      "Elective 2": "5**",
+      "Elective 3": "5**"
+    }
+  },
+  "JS4226": {
+    "median": {
+      "CHIN": "5*",
+      "ENGL": "3",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "5",
+      "Elective 2": "4"
+    },
+    "lq": {
+      "CHIN": "5",
+      "ENGL": "3",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "5",
+      "Elective 2": "4",
+      "Elective 3": "4"
+    },
+    "uq": {
+      "CHIN": "5",
+      "ENGL": "5",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "5",
+      "Elective 2": "4"
+    }
+  },
+  "JS4238": {
+    "median": {
+      "CHIN": "3",
+      "ENGL": "5*",
+      "MATH": "5*",
+      "CSD": "A",
+      "M1/M2": "5",
+      "Elective 1": "5*",
+      "Elective 2": "5",
+      "Elective 3": "4"
+    },
+    "lq": {
+      "CHIN": "5",
+      "ENGL": "5",
+      "MATH": "5*",
+      "CSD": "A",
+      "M1/M2": "5*",
+      "Elective 1": "5",
+      "Elective 2": "5"
+    },
+    "uq": {
+      "CHIN": "3",
+      "ENGL": "5",
+      "MATH": "5**",
+      "CSD": "A",
+      "M1/M2": "5*",
+      "Elective 1": "5",
+      "Elective 2": "5",
+      "Elective 3": "4"
+    }
+  },
+  "JS4240": {
+    "median": {
+      "CHIN": "5",
+      "ENGL": "4",
+      "MATH": "5*",
+      "CSD": "A",
+      "M1/M2": "5",
+      "Elective 1": "4",
+      "Elective 2": "4"
+    },
+    "lq": {
+      "CHIN": "4",
+      "ENGL": "4",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "5*",
+      "Elective 2": "5*"
+    },
+    "uq": {
+      "CHIN": "5",
+      "ENGL": "4",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "5*",
+      "Elective 2": "5",
+      "Elective 3": "5"
+    }
+  },
+  "JS4252": {
+    "median": {
+      "CHIN": "4",
+      "ENGL": "5",
+      "MATH": "5**",
+      "CSD": "A",
+      "M1/M2": "5*",
+      "Elective 1": "5*",
+      "Elective 2": "5*",
+      "Elective 3": "5"
+    },
+    "lq": {
+      "CHIN": "5",
+      "ENGL": "5**",
+      "MATH": "5*",
+      "CSD": "A",
+      "M1/M2": "5",
+      "Elective 1": "5*",
+      "Elective 2": "5"
+    },
+    "uq": {
+      "CHIN": "4",
+      "ENGL": "5",
+      "MATH": "5**",
+      "CSD": "A",
+      "M1/M2": "5*",
+      "Elective 1": "5**",
+      "Elective 2": "5*",
+      "Elective 3": "4"
+    }
+  },
+  "JS4254": {
+    "median": {
+      "CHIN": "5",
+      "ENGL": "5*",
+      "MATH": "5*",
+      "CSD": "A",
+      "Elective 1": "5**",
+      "Elective 2": "5*",
+      "Elective 3": "4"
+    },
+    "lq": {
+      "CHIN": "5",
+      "ENGL": "5",
+      "MATH": "5",
+      "CSD": "A",
+      "M1/M2": "5**",
+      "Elective 1": "5**",
+      "Elective 2": "4",
+      "Elective 3": "4"
+    },
+    "uq": {
+      "CHIN": "5**",
+      "ENGL": "5",
+      "MATH": "5*",
+      "CSD": "A",
+      "Elective 1": "5**",
+      "Elective 2": "5",
+      "Elective 3": "5"
+    }
+  },
+  "JS4264": {
+    "median": {
+      "CHIN": "4",
+      "ENGL": "5*",
+      "MATH": "5",
+      "CSD": "A",
+      "M1/M2": "4",
+      "Elective 1": "5*",
+      "Elective 2": "5*"
+    },
+    "lq": {
+      "CHIN": "5",
+      "ENGL": "5",
+      "MATH": "5*",
+      "CSD": "A",
+      "Elective 1": "5*",
+      "Elective 2": "5",
+      "Elective 3": "5"
+    },
+    "uq": {
+      "CHIN": "5**",
+      "ENGL": "5*",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "5",
+      "Elective 2": "5",
+      "Elective 3": "5"
+    }
+  },
+  "JS4276": {
+    "median": {
+      "CHIN": "5*",
+      "ENGL": "5*",
+      "MATH": "5*",
+      "CSD": "A",
+      "M1/M2": "5*",
+      "Elective 1": "5**",
+      "Elective 2": "5**",
+      "Elective 3": "5**"
+    },
+    "lq": {
+      "CHIN": "4",
+      "ENGL": "5",
+      "MATH": "5**",
+      "LS": "4",
+      "M1/M2": "5**",
+      "Elective 1": "5*",
+      "Elective 2": "5*",
+      "Elective 3": "5*"
+    },
+    "uq": {
+      "CHIN": "4",
+      "ENGL": "5**",
+      "MATH": "5**",
+      "CSD": "A",
+      "M1/M2": "5*",
+      "Elective 1": "5**",
+      "Elective 2": "5**",
+      "Elective 3": "5**"
+    }
+  },
+  "JS4725": {
+    "median": {
+      "CHIN": "5**",
+      "ENGL": "4",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "5",
+      "Elective 2": "5",
+      "Elective 3": "4"
+    },
+    "lq": {
+      "CHIN": "4",
+      "ENGL": "5*",
+      "MATH": "5*",
+      "CSD": "A",
+      "M1/M2": "5",
+      "Elective 1": "4",
+      "Elective 2": "4"
+    },
+    "uq": {
+      "CHIN": "3",
+      "ENGL": "5",
+      "MATH": "5",
+      "CSD": "A",
+      "M1/M2": "5*",
+      "Elective 1": "5",
+      "Elective 2": "5"
+    }
+  },
+  "JS4760": {
+    "median": {
+      "CHIN": "4",
+      "ENGL": "4",
+      "MATH": "5*",
+      "CSD": "A",
+      "M1/M2": "5",
+      "Elective 1": "5",
+      "Elective 2": "4"
+    },
+    "lq": {
+      "CHIN": "4",
+      "ENGL": "3",
+      "MATH": "5",
+      "CSD": "A",
+      "M1/M2": "5*",
+      "Elective 1": "4",
+      "Elective 2": "3"
+    },
+    "uq": {
+      "CHIN": "4",
+      "ENGL": "4",
+      "MATH": "5",
+      "CSD": "A",
+      "M1/M2": "5",
+      "Elective 1": "5",
+      "Elective 2": "5",
+      "Elective 3": "4"
+    }
+  },
+  "JS4320": {
+    "median": {
+      "CHIN": "3",
+      "ENGL": "4",
+      "MATH": "5*",
+      "CSD": "A",
+      "M1/M2": "5",
+      "Elective 1": "5",
+      "Elective 2": "4"
+    },
+    "lq": {
+      "CHIN": "5",
+      "ENGL": "4",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "5",
+      "Elective 2": "5",
+      "Elective 3": "4"
+    },
+    "uq": {
+      "CHIN": "4",
+      "ENGL": "4",
+      "MATH": "5*",
+      "CSD": "A",
+      "M1/M2": "5*",
+      "Elective 1": "5",
+      "Elective 2": "3"
+    }
+  },
+  "JS4329": {
+    "median": {
+      "CHIN": "5",
+      "ENGL": "4",
+      "MATH": "5",
+      "CSD": "A",
+      "Elective 1": "5*",
+      "Elective 2": "5",
+      "Elective 3": "4"
+    },
+    "lq": {
+      "CHIN": "4",
+      "ENGL": "5*",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "5",
+      "Elective 2": "5",
+      "Elective 3": "4"
+    },
+    "uq": {
+      "CHIN": "5",
+      "ENGL": "5",
+      "MATH": "5",
+      "CSD": "A",
+      "Elective 1": "5*",
+      "Elective 2": "5",
+      "Elective 3": "4"
+    }
+  },
+  "JS4331": {
+    "median": {
+      "CHIN": "5**",
+      "ENGL": "5",
+      "MATH": "3",
+      "CSD": "A",
+      "Elective 1": "5*",
+      "Elective 2": "5*",
+      "Elective 3": "5",
+      "Elective 4": "N2 -\nPass"
+    },
+    "lq": {},
+    "uq": {
+      "CHIN": "5**",
+      "ENGL": "5",
+      "MATH": "5",
+      "CSD": "A",
+      "Elective 1": "5**",
+      "Elective 2": "5**",
+      "Elective 3": "5"
+    }
+  },
+  "JS4343": {
+    "median": {
+      "CHIN": "4",
+      "ENGL": "5**",
+      "MATH": "5",
+      "CSD": "A",
+      "Elective 1": "5",
+      "Elective 2": "5",
+      "Elective 3": "5"
+    },
+    "lq": {
+      "CHIN": "4",
+      "ENGL": "5**",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "5*",
+      "Elective 2": "5",
+      "Elective 3": "4"
+    },
+    "uq": {
+      "CHIN": "5**",
+      "ENGL": "5**",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "5*",
+      "Elective 2": "4",
+      "Elective 3": "4"
+    }
+  },
+  "JS4361": {
+    "median": {
+      "CHIN": "4",
+      "ENGL": "3",
+      "MATH": "5**",
+      "CSD": "A",
+      "M1/M2": "5**",
+      "Elective 1": "5",
+      "Elective 2": "5"
+    },
+    "lq": {},
+    "uq": {
+      "CHIN": "3",
+      "ENGL": "5*",
+      "MATH": "5**",
+      "CSD": "A",
+      "M1/M2": "5*",
+      "Elective 1": "5*",
+      "Elective 2": "5",
+      "Elective 3": "4"
+    }
+  },
+  "JS4372": {
+    "median": {
+      "CHIN": "5*",
+      "ENGL": "3",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "4",
+      "Elective 2": "4"
+    },
+    "lq": {
+      "CHIN": "4",
+      "ENGL": "5",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "4",
+      "Elective 2": "4",
+      "Elective 3": "3"
+    },
+    "uq": {
+      "CHIN": "5",
+      "ENGL": "4",
+      "MATH": "5",
+      "CSD": "A",
+      "Elective 1": "4",
+      "Elective 2": "4"
+    }
+  },
+  "JS4386": {
+    "median": {
+      "CHIN": "4",
+      "ENGL": "4",
+      "MATH": "5*",
+      "CSD": "A",
+      "M1/M2": "4",
+      "Elective 1": "4"
+    },
+    "lq": {
+      "CHIN": "4",
+      "ENGL": "4",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "5",
+      "Elective 2": "4",
+      "Elective 3": "4"
+    },
+    "uq": {
+      "CHIN": "4",
+      "ENGL": "5",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "5",
+      "Elective 2": "4",
+      "Elective 3": "4"
+    }
+  },
+  "JS4408": {
+    "median": {
+      "CHIN": "4",
+      "ENGL": "4",
+      "MATH": "5*",
+      "CSD": "A",
+      "M1/M2": "4",
+      "Elective 1": "4",
+      "Elective 2": "4"
+    },
+    "lq": {
+      "CHIN": "4",
+      "ENGL": "4",
+      "MATH": "5",
+      "CSD": "A",
+      "Elective 1": "5",
+      "Elective 2": "4",
+      "Elective 3": "4"
+    },
+    "uq": {
+      "CHIN": "4",
+      "ENGL": "3",
+      "MATH": "5*",
+      "CSD": "A",
+      "M1/M2": "4",
+      "Elective 1": "5",
+      "Elective 2": "4"
+    }
+  },
+  "JS4412": {
+    "median": {
+      "CHIN": "3",
+      "ENGL": "4",
+      "MATH": "5*",
+      "CSD": "A",
+      "M1/M2": "5",
+      "Elective 1": "5*",
+      "Elective 2": "5"
+    },
+    "lq": {},
+    "uq": {
+      "CHIN": "3",
+      "ENGL": "5*",
+      "MATH": "5*",
+      "CSD": "A",
+      "M1/M2": "4",
+      "Elective 1": "5*",
+      "Elective 2": "5",
+      "Elective 3": "5"
+    }
+  },
+  "JS4416": {
+    "median": {
+      "CHIN": "5",
+      "ENGL": "4",
+      "MATH": "5*",
+      "CSD": "A",
+      "M1/M2": "5*",
+      "Elective 1": "5*",
+      "Elective 2": "5*"
+    },
+    "lq": {
+      "CHIN": "5*",
+      "ENGL": "4",
+      "MATH": "5*",
+      "CSD": "A",
+      "M1/M2": "5",
+      "Elective 1": "5**",
+      "Elective 2": "5"
+    },
+    "uq": {
+      "CHIN": "4",
+      "ENGL": "4",
+      "MATH": "5**",
+      "CSD": "A",
+      "M1/M2": "5**",
+      "Elective 1": "5*",
+      "Elective 2": "5*"
+    }
+  },
+  "JS4428": {
+    "median": {
+      "CHIN": "5",
+      "ENGL": "4",
+      "MATH": "5*",
+      "CSD": "A",
+      "Elective 1": "5**",
+      "Elective 2": "5*"
+    },
+    "lq": {},
+    "uq": {
+      "CHIN": "5",
+      "ENGL": "5",
+      "MATH": "5**",
+      "CSD": "A",
+      "Elective 1": "5*",
+      "Elective 2": "5",
+      "Elective 3": "5"
+    }
+  },
+  "JS4434": {
+    "median": {
+      "CHIN": "4",
+      "ENGL": "5*",
+      "MATH": "5",
+      "CSD": "A",
+      "M1/M2": "4",
+      "Elective 1": "4",
+      "Elective 2": "4",
+      "Elective 3": "3"
+    },
+    "lq": {
+      "CHIN": "3",
+      "ENGL": "4",
+      "MATH": "5*",
+      "CSD": "A",
+      "M1/M2": "4",
+      "Elective 1": "4",
+      "Elective 2": "4"
+    },
+    "uq": {
+      "CHIN": "4",
+      "ENGL": "4",
+      "MATH": "5*",
+      "CSD": "A",
+      "M1/M2": "5",
+      "Elective 1": "4",
+      "Elective 2": "3"
+    }
+  },
+  "JS4446": {
+    "median": {
+      "CHIN": "5*",
+      "ENGL": "4",
+      "MATH": "5",
+      "CSD": "A",
+      "M1/M2": "4",
+      "Elective 1": "5",
+      "Elective 2": "4"
+    },
+    "lq": {},
+    "uq": {
+      "CHIN": "4",
+      "ENGL": "5",
+      "MATH": "5",
+      "CSD": "A",
+      "M1/M2": "5",
+      "Elective 1": "5",
+      "Elective 2": "4"
+    }
+  },
+  "JS4458": {
+    "median": {
+      "CHIN": "4",
+      "ENGL": "4",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "5",
+      "Elective 2": "5",
+      "Elective 3": "4"
+    },
+    "lq": {
+      "CHIN": "3",
+      "ENGL": "4",
+      "MATH": "5",
+      "CSD": "A",
+      "M1/M2": "5",
+      "Elective 1": "4",
+      "Elective 2": "4"
+    },
+    "uq": {
+      "CHIN": "5",
+      "ENGL": "4",
+      "MATH": "5",
+      "CSD": "A",
+      "M1/M2": "4",
+      "Elective 1": "5",
+      "Elective 2": "4"
+    }
+  },
+  "JS4460": {
+    "median": {
+      "CHIN": "4",
+      "ENGL": "4",
+      "MATH": "5**",
+      "CSD": "A",
+      "M1/M2": "5*",
+      "Elective 1": "5",
+      "Elective 2": "5",
+      "Elective 3": "4"
+    },
+    "lq": {},
+    "uq": {
+      "CHIN": "3",
+      "ENGL": "4",
+      "MATH": "5**",
+      "CSD": "A",
+      "M1/M2": "5*",
+      "Elective 1": "5*",
+      "Elective 2": "5",
+      "Elective 3": "3"
+    }
+  },
+  "JS4462": {
+    "median": {
+      "CHIN": "5",
+      "ENGL": "3",
+      "MATH": "5",
+      "CSD": "A",
+      "M1/M2": "4",
+      "Elective 1": "4",
+      "Elective 2": "4"
+    },
+    "lq": {
+      "CHIN": "4",
+      "ENGL": "3",
+      "MATH": "5",
+      "CSD": "A",
+      "M1/M2": "3",
+      "Elective 1": "5",
+      "Elective 2": "4"
+    },
+    "uq": {
+      "CHIN": "4",
+      "ENGL": "4",
+      "MATH": "5",
+      "CSD": "A",
+      "M1/M2": "5",
+      "Elective 1": "4",
+      "Elective 2": "4"
+    }
+  },
+  "JS4468": {
+    "median": {
+      "CHIN": "5",
+      "ENGL": "4",
+      "MATH": "5*",
+      "CSD": "A",
+      "M1/M2": "5*",
+      "Elective 1": "5*",
+      "Elective 2": "5*"
+    },
+    "lq": {},
+    "uq": {
+      "CHIN": "5**",
+      "ENGL": "4",
+      "MATH": "5*",
+      "CSD": "A",
+      "M1/M2": "5",
+      "Elective 1": "5**",
+      "Elective 2": "5*",
+      "Elective 3": "3"
+    }
+  },
+  "JS4470": {
+    "median": {
+      "CHIN": "5",
+      "ENGL": "4",
+      "MATH": "4",
+      "CSD": "A",
+      "M1/M2": "3",
+      "Elective 1": "5",
+      "Elective 2": "4",
+      "Elective 3": "3"
+    },
+    "lq": {
+      "CHIN": "3",
+      "ENGL": "4",
+      "MATH": "4",
+      "CSD": "A",
+      "M1/M2": "3",
+      "Elective 1": "5",
+      "Elective 2": "4"
+    },
+    "uq": {
+      "CHIN": "4",
+      "ENGL": "4",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "5",
+      "Elective 2": "5",
+      "Elective 3": "5"
+    }
+  },
+  "JS4733": {
+    "median": {
+      "CHIN": "5*",
+      "ENGL": "5**",
+      "MATH": "5**",
+      "CSD": "A",
+      "M1/M2": "5**",
+      "Elective 1": "5*",
+      "Elective 2": "5*",
+      "Elective 3": "5"
+    },
+    "lq": {
+      "CHIN": "4",
+      "ENGL": "4",
+      "MATH": "5*",
+      "CSD": "A",
+      "M1/M2": "5",
+      "Elective 1": "5*",
+      "Elective 2": "5",
+      "Elective 3": "5"
+    },
+    "uq": {
+      "CHIN": "5",
+      "ENGL": "5",
+      "MATH": "5**",
+      "CSD": "A",
+      "M1/M2": "5**",
+      "Elective 1": "5**",
+      "Elective 2": "5**"
+    }
+  },
+  "JS4750": {
+    "median": {
+      "CHIN": "3",
+      "ENGL": "5*",
+      "MATH": "5",
+      "CSD": "A",
+      "M1/M2": "5",
+      "Elective 1": "5*",
+      "Elective 2": "5",
+      "Elective 3": "4"
+    },
+    "lq": {
+      "CHIN": "4",
+      "ENGL": "4",
+      "MATH": "5",
+      "CSD": "A",
+      "M1/M2": "4",
+      "Elective 1": "5*",
+      "Elective 2": "5"
+    },
+    "uq": {
+      "CHIN": "5**",
+      "ENGL": "4",
+      "MATH": "5*",
+      "CSD": "A",
+      "M1/M2": "5*",
+      "Elective 1": "5",
+      "Elective 2": "4"
+    }
+  },
+  "JS4903": {
+    "median": {
+      "CHIN": "4",
+      "ENGL": "5**",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "5*",
+      "Elective 2": "4",
+      "Elective 3": "4"
+    },
+    "lq": {
+      "CHIN": "5",
+      "ENGL": "5*",
+      "MATH": "4",
+      "CSD": "A",
+      "M1/M2": "5",
+      "Elective 1": "5",
+      "Elective 2": "4",
+      "Elective 3": "4"
+    },
+    "uq": {
+      "CHIN": "4",
+      "ENGL": "5*",
+      "MATH": "5",
+      "CSD": "A",
+      "M1/M2": "3",
+      "Elective 1": "5*",
+      "Elective 2": "5",
+      "Elective 3": "4"
+    }
+  },
+  "JS4501": {
+    "median": {
+      "CHIN": "5*",
+      "ENGL": "5*",
+      "MATH": "5*",
+      "CSD": "A",
+      "M1/M2": "5**",
+      "Elective 1": "5**",
+      "Elective 2": "5*",
+      "Elective 3": "5"
+    },
+    "lq": {
+      "CHIN": "5",
+      "ENGL": "5*",
+      "MATH": "5*",
+      "CSD": "A",
+      "M1/M2": "5**",
+      "Elective 1": "5**",
+      "Elective 2": "5*",
+      "Elective 3": "5"
+    },
+    "uq": {
+      "CHIN": "5**",
+      "ENGL": "4",
+      "MATH": "5",
+      "CSD": "A",
+      "M1/M2": "5",
+      "Elective 1": "5",
+      "Elective 2": "4",
+      "Elective 3": "4"
+    }
+  },
+  "JS4502": {
+    "median": {
+      "CHIN": "5*",
+      "ENGL": "5*",
+      "MATH": "5**",
+      "CSD": "A",
+      "M1/M2": "5**",
+      "Elective 1": "5**",
+      "Elective 2": "5**",
+      "Elective 3": "5**"
+    },
+    "lq": {
+      "CHIN": "5",
+      "ENGL": "5**",
+      "MATH": "5**",
+      "CSD": "A",
+      "Elective 1": "5**",
+      "Elective 2": "5**",
+      "Elective 3": "5**"
+    },
+    "uq": {
+      "CHIN": "5*",
+      "ENGL": "5**",
+      "MATH": "5**",
+      "CSD": "A",
+      "M1/M2": "5**",
+      "Elective 1": "5**",
+      "Elective 2": "5**",
+      "Elective 3": "5**"
+    }
+  },
+  "JS4513": {
+    "median": {
+      "CHIN": "5*",
+      "ENGL": "4",
+      "MATH": "5",
+      "CSD": "A",
+      "M1/M2": "4",
+      "Elective 1": "5",
+      "Elective 2": "5",
+      "Elective 3": "4"
+    },
+    "lq": {
+      "CHIN": "5*",
+      "ENGL": "5*",
+      "MATH": "5",
+      "CSD": "A",
+      "Elective 1": "4",
+      "Elective 2": "4",
+      "Elective 3": "3"
+    },
+    "uq": {}
+  },
+  "JS4525": {
+    "median": {
+      "CHIN": "5",
+      "ENGL": "5*",
+      "MATH": "5",
+      "CSD": "A",
+      "Elective 1": "5*",
+      "Elective 2": "5*",
+      "Elective 3": "5"
+    },
+    "lq": {
+      "CHIN": "5",
+      "ENGL": "5*",
+      "MATH": "5",
+      "CSD": "A",
+      "Elective 1": "5*",
+      "Elective 2": "5",
+      "Elective 3": "5"
+    },
+    "uq": {
+      "CHIN": "5",
+      "ENGL": "4",
+      "MATH": "5",
+      "CSD": "A",
+      "M1/M2": "5*",
+      "Elective 1": "5**",
+      "Elective 2": "5*",
+      "Elective 3": "5"
+    }
+  },
+  "JS4537": {
+    "median": {
+      "CHIN": "5*",
+      "ENGL": "4",
+      "MATH": "4",
+      "CSD": "A",
+      "M1/M2": "5",
+      "Elective 1": "5",
+      "Elective 2": "5",
+      "Elective 3": "4"
+    },
+    "lq": {
+      "CHIN": "3",
+      "ENGL": "4",
+      "MATH": "5",
+      "CSD": "A",
+      "Elective 1": "5*",
+      "Elective 2": "5",
+      "Elective 3": "3"
+    },
+    "uq": {
+      "CHIN": "4",
+      "ENGL": "4",
+      "MATH": "5*",
+      "CSD": "A",
+      "M1/M2": "5*",
+      "Elective 1": "5*",
+      "Elective 2": "4"
+    }
+  },
+  "JS4542": {
+    "median": {
+      "CHIN": "5**",
+      "ENGL": "3",
+      "MATH": "5*",
+      "CSD": "A",
+      "M1/M2": "5*",
+      "Elective 1": "4",
+      "Elective 2": "4"
+    },
+    "lq": {
+      "CHIN": "5*",
+      "ENGL": "5",
+      "MATH": "5",
+      "CSD": "A",
+      "Elective 1": "5",
+      "Elective 2": "5",
+      "Elective 3": "4"
+    },
+    "uq": {
+      "CHIN": "4",
+      "ENGL": "5",
+      "MATH": "5*",
+      "CSD": "A",
+      "M1/M2": "4",
+      "Elective 1": "5*",
+      "Elective 2": "5",
+      "Elective 3": "5"
+    }
+  },
+  "JS4550": {
+    "median": {
+      "CHIN": "5*",
+      "ENGL": "5",
+      "MATH": "5*",
+      "CSD": "A",
+      "Elective 1": "5*",
+      "Elective 2": "5",
+      "Elective 3": "5"
+    },
+    "lq": {
+      "CHIN": "5*",
+      "ENGL": "5",
+      "MATH": "5",
+      "CSD": "A",
+      "Elective 1": "5*",
+      "Elective 2": "5*",
+      "Elective 3": "5"
+    },
+    "uq": {
+      "CHIN": "5",
+      "ENGL": "5",
+      "MATH": "5",
+      "CSD": "A",
+      "Elective 1": "5**",
+      "Elective 2": "5*",
+      "Elective 3": "5"
+    }
+  },
+  "JS4601": {
+    "median": {
+      "CHIN": "5",
+      "ENGL": "4",
+      "MATH": "5",
+      "CSD": "A",
+      "M1/M2": "5*",
+      "Elective 1": "4",
+      "Elective 2": "4"
+    },
+    "lq": {
+      "CHIN": "5*",
+      "ENGL": "4",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "5",
+      "Elective 2": "4",
+      "Elective 3": "3"
+    },
+    "uq": {
+      "CHIN": "5*",
+      "ENGL": "4",
+      "MATH": "5*",
+      "CSD": "A",
+      "M1/M2": "5",
+      "Elective 1": "4",
+      "Elective 2": "3"
+    }
+  },
+  "JS4648": {
+    "median": {
+      "CHIN": "4",
+      "ENGL": "5*",
+      "MATH": "5",
+      "CSD": "A",
+      "M1/M2": "4",
+      "Elective 1": "4",
+      "Elective 2": "3"
+    },
+    "lq": {
+      "CHIN": "4",
+      "ENGL": "4",
+      "MATH": "5",
+      "CSD": "A",
+      "M1/M2": "5*",
+      "Elective 1": "4",
+      "Elective 2": "4"
+    },
+    "uq": {
+      "CHIN": "3",
+      "ENGL": "4",
+      "MATH": "5*",
+      "CSD": "A",
+      "M1/M2": "3",
+      "Elective 1": "5",
+      "Elective 2": "5",
+      "Elective 3": "4"
+    }
+  },
+  "JS4682": {
+    "median": {
+      "CHIN": "4",
+      "ENGL": "4",
+      "MATH": "5*",
+      "CSD": "A",
+      "M1/M2": "5*",
+      "Elective 1": "5**",
+      "Elective 2": "5*",
+      "Elective 3": "5"
+    },
+    "lq": {
+      "CHIN": "4",
+      "ENGL": "5",
+      "MATH": "5*",
+      "CSD": "A",
+      "M1/M2": "5**",
+      "Elective 1": "5",
+      "Elective 2": "4"
+    },
+    "uq": {
+      "CHIN": "4",
+      "ENGL": "3",
+      "MATH": "5**",
+      "CSD": "A",
+      "M1/M2": "5**",
+      "Elective 1": "5**",
+      "Elective 2": "5*"
+    }
+  },
+  "JS4690": {
+    "median": {
+      "CHIN": "4",
+      "ENGL": "5*",
+      "MATH": "5",
+      "CSD": "A",
+      "M1/M2": "5*",
+      "Elective 1": "5*",
+      "Elective 2": "5*",
+      "Elective 3": "N3 -\nPass"
+    },
+    "lq": {
+      "CHIN": "4",
+      "ENGL": "4",
+      "MATH": "5*",
+      "CSD": "A",
+      "M1/M2": "5*",
+      "Elective 1": "5",
+      "Elective 2": "5",
+      "Elective 3": "5"
+    },
+    "uq": {
+      "CHIN": "5",
+      "ENGL": "5",
+      "MATH": "5**",
+      "CSD": "A",
+      "M1/M2": "5*",
+      "Elective 1": "5**",
+      "Elective 2": "5*",
+      "Elective 3": "5"
+    }
+  },
+  "JS4719": {
+    "median": {
+      "CHIN": "4",
+      "ENGL": "5",
+      "MATH": "5*",
+      "CSD": "A",
+      "M1/M2": "5*",
+      "Elective 1": "5",
+      "Elective 2": "4"
+    },
+    "lq": {
+      "CHIN": "4",
+      "ENGL": "4",
+      "MATH": "5**",
+      "CSD": "A",
+      "M1/M2": "4",
+      "Elective 1": "5*",
+      "Elective 2": "5",
+      "Elective 3": "4"
+    },
+    "uq": {
+      "CHIN": "3",
+      "ENGL": "4",
+      "MATH": "5*",
+      "CSD": "A",
+      "M1/M2": "5*",
+      "Elective 1": "5*",
+      "Elective 2": "5"
+    }
+  },
+  "JS4801": {
+    "median": {
+      "CHIN": "5**",
+      "ENGL": "5",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "4",
+      "Elective 2": "4"
+    },
+    "lq": {
+      "CHIN": "5",
+      "ENGL": "5*",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "4",
+      "Elective 2": "4",
+      "Elective 3": "4"
+    },
+    "uq": {
+      "CHIN": "4",
+      "ENGL": "4",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "5**",
+      "Elective 2": "5*"
+    }
+  },
+  "JS4812": {
+    "median": {
+      "CHIN": "3",
+      "ENGL": "5*",
+      "MATH": "4",
+      "CSD": "A",
+      "M1/M2": "4",
+      "Elective 1": "5",
+      "Elective 2": "4"
+    },
+    "lq": {},
+    "uq": {
+      "CHIN": "4",
+      "ENGL": "5*",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "5",
+      "Elective 2": "4",
+      "Elective 3": "4"
+    }
+  },
+  "JS4824": {
+    "median": {
+      "CHIN": "4",
+      "ENGL": "5*",
+      "MATH": "5",
+      "CSD": "A",
+      "Elective 1": "5",
+      "Elective 2": "4",
+      "Elective 3": "4"
+    },
+    "lq": {
+      "CHIN": "3",
+      "ENGL": "4",
+      "MATH": "5*",
+      "CSD": "A",
+      "M1/M2": "5",
+      "Elective 1": "4",
+      "Elective 2": "4"
+    },
+    "uq": {
+      "CHIN": "4",
+      "ENGL": "4",
+      "MATH": "5",
+      "CSD": "A",
+      "Elective 1": "5*",
+      "Elective 2": "5",
+      "Elective 3": "5"
+    }
+  },
+  "JS4836": {
+    "median": {
+      "CHIN": "4",
+      "ENGL": "5",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "5**",
+      "Elective 2": "4",
+      "Elective 3": "4"
+    },
+    "lq": {},
+    "uq": {
+      "CHIN": "5**",
+      "ENGL": "4",
+      "MATH": "4",
+      "CSD": "A",
+      "M1/M2": "4",
+      "Elective 1": "5*",
+      "Elective 2": "5",
+      "Elective 3": "5"
+    }
+  },
+  "JS4838": {
+    "median": {
+      "CHIN": "4",
+      "ENGL": "5",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "5*",
+      "Elective 2": "5",
+      "Elective 3": "4"
+    },
+    "lq": {
+      "CHIN": "5",
+      "ENGL": "4",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "5*",
+      "Elective 2": "4",
+      "Elective 3": "4"
+    },
+    "uq": {
+      "CHIN": "4",
+      "ENGL": "5",
+      "MATH": "5",
+      "CSD": "A",
+      "Elective 1": "5",
+      "Elective 2": "5",
+      "Elective 3": "4"
+    }
+  },
+  "JS4848": {
+    "median": {
+      "CHIN": "4",
+      "ENGL": "4",
+      "MATH": "5",
+      "CSD": "A",
+      "M1/M2": "4",
+      "Elective 1": "5*",
+      "Elective 2": "4"
+    },
+    "lq": {},
+    "uq": {
+      "CHIN": "5**",
+      "ENGL": "4",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "4",
+      "Elective 2": "4",
+      "Elective 3": "4"
+    }
+  },
+  "JS4850": {
+    "median": {
+      "CHIN": "5**",
+      "ENGL": "3",
+      "MATH": "3",
+      "CSD": "A",
+      "Elective 1": "5",
+      "Elective 2": "5",
+      "Elective 3": "3"
+    },
+    "lq": {
+      "CHIN": "5*",
+      "ENGL": "4",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "5",
+      "Elective 2": "4",
+      "Elective 3": "4"
+    },
+    "uq": {
+      "CHIN": "5*",
+      "ENGL": "5*",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "5",
+      "Elective 2": "4",
+      "Elective 3": "4"
+    }
+  },
+  "JS4858": {
+    "median": {
+      "CHIN": "4",
+      "ENGL": "5",
+      "MATH": "5*",
+      "CSD": "A",
+      "Elective 1": "5",
+      "Elective 2": "5",
+      "Elective 3": "4"
+    },
+    "lq": {
+      "CHIN": "4",
+      "ENGL": "4",
+      "MATH": "5*",
+      "CSD": "A",
+      "M1/M2": "5",
+      "Elective 1": "5",
+      "Elective 2": "4"
+    },
+    "uq": {
+      "CHIN": "5",
+      "ENGL": "5**",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "5",
+      "Elective 2": "5"
+    }
+  },
+  "JS4862": {
+    "median": {
+      "CHIN": "5*",
+      "ENGL": "5*",
+      "MATH": "5",
+      "CSD": "A",
+      "Elective 1": "4",
+      "Elective 2": "4",
+      "Elective 3": "4"
+    },
+    "lq": {
+      "CHIN": "3",
+      "ENGL": "5",
+      "MATH": "5*",
+      "CSD": "A",
+      "M1/M2": "5",
+      "Elective 1": "4",
+      "Elective 2": "4",
+      "Elective 3": "4"
+    },
+    "uq": {
+      "CHIN": "3",
+      "ENGL": "5*",
+      "MATH": "5",
+      "CSD": "A",
+      "Elective 1": "5**",
+      "Elective 2": "5",
+      "Elective 3": "4"
+    }
+  },
+  "JS4874": {
+    "median": {
+      "CHIN": "4",
+      "ENGL": "5",
+      "MATH": "5*",
+      "CSD": "A",
+      "M1/M2": "5",
+      "Elective 1": "5",
+      "Elective 2": "4",
+      "Elective 3": "4"
+    },
+    "lq": {
+      "CHIN": "5*",
+      "ENGL": "4",
+      "MATH": "5",
+      "CSD": "A",
+      "Elective 1": "5*",
+      "Elective 2": "4",
+      "Elective 3": "4"
+    },
+    "uq": {
+      "CHIN": "5*",
+      "ENGL": "5*",
+      "MATH": "5",
+      "CSD": "A",
+      "M1/M2": "5",
+      "Elective 1": "4",
+      "Elective 2": "4"
+    }
+  },
+  "JS4886": {
+    "median": {
+      "CHIN": "5",
+      "ENGL": "4",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "5*",
+      "Elective 2": "4",
+      "Elective 3": "4"
+    },
+    "lq": {
+      "CHIN": "5*",
+      "ENGL": "4",
+      "MATH": "4",
+      "CSD": "A",
+      "M1/M2": "4",
+      "Elective 1": "5",
+      "Elective 2": "4"
+    },
+    "uq": {
+      "CHIN": "5*",
+      "ENGL": "4",
+      "MATH": "5",
+      "CSD": "A",
+      "Elective 1": "5",
+      "Elective 2": "4"
+    }
+  },
+  "JS4892": {
+    "median": {
+      "CHIN": "5*",
+      "ENGL": "4",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "5",
+      "Elective 2": "4",
+      "Elective 3": "3"
+    },
+    "lq": {
+      "CHIN": "4",
+      "ENGL": "5",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "5",
+      "Elective 2": "4",
+      "Elective 3": "4"
+    },
+    "uq": {
+      "CHIN": "3",
+      "ENGL": "4",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "5*",
+      "Elective 2": "5",
+      "Elective 3": "4"
+    }
+  },
+  "JS4893": {
+    "median": {
+      "CHIN": "3",
+      "ENGL": "4",
+      "MATH": "5*",
+      "CSD": "A",
+      "Elective 1": "5",
+      "Elective 2": "4"
+    },
+    "lq": {
+      "CHIN": "4",
+      "ENGL": "4",
+      "MATH": "5",
+      "CSD": "A",
+      "M1/M2": "5",
+      "Elective 1": "4",
+      "Elective 2": "3"
+    },
+    "uq": {
+      "CHIN": "3",
+      "ENGL": "4",
+      "MATH": "4",
+      "CSD": "A",
+      "Elective 1": "5",
+      "Elective 2": "5",
+      "Elective 3": "5"
+    }
+  }
+}

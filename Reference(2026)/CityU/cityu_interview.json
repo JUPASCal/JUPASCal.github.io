@@ -1,0 +1,287 @@
+{
+  "source": "https://www.cityu.edu.hk/admo/interview-arrangements-local-jupas-applicants",
+  "fetched": "2026-05-22",
+  "count": 40,
+  "programmes": {
+    "JS1000": {
+      "name": "BSc Computational Finance and Financial Technology (Streams: Computational Finance / Financial Technology)",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "On a selective basis - Early/Mid-June 2026 - Interview video - English",
+      "after": ""
+    },
+    "JS1001": {
+      "name": "BBA Global Business (Features: 3 Exchanges/Joint Bachelor’s Degree Program with Columbia University (US)/Overseas Summer School & Study Tour/Business Consultancy Project/Scholarship and Sponsorship)",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "On a selective basis - Tentative: 16 – 17 June 2026 - Group interview - English",
+      "after": ""
+    },
+    "JS1002": {
+      "name": "BBA Accountancy (Streams: Professional Accounting / ESG and Tech)",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "On a selective basis - Mid-June 2026 - Interview - English",
+      "after": ""
+    },
+    "JS1005": {
+      "name": "BBA Management (Streams: Human Resources Management / Strategy and International Management)",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "On a selective basis - 27-28 May 2026 - Group interview - English",
+      "after": ""
+    },
+    "JS1007": {
+      "name": "BBA Marketing (Streams: Global Marketing / Marketing Analytics)",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "On a selective basis - Mid-June 2026 - Group interview - English",
+      "after": ""
+    },
+    "JS1017": {
+      "name": "Intelligent Information Systems [Majors: BBA Global Business Systems Management / BBA Artificial Intelligence in Business]",
+      "type": "interview",
+      "timing": "both",
+      "before": "On a selective basis - June/July2026 - Group interview - English",
+      "after": "On a selective basis - June/July2026 - Group interview - English"
+    },
+    "JS1018": {
+      "name": "BBA Global Business Systems Management (Features: Intelligent Technologies / Global Business / Study Exchange)",
+      "type": "interview",
+      "timing": "both",
+      "before": "On a selective basis - June/July2026 - Group interview - English",
+      "after": "On a selective basis - June/July2026 - Group interview - English"
+    },
+    "JS1019": {
+      "name": "BBA Artificial Intelligence in Business (Streams: Business Intelligence / Information Systems Auditing / Internet Services and Social Networks / Data Informatics)",
+      "type": "interview",
+      "timing": "both",
+      "before": "On a selective basis - June/July2026 - Group interview - English",
+      "after": "On a selective basis - June/July2026 - Group interview - English"
+    },
+    "JS1026": {
+      "name": "BBA Business Decision Analytics (Streams: Decision Analytics / Data Informatics)",
+      "type": "interview",
+      "timing": "both",
+      "before": "On a selective basis - July 2026 - Group interview - English",
+      "after": "On a selective basis - July 2026 - Group interview - English"
+    },
+    "JS1027": {
+      "name": "BBA Global Operations Management (Features: Supply Chain Management / Operations Efficiency / Process Improvement / Operations Analytics / Resource Planning)",
+      "type": "interview",
+      "timing": "both",
+      "before": "On a selective basis - July 2026 - Group interview - English",
+      "after": "On a selective basis - July 2026 - Group interview - English"
+    },
+    "JS1201": {
+      "name": "Architecture and Civil Engineering (Majors: BEng Architectural Engineering / BEng Civil Engineering / BSc Architecture and Surveying)",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "On a selective basis - Early to Mid-May 2026 - Group and/or individual interviews - English",
+      "after": ""
+    },
+    "JS1205": {
+      "name": "Electrical Engineering (Majors: BEng Computer and Data Engineering / BEng Electronic and Electrical Engineering / BEng Information Engineering / BEng Microelectronics Engineering)",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "On a selective basis - Early July 2026 - Group interview - English",
+      "after": ""
+    },
+    "JS1207": {
+      "name": "Mechanical Engineering (Majors: BEng Aerospace Engineering / BEng Mechanical Engineering / BEng Nuclear and Risk Engineering)",
+      "type": "interview",
+      "timing": "both",
+      "before": "When necessary",
+      "after": "When necessary"
+    },
+    "JS1210": {
+      "name": "BEng Materials Science and Engineering (Features: HKIE Accredited / Industrial and Research Internships / Overseas Double-degrees / Knowledge Transfer / World-leading Research)",
+      "type": "interview",
+      "timing": "both",
+      "before": "On a selective basis - Mid-July 2026 - Group interview - English",
+      "after": "On a selective basis - Mid-July 2026 - Group interview - English"
+    },
+    "JS1216": {
+      "name": "BEng Intelligent Manufacturing Engineering (Features: Industrial Internet-of-Things / Industrial Big Data / Robotics and Automation / Logistics and Supply Chain / Smart City Engineering)",
+      "type": "interview",
+      "timing": "both",
+      "before": "When necessary",
+      "after": "When necessary"
+    },
+    "JS1217": {
+      "name": "Pathway for Research, Innovation, and Multinational Engineering (PRIME) (any major in College of Engineering + Overseas Experience / Interdisciplinary / Entrepreneurial Training)",
+      "type": "interview",
+      "timing": "both",
+      "before": "When necessary",
+      "after": "When necessary"
+    },
+    "JS1219": {
+      "name": "BEng Innovation and Enterprise Engineering (Features: Engineering / Technology / Innovation / Enterprise / Entrepreneurship)",
+      "type": "interview",
+      "timing": "both",
+      "before": "When necessary",
+      "after": "When necessary"
+    },
+    "JS1104": {
+      "name": "BA English (Streams: English and Professional Communication / Language and Literature)",
+      "type": "interview",
+      "timing": "both",
+      "before": "When necessary",
+      "after": "When necessary"
+    },
+    "JS1108": {
+      "name": "BSocSc Public Affairs and Management (Streams: Public Affairs and Governance / Public Policy and Management)",
+      "type": "interview",
+      "timing": "both",
+      "before": "When necessary",
+      "after": "When necessary"
+    },
+    "JS1113": {
+      "name": "BSocSc Social Work (Features: Social Engagement and Concern for People’s Health and Well-Being / Human Diversities and Sustainability / People-in-Environment Interventions)",
+      "type": "interview",
+      "timing": "post-results",
+      "before": "",
+      "after": "On a selective basis - Late July to early August 2026 - Group interview - English and Chinese"
+    },
+    "JS1123": {
+      "name": "BSocSc Crime Science and Bachelor of Laws (Double Degree)",
+      "type": "interview",
+      "timing": "both",
+      "before": "When necessary",
+      "after": "When necessary"
+    },
+    "JS1200": {
+      "name": "Global Research Enrichment and Technopreneurship (GREAT) [Majors: BSc Chemistry / BSc Computing Mathematics / BSc Physics + Global Research Enrichment and Technopreneurship (GREAT)]",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "On a selective basis - June 2026 - Individual interview - English",
+      "after": ""
+    },
+    "JS1202": {
+      "name": "BSc Chemistry (Streams: Comprehensive Chemistry / Cosmetic Chemistry / Forensic Chemistry / Global Research Enrichment and Technopreneurship (GREAT))",
+      "type": "interview",
+      "timing": "both",
+      "before": "When necessary",
+      "after": "When necessary"
+    },
+    "JS1206": {
+      "name": "BSc Computing Mathematics (Streams: Enriched Mathematics / Financial Mathematics / Global Research Enrichment and Technopreneurship (GREAT))",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "On a selective basis - June 2026 - Group interview (40 minutes) - English",
+      "after": ""
+    },
+    "JS1208": {
+      "name": "BSc Physics [Features: Classical Physics / Modern Physics / Experimental and Computational Physics / Medical Physics / Condensed Matter Physics / Global Research Enrichment and Technopreneurship (GREAT)]",
+      "type": "interview",
+      "timing": "both",
+      "before": "When necessary",
+      "after": "When necessary"
+    },
+    "JS1801": {
+      "name": "Bachelor of Veterinary Medicine (Features: One Health / Animal Health & Welfare / Public Health / Dual Accreditation)",
+      "type": "interview",
+      "timing": "post-results",
+      "before": "",
+      "after": "On a selective basis - 22-25 July 2026 - Individual interview - English As part of the application process, all applicants are required to complete an online open response situational judgement test (Casper) prior to the interview step. More information about the Casper test can be found on our BVM Admission Website. Shortlisted applicants will be invited for an Multiple Mini Interview (MMI) conducted in English."
+    },
+    "JS1050": {
+      "name": "International Sustainability Programme for Innovation, Research & Entrepreneurship(INSPIRE) (Majors: BEng Energy Science & Engineering/BEng Environmental Science & Engineering +Features: Global Focus)",
+      "type": "interview",
+      "timing": "both",
+      "before": "On a selective basis - Early to mid-July 2026 - Group interview - English",
+      "after": "On a selective basis - Early to mid-July 2026 - Group interview - English"
+    },
+    "JS1051": {
+      "name": "Energy and Environment (Majors: BEng Energy Science and Engineering / BEng Environmental Science and Engineering)",
+      "type": "interview",
+      "timing": "both",
+      "before": "On a selective basis - Early to mid-July 2026 - Group interview - English",
+      "after": "On a selective basis - Early to mid-July 2026 - Group interview - English"
+    },
+    "JS1052": {
+      "name": "BEng Environmental Science and Engineering and BBA Finance (Double Degree; Features: Environmental, Social & Governance (ESG) / Green Finance / Environmental Technology / Interdisciplinary Education)",
+      "type": "interview",
+      "timing": "both",
+      "before": "On a selective basis - Early to mid-July 2026 - Group interview - English",
+      "after": "On a selective basis - Early to mid-July 2026 - Group interview - English"
+    },
+    "JS1053": {
+      "name": "BSc Environment and Sustainable Business (Features: Environmental Science / Business Sustainability / Environmental, Social & Governance (ESG))",
+      "type": "interview",
+      "timing": "both",
+      "before": "On a selective basis - Early to mid-July 2026 - Group interview - English",
+      "after": "On a selective basis - Early to mid-July 2026 - Group interview - English"
+    },
+    "JS1061": {
+      "name": "Bachelor of Laws",
+      "type": "interview",
+      "timing": "both",
+      "before": "When necessary",
+      "after": "When necessary"
+    },
+    "JS1062": {
+      "name": "Bachelor of Laws and BBA Accountancy (Double Degree)",
+      "type": "interview",
+      "timing": "both",
+      "before": "When necessary",
+      "after": "When necessary"
+    },
+    "JS1070": {
+      "name": "AI, Computing and Transformation (ACT) (Features: Free Choice of Major / One-to-One Advisor / Elite Work Placement / Executive Mentor Scheme / Premium Overseas Exchange / Internship Exchange)",
+      "type": "interview",
+      "timing": "both",
+      "before": "When necessary",
+      "after": "When necessary"
+    },
+    "JS1071": {
+      "name": "Data Science (Majors: BSc Data Science / BSc Data and Systems Engineering)",
+      "type": "interview",
+      "timing": "both",
+      "before": "When necessary",
+      "after": "When necessary"
+    },
+    "JS1072": {
+      "name": "BSc Data Science (Features: Data Science / Machine Learning / Data Mining / Big Data Analysis)",
+      "type": "interview",
+      "timing": "both",
+      "before": "When necessary",
+      "after": "When necessary"
+    },
+    "JS1074": {
+      "name": "BSc Data and Systems Engineering (Features: Data Science / FinTech & Decision Analytics / Industrial AI / Smart City)",
+      "type": "interview",
+      "timing": "both",
+      "before": "When necessary",
+      "after": "When necessary"
+    },
+    "JS1204": {
+      "name": "BSc Computer Science (Streams: Artificial Intelligence / Cybersecurity / Data Science / Multimedia Computing / Software Engineering and Project Management)",
+      "type": "interview",
+      "timing": "both",
+      "before": "When necessary",
+      "after": "When necessary"
+    },
+    "JS1218": {
+      "name": "BSc Cybersecurity (Features: System Security / Software Security / Cryptography / Privacy-Enhancing Technologies / Cyber Risk Management)",
+      "type": "interview",
+      "timing": "both",
+      "before": "When necessary",
+      "after": "When necessary"
+    },
+    "JS1221": {
+      "name": "BSc Computer Science and BSc Computational Finance and Financial Technology (Double Degree; Features: Corporate Accounting & Economics / Computational Finance / Advanced Statistics / Modeling & Algorithms / Financial Technologies Software Engineering)",
+      "type": "interview",
+      "timing": "both",
+      "before": "When necessary",
+      "after": "When necessary"
+    },
+    "JS1211": {
+      "name": "BEng Biomedical Engineering (Features: Medical Technology / Bioinstrumentation / Cell and Tissue Engineering / Biomedical Robotics)",
+      "type": "interview",
+      "timing": "both",
+      "before": "When necessary",
+      "after": "When necessary"
+    }
+  }
+}

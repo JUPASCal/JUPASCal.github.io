@@ -1,0 +1,15 @@
+# Python dependencies for the data pipeline in scripts/ (extraction + unification).
+# The web app itself needs no Python — these are only for regenerating the dataset.
+#
+#   python -m venv .venv && source .venv/bin/activate
+#   pip install -r requirements.txt
+#   playwright install chromium      # for the Playwright-based scrapers
+#
+# (Tested on Python 3.11.)
+beautifulsoup4
+openpyxl
+pandas
+pdfplumber
+playwright
+pypdf
+requests

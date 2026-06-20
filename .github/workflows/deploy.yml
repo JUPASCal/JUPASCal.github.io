@@ -1,0 +1,74 @@
+name: Deploy to GitHub Pages
+
+# Every push to main builds the app and publishes it to GitHub Pages — there is
+# no longer a manual "build & copy dist/ to the repo root" step. The app sources
+# live at the repo root (Vite + React); the build output (dist/) is gitignored.
+#
+# ONE-TIME SETUP (repo Settings → Pages → Build and deployment):
+#   set "Source" to "GitHub Actions". Until that is done, the deploy job below
+#   cannot publish.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Grant the workflow the rights Pages deployment needs (OIDC + pages write).
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one Pages deploy at a time; don't cancel a running deploy.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Bundle runtime data + CNAME into the published artifact
+        # The app fetches these at runtime relative to index.html, so they must
+        # sit next to it in the deployed site (they are NOT part of the Vite build).
+        run: |
+          mkdir -p dist/data/processed dist/data/raw
+          cp data/processed/JUPAS_2026_Unified_Data.json dist/data/processed/
+          cp data/processed/JUPAS_2026_Unified_Data.version dist/data/processed/
+          cp data/processed/programme_details_2026.json dist/data/processed/
+          cp data/raw/subjects.canonical.json dist/data/raw/
+          cp CNAME dist/CNAME
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

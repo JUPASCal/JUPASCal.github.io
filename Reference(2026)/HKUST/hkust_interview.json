@@ -1,0 +1,13 @@
+{
+  "source": "https://join.hkust.edu.hk/admissions/jupas",
+  "fetched": "2026-05-22",
+  "note": "HKUST is interview-light: only these 5 Business School programmes require an interview, held ~Nov & May (before HKDSE results) with interview performance folded into the final admission score. All other HKUST programmes are score-based (no interview). Hand-curated from HKUST admissions info, not table-scraped.",
+  "count": 5,
+  "programmes": {
+    "JS5313": {"name": "BBA in Global Business", "type": "interview", "timing": "pre-results", "salience": "weighty", "scored": true},
+    "JS5331": {"name": "BSc in Economics and Finance", "type": "interview", "timing": "pre-results", "salience": "weighty", "scored": true},
+    "JS5332": {"name": "BSc in Quantitative Finance", "type": "interview", "timing": "pre-results", "salience": "weighty", "scored": true},
+    "JS5814": {"name": "BSc in Risk Management and Business Intelligence", "type": "interview", "timing": "pre-results", "salience": "weighty", "scored": true},
+    "JS5822": {"name": "BSc in Sustainable and Green Finance", "type": "interview", "timing": "pre-results", "salience": "weighty", "scored": true}
+  }
+}

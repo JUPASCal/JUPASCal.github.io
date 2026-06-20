@@ -1,0 +1,105 @@
+{
+  "source": "https://admissions.hkbu.edu.hk/en/hkdse.html",
+  "fetched": "2026-05-22",
+  "count": 14,
+  "programmes": {
+    "JS2060": {
+      "name": "Bachelor of Arts (Hons) / Bachelor of Music (Hons) (Music / Creative Industries)",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "May - June 2026",
+      "after": "N/A"
+    },
+    "JS2110": {
+      "name": "Bachelor of Business Administration (Hons) - Accounting Concentration",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "June 2026",
+      "after": "N/A"
+    },
+    "JS2120": {
+      "name": "Bachelor of Business Administration (Hons)",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "June 2026",
+      "after": "N/A"
+    },
+    "JS2330": {
+      "name": "Bachelor of Arts (Hons) in Film and Television",
+      "type": "interview",
+      "timing": "post-results",
+      "before": "N/A",
+      "after": "End of July 2026"
+    },
+    "JS2340": {
+      "name": "Bachelor of Fine Arts (Hons) in Acting for Global Screen",
+      "type": "interview",
+      "timing": "both",
+      "before": "June 2026",
+      "after": "End of July 2026"
+    },
+    "JS2370": {
+      "name": "Bachelor of Communication (Hons) in Game Design and Animation",
+      "type": "interview",
+      "timing": "post-results",
+      "before": "N/A",
+      "after": "End of July 2026"
+    },
+    "JS2410": {
+      "name": "Bachelor of Chinese Medicine and Bachelor of Science (Hons) in Biomedical Science",
+      "type": "interview",
+      "timing": "both",
+      "before": "June 2026",
+      "after": "End of July 2026"
+    },
+    "JS2420": {
+      "name": "Bachelor of Pharmacy (Hons) in Chinese Medicine",
+      "type": "interview",
+      "timing": "both",
+      "before": "June 2026",
+      "after": "End of July 2026"
+    },
+    "JS2660": {
+      "name": "Bachelor of Social Work (Hons)",
+      "type": "interview",
+      "timing": "post-results",
+      "before": "N/A",
+      "after": "End of July 2026 *"
+    },
+    "JS2810": {
+      "name": "Bachelor of Arts (Hons) in Visual Arts",
+      "type": "interview",
+      "timing": "both",
+      "before": "June 2026",
+      "after": "End of July 2026"
+    },
+    "JS2920": {
+      "name": "Bachelor of Arts and Science (Hons) in Arts and Technology",
+      "type": "interview",
+      "timing": "both",
+      "before": "June 2026",
+      "after": "End of July 2026"
+    },
+    "JS2930": {
+      "name": "Bachelor of Arts (Hons) in Business Administration (Global Entertainment)",
+      "type": "interview",
+      "timing": "both",
+      "before": "June 2026",
+      "after": "End of July 2026"
+    },
+    "JS2950": {
+      "name": "Bachelor of Arts, Science and Technology (Hons) in Individualised Major",
+      "type": "interview",
+      "timing": "both",
+      "before": "June 2026",
+      "after": "End of July 2026"
+    },
+    "JS2960": {
+      "name": "Bachelor of Arts and Science (Hons) in Digital Futures and Humanities",
+      "type": "interview",
+      "timing": "post-results",
+      "before": "N/A",
+      "after": "End of July 2026"
+    }
+  }
+}

@@ -1,0 +1,189 @@
+{
+  "source": "https://www.apply.eduhk.hk/ug/jupas_interview",
+  "fetched": "2026-05-22",
+  "count": 26,
+  "programmes": {
+    "JS8001": {
+      "name": "BA(CDA)&BEd(MU)",
+      "type": "interview",
+      "timing": "both",
+      "before": "Feb 2026; 15-18 June 2026",
+      "after": "23-24 July 2026"
+    },
+    "JS8002": {
+      "name": "BA(CDA)&BEd(VA)",
+      "type": "interview",
+      "timing": "both",
+      "before": "Feb 2026; 15-18 June 2026",
+      "after": "23-24 July 2026"
+    },
+    "JS8003": {
+      "name": "BA(DCCC)&BEd(CL)",
+      "type": "interview",
+      "timing": "both",
+      "before": "Feb 2026; 15-18 June 2026",
+      "after": "23-24 July 2026"
+    },
+    "JS8004": {
+      "name": "BA(ESDC)&BEd(EL)",
+      "type": "interview",
+      "timing": "both",
+      "before": "Feb 2026; 15-18 June 2026",
+      "after": "23-24 July 2026"
+    },
+    "JS8005": {
+      "name": "BA(HE&AM)&BEd(CHI HIST)",
+      "type": "interview",
+      "timing": "both",
+      "before": "Feb 2026; 15-18 June 2026",
+      "after": "23-24 July 2026"
+    },
+    "JS8006": {
+      "name": "BSocSc(Psy)&BEd(ECE)",
+      "type": "interview",
+      "timing": "both",
+      "before": "Feb 2026; 15-18 June 2026",
+      "after": "23-24 July 2026"
+    },
+    "JS8007": {
+      "name": "BA(PF)&BEd(BAFS)",
+      "type": "interview",
+      "timing": "both",
+      "before": "Feb 2026; 15-18 June 2026",
+      "after": "23-24 July 2026"
+    },
+    "JS8008": {
+      "name": "BSc(AIET)&BEd(ICT&PSci)",
+      "type": "interview",
+      "timing": "both",
+      "before": "Feb 2026; 15-18 June 2026",
+      "after": "23-24 July 2026"
+    },
+    "JS8009": {
+      "name": "BSc(AIET)&BEd(PM)",
+      "type": "interview",
+      "timing": "both",
+      "before": "Feb 2026; 15-18 June 2026",
+      "after": "23-24 July 2026"
+    },
+    "JS8010": {
+      "name": "BSc(SPSC)&BEd(PE)",
+      "type": "interview",
+      "timing": "both",
+      "before": "Feb 2026; 15-18 June 2026",
+      "after": "23-24 July 2026"
+    },
+    "JS8011": {
+      "name": "BSc(IEM)&BEd(SCI)",
+      "type": "interview",
+      "timing": "both",
+      "before": "Feb 2026; 15-18 June 2026",
+      "after": "23-24 July 2026"
+    },
+    "JS8012": {
+      "name": "BSocSc(SCS)&BEd(GEOG)",
+      "type": "interview",
+      "timing": "both",
+      "before": "Feb 2026; 15-18 June 2026",
+      "after": "23-24 July 2026"
+    },
+    "JS8013": {
+      "name": "BSocSc(SCS)&BEd(PHM)",
+      "type": "interview",
+      "timing": "both",
+      "before": "Feb 2026; 15-18 June 2026",
+      "after": "23-24 July 2026"
+    },
+    "JS8507": {
+      "name": "HD(ECE)",
+      "type": "interview",
+      "timing": "both",
+      "before": "15-18 June 2026",
+      "after": "23-24 July 2026"
+    },
+    "JS8651": {
+      "name": "BSocSc(Psy)",
+      "type": "interview",
+      "timing": "both",
+      "before": "Feb 2026; 15-18 June 2026",
+      "after": "23-24 July 2026"
+    },
+    "JS8663": {
+      "name": "BA(SE)",
+      "type": "interview",
+      "timing": "both",
+      "before": "Feb 2026; 15-18 June 2026",
+      "after": "23-24 July 2026"
+    },
+    "JS8674": {
+      "name": "BA(DCCC)",
+      "type": "interview",
+      "timing": "both",
+      "before": "Feb 2026; 15-18 June 2026",
+      "after": "23-24 July 2026"
+    },
+    "JS8675": {
+      "name": "BA(ESDC)",
+      "type": "interview",
+      "timing": "both",
+      "before": "Feb 2026; 15-18 June 2026",
+      "after": "23-24 July 2026"
+    },
+    "JS8685": {
+      "name": "BA(CDA)-MU",
+      "type": "interview",
+      "timing": "both",
+      "before": "Feb 2026; 15-18 June 2026",
+      "after": "23-24 July 2026"
+    },
+    "JS8686": {
+      "name": "BA(CDA)-VA",
+      "type": "interview",
+      "timing": "both",
+      "before": "Feb 2026; 15-18 June 2026",
+      "after": "23-24 July 2026"
+    },
+    "JS8687": {
+      "name": "BA(HE&AM)",
+      "type": "interview",
+      "timing": "both",
+      "before": "Feb 2026; 15-18 June 2026",
+      "after": "23-24 July 2026"
+    },
+    "JS8688": {
+      "name": "BA(PF)",
+      "type": "interview",
+      "timing": "both",
+      "before": "Feb 2026; 15-18 June 2026",
+      "after": "23-24 July 2026"
+    },
+    "JS8702": {
+      "name": "BSc(IEM)",
+      "type": "interview",
+      "timing": "both",
+      "before": "Feb 2026; 15-18 June 2026",
+      "after": "23-24 July 2026"
+    },
+    "JS8714": {
+      "name": "BSc(AI&EdTech)",
+      "type": "interview",
+      "timing": "both",
+      "before": "Feb 2026; 15-18 June 2026",
+      "after": "23-24 July 2026"
+    },
+    "JS8726": {
+      "name": "BSc(SPSC)",
+      "type": "interview",
+      "timing": "both",
+      "before": "Feb 2026; 15-18 June 2026",
+      "after": "23-24 July 2026"
+    },
+    "JS8727": {
+      "name": "BSc(SPR)",
+      "type": "interview",
+      "timing": "both",
+      "before": "15-18 June 2026",
+      "after": "23-24 July 2026"
+    }
+  }
+}
