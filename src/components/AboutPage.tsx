@@ -135,7 +135,12 @@ export function AboutPage() {
         </section>
 
         <footer className="about-version">
-          <span>{t("about.version")} <code>{__APP_VERSION__}</code></span>
+          <span>
+            {__APP_VERSION__.includes("-beta") ? <><strong>{t("about.beta")}</strong> · </> : null}
+            {t("about.version")} <code>{__APP_VERSION__}</code>
+            {__ADMISSION_CYCLE__ ? <> · {t("about.cycle", { year: __ADMISSION_CYCLE__ })}</> : null}
+            {" · "}{t("about.build")} <code>{__BUILD_SHA__}</code> ({__BUILD_DATE__})
+          </span>
           <span className="about-social">
             <a
               href="https://github.com/JUPASCal/JUPASCal.github.io"

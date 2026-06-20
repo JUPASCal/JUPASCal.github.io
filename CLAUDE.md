@@ -62,8 +62,10 @@ This document is the single source of truth for all AI agents (Gemini, Claude, e
 - **Eligibility Checks**: Use **2026 requirements** for current applicants.
 - **Rationale**: Students compare their 2026 potential scores against 2025 admission benchmarks.
 
-### Versioning (every push)
-- **Bump `package.json` (repo root) `"version"` on every push that deploys.** It is exposed as `__APP_VERSION__` (Vite define) and shown on the About page footer, so the deployed version is always identifiable. Currently pre-1.0: bump the `-beta.N` suffix per push (e.g. `0.1.0-beta.2` → `0.1.0-beta.3`). This applies to ALL agents.
+### Versioning — see [`VERSIONING.md`](VERSIONING.md) (authoritative)
+- **Do NOT bump the version on a routine push.** Every deploy is auto-identified by a build stamp (`__BUILD_SHA__` + `__BUILD_DATE__`, injected at build time and shown in the About footer). A normal change = just push to `main`.
+- **Bump `package.json` `"version"` (semver) ONLY when cutting a release**: pre-1.0 stay `0.1.0-beta.N`; set `1.0.0` at stable launch; then PATCH=fixes, MINOR=features (and the annual data refresh — also bump `"admissionCycle"`), MAJOR=overhauls. Tag releases (`vX.Y.Z`) + publish GitHub Release notes.
+- **`"admissionCycle"`** (`package.json`, e.g. `"2026"`) is the JUPAS entry year the data targets — a separate axis, bumped only on a data refresh, surfaced as `__ADMISSION_CYCLE__`. This applies to ALL agents — read `VERSIONING.md` before any release push.
 
 ### Deployment (auto-deploy on push to `main`)
 - **`.github/workflows/deploy.yml`** builds the app, copies the runtime data files (`data/processed/JUPAS_2026_Unified_Data.json` + `.version`, `data/raw/subjects.canonical.json`) and `CNAME` into `dist/`, and publishes `dist/` to GitHub Pages. **A push to `main` is a production deploy** — there is no separate build/copy step and no committed bundle.

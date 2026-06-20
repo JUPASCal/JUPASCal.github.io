@@ -2,11 +2,21 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { readFile } from "node:fs/promises";
 import { readFileSync } from "node:fs";
+import { execSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { resolve } from "node:path";
 
 const projectDir = fileURLToPath(new URL(".", import.meta.url));
 const pkg = JSON.parse(readFileSync(new URL("./package.json", import.meta.url), "utf-8"));
+
+// Build stamp — uniquely identifies the exact deploy (for bug reports) WITHOUT a
+// manual version bump. See VERSIONING.md: routine pushes aren't versioned, the
+// build stamp covers per-deploy identity; only releases bump package.json.
+const buildSha = (() => {
+  if (process.env.GITHUB_SHA) return process.env.GITHUB_SHA.slice(0, 7); // CI (Actions)
+  try { return execSync("git rev-parse --short HEAD").toString().trim(); } catch { return "dev"; }
+})();
+const buildDate = new Date().toISOString().slice(0, 10); // YYYY-MM-DD (build time)
 // Single source of truth for the programme count: the unified dataset's length,
 // read at build time and injected as __PROGRAMME_COUNT__. Avoids hardcoding the
 // number in the UI (it changes whenever programmes are added/removed).
@@ -55,6 +65,11 @@ export default defineConfig({
   define: {
     __APP_VERSION__: JSON.stringify(pkg.version),
     __PROGRAMME_COUNT__: JSON.stringify(programmeCount),
+    // Admission cycle (JUPAS entry year) the data targets — see package.json
+    // "admissionCycle". Independent of the app version; bump only on a data refresh.
+    __ADMISSION_CYCLE__: JSON.stringify(pkg.admissionCycle ?? ""),
+    __BUILD_SHA__: JSON.stringify(buildSha),
+    __BUILD_DATE__: JSON.stringify(buildDate),
   },
   plugins: [
     react(),

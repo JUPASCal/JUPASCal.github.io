@@ -104,6 +104,9 @@ export const STRINGS = {
   "about.more.h": { en: "Data sources", zh: "數據來源" },
   "about.more.p": { en: "Programme weightings, entry requirements and admission scores are compiled from each institution's own published admissions materials and the official JUPAS site, then cross-checked against them. The figures are reference estimates and may lag the latest official updates.", zh: "課程的科目比重、入學要求及收生分數，均整理自各院校官方公佈的收生資料及 JUPAS 官方網站，並經逐一核對。所有數字僅屬參考估算，未必反映最新的官方更新。" },
   "about.version": { en: "Version", zh: "版本" },
+  "about.beta": { en: "Public Beta", zh: "公開測試版" },
+  "about.cycle": { en: "{year} entry", zh: "{year} 年入學" },
+  "about.build": { en: "build", zh: "建置" },
 
   // – Advisor empty state –
   "advisorEmpty.eyebrow": { en: "Risk Analysis", zh: "風險分析" },
