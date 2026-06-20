@@ -460,7 +460,7 @@ function ChanceRow({ pick, onOpenDetail }: { pick: PickChance; onOpenDetail?: (c
   if (pick.selection.length > 0) {
     notes.push(pick.selection.map((it) => t(selectionTypeKey(it.type))).join(" · "));
   }
-  if (pick.fewPlaces) notes.push(t("analysis.notesFewPlaces"));
+  if (pick.fewPlaces) notes.push(t("analysis.notesFewPlaces", { n: pick.result.programme.quota ?? 0 }));
 
   const body = (
     <>

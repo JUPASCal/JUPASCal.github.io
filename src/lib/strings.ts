@@ -535,7 +535,7 @@ export const STRINGS = {
   "analysis.disclaimer": { en: "This is an automatic estimate based on 2025 admission scores and 2026 entrance requirements. For reference only – your real chances also depend on places, interviews, and how others apply.", zh: "此乃根據 2025 年收生分數及 2026 年入學要求自動估算，僅供參考，並非保證 – 實際取錄機會仍視乎學額、面試及其他申請人的情況。" },
   "analysis.wantOwn": { en: "Want to check your own chances?", zh: "想計算自己的取錄機會？" },
   "analysis.notesInterview": { en: "interview / portfolio", zh: "面試／作品集" },
-  "analysis.notesFewPlaces": { en: "very few places", zh: "學額甚少" },
+  "analysis.notesFewPlaces": { en: "very few places ({n})", zh: "學額甚少（{n} 個）" },
   "analysis.openDetailAria": { en: "Open {code} {name} details", zh: "開啟 {code} {name} 詳情" },
 
   // – Alternative / safety suggestions (Advisor Console) –
@@ -548,7 +548,7 @@ export const STRINGS = {
   "suggest.scoreVsMed": { en: "Your {score} vs median {median}", zh: "你的 {score}（中位數 {median}）" },
   "suggest.you": { en: "You", zh: "你" },
   "suggest.median": { en: "Median", zh: "中位數" },
-  "suggest.fewPlaces": { en: "very few places", zh: "學額甚少" },
+  "suggest.fewPlaces": { en: "very few places ({n})", zh: "學額甚少（{n} 個）" },
   "suggest.add": { en: "Add to plan", zh: "加入計劃" },
   "suggest.addAria": { en: "Add {code} {name} to your plan", zh: "將 {code} {name} 加入你的計劃" },
   "suggest.swap": { en: "Swap {slot}", zh: "替換 {slot}" },
@@ -713,7 +713,7 @@ export const STRINGS = {
   "find.bandAOk.detail.many": { en: "{slots} score at or above what most students got in with last year, so Band A includes more than one realistic option.", zh: "{slots} 的分數達到或高於去年大部分取錄學生的分數，因此 Band A 包含多於一個可行選擇。" },
   "find.bandAThin.title": { en: "Band A has limited realistic options", zh: "Band A 的可行選擇較少" },
   "find.bandAThin.detail": { en: "{slots} looks realistic, but Band A should ideally include more than one realistic option. Review the remaining Band A choices and adjust the order if needed.", zh: "{slots} 看來較可行，但 Band A 理想上應包含多於一個可行選擇。請檢查其餘 Band A 志願，並按需要調整次序。" },
-  "find.fewPlaces.title.one": { en: "{slots} has very few places", zh: "{slots} 學額甚少" },
+  "find.fewPlaces.title.one": { en: "Very few places: {slots}", zh: "學額甚少：{slots}" },
   "find.fewPlaces.title.many": { en: "Very few places: {slots}", zh: "學額甚少：{slots}" },
   "find.fewPlaces.detail.one": { en: "{slots} takes very few students, so the score needed can jump around from year to year. Even with a good score, treat it as less safe than the numbers suggest.", zh: "{slots} 收生人數甚少，所需分數每年可能大幅波動。即使你分數達標，仍不應簡單視為低風險選擇。" },
   "find.fewPlaces.detail.many": { en: "{slots} take very few students, so the score needed can jump around from year to year. Even with a good score, treat them as less safe than the numbers suggest.", zh: "{slots} 收生人數甚少，所需分數每年可能大幅波動。即使你分數達標，仍不應簡單視為低風險選擇。" },

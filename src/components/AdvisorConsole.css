@@ -926,13 +926,16 @@ html:has(.advisor-console) body {
   gap: var(--space-2);
 }
 
-/* Desktop console: the stacked cards leave the wide panel's right half empty, so
-   lay them out two-up. A lone card spans the full width (no awkward half card),
-   and the action row pins to the bottom so side-by-side cards align. Mobile keeps
+/* Desktop console: lay the cards out multi-up to use the wide panel — but only
+   when there's room for a comfortable card. auto-fit + a ~340px min means the
+   grid drops to a single full-width column on a narrow / scaled-down console
+   (where two-up was cramming the score pills and Swap/Add buttons), and goes
+   two-up (or more) on a genuinely wide panel. A lone card spans full width, and
+   the action row pins to the bottom so side-by-side cards align. Mobile keeps
    the single-column flex above. */
 .console-analyze .suggest-list {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
   gap: var(--space-2);
 }
 .console-analyze .suggest-list > :only-child {
@@ -1117,6 +1120,15 @@ html:has(.advisor-console) body {
   background: color-mix(in srgb, var(--accent) 85%, black);
   border-color: color-mix(in srgb, var(--accent) 85%, black);
   outline: none;
+}
+
+/* In-panel Add/Swap row for a recommendation opened in the (desktop) detail
+   panel — reuses the .suggest-add / .suggest-swap pills. */
+.detail-rec-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: var(--space-2) 0 var(--space-1);
 }
 
 /* "Show N more / fewer" reveal under the suggestion list. */

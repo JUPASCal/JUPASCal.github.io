@@ -89,7 +89,7 @@ export function AlternativeSuggestions({ results, allResults, onAdd, onSwap, onO
                       <p className="suggest-name">{pickName(p, lang)}</p>
                       <p className="suggest-meta">
                         {t("suggest.forSlot", { slot: s.forSlot, code: s.forCode })}
-                        {s.fewPlaces ? " · " + t("suggest.fewPlaces") : ""}
+                        {s.fewPlaces ? " · " + t("suggest.fewPlaces", { n: s.result.programme.quota ?? 0 }) : ""}
                       </p>
                     </div>
                   </div>

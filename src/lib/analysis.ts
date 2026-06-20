@@ -622,10 +622,16 @@ export function analyzePortfolio(rawPicks: (ProgrammeResult | null)[], t: Transl
   if (aFewPlaces.length > 0) {
     const fpRefs = aFewPlaces.map(slotRef);
     const one = aFewPlaces.length === 1;
+    // Title shows the actual intake per slot (e.g. "A1（15 個）、A3（22 個）") so the
+    // "very few places" warning is concrete; the detail keeps the plain slot list
+    // to avoid repeating the number next to "收生人數甚少".
+    const fpSlotsWithQuota = aFewPlaces
+      .map((p) => lang === "zh" ? `${p.slot}（${p.result.programme.quota} 個）` : `${p.slot} (${p.result.programme.quota})`)
+      .join(lang === "zh" ? "、" : ", ");
     findings.push({
       id: "band-a-few-places",
       severity: "warning",
-      title: t(one ? "find.fewPlaces.title.one" : "find.fewPlaces.title.many", { slots: listSlots(fpRefs, lang) }),
+      title: t(one ? "find.fewPlaces.title.one" : "find.fewPlaces.title.many", { slots: fpSlotsWithQuota }),
       detail: t(one ? "find.fewPlaces.detail.one" : "find.fewPlaces.detail.many", { slots: listSlots(fpRefs, lang) }),
       slots: fpRefs,
     });

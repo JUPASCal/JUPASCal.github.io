@@ -1031,6 +1031,13 @@ function CalculatorApp() {
     for (const s of alternatives.suggestions) map[s.result.programme.jupas_code] = s.forSlot;
     return map;
   }, [alternatives]);
+  // code → the 0-based slot index it backs up, so the detail panel's "Swap"
+  // action (which only knows the code) can target the right slot.
+  const suggestionSlotIndexByCode = useMemo(() => {
+    const map: Record<string, number> = {};
+    for (const s of alternatives.suggestions) map[s.result.programme.jupas_code] = s.forSlotIndex;
+    return map;
+  }, [alternatives]);
 
   // When the active programme is a SUGGESTION not in the plan (e.g. a clicked
   // "Safer option"), include it in the detail panel's results so its OWN detail
@@ -1462,6 +1469,13 @@ function CalculatorApp() {
       onActiveCodeChange={setActiveCode}
       onRemove={removePickedCode}
       readOnly={readOnly}
+      // Desktop console has no mobile-style footer, so the recommendation
+      // Add/Swap actions live inside the detail panel itself.
+      onAddToPlan={pickProgramme}
+      onSwapToSlot={(code) => {
+        const idx = suggestionSlotIndexByCode[code];
+        if (idx != null) setSlotCode(idx, code);
+      }}
     />
   ) : null;
 

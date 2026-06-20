@@ -38,9 +38,14 @@ type Props = {
   // slot it backs up ("A2"). Every listed programme is then treated as a
   // suggestion (no remove button, "Backup for AX" labels instead of slot badges).
   suggestionSlots?: Record<string, string>;
+  // When viewing a suggestion, show in-panel Add/Swap actions (desktop console —
+  // there's no mobile-style footer there). Both take just the code; the parent
+  // resolves which slot a swap targets. Omit on mobile (the footer handles it).
+  onAddToPlan?: (code: string) => void;
+  onSwapToSlot?: (code: string) => void;
 };
 
-export function DetailPanel({ results, activeCode, reviewRequest, onActiveCodeChange, onRemove, readOnly = false, previewCode, suggestionSlots }: Props) {
+export function DetailPanel({ results, activeCode, reviewRequest, onActiveCodeChange, onRemove, readOnly = false, previewCode, suggestionSlots, onAddToPlan, onSwapToSlot }: Props) {
   const { t, lang } = useLang();
   const [auditOpen, setAuditOpen] = useState(false);
   // Programme name is clamped (2 lines / 1 secondary line) by default; tapping
@@ -265,6 +270,34 @@ export function DetailPanel({ results, activeCode, reviewRequest, onActiveCodeCh
             {programme.scores_2025?.score_type === "estimated" ? <span className="status warn">{t("detail.estimatedBenchmark")}</span> : null}
           </div>
         </div>
+
+        {/* Plan actions for a recommendation viewed in the (desktop) detail panel,
+            which has no mobile-style footer. Only shown when the parent passes the
+            handlers (desktop console) and we're looking at a suggestion. */}
+        {isSuggested(programme.jupas_code) && !readOnly && (onAddToPlan || onSwapToSlot) ? (
+          <div className="detail-rec-actions">
+            {onSwapToSlot && backupSlotOf(programme.jupas_code) ? (
+              <button
+                type="button"
+                className="suggest-swap"
+                onClick={() => onSwapToSlot(programme.jupas_code)}
+                aria-label={t("suggest.swapAria", { code: programme.jupas_code, slot: backupSlotOf(programme.jupas_code)! })}
+              >
+                {t("suggest.swap", { slot: backupSlotOf(programme.jupas_code)! })}
+              </button>
+            ) : null}
+            {onAddToPlan ? (
+              <button
+                type="button"
+                className="suggest-add"
+                onClick={() => onAddToPlan(programme.jupas_code)}
+                aria-label={t("suggest.addAria", { code: programme.jupas_code, name: pickName(programme, lang) })}
+              >
+                {t("suggest.add")}
+              </button>
+            ) : null}
+          </div>
+        ) : null}
 
         <section className={`score-context band-${result.band}`}>
           <div
