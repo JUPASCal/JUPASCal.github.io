@@ -75,7 +75,7 @@ export const STRINGS = {
   // – About page –
   "about.eyebrow": { en: "About", zh: "關於" },
   "about.title": { en: "JUPASCal", zh: "JUPASCal" },
-  "about.lede": { en: "An unofficial JUPAS admissions score calculator for comparing programmes and historical score benchmarks across Hong Kong universities.", zh: "非官方 JUPAS 收生分數計算器，可用於比較香港各大學課程及其往年收生分數基準。" },
+  "about.lede": { en: "An unofficial JUPAS admissions score calculator for comparing programmes and historical score benchmarks across Hong Kong universities.", zh: "非官方 JUPAS 收生計分器，可比較香港各大學課程及其往年收生分數基準。" },
   "about.facts.institutions": { en: "institutions", zh: "所院校" },
   "about.facts.programmes": { en: "programmes", zh: "個課程" },
   "about.facts.baselines": { en: "score baselines", zh: "收生分數基準" },
@@ -350,7 +350,7 @@ export const STRINGS = {
   "detail.emptyLede": { en: "Choose one or more programmes to compare details, eligibility, score calculation, and the difference with 2025 admission scores.", zh: "選取一個或多個課程，即可比較課程詳情、入學資格、分數構成，以及與 2025 年入學分數的差距。" },
   "detail.selectedAria": { en: "Selected programmes", zh: "已選課程" },
   "detail.programmeList": { en: "Programme List ({n})", zh: "課程清單（{n}）" },
-  "detail.suggestionList": { en: "Safer options ({n})", zh: "穩陣之選（{n}）" },
+  "detail.suggestionList": { en: "Safer options ({n})", zh: "穩妥之選（{n}）" },
   "detail.emptySlot": { en: "Empty Slot", zh: "空置志願" },
   "detail.eligible": { en: "Eligible", zh: "符合資格" },
   "detail.suggested": { en: "Suggested", zh: "建議課程" },
@@ -456,11 +456,11 @@ export const STRINGS = {
   "share.eyebrowReceived": { en: "Shared with you · 2026", zh: "對方分享的計劃 · 2026" },
   "share.eyebrowOwn": { en: "Your JUPAS plan · 2026", zh: "你的 JUPAS 計劃 · 2026" },
   "share.saveAsProfile": { en: "Save as my profile", zh: "儲存為我的個人檔案" },
-  "share.openInCalc": { en: "Open in calculator", zh: "在計算器中開啟" },
+  "share.openInCalc": { en: "Open in calculator", zh: "在計分器中開啟" },
   "share.viewAnalysis": { en: "View analysis", zh: "查看分析" },
   "share.viewModeBadge": { en: "Viewing a shared plan", zh: "正在檢視分享的計劃" },
   "share.recapAria": { en: "JUPAS recap card", zh: "JUPAS 總覽卡" },
-  "share.recapFootnote": { en: "jupascal.com · unofficial JUPAS calculator · for reference only", zh: "jupascal.com · 非官方 JUPAS 計算機 · 僅供參考" },
+  "share.recapFootnote": { en: "jupascal.com · unofficial JUPAS calculator · for reference only", zh: "jupascal.com · 非官方 JUPAS 計分器 · 僅供參考" },
   "share.showScoresToggle": { en: "Show my calculated scores on the card", zh: "在卡片上顯示我的計算分數" },
   "share.shareThisAria": { en: "Share this plan", zh: "分享此計劃" },
   "share.shareViaTitle": { en: "Share via…", zh: "分享…" },
@@ -539,7 +539,7 @@ export const STRINGS = {
   "analysis.openDetailAria": { en: "Open {code} {name} details", zh: "開啟 {code} {name} 詳情" },
 
   // – Alternative / safety suggestions (Advisor Console) –
-  "suggest.heading": { en: "Safer options in the same direction", zh: "同方向的穩陣之選" },
+  "suggest.heading": { en: "Safer options in the same direction", zh: "同方向的穩妥之選" },
   "suggest.note": { en: "{n} suggested", zh: "{n} 個建議" },
   "suggest.intro": { en: "These similar programmes look more within reach for this profile — consider them as backups.", zh: "以下同類課程以此成績較有把握，可考慮作後備之選。" },
   "suggest.forSlot": { en: "Backup for {slot} · {code}", zh: "{slot}（{code}）的後備之選" },
@@ -555,7 +555,7 @@ export const STRINGS = {
   "suggest.swapAria": { en: "Replace {slot} with {code}", zh: "以 {code} 替換 {slot}" },
   "suggest.showMore": { en: "Show {n} more", zh: "顯示更多 {n} 個" },
   "suggest.showFewer": { en: "Show fewer", zh: "收起" },
-  "suggest.none": { en: "No safer same-direction options were found for the picks that need a backup.", zh: "未能為需要後備的志願找到同方向而更穩陣的課程。" },
+  "suggest.none": { en: "No safer same-direction options were found for the picks that need a backup.", zh: "未能為需要後備的志願找到同方向而更穩妥的課程。" },
 
   // – Non-academic requirements (interview / portfolio / test) –
   "sel.type.interview": { en: "Interview", zh: "面試" },
