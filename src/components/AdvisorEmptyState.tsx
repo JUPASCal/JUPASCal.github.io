@@ -17,6 +17,7 @@ export function AdvisorEmptyState() {
           <li>{t("advisorEmpty.check2")}</li>
           <li>{t("advisorEmpty.check3")}</li>
           <li>{t("advisorEmpty.check4")}</li>
+          <li>{t("advisorEmpty.check5")}</li>
         </ul>
       </div>
 

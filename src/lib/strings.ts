@@ -111,12 +111,13 @@ export const STRINGS = {
   // – Advisor empty state –
   "advisorEmpty.eyebrow": { en: "Risk Analysis", zh: "風險分析" },
   "advisorEmpty.title": { en: "Pick programmes to start analysing", zh: "選擇課程後開始分析" },
-  "advisorEmpty.lede": { en: "Enter 2026 JUPAS choices into the A1–B3 slots on the left. This panel will score the strategy and surface anything worth a closer look.", zh: "把學生的 2026 年 JUPAS 志願填入左方 A1–B3 各格，本面板便會評估整體策略，並標示值得進一步留意的地方。" },
+  "advisorEmpty.lede": { en: "Add the JUPAS programmes you're considering. This panel scores your whole plan against past admission data, flags the risks, and suggests safer options in the same direction.", zh: "加入你正在考慮的 JUPAS 志願，本面板便會根據歷年收生數據評估整個方案、指出當中風險，並建議同方向而較穩妥的選擇。" },
   "advisorEmpty.checkHeading": { en: "What we'll check automatically", zh: "系統會自動檢查" },
-  "advisorEmpty.check1": { en: "Whether each pick passes its 2026 admission requirements at the student's current grades.", zh: "按學生現時成績，檢查每個志願是否符合其 2026 年入學要求。" },
-  "advisorEmpty.check2": { en: "How the calculated 2025-logic score compares against the 2025 LQ / median / UQ benchmarks.", zh: "將按 2025 年計分邏輯算出的分數，對照該年的 LQ／中位數／UQ 基準。" },
-  "advisorEmpty.check3": { en: "Whether the A-band leans dream / B-band leans safer, and if a realistic safety choice exists.", zh: "檢查 A 組是否過於進取、B 組是否較穩妥，以及是否有可行的保底選擇。" },
-  "advisorEmpty.check4": { en: "Programmes where the calculated score is far below the 2025 LQ – likely overshoot.", zh: "標示計算分數遠低於 2025 年 LQ 的課程 – 通常代表志願過於進取。" },
+  "advisorEmpty.check1": { en: "Whether each choice meets its 2026 entry requirements at your grades.", zh: "按你的成績，檢查每個志願是否符合其 2026 年入學要求。" },
+  "advisorEmpty.check2": { en: "Where each calculated score sits against the 2025 LQ / median / UQ — and the admission risk for that slot.", zh: "每個計算分數相對 2025 年 LQ／中位數／UQ 的位置，以及該志願的取錄風險。" },
+  "advisorEmpty.check3": { en: "Whether Band A (A1–A3) holds enough realistic options, flagging reaches and empty slots.", zh: "Band A（A1–A3）是否有足夠可行選擇，並標示過於進取或空置的志願。" },
+  "advisorEmpty.check4": { en: "Requirements beyond grades — interviews, portfolios, or other tests — a choice may ask for.", zh: "成績以外的要求，例如面試、作品集或其他測試。" },
+  "advisorEmpty.check5": { en: "Safer same-direction alternatives you're likelier to get into, for any risky Band-A choice.", zh: "為偏進取的 Band A 志願，建議同方向而較有把握的替代課程。" },
   "advisorEmpty.footnote": { en: "Scores are estimates based on 2025 admission data and 2026 weightings. Final admission depends on JUPAS ranking, places, interviews, and competition.", zh: "分數乃根據 2025 年收生數據及 2026 年計分比重估算。最終能否取錄，仍視乎 JUPAS 排位、學額、面試及整體競爭情況。" },
 
   // – Step 1: grade input –
@@ -225,6 +226,7 @@ export const STRINGS = {
   "results.checkReq": { en: "Not Eligible", zh: "未符合要求" },
   "results.removeFromCompare": { en: "Remove from comparison", zh: "從比較清單移除" },
   "results.addToCompare": { en: "Add to comparison", zh: "加入比較清單" },
+  "results.quotaShort": { en: "Quota", zh: "學額" },
   "results.medShort": { en: "M", zh: "中" },
 
   // – Step 3: compare –
@@ -259,7 +261,7 @@ export const STRINGS = {
   "planner.ariaPanel": { en: "Programme choices planner", zh: "課程志願規劃" },
   "planner.eyebrow": { en: "Your plan", zh: "你的方案" },
   "planner.title": { en: "Programme choices", zh: "課程志願" },
-  "planner.subtitleEmpty": { en: "Add programmes by code or name — in your real JUPAS order.", zh: "以課程編號或名稱加入，按你實際的 JUPAS 志願次序排列。" },
+  "planner.subtitleEmpty": { en: "Add programmes by code or name.", zh: "以課程編號或名稱加入。" },
   "planner.subtitleFilled": { en: "{filled} programme{extra} added", zh: "已加入 {filled} 個課程" },
   "planner.extraBelow": { en: " · +{n} below B3", zh: " · B3 以下另有 {n} 個志願" },
   "planner.slotsAria": { en: "Preference slots", zh: "志願位置" },
