@@ -1,0 +1,53 @@
+{
+  "source": "https://www.cityu.edu.hk/admo/programmes/",
+  "fetched": "2026-05-22",
+  "pages_ok": 55,
+  "pages_blocked": 0,
+  "programmes": {
+    "JS1040": {
+      "requirements": [
+        {
+          "type": "portfolio",
+          "salience": "weighty",
+          "source": "official"
+        }
+      ]
+    },
+    "JS1041": {
+      "requirements": [
+        {
+          "type": "portfolio",
+          "salience": "weighty",
+          "source": "official"
+        }
+      ]
+    },
+    "JS1042": {
+      "requirements": [
+        {
+          "type": "portfolio",
+          "salience": "weighty",
+          "source": "official"
+        }
+      ]
+    },
+    "JS1043": {
+      "requirements": [
+        {
+          "type": "portfolio",
+          "salience": "weighty",
+          "source": "official"
+        }
+      ]
+    },
+    "JS1044": {
+      "requirements": [
+        {
+          "type": "portfolio",
+          "salience": "weighty",
+          "source": "official"
+        }
+      ]
+    }
+  }
+}

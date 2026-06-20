@@ -1,0 +1,3649 @@
+[
+  {
+    "jupas_code": "JS5101",
+    "name": "International Research Enrichment",
+    "faculty": "School of Science",
+    "institution": "HKUST",
+    "data_year_formula": "2026",
+    "data_year_scores": "2025",
+    "engMultiplier": "x1",
+    "secondMultiplier": "x1",
+    "secondMultiplierSubject": "Math",
+    "subjectNum": 5,
+    "max_attainable_weighting": 5,
+    "formula_steps": [
+      {
+        "type": "required",
+        "subject": "English Language",
+        "weight": 1.0
+      },
+      {
+        "type": "required",
+        "subject": "Mathematics Compulsory Part",
+        "weight": 1.0
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [
+          "Biology",
+          "Chemistry",
+          "Physics",
+          "Mathematics Extended Part (Algebra and Calculus) - Module 2",
+          "Mathematics Extended Part (Calculus and Statistics) - Module 1"
+        ],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [
+          "Biology",
+          "Chemistry",
+          "Physics",
+          "Mathematics Extended Part (Algebra and Calculus) - Module 2",
+          "Mathematics Extended Part (Calculus and Statistics) - Module 1"
+        ],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      }
+    ],
+    "subject_weights_2026": {
+      "English Language": 1.0,
+      "Mathematics Compulsory Part": 1.0
+    },
+    "bonus_6th": {
+      "bonus_percentage": 5,
+      "eligible_categories": [
+        "Core",
+        "Category A",
+        "Category B",
+        "Category C"
+      ]
+    },
+    "is_better_of": false,
+    "score_median": "38.25",
+    "score_lq": "37.88",
+    "expected_score_2026": "33",
+    "min_requirements_2026_raw": {
+      "english": "3",
+      "chinese": "3",
+      "maths_core": "2",
+      "csd": "attained",
+      "elective_subject_1": "3",
+      "elective_subject_2": "3"
+    },
+    "flexible_intake_score": -1,
+    "anotherSpecifiedSubject": "One of: Biology / Chemistry / Physics / M1 / M2",
+    "otherSubjects_text": "Best 2 from Biology / Chemistry / Physics / M1 / M2 + Best 1 other subject",
+    "remark": "",
+    "siteURL": "our-programs/school-of-science/international-research-enrichment"
+  },
+  {
+    "jupas_code": "JS5102",
+    "name": "Science (Group A)",
+    "faculty": "School of Science",
+    "institution": "HKUST",
+    "data_year_formula": "2026",
+    "data_year_scores": "2025",
+    "engMultiplier": "x1.5",
+    "secondMultiplier": "x1",
+    "secondMultiplierSubject": "Math",
+    "subjectNum": 5,
+    "max_attainable_weighting": 7.5,
+    "formula_steps": [
+      {
+        "type": "required",
+        "subject": "English Language",
+        "weight": 1.5
+      },
+      {
+        "type": "required",
+        "subject": "Mathematics Compulsory Part",
+        "weight": 1.0
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [
+          "Biology",
+          "Chemistry",
+          "Physics",
+          "Mathematics Extended Part (Algebra and Calculus) - Module 2",
+          "Mathematics Extended Part (Calculus and Statistics) - Module 1"
+        ],
+        "weights": [
+          {
+            "subjects": [
+              "Physics",
+              "Mathematics Extended Part (Algebra and Calculus) - Module 2",
+              "Mathematics Extended Part (Calculus and Statistics) - Module 1"
+            ],
+            "weight": 2.0
+          },
+          {
+            "subjects": [
+              "Biology",
+              "Chemistry"
+            ],
+            "weight": 1.5
+          }
+        ],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [
+          {
+            "subjects": [
+              "Physics",
+              "Mathematics Extended Part (Algebra and Calculus) - Module 2",
+              "Mathematics Extended Part (Calculus and Statistics) - Module 1"
+            ],
+            "weight": 2.0
+          },
+          {
+            "subjects": [
+              "Biology",
+              "Chemistry"
+            ],
+            "weight": 1.5
+          }
+        ],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      }
+    ],
+    "subject_weights_2026": {
+      "English Language": 1.5,
+      "Mathematics Compulsory Part": 1.0,
+      "Physics": 2.0,
+      "Mathematics Extended Part (Algebra and Calculus) - Module 2": 2.0,
+      "Mathematics Extended Part (Calculus and Statistics) - Module 1": 2.0,
+      "Biology": 1.5,
+      "Chemistry": 1.5
+    },
+    "bonus_6th": {
+      "bonus_percentage": 5,
+      "eligible_categories": [
+        "Core",
+        "Category A",
+        "Category B",
+        "Category C"
+      ]
+    },
+    "is_better_of": false,
+    "score_median": "33.13",
+    "score_lq": "32.63",
+    "expected_score_2026": "27",
+    "min_requirements_2026_raw": {
+      "english": "3",
+      "chinese": "3",
+      "maths_core": "2",
+      "csd": "attained",
+      "elective_subject_1": "3",
+      "elective_subject_2": "3"
+    },
+    "flexible_intake_score": -1,
+    "anotherSpecifiedSubject": "One of: Biology / Chemistry / Physics / M1 / M2",
+    "otherSubjects_text": "Best from Biology / Chemistry / Physics / M1 / M2# + Best 2 other subjects## Weighting: Physics / M1 / M2 (x2), Biology / Chemistry (x 1.5)Remarks: The highest score of at most TWO weighted electives will be taken in the Best 5 score calculation.",
+    "remark": "",
+    "siteURL": "our-programs/school-of-science"
+  },
+  {
+    "jupas_code": "JS5103",
+    "name": "Science (Group B)",
+    "faculty": "School of Science",
+    "institution": "HKUST",
+    "data_year_formula": "2026",
+    "data_year_scores": "2025",
+    "engMultiplier": "x1.5",
+    "secondMultiplier": "x1",
+    "secondMultiplierSubject": "Math",
+    "subjectNum": 5,
+    "max_attainable_weighting": 7.5,
+    "formula_steps": [
+      {
+        "type": "required",
+        "subject": "English Language",
+        "weight": 1.5
+      },
+      {
+        "type": "required",
+        "subject": "Mathematics Compulsory Part",
+        "weight": 1.0
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [
+          "Biology",
+          "Chemistry",
+          "Physics",
+          "Mathematics Extended Part (Algebra and Calculus) - Module 2",
+          "Mathematics Extended Part (Calculus and Statistics) - Module 1"
+        ],
+        "weights": [
+          {
+            "subjects": [
+              "Biology",
+              "Chemistry"
+            ],
+            "weight": 2.0
+          },
+          {
+            "subjects": [
+              "Physics",
+              "Mathematics Extended Part (Algebra and Calculus) - Module 2",
+              "Mathematics Extended Part (Calculus and Statistics) - Module 1"
+            ],
+            "weight": 1.5
+          }
+        ],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [
+          {
+            "subjects": [
+              "Biology",
+              "Chemistry"
+            ],
+            "weight": 2.0
+          },
+          {
+            "subjects": [
+              "Physics",
+              "Mathematics Extended Part (Algebra and Calculus) - Module 2",
+              "Mathematics Extended Part (Calculus and Statistics) - Module 1"
+            ],
+            "weight": 1.5
+          }
+        ],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      }
+    ],
+    "subject_weights_2026": {
+      "English Language": 1.5,
+      "Mathematics Compulsory Part": 1.0,
+      "Biology": 2.0,
+      "Chemistry": 2.0,
+      "Physics": 1.5,
+      "Mathematics Extended Part (Algebra and Calculus) - Module 2": 1.5,
+      "Mathematics Extended Part (Calculus and Statistics) - Module 1": 1.5
+    },
+    "bonus_6th": {
+      "bonus_percentage": 5,
+      "eligible_categories": [
+        "Core",
+        "Category A",
+        "Category B",
+        "Category C"
+      ]
+    },
+    "is_better_of": false,
+    "score_median": "33.38",
+    "score_lq": "32.75",
+    "expected_score_2026": "27",
+    "min_requirements_2026_raw": {
+      "english": "3",
+      "chinese": "3",
+      "maths_core": "2",
+      "csd": "attained",
+      "elective_subject_1": "3",
+      "elective_subject_2": "3"
+    },
+    "flexible_intake_score": -1,
+    "anotherSpecifiedSubject": "One of: Biology / Chemistry / Physics / M1 / M2",
+    "otherSubjects_text": "Best from Biology / Chemistry / Physics / M1 / M2# + Best 2 other subjects## Weighting: Biology / Chemistry (x2), Physics / M1 / M2 (x 1.5)Remarks: The highest score of at most TWO weighted electives will be taken in the Best 5 score calculation.",
+    "remark": "",
+    "siteURL": "our-programs/school-of-science"
+  },
+  {
+    "jupas_code": "JS5118",
+    "name": "BSc in Biomedical and Health Sciences",
+    "faculty": "School of Science",
+    "institution": "HKUST",
+    "data_year_formula": "2026",
+    "data_year_scores": "2025",
+    "engMultiplier": "x1.5",
+    "secondMultiplier": "x1",
+    "secondMultiplierSubject": "Math",
+    "subjectNum": 5,
+    "max_attainable_weighting": 7.5,
+    "formula_steps": [
+      {
+        "type": "required",
+        "subject": "English Language",
+        "weight": 1.5
+      },
+      {
+        "type": "required",
+        "subject": "Mathematics Compulsory Part",
+        "weight": 1.0
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [
+          "Biology",
+          "Chemistry",
+          "Physics",
+          "Mathematics Extended Part (Algebra and Calculus) - Module 2",
+          "Mathematics Extended Part (Calculus and Statistics) - Module 1"
+        ],
+        "weights": [
+          {
+            "subjects": [
+              "Biology",
+              "Chemistry"
+            ],
+            "weight": 2.0
+          },
+          {
+            "subjects": [
+              "Physics",
+              "Mathematics Extended Part (Algebra and Calculus) - Module 2",
+              "Mathematics Extended Part (Calculus and Statistics) - Module 1"
+            ],
+            "weight": 1.5
+          }
+        ],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [
+          {
+            "subjects": [
+              "Biology",
+              "Chemistry"
+            ],
+            "weight": 2.0
+          },
+          {
+            "subjects": [
+              "Physics",
+              "Mathematics Extended Part (Algebra and Calculus) - Module 2",
+              "Mathematics Extended Part (Calculus and Statistics) - Module 1"
+            ],
+            "weight": 1.5
+          }
+        ],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      }
+    ],
+    "subject_weights_2026": {
+      "English Language": 1.5,
+      "Mathematics Compulsory Part": 1.0,
+      "Biology": 2.0,
+      "Chemistry": 2.0,
+      "Physics": 1.5,
+      "Mathematics Extended Part (Algebra and Calculus) - Module 2": 1.5,
+      "Mathematics Extended Part (Calculus and Statistics) - Module 1": 1.5
+    },
+    "bonus_6th": {
+      "bonus_percentage": 5,
+      "eligible_categories": [
+        "Core",
+        "Category A",
+        "Category B",
+        "Category C"
+      ]
+    },
+    "is_better_of": false,
+    "score_median": "43.13",
+    "score_lq": "40.5",
+    "expected_score_2026": "43",
+    "min_requirements_2026_raw": {
+      "english": "3",
+      "chinese": "3",
+      "maths_core": "2",
+      "csd": "attained",
+      "elective_subject_1": "3",
+      "elective_subject_2": "3"
+    },
+    "flexible_intake_score": 49,
+    "anotherSpecifiedSubject": "One of: Biology / Chemistry / Physics / M1 / M2",
+    "otherSubjects_text": "Best from Biology / Chemistry / Physics / M1 / M2# + Best 2 other subjects## Weighting: Biology / Chemistry (x2), Physics / M1 / M2 (x 1.5)Remarks: The highest score of at most TWO weighted electives will be taken in the Best 5 score calculation.",
+    "remark": "",
+    "siteURL": "our-programs/school-of-science"
+  },
+  {
+    "jupas_code": "JS5181",
+    "name": "Science (Group A) with extended Major in Artificial Intelligence",
+    "faculty": "School of Science",
+    "institution": "HKUST",
+    "data_year_formula": "2026",
+    "data_year_scores": "2025",
+    "engMultiplier": "x1.5",
+    "secondMultiplier": "x1",
+    "secondMultiplierSubject": "Math",
+    "subjectNum": 5,
+    "max_attainable_weighting": 7.5,
+    "formula_steps": [
+      {
+        "type": "required",
+        "subject": "English Language",
+        "weight": 1.5
+      },
+      {
+        "type": "required",
+        "subject": "Mathematics Compulsory Part",
+        "weight": 1.0
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [
+          "Biology",
+          "Chemistry",
+          "Physics",
+          "Mathematics Extended Part (Algebra and Calculus) - Module 2",
+          "Mathematics Extended Part (Calculus and Statistics) - Module 1"
+        ],
+        "weights": [
+          {
+            "subjects": [
+              "Physics",
+              "Mathematics Extended Part (Algebra and Calculus) - Module 2",
+              "Mathematics Extended Part (Calculus and Statistics) - Module 1"
+            ],
+            "weight": 2.0
+          },
+          {
+            "subjects": [
+              "Biology",
+              "Chemistry"
+            ],
+            "weight": 1.5
+          }
+        ],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [
+          {
+            "subjects": [
+              "Physics",
+              "Mathematics Extended Part (Algebra and Calculus) - Module 2",
+              "Mathematics Extended Part (Calculus and Statistics) - Module 1"
+            ],
+            "weight": 2.0
+          },
+          {
+            "subjects": [
+              "Biology",
+              "Chemistry"
+            ],
+            "weight": 1.5
+          }
+        ],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      }
+    ],
+    "subject_weights_2026": {
+      "English Language": 1.5,
+      "Mathematics Compulsory Part": 1.0,
+      "Physics": 2.0,
+      "Mathematics Extended Part (Algebra and Calculus) - Module 2": 2.0,
+      "Mathematics Extended Part (Calculus and Statistics) - Module 1": 2.0,
+      "Biology": 1.5,
+      "Chemistry": 1.5
+    },
+    "bonus_6th": {
+      "bonus_percentage": 5,
+      "eligible_categories": [
+        "Core",
+        "Category A",
+        "Category B",
+        "Category C"
+      ]
+    },
+    "is_better_of": false,
+    "score_median": "37.50",
+    "score_lq": "36.00",
+    "expected_score_2026": "30",
+    "min_requirements_2026_raw": {
+      "english": "3",
+      "chinese": "3",
+      "maths_core": "3",
+      "csd": "attained",
+      "elective_subject_1": "3",
+      "elective_subject_2": "3"
+    },
+    "flexible_intake_score": -1,
+    "anotherSpecifiedSubject": "One of: Biology / Chemistry / Physics / M1 / M2",
+    "otherSubjects_text": "Best from Biology / Chemistry / Physics / M1 / M2# + Best 2 other subjects## Weighting: Physics / M1 / M2 (x2), Biology / Chemistry (x 1.5)Remarks: The highest score of at most TWO weighted electives will be taken in the Best 5 score calculation.",
+    "remark": "",
+    "siteURL": "our-programs/school-of-science/science-group-a-with-an-extended-major-in-artificial-intelligence"
+  },
+  {
+    "jupas_code": "JS5200",
+    "name": "",
+    "faculty": "",
+    "institution": "HKUST",
+    "data_year_formula": "2026",
+    "data_year_scores": "2025",
+    "engMultiplier": "x1",
+    "secondMultiplier": "x1",
+    "secondMultiplierSubject": "",
+    "subjectNum": 5,
+    "max_attainable_weighting": 5,
+    "formula_steps": [
+      {
+        "type": "required",
+        "subject": "English Language",
+        "weight": 2.0
+      },
+      {
+        "type": "required",
+        "subject": "Mathematics Compulsory Part",
+        "weight": 2.0
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [
+          "Biology",
+          "Chemistry",
+          "Physics",
+          "Information and Communication Technology"
+        ],
+        "weights": [
+          {
+            "subjects": [
+              "Biology",
+              "Chemistry",
+              "Physics"
+            ],
+            "weight": 2.0
+          }
+        ],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [
+          {
+            "subjects": [
+              "Mathematics Extended Part (Algebra and Calculus) - Module 2",
+              "Mathematics Extended Part (Calculus and Statistics) - Module 1"
+            ],
+            "weight": 1.5
+          }
+        ],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      }
+    ],
+    "subject_weights_2026": {
+      "English Language": 2.0,
+      "Mathematics Compulsory Part": 2.0,
+      "Biology": 2.0,
+      "Chemistry": 2.0,
+      "Physics": 2.0,
+      "Mathematics Extended Part (Algebra and Calculus) - Module 2": 1.5,
+      "Mathematics Extended Part (Calculus and Statistics) - Module 1": 1.5
+    },
+    "bonus_6th": {
+      "bonus_percentage": 5,
+      "eligible_categories": []
+    },
+    "is_better_of": false,
+    "score_median": "",
+    "score_lq": "",
+    "expected_score_2026": "",
+    "min_requirements_2026_raw": {},
+    "flexible_intake_score": -1,
+    "anotherSpecifiedSubject": "",
+    "otherSubjects_text": "",
+    "remark": "",
+    "siteURL": ""
+  },
+  {
+    "jupas_code": "JS5212",
+    "name": "BEng in Computer Engineering",
+    "faculty": "School of Engineering",
+    "institution": "HKUST",
+    "data_year_formula": "2026",
+    "data_year_scores": "2025",
+    "engMultiplier": "x2",
+    "secondMultiplier": "x2",
+    "secondMultiplierSubject": "Math",
+    "subjectNum": 5,
+    "max_attainable_weighting": 9,
+    "formula_steps": [
+      {
+        "type": "required",
+        "subject": "English Language",
+        "weight": 2.0
+      },
+      {
+        "type": "required",
+        "subject": "Mathematics Compulsory Part",
+        "weight": 2.0
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [
+          "Biology",
+          "Chemistry",
+          "Physics",
+          "Information and Communication Technology"
+        ],
+        "weights": [
+          {
+            "subjects": [
+              "Physics"
+            ],
+            "weight": 2.0
+          },
+          {
+            "subjects": [
+              "Information and Communication Technology"
+            ],
+            "weight": 1.5
+          },
+          {
+            "subjects": [
+              "Biology",
+              "Chemistry"
+            ],
+            "weight": 1.0
+          }
+        ],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [
+          {
+            "subjects": [
+              "Mathematics Extended Part (Algebra and Calculus) - Module 2",
+              "Mathematics Extended Part (Calculus and Statistics) - Module 1"
+            ],
+            "weight": 2.0
+          }
+        ],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      }
+    ],
+    "subject_weights_2026": {
+      "English Language": 2.0,
+      "Mathematics Compulsory Part": 2.0,
+      "Physics": 2.0,
+      "Information and Communication Technology": 1.5,
+      "Biology": 1.0,
+      "Chemistry": 1.0,
+      "Mathematics Extended Part (Algebra and Calculus) - Module 2": 2.0,
+      "Mathematics Extended Part (Calculus and Statistics) - Module 1": 2.0
+    },
+    "bonus_6th": {
+      "bonus_percentage": 5,
+      "eligible_categories": [
+        "Core",
+        "Category A",
+        "Category C"
+      ]
+    },
+    "is_better_of": false,
+    "score_median": "46",
+    "score_lq": "44",
+    "expected_score_2026": "40",
+    "min_requirements_2026_raw": {
+      "english": "3",
+      "chinese": "3",
+      "maths_core": "3",
+      "csd": "attained",
+      "elective_subject_1": "3",
+      "elective_subject_2": "3"
+    },
+    "flexible_intake_score": 43,
+    "anotherSpecifiedSubject": "One of: Biology / Chemistry / Physics / Information and Communication Technology",
+    "otherSubjects_text": "Best from Biology / Chemistry / Physics / ICT* + Best 2 other subjects~* Weighting: Physics (x2), ICT (x1.5), Biology / Chemistry (x1)~ Weighting: M1 / M2 (x2), other subjects (x1)",
+    "remark": "",
+    "siteURL": "our-programs/school-of-engineering/computer-engineering"
+  },
+  {
+    "jupas_code": "JS5220",
+    "name": "Department of Chemical and Biological Engineering",
+    "faculty": "School of Engineering",
+    "institution": "HKUST",
+    "data_year_formula": "2026",
+    "data_year_scores": "2025",
+    "engMultiplier": "x2",
+    "secondMultiplier": "x2",
+    "secondMultiplierSubject": "Math",
+    "subjectNum": 5,
+    "max_attainable_weighting": 10,
+    "formula_steps": [
+      {
+        "type": "required",
+        "subject": "English Language",
+        "weight": 2.0
+      },
+      {
+        "type": "required",
+        "subject": "Mathematics Compulsory Part",
+        "weight": 2.0
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [
+          "Biology",
+          "Chemistry",
+          "Physics",
+          "Information and Communication Technology"
+        ],
+        "weights": [
+          {
+            "subjects": [
+              "Biology",
+              "Chemistry",
+              "Physics"
+            ],
+            "weight": 2.0
+          },
+          {
+            "subjects": [
+              "Information and Communication Technology"
+            ],
+            "weight": 1.5
+          }
+        ],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [
+          {
+            "subjects": [
+              "Biology",
+              "Chemistry",
+              "Physics",
+              "Mathematics Extended Part (Algebra and Calculus) - Module 2",
+              "Mathematics Extended Part (Calculus and Statistics) - Module 1"
+            ],
+            "weight": 2.0
+          },
+          {
+            "subjects": [
+              "Information and Communication Technology"
+            ],
+            "weight": 1.5
+          }
+        ],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [
+          {
+            "subjects": [
+              "Biology",
+              "Chemistry",
+              "Physics",
+              "Mathematics Extended Part (Algebra and Calculus) - Module 2",
+              "Mathematics Extended Part (Calculus and Statistics) - Module 1"
+            ],
+            "weight": 2.0
+          },
+          {
+            "subjects": [
+              "Information and Communication Technology"
+            ],
+            "weight": 1.5
+          }
+        ],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      }
+    ],
+    "subject_weights_2026": {
+      "English Language": 2.0,
+      "Mathematics Compulsory Part": 2.0,
+      "Biology": 2.0,
+      "Chemistry": 2.0,
+      "Physics": 2.0,
+      "Information and Communication Technology": 1.5,
+      "Mathematics Extended Part (Algebra and Calculus) - Module 2": 2.0,
+      "Mathematics Extended Part (Calculus and Statistics) - Module 1": 2.0
+    },
+    "bonus_6th": {
+      "bonus_percentage": 5,
+      "eligible_categories": [
+        "Core",
+        "Category A",
+        "Category C"
+      ]
+    },
+    "is_better_of": false,
+    "score_median": "47",
+    "score_lq": "44",
+    "expected_score_2026": "32-34*",
+    "min_requirements_2026_raw": {
+      "english": "3",
+      "chinese": "3",
+      "maths_core": "3",
+      "csd": "attained",
+      "elective_subject_1": "3",
+      "elective_subject_2": "3"
+    },
+    "flexible_intake_score": 38,
+    "anotherSpecifiedSubject": "One of: Biology / Chemistry / Physics / Information and Communication Technology",
+    "otherSubjects_text": "Best from Biology / Chemistry / Physics / ICT* + Best 2 other subjects~* Weighting: Biology / Chemistry / Physics (x2), ICT (x1.5)~ Weighting: Biology / Chemistry / Physics / M1 / M2 (x2), ICT (x1.5), other subjects (x1)",
+    "remark": "",
+    "siteURL": "our-programs/school-of-engineering"
+  },
+  {
+    "jupas_code": "JS5230",
+    "name": "Department of Civil and Environmental Engineering",
+    "faculty": "School of Engineering",
+    "institution": "HKUST",
+    "data_year_formula": "2026",
+    "data_year_scores": "2025",
+    "engMultiplier": "x2",
+    "secondMultiplier": "x2",
+    "secondMultiplierSubject": "Math",
+    "subjectNum": 5,
+    "max_attainable_weighting": 9,
+    "formula_steps": [
+      {
+        "type": "required",
+        "subject": "English Language",
+        "weight": 2.0
+      },
+      {
+        "type": "required",
+        "subject": "Mathematics Compulsory Part",
+        "weight": 2.0
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [
+          "Biology",
+          "Chemistry",
+          "Physics",
+          "Information and Communication Technology"
+        ],
+        "weights": [
+          {
+            "subjects": [
+              "Chemistry",
+              "Physics"
+            ],
+            "weight": 2.0
+          },
+          {
+            "subjects": [
+              "Information and Communication Technology"
+            ],
+            "weight": 1.5
+          },
+          {
+            "subjects": [
+              "Biology"
+            ],
+            "weight": 1.0
+          }
+        ],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [
+          {
+            "subjects": [
+              "Mathematics Extended Part (Algebra and Calculus) - Module 2",
+              "Mathematics Extended Part (Calculus and Statistics) - Module 1"
+            ],
+            "weight": 2.0
+          }
+        ],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      }
+    ],
+    "subject_weights_2026": {
+      "English Language": 2.0,
+      "Mathematics Compulsory Part": 2.0,
+      "Chemistry": 2.0,
+      "Physics": 2.0,
+      "Information and Communication Technology": 1.5,
+      "Biology": 1.0,
+      "Mathematics Extended Part (Algebra and Calculus) - Module 2": 2.0,
+      "Mathematics Extended Part (Calculus and Statistics) - Module 1": 2.0
+    },
+    "bonus_6th": {
+      "bonus_percentage": 5,
+      "eligible_categories": [
+        "Core",
+        "Category A",
+        "Category C"
+      ]
+    },
+    "is_better_of": false,
+    "score_median": "41",
+    "score_lq": "39",
+    "expected_score_2026": "32-34*",
+    "min_requirements_2026_raw": {
+      "english": "3",
+      "chinese": "3",
+      "maths_core": "3",
+      "csd": "attained",
+      "elective_subject_1": "3",
+      "elective_subject_2": "3"
+    },
+    "flexible_intake_score": 38,
+    "anotherSpecifiedSubject": "One of: Biology / Chemistry / Physics / Information and Communication Technology",
+    "otherSubjects_text": "Best from Biology / Chemistry / Physics / ICT* + Best 2 other subjects~* Weighting: Chemistry / Physics (x2), ICT (x1.5), Biology (x1)~ Weighting: M1 / M2 (x2), other subjects (x1)",
+    "remark": "",
+    "siteURL": "our-programs/school-of-engineering"
+  },
+  {
+    "jupas_code": "JS5240",
+    "name": "Department of Computer Science and Engineering",
+    "faculty": "School of Engineering",
+    "institution": "HKUST",
+    "data_year_formula": "2026",
+    "data_year_scores": "2025",
+    "engMultiplier": "x2",
+    "secondMultiplier": "x2",
+    "secondMultiplierSubject": "Math",
+    "subjectNum": 5,
+    "max_attainable_weighting": 9,
+    "formula_steps": [
+      {
+        "type": "required",
+        "subject": "English Language",
+        "weight": 2.0
+      },
+      {
+        "type": "required",
+        "subject": "Mathematics Compulsory Part",
+        "weight": 2.0
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [
+          "Biology",
+          "Chemistry",
+          "Physics",
+          "Information and Communication Technology"
+        ],
+        "weights": [
+          {
+            "subjects": [
+              "Physics"
+            ],
+            "weight": 2.0
+          },
+          {
+            "subjects": [
+              "Information and Communication Technology"
+            ],
+            "weight": 1.5
+          },
+          {
+            "subjects": [
+              "Biology",
+              "Chemistry"
+            ],
+            "weight": 1.0
+          }
+        ],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [
+          {
+            "subjects": [
+              "Mathematics Extended Part (Algebra and Calculus) - Module 2",
+              "Mathematics Extended Part (Calculus and Statistics) - Module 1"
+            ],
+            "weight": 2.0
+          }
+        ],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      }
+    ],
+    "subject_weights_2026": {
+      "English Language": 2.0,
+      "Mathematics Compulsory Part": 2.0,
+      "Physics": 2.0,
+      "Information and Communication Technology": 1.5,
+      "Biology": 1.0,
+      "Chemistry": 1.0,
+      "Mathematics Extended Part (Algebra and Calculus) - Module 2": 2.0,
+      "Mathematics Extended Part (Calculus and Statistics) - Module 1": 2.0
+    },
+    "bonus_6th": {
+      "bonus_percentage": 5,
+      "eligible_categories": [
+        "Core",
+        "Category A",
+        "Category C"
+      ]
+    },
+    "is_better_of": false,
+    "score_median": "50",
+    "score_lq": "48",
+    "expected_score_2026": "43",
+    "min_requirements_2026_raw": {
+      "english": "3",
+      "chinese": "3",
+      "maths_core": "3",
+      "csd": "attained",
+      "elective_subject_1": "3",
+      "elective_subject_2": "3"
+    },
+    "flexible_intake_score": 47,
+    "anotherSpecifiedSubject": "One of: Biology / Chemistry / Physics / Information and Communication Technology",
+    "otherSubjects_text": "Best from Biology / Chemistry / Physics / ICT* + Best 2 other subjects~* Weighting: Physics (x2), ICT (x1.5), Biology / Chemistry (x1)~ Weighting: M1 / M2 (x2), other subjects (x1)",
+    "remark": "",
+    "siteURL": "our-programs/school-of-engineering"
+  },
+  {
+    "jupas_code": "JS5250",
+    "name": "Department of Electronic and Computer Engineering",
+    "faculty": "School of Engineering",
+    "institution": "HKUST",
+    "data_year_formula": "2026",
+    "data_year_scores": "2025",
+    "engMultiplier": "x2",
+    "secondMultiplier": "x2",
+    "secondMultiplierSubject": "Math",
+    "subjectNum": 5,
+    "max_attainable_weighting": 9,
+    "formula_steps": [
+      {
+        "type": "required",
+        "subject": "English Language",
+        "weight": 2.0
+      },
+      {
+        "type": "required",
+        "subject": "Mathematics Compulsory Part",
+        "weight": 2.0
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [
+          "Biology",
+          "Chemistry",
+          "Physics",
+          "Information and Communication Technology"
+        ],
+        "weights": [
+          {
+            "subjects": [
+              "Physics"
+            ],
+            "weight": 2.0
+          },
+          {
+            "subjects": [
+              "Information and Communication Technology"
+            ],
+            "weight": 1.5
+          },
+          {
+            "subjects": [
+              "Biology",
+              "Chemistry"
+            ],
+            "weight": 1.0
+          }
+        ],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [
+          {
+            "subjects": [
+              "Mathematics Extended Part (Algebra and Calculus) - Module 2",
+              "Mathematics Extended Part (Calculus and Statistics) - Module 1"
+            ],
+            "weight": 2.0
+          }
+        ],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      }
+    ],
+    "subject_weights_2026": {
+      "English Language": 2.0,
+      "Mathematics Compulsory Part": 2.0,
+      "Physics": 2.0,
+      "Information and Communication Technology": 1.5,
+      "Biology": 1.0,
+      "Chemistry": 1.0,
+      "Mathematics Extended Part (Algebra and Calculus) - Module 2": 2.0,
+      "Mathematics Extended Part (Calculus and Statistics) - Module 1": 2.0
+    },
+    "bonus_6th": {
+      "bonus_percentage": 5,
+      "eligible_categories": [
+        "Core",
+        "Category A",
+        "Category C"
+      ]
+    },
+    "is_better_of": false,
+    "score_median": "44",
+    "score_lq": "42",
+    "expected_score_2026": "32-34*",
+    "min_requirements_2026_raw": {
+      "english": "3",
+      "chinese": "3",
+      "maths_core": "3",
+      "csd": "attained",
+      "elective_subject_1": "3",
+      "elective_subject_2": "3"
+    },
+    "flexible_intake_score": 38,
+    "anotherSpecifiedSubject": "One of: Biology / Chemistry / Physics / Information and Communication Technology",
+    "otherSubjects_text": "Best from Biology / Chemistry / Physics / ICT* + Best 2 other subjects~* Weighting: Physics (x2), ICT (x1.5), Biology / Chemistry (x1)~ Weighting: M1 / M2 (x2), other subjects (x1)",
+    "remark": "",
+    "siteURL": "our-programs/school-of-engineering"
+  },
+  {
+    "jupas_code": "JS5260",
+    "name": "Department of Industrial Engineering and Decision Analytics",
+    "faculty": "School of Engineering",
+    "institution": "HKUST",
+    "data_year_formula": "2026",
+    "data_year_scores": "2025",
+    "engMultiplier": "x2",
+    "secondMultiplier": "x2",
+    "secondMultiplierSubject": "Math",
+    "subjectNum": 5,
+    "max_attainable_weighting": 9,
+    "formula_steps": [
+      {
+        "type": "required",
+        "subject": "English Language",
+        "weight": 2.0
+      },
+      {
+        "type": "required",
+        "subject": "Mathematics Compulsory Part",
+        "weight": 2.0
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [
+          "Biology",
+          "Chemistry",
+          "Physics",
+          "Information and Communication Technology"
+        ],
+        "weights": [
+          {
+            "subjects": [
+              "Physics"
+            ],
+            "weight": 2.0
+          },
+          {
+            "subjects": [
+              "Information and Communication Technology"
+            ],
+            "weight": 1.5
+          },
+          {
+            "subjects": [
+              "Biology",
+              "Chemistry"
+            ],
+            "weight": 1.0
+          }
+        ],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [
+          {
+            "subjects": [
+              "Mathematics Extended Part (Algebra and Calculus) - Module 2",
+              "Mathematics Extended Part (Calculus and Statistics) - Module 1"
+            ],
+            "weight": 2.0
+          }
+        ],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      }
+    ],
+    "subject_weights_2026": {
+      "English Language": 2.0,
+      "Mathematics Compulsory Part": 2.0,
+      "Physics": 2.0,
+      "Information and Communication Technology": 1.5,
+      "Biology": 1.0,
+      "Chemistry": 1.0,
+      "Mathematics Extended Part (Algebra and Calculus) - Module 2": 2.0,
+      "Mathematics Extended Part (Calculus and Statistics) - Module 1": 2.0
+    },
+    "bonus_6th": {
+      "bonus_percentage": 5,
+      "eligible_categories": [
+        "Core",
+        "Category A",
+        "Category C"
+      ]
+    },
+    "is_better_of": false,
+    "score_median": "37",
+    "score_lq": "36",
+    "expected_score_2026": "32-34*",
+    "min_requirements_2026_raw": {
+      "english": "3",
+      "chinese": "3",
+      "maths_core": "3",
+      "csd": "attained",
+      "elective_subject_1": "3",
+      "elective_subject_2": "3"
+    },
+    "flexible_intake_score": 38,
+    "anotherSpecifiedSubject": "One of: Biology / Chemistry / Physics / Information and Communication Technology",
+    "otherSubjects_text": "Best from Biology / Chemistry / Physics / ICT* + Best 2 other subjects~* Weighting: Physics (x2), ICT (x1.5), Biology / Chemistry (x1)~ Weighting: M1 / M2 (x2), other subjects (x1)",
+    "remark": "",
+    "siteURL": "our-programs/school-of-engineering"
+  },
+  {
+    "jupas_code": "JS5270",
+    "name": "Department of Mechanical and Aerospace Engineering",
+    "faculty": "School of Engineering",
+    "institution": "HKUST",
+    "data_year_formula": "2026",
+    "data_year_scores": "2025",
+    "engMultiplier": "x2",
+    "secondMultiplier": "x2",
+    "secondMultiplierSubject": "Math",
+    "subjectNum": 5,
+    "max_attainable_weighting": 8.5,
+    "formula_steps": [
+      {
+        "type": "required",
+        "subject": "English Language",
+        "weight": 2.0
+      },
+      {
+        "type": "required",
+        "subject": "Mathematics Compulsory Part",
+        "weight": 2.0
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [
+          "Biology",
+          "Chemistry",
+          "Physics",
+          "Information and Communication Technology"
+        ],
+        "weights": [
+          {
+            "subjects": [
+              "Biology",
+              "Chemistry",
+              "Physics"
+            ],
+            "weight": 2.0
+          },
+          {
+            "subjects": [
+              "Information and Communication Technology"
+            ],
+            "weight": 1.0
+          }
+        ],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [
+          {
+            "subjects": [
+              "Mathematics Extended Part (Algebra and Calculus) - Module 2",
+              "Mathematics Extended Part (Calculus and Statistics) - Module 1"
+            ],
+            "weight": 1.5
+          }
+        ],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      }
+    ],
+    "subject_weights_2026": {
+      "English Language": 2.0,
+      "Mathematics Compulsory Part": 2.0,
+      "Biology": 2.0,
+      "Chemistry": 2.0,
+      "Physics": 2.0,
+      "Information and Communication Technology": 1.0,
+      "Mathematics Extended Part (Algebra and Calculus) - Module 2": 1.5,
+      "Mathematics Extended Part (Calculus and Statistics) - Module 1": 1.5
+    },
+    "bonus_6th": {
+      "bonus_percentage": 5,
+      "eligible_categories": [
+        "Core",
+        "Category A",
+        "Category C"
+      ]
+    },
+    "is_better_of": false,
+    "score_median": "41",
+    "score_lq": "40",
+    "expected_score_2026": "32-34*",
+    "min_requirements_2026_raw": {
+      "english": "3",
+      "chinese": "3",
+      "maths_core": "3",
+      "csd": "attained",
+      "elective_subject_1": "3",
+      "elective_subject_2": "3"
+    },
+    "flexible_intake_score": 38,
+    "anotherSpecifiedSubject": "One of: Biology / Chemistry / Physics / Information and Communication Technology",
+    "otherSubjects_text": "Best from Biology / Chemistry / Physics / ICT* + Best 2 other subjects~* Weighting: Biology / Chemistry / Physics (x2) , ICT (x1)~ Weighting: M1 / M2 (x1.5), other subjects (x1)",
+    "remark": "",
+    "siteURL": "our-programs/school-of-engineering"
+  },
+  {
+    "jupas_code": "JS5282",
+    "name": "Engineering with extended Major in Artificial Intelligence",
+    "faculty": "School of Engineering",
+    "institution": "HKUST",
+    "data_year_formula": "2026",
+    "data_year_scores": "2025",
+    "engMultiplier": "x2",
+    "secondMultiplier": "x2",
+    "secondMultiplierSubject": "Math",
+    "subjectNum": 5,
+    "max_attainable_weighting": 8.5,
+    "formula_steps": [
+      {
+        "type": "required",
+        "subject": "English Language",
+        "weight": 2.0
+      },
+      {
+        "type": "required",
+        "subject": "Mathematics Compulsory Part",
+        "weight": 2.0
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [
+          "Biology",
+          "Chemistry",
+          "Physics",
+          "Information and Communication Technology"
+        ],
+        "weights": [
+          {
+            "subjects": [
+              "Biology",
+              "Chemistry",
+              "Physics"
+            ],
+            "weight": 2.0
+          },
+          {
+            "subjects": [
+              "Information and Communication Technology"
+            ],
+            "weight": 1.5
+          }
+        ],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [
+          {
+            "subjects": [
+              "Mathematics Extended Part (Algebra and Calculus) - Module 2",
+              "Mathematics Extended Part (Calculus and Statistics) - Module 1"
+            ],
+            "weight": 1.5
+          }
+        ],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      }
+    ],
+    "subject_weights_2026": {
+      "English Language": 2.0,
+      "Mathematics Compulsory Part": 2.0,
+      "Biology": 2.0,
+      "Chemistry": 2.0,
+      "Physics": 2.0,
+      "Information and Communication Technology": 1.5,
+      "Mathematics Extended Part (Algebra and Calculus) - Module 2": 1.5,
+      "Mathematics Extended Part (Calculus and Statistics) - Module 1": 1.5
+    },
+    "bonus_6th": {
+      "bonus_percentage": 5,
+      "eligible_categories": [
+        "Core",
+        "Category A",
+        "Category C"
+      ]
+    },
+    "is_better_of": false,
+    "score_median": "49",
+    "score_lq": "46",
+    "expected_score_2026": "40",
+    "min_requirements_2026_raw": {
+      "english": "3",
+      "chinese": "3",
+      "maths_core": "3",
+      "csd": "attained",
+      "elective_subject_1": "3",
+      "elective_subject_2": "3"
+    },
+    "flexible_intake_score": 43,
+    "anotherSpecifiedSubject": "One of: Biology / Chemistry / Physics / Information and Communication Technology",
+    "otherSubjects_text": "Best from Biology / Chemistry / Physics / ICT* + Best 2 other subjects~* Weighting: Biology / Chemistry / Physics (x2) , ICT (x1.5)~ Weighting: M1 / M2 (x1.5), other subjects (x1)",
+    "remark": "",
+    "siteURL": "our-programs/school-of-engineering/engineering-with-an-extended-major-in-artificial-intelligence"
+  },
+  {
+    "jupas_code": "JS5300",
+    "name": "Business and Management",
+    "faculty": "School of Business and Management",
+    "institution": "HKUST",
+    "data_year_formula": "2026",
+    "data_year_scores": "2025",
+    "engMultiplier": "x2",
+    "secondMultiplier": "x2",
+    "secondMultiplierSubject": "Math",
+    "subjectNum": 5,
+    "max_attainable_weighting": 7,
+    "formula_steps": [
+      {
+        "type": "required",
+        "subject": "English Language",
+        "weight": 2.0
+      },
+      {
+        "type": "required",
+        "subject": "Mathematics Compulsory Part",
+        "weight": 2.0
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      }
+    ],
+    "subject_weights_2026": {
+      "English Language": 2.0,
+      "Mathematics Compulsory Part": 2.0
+    },
+    "bonus_6th": {
+      "bonus_percentage": 5,
+      "eligible_categories": [
+        "Core",
+        "Category A",
+        "Category C"
+      ]
+    },
+    "is_better_of": false,
+    "score_median": "35.00",
+    "score_lq": "33.90",
+    "expected_score_2026": "30",
+    "min_requirements_2026_raw": {
+      "english": "4",
+      "chinese": "3",
+      "maths_core": "3",
+      "csd": "attained",
+      "elective_subject_1": "3",
+      "elective_subject_2": "3"
+    },
+    "flexible_intake_score": -1,
+    "anotherSpecifiedSubject": "No specific subject requirements",
+    "otherSubjects_text": "Best 3 other subjects",
+    "remark": "",
+    "siteURL": "our-programs/school-of-business-and-management"
+  },
+  {
+    "jupas_code": "JS5311",
+    "name": "BBA in Economics",
+    "faculty": "School of Business and Management",
+    "institution": "HKUST",
+    "data_year_formula": "2026",
+    "data_year_scores": "2025",
+    "engMultiplier": "x2",
+    "secondMultiplier": "x2",
+    "secondMultiplierSubject": "Math",
+    "subjectNum": 5,
+    "max_attainable_weighting": 7,
+    "formula_steps": [
+      {
+        "type": "required",
+        "subject": "English Language",
+        "weight": 2.0
+      },
+      {
+        "type": "required",
+        "subject": "Mathematics Compulsory Part",
+        "weight": 2.0
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      }
+    ],
+    "subject_weights_2026": {
+      "English Language": 2.0,
+      "Mathematics Compulsory Part": 2.0
+    },
+    "bonus_6th": {
+      "bonus_percentage": 5,
+      "eligible_categories": [
+        "Core",
+        "Category A",
+        "Category C"
+      ]
+    },
+    "is_better_of": false,
+    "score_median": "36.55",
+    "score_lq": "35.40",
+    "expected_score_2026": "31",
+    "min_requirements_2026_raw": {
+      "english": "4",
+      "chinese": "3",
+      "maths_core": "3",
+      "csd": "attained",
+      "elective_subject_1": "3",
+      "elective_subject_2": "3"
+    },
+    "flexible_intake_score": -1,
+    "anotherSpecifiedSubject": "No specific subject requirements",
+    "otherSubjects_text": "Best 3 other subjects",
+    "remark": "",
+    "siteURL": "our-programs/school-of-business-and-management/economics"
+  },
+  {
+    "jupas_code": "JS5312",
+    "name": "BBA in Finance",
+    "faculty": "School of Business and Management",
+    "institution": "HKUST",
+    "data_year_formula": "2026",
+    "data_year_scores": "2025",
+    "engMultiplier": "x2",
+    "secondMultiplier": "x2",
+    "secondMultiplierSubject": "Math",
+    "subjectNum": 5,
+    "max_attainable_weighting": 7.5,
+    "formula_steps": [
+      {
+        "type": "required",
+        "subject": "English Language",
+        "weight": 2.0
+      },
+      {
+        "type": "required",
+        "subject": "Mathematics Compulsory Part",
+        "weight": 2.0
+      },
+      {
+        "type": "better_of",
+        "options": [
+          [
+            {
+              "type": "best_from_pool",
+              "subject_filter": [],
+              "weights": [],
+              "eligible_categories": [
+                "Core",
+                "Category A"
+              ]
+            },
+            {
+              "type": "best_from_pool",
+              "subject_filter": [],
+              "weights": [],
+              "eligible_categories": [
+                "Core",
+                "Category A"
+              ]
+            },
+            {
+              "type": "best_from_pool",
+              "subject_filter": [],
+              "weights": [],
+              "eligible_categories": [
+                "Core",
+                "Category A"
+              ]
+            }
+          ],
+          [
+            {
+              "type": "best_from_pool",
+              "subject_filter": [
+                "Chemistry",
+                "Physics",
+                "Economics",
+                "Mathematics Extended Part (Algebra and Calculus) - Module 2",
+                "Mathematics Extended Part (Calculus and Statistics) - Module 1"
+              ],
+              "weights": [
+                {
+                  "subjects": [
+                    "Chemistry",
+                    "Physics",
+                    "Economics",
+                    "Mathematics Extended Part (Algebra and Calculus) - Module 2",
+                    "Mathematics Extended Part (Calculus and Statistics) - Module 1"
+                  ],
+                  "weight": 1.5
+                }
+              ],
+              "eligible_categories": [
+                "Core",
+                "Category A"
+              ]
+            },
+            {
+              "type": "best_from_pool",
+              "subject_filter": [],
+              "weights": [],
+              "eligible_categories": [
+                "Core",
+                "Category A"
+              ]
+            },
+            {
+              "type": "best_from_pool",
+              "subject_filter": [],
+              "weights": [],
+              "eligible_categories": [
+                "Core",
+                "Category A"
+              ]
+            }
+          ]
+        ]
+      }
+    ],
+    "subject_weights_2026": {
+      "English Language": 2.0,
+      "Mathematics Compulsory Part": 2.0
+    },
+    "bonus_6th": {
+      "bonus_percentage": 5,
+      "eligible_categories": [
+        "Core",
+        "Category A",
+        "Category C"
+      ]
+    },
+    "is_better_of": true,
+    "score_median": "43.31",
+    "score_lq": "41.81",
+    "expected_score_2026": "38",
+    "min_requirements_2026_raw": {
+      "english": "4",
+      "chinese": "3",
+      "maths_core": "3",
+      "csd": "attained",
+      "elective_subject_1": "3",
+      "elective_subject_2": "3"
+    },
+    "flexible_intake_score": -1,
+    "anotherSpecifiedSubject": "No specific subject requirements",
+    "otherSubjects_text": "Better of Best 3 other subjects ORBest of Chemistry / Economics / Physics / M1 / M2 x 1.5 + Best 2 other subjects",
+    "remark": "",
+    "siteURL": "our-programs/school-of-business-and-management/finance"
+  },
+  {
+    "jupas_code": "JS5313",
+    "name": "BBA in Global Business",
+    "faculty": "School of Business and Management",
+    "institution": "HKUST",
+    "data_year_formula": "2026",
+    "data_year_scores": "2025",
+    "engMultiplier": "x2",
+    "secondMultiplier": "x2",
+    "secondMultiplierSubject": "Math",
+    "subjectNum": 5,
+    "max_attainable_weighting": 7,
+    "formula_steps": [
+      {
+        "type": "required",
+        "subject": "English Language",
+        "weight": 2.0
+      },
+      {
+        "type": "required",
+        "subject": "Mathematics Compulsory Part",
+        "weight": 2.0
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      }
+    ],
+    "subject_weights_2026": {
+      "English Language": 2.0,
+      "Mathematics Compulsory Part": 2.0
+    },
+    "bonus_6th": {
+      "bonus_percentage": 5,
+      "eligible_categories": [
+        "Core",
+        "Category A",
+        "Category C"
+      ]
+    },
+    "is_better_of": false,
+    "score_median": "52.43",
+    "score_lq": "50.40",
+    "expected_score_2026": "50",
+    "min_requirements_2026_raw": {
+      "english": "4",
+      "chinese": "3",
+      "maths_core": "3",
+      "csd": "attained",
+      "elective_subject_1": "3",
+      "elective_subject_2": "3"
+    },
+    "flexible_intake_score": -1,
+    "anotherSpecifiedSubject": "No specific subject requirements",
+    "otherSubjects_text": "Best 3 other subjects",
+    "remark": "",
+    "siteURL": "our-programs/school-of-business-and-management/global-business-management"
+  },
+  {
+    "jupas_code": "JS5314",
+    "name": "BBA in Information Systems",
+    "faculty": "School of Business and Management",
+    "institution": "HKUST",
+    "data_year_formula": "2026",
+    "data_year_scores": "2025",
+    "engMultiplier": "x2",
+    "secondMultiplier": "x2",
+    "secondMultiplierSubject": "Math",
+    "subjectNum": 5,
+    "max_attainable_weighting": 7,
+    "formula_steps": [
+      {
+        "type": "required",
+        "subject": "English Language",
+        "weight": 2.0
+      },
+      {
+        "type": "required",
+        "subject": "Mathematics Compulsory Part",
+        "weight": 2.0
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      }
+    ],
+    "subject_weights_2026": {
+      "English Language": 2.0,
+      "Mathematics Compulsory Part": 2.0
+    },
+    "bonus_6th": {
+      "bonus_percentage": 5,
+      "eligible_categories": [
+        "Core",
+        "Category A",
+        "Category C"
+      ]
+    },
+    "is_better_of": false,
+    "score_median": "35.93",
+    "score_lq": "35.40",
+    "expected_score_2026": "31",
+    "min_requirements_2026_raw": {
+      "english": "4",
+      "chinese": "3",
+      "maths_core": "3",
+      "csd": "attained",
+      "elective_subject_1": "3",
+      "elective_subject_2": "3"
+    },
+    "flexible_intake_score": -1,
+    "anotherSpecifiedSubject": "No specific subject requirements",
+    "otherSubjects_text": "Best 3 other subjects",
+    "remark": "",
+    "siteURL": "our-programs/school-of-business-and-management/information-systems"
+  },
+  {
+    "jupas_code": "JS5315",
+    "name": "BBA in Management",
+    "faculty": "School of Business and Management",
+    "institution": "HKUST",
+    "data_year_formula": "2026",
+    "data_year_scores": "2025",
+    "engMultiplier": "x2",
+    "secondMultiplier": "x2",
+    "secondMultiplierSubject": "Math",
+    "subjectNum": 5,
+    "max_attainable_weighting": 7,
+    "formula_steps": [
+      {
+        "type": "required",
+        "subject": "English Language",
+        "weight": 2.0
+      },
+      {
+        "type": "required",
+        "subject": "Mathematics Compulsory Part",
+        "weight": 2.0
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      }
+    ],
+    "subject_weights_2026": {
+      "English Language": 2.0,
+      "Mathematics Compulsory Part": 2.0
+    },
+    "bonus_6th": {
+      "bonus_percentage": 5,
+      "eligible_categories": [
+        "Core",
+        "Category A",
+        "Category C"
+      ]
+    },
+    "is_better_of": false,
+    "score_median": "33.90",
+    "score_lq": "33.90",
+    "expected_score_2026": "31",
+    "min_requirements_2026_raw": {
+      "english": "4",
+      "chinese": "3",
+      "maths_core": "3",
+      "csd": "attained",
+      "elective_subject_1": "3",
+      "elective_subject_2": "3"
+    },
+    "flexible_intake_score": -1,
+    "anotherSpecifiedSubject": "No specific subject requirements",
+    "otherSubjects_text": "Best 3 other subjects",
+    "remark": "",
+    "siteURL": "our-programs/school-of-business-and-management/management"
+  },
+  {
+    "jupas_code": "JS5316",
+    "name": "BBA in Marketing",
+    "faculty": "School of Business and Management",
+    "institution": "HKUST",
+    "data_year_formula": "2026",
+    "data_year_scores": "2025",
+    "engMultiplier": "x2",
+    "secondMultiplier": "x2",
+    "secondMultiplierSubject": "Math",
+    "subjectNum": 5,
+    "max_attainable_weighting": 7,
+    "formula_steps": [
+      {
+        "type": "required",
+        "subject": "English Language",
+        "weight": 2.0
+      },
+      {
+        "type": "required",
+        "subject": "Mathematics Compulsory Part",
+        "weight": 2.0
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      }
+    ],
+    "subject_weights_2026": {
+      "English Language": 2.0,
+      "Mathematics Compulsory Part": 2.0
+    },
+    "bonus_6th": {
+      "bonus_percentage": 5,
+      "eligible_categories": [
+        "Core",
+        "Category A",
+        "Category C"
+      ]
+    },
+    "is_better_of": false,
+    "score_median": "32.55",
+    "score_lq": "32.40",
+    "expected_score_2026": "31",
+    "min_requirements_2026_raw": {
+      "english": "4",
+      "chinese": "3",
+      "maths_core": "3",
+      "csd": "attained",
+      "elective_subject_1": "3",
+      "elective_subject_2": "3"
+    },
+    "flexible_intake_score": -1,
+    "anotherSpecifiedSubject": "No specific subject requirements",
+    "otherSubjects_text": "Best 3 other subjects",
+    "remark": "",
+    "siteURL": "our-programs/school-of-business-and-management/marketing"
+  },
+  {
+    "jupas_code": "JS5317",
+    "name": "BBA in Operations Management",
+    "faculty": "School of Business and Management",
+    "institution": "HKUST",
+    "data_year_formula": "2026",
+    "data_year_scores": "2025",
+    "engMultiplier": "x2",
+    "secondMultiplier": "x2",
+    "secondMultiplierSubject": "Math",
+    "subjectNum": 5,
+    "max_attainable_weighting": 7,
+    "formula_steps": [
+      {
+        "type": "required",
+        "subject": "English Language",
+        "weight": 2.0
+      },
+      {
+        "type": "required",
+        "subject": "Mathematics Compulsory Part",
+        "weight": 2.0
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      }
+    ],
+    "subject_weights_2026": {
+      "English Language": 2.0,
+      "Mathematics Compulsory Part": 2.0
+    },
+    "bonus_6th": {
+      "bonus_percentage": 5,
+      "eligible_categories": [
+        "Core",
+        "Category A",
+        "Category C"
+      ]
+    },
+    "is_better_of": false,
+    "score_median": "32.40",
+    "score_lq": "32.05",
+    "expected_score_2026": "31",
+    "min_requirements_2026_raw": {
+      "english": "4",
+      "chinese": "3",
+      "maths_core": "3",
+      "csd": "attained",
+      "elective_subject_1": "3",
+      "elective_subject_2": "3"
+    },
+    "flexible_intake_score": -1,
+    "anotherSpecifiedSubject": "No specific subject requirements",
+    "otherSubjects_text": "Best 3 other subjects",
+    "remark": "",
+    "siteURL": "our-programs/school-of-business-and-management/operations-management"
+  },
+  {
+    "jupas_code": "JS5318",
+    "name": "BBA in Professional Accounting",
+    "faculty": "School of Business and Management",
+    "institution": "HKUST",
+    "data_year_formula": "2026",
+    "data_year_scores": "2025",
+    "engMultiplier": "x2",
+    "secondMultiplier": "x2",
+    "secondMultiplierSubject": "Math",
+    "subjectNum": 5,
+    "max_attainable_weighting": 7,
+    "formula_steps": [
+      {
+        "type": "required",
+        "subject": "English Language",
+        "weight": 2.0
+      },
+      {
+        "type": "required",
+        "subject": "Mathematics Compulsory Part",
+        "weight": 2.0
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      }
+    ],
+    "subject_weights_2026": {
+      "English Language": 2.0,
+      "Mathematics Compulsory Part": 2.0
+    },
+    "bonus_6th": {
+      "bonus_percentage": 5,
+      "eligible_categories": [
+        "Core",
+        "Category A",
+        "Category C"
+      ]
+    },
+    "is_better_of": false,
+    "score_median": "34.05",
+    "score_lq": "33.55",
+    "expected_score_2026": "31",
+    "min_requirements_2026_raw": {
+      "english": "4",
+      "chinese": "3",
+      "maths_core": "3",
+      "csd": "attained",
+      "elective_subject_1": "3",
+      "elective_subject_2": "3"
+    },
+    "flexible_intake_score": -1,
+    "anotherSpecifiedSubject": "No specific subject requirements",
+    "otherSubjects_text": "Best 3 other subjects",
+    "remark": "",
+    "siteURL": "our-programs/school-of-business-and-management/accounting"
+  },
+  {
+    "jupas_code": "JS5331",
+    "name": "BSc in Economics and Finance",
+    "faculty": "School of Business and Management",
+    "institution": "HKUST",
+    "data_year_formula": "2026",
+    "data_year_scores": "2025",
+    "engMultiplier": "x2",
+    "secondMultiplier": "x2",
+    "secondMultiplierSubject": "Math",
+    "subjectNum": 5,
+    "max_attainable_weighting": 7.5,
+    "formula_steps": [
+      {
+        "type": "required",
+        "subject": "English Language",
+        "weight": 2.0
+      },
+      {
+        "type": "required",
+        "subject": "Mathematics Compulsory Part",
+        "weight": 2.0
+      },
+      {
+        "type": "better_of",
+        "options": [
+          [
+            {
+              "type": "best_from_pool",
+              "subject_filter": [],
+              "weights": [],
+              "eligible_categories": [
+                "Core",
+                "Category A"
+              ]
+            },
+            {
+              "type": "best_from_pool",
+              "subject_filter": [],
+              "weights": [],
+              "eligible_categories": [
+                "Core",
+                "Category A"
+              ]
+            },
+            {
+              "type": "best_from_pool",
+              "subject_filter": [],
+              "weights": [],
+              "eligible_categories": [
+                "Core",
+                "Category A"
+              ]
+            }
+          ],
+          [
+            {
+              "type": "best_from_pool",
+              "subject_filter": [
+                "Chemistry",
+                "Physics",
+                "Economics",
+                "Mathematics Extended Part (Algebra and Calculus) - Module 2",
+                "Mathematics Extended Part (Calculus and Statistics) - Module 1"
+              ],
+              "weights": [
+                {
+                  "subjects": [
+                    "Chemistry",
+                    "Physics",
+                    "Economics",
+                    "Mathematics Extended Part (Algebra and Calculus) - Module 2",
+                    "Mathematics Extended Part (Calculus and Statistics) - Module 1"
+                  ],
+                  "weight": 1.5
+                }
+              ],
+              "eligible_categories": [
+                "Core",
+                "Category A"
+              ]
+            },
+            {
+              "type": "best_from_pool",
+              "subject_filter": [],
+              "weights": [],
+              "eligible_categories": [
+                "Core",
+                "Category A"
+              ]
+            },
+            {
+              "type": "best_from_pool",
+              "subject_filter": [],
+              "weights": [],
+              "eligible_categories": [
+                "Core",
+                "Category A"
+              ]
+            }
+          ]
+        ]
+      }
+    ],
+    "subject_weights_2026": {
+      "English Language": 2.0,
+      "Mathematics Compulsory Part": 2.0
+    },
+    "bonus_6th": {
+      "bonus_percentage": 5,
+      "eligible_categories": [
+        "Core",
+        "Category A",
+        "Category C"
+      ]
+    },
+    "is_better_of": true,
+    "score_median": "48.19",
+    "score_lq": "46.50",
+    "expected_score_2026": "44",
+    "min_requirements_2026_raw": {
+      "english": "4",
+      "chinese": "3",
+      "maths_core": "3",
+      "csd": "attained",
+      "elective_subject_1": "3",
+      "elective_subject_2": "3"
+    },
+    "flexible_intake_score": -1,
+    "anotherSpecifiedSubject": "No specific subject requirements",
+    "otherSubjects_text": "Better of Best 3 other subjects ORBest of Chemistry / Economics / Physics / M1 / M2 x 1.5 + Best 2 other subjects",
+    "remark": "",
+    "siteURL": "our-programs/school-of-business-and-management/economics-and-finance"
+  },
+  {
+    "jupas_code": "JS5332",
+    "name": "BSc in Quantitative Finance",
+    "faculty": "School of Business and Management",
+    "institution": "HKUST",
+    "data_year_formula": "2026",
+    "data_year_scores": "2025",
+    "engMultiplier": "x2",
+    "secondMultiplier": "x2",
+    "secondMultiplierSubject": "Math",
+    "subjectNum": 5,
+    "max_attainable_weighting": 7.5,
+    "formula_steps": [
+      {
+        "type": "required",
+        "subject": "English Language",
+        "weight": 2.0
+      },
+      {
+        "type": "required",
+        "subject": "Mathematics Compulsory Part",
+        "weight": 2.0
+      },
+      {
+        "type": "better_of",
+        "options": [
+          [
+            {
+              "type": "best_from_pool",
+              "subject_filter": [],
+              "weights": [],
+              "eligible_categories": [
+                "Core",
+                "Category A"
+              ]
+            },
+            {
+              "type": "best_from_pool",
+              "subject_filter": [],
+              "weights": [],
+              "eligible_categories": [
+                "Core",
+                "Category A"
+              ]
+            },
+            {
+              "type": "best_from_pool",
+              "subject_filter": [],
+              "weights": [],
+              "eligible_categories": [
+                "Core",
+                "Category A"
+              ]
+            }
+          ],
+          [
+            {
+              "type": "best_from_pool",
+              "subject_filter": [
+                "Chemistry",
+                "Physics",
+                "Economics",
+                "Mathematics Extended Part (Algebra and Calculus) - Module 2",
+                "Mathematics Extended Part (Calculus and Statistics) - Module 1"
+              ],
+              "weights": [
+                {
+                  "subjects": [
+                    "Chemistry",
+                    "Physics",
+                    "Economics",
+                    "Mathematics Extended Part (Algebra and Calculus) - Module 2",
+                    "Mathematics Extended Part (Calculus and Statistics) - Module 1"
+                  ],
+                  "weight": 1.5
+                }
+              ],
+              "eligible_categories": [
+                "Core",
+                "Category A"
+              ]
+            },
+            {
+              "type": "best_from_pool",
+              "subject_filter": [],
+              "weights": [],
+              "eligible_categories": [
+                "Core",
+                "Category A"
+              ]
+            },
+            {
+              "type": "best_from_pool",
+              "subject_filter": [],
+              "weights": [],
+              "eligible_categories": [
+                "Core",
+                "Category A"
+              ]
+            }
+          ]
+        ]
+      }
+    ],
+    "subject_weights_2026": {
+      "English Language": 2.0,
+      "Mathematics Compulsory Part": 2.0
+    },
+    "bonus_6th": {
+      "bonus_percentage": 5,
+      "eligible_categories": [
+        "Core",
+        "Category A",
+        "Category C"
+      ]
+    },
+    "is_better_of": true,
+    "score_median": "58.13",
+    "score_lq": "56.06",
+    "expected_score_2026": "54",
+    "min_requirements_2026_raw": {
+      "english": "4",
+      "chinese": "3",
+      "maths_core": "3",
+      "csd": "attained",
+      "elective_subject_1": "3",
+      "elective_subject_2": "3"
+    },
+    "flexible_intake_score": -1,
+    "anotherSpecifiedSubject": "No specific subject requirements",
+    "otherSubjects_text": "Better of Best 3 other subjects ORBest of Chemistry / Economics / Physics / M1 / M2 x 1.5 + Best 2 other subjects",
+    "remark": "",
+    "siteURL": "our-programs/school-of-business-and-management/quantitative-finance"
+  },
+  {
+    "jupas_code": "JS5411",
+    "name": "BSc in Global China Studies",
+    "faculty": "School of Humanities and Social Science",
+    "institution": "HKUST",
+    "data_year_formula": "2026",
+    "data_year_scores": "2025",
+    "engMultiplier": "x2",
+    "secondMultiplier": "x1.5",
+    "secondMultiplierSubject": "Chinese",
+    "subjectNum": 5,
+    "max_attainable_weighting": 6.5,
+    "formula_steps": [
+      {
+        "type": "required",
+        "subject": "English Language",
+        "weight": 2.0
+      },
+      {
+        "type": "required",
+        "subject": "Chinese Language",
+        "weight": 1.5
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A",
+          "Category C"
+        ]
+      }
+    ],
+    "subject_weights_2026": {
+      "English Language": 2.0,
+      "Chinese Language": 1.5
+    },
+    "bonus_6th": {
+      "bonus_percentage": 5,
+      "eligible_categories": [
+        "Core",
+        "Category A",
+        "Category B",
+        "Category C"
+      ]
+    },
+    "is_better_of": false,
+    "score_median": "29.23",
+    "score_lq": "28.80",
+    "expected_score_2026": "26",
+    "min_requirements_2026_raw": {
+      "english": "3",
+      "chinese": "3",
+      "maths_core": "2",
+      "csd": "attained",
+      "elective_subject_1": "3",
+      "elective_subject_2": "3"
+    },
+    "flexible_intake_score": -1,
+    "anotherSpecifiedSubject": "No specific subject requirements",
+    "otherSubjects_text": "Best 3 other subjects ▲▲ Category C subjects may be used once in the score calculation.",
+    "remark": "",
+    "siteURL": "our-programs/school-of-humanities-and-social-science/global-china-studies"
+  },
+  {
+    "jupas_code": "JS5412",
+    "name": "BSc in Quantitative Social Analysis",
+    "faculty": "School of Humanities and Social Science",
+    "institution": "HKUST",
+    "data_year_formula": "2026",
+    "data_year_scores": "2025",
+    "engMultiplier": "x2",
+    "secondMultiplier": "x2",
+    "secondMultiplierSubject": "Math",
+    "subjectNum": 5,
+    "max_attainable_weighting": 7.5,
+    "formula_steps": [
+      {
+        "type": "required",
+        "subject": "English Language",
+        "weight": 2.0
+      },
+      {
+        "type": "required",
+        "subject": "Mathematics Compulsory Part",
+        "weight": 2.0
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [
+          {
+            "subjects": [
+              "Mathematics Extended Part (Algebra and Calculus) - Module 2",
+              "Mathematics Extended Part (Calculus and Statistics) - Module 1"
+            ],
+            "weight": 1.5
+          }
+        ],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [
+          {
+            "subjects": [
+              "Mathematics Extended Part (Algebra and Calculus) - Module 2",
+              "Mathematics Extended Part (Calculus and Statistics) - Module 1"
+            ],
+            "weight": 1.5
+          }
+        ],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [
+          {
+            "subjects": [
+              "Mathematics Extended Part (Algebra and Calculus) - Module 2",
+              "Mathematics Extended Part (Calculus and Statistics) - Module 1"
+            ],
+            "weight": 1.5
+          }
+        ],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      }
+    ],
+    "subject_weights_2026": {
+      "English Language": 2.0,
+      "Mathematics Compulsory Part": 2.0,
+      "Mathematics Extended Part (Algebra and Calculus) - Module 2": 1.5,
+      "Mathematics Extended Part (Calculus and Statistics) - Module 1": 1.5
+    },
+    "bonus_6th": {
+      "bonus_percentage": 5,
+      "eligible_categories": [
+        "Core",
+        "Category A",
+        "Category B",
+        "Category C"
+      ]
+    },
+    "is_better_of": false,
+    "score_median": "33.00",
+    "score_lq": "32.50",
+    "expected_score_2026": "29",
+    "min_requirements_2026_raw": {
+      "english": "3",
+      "chinese": "3",
+      "maths_core": "3",
+      "csd": "attained",
+      "elective_subject_1": "3",
+      "elective_subject_2": "3"
+    },
+    "flexible_intake_score": -1,
+    "anotherSpecifiedSubject": "No specific subject requirements",
+    "otherSubjects_text": "Best 3 other subjects^^ Weighting: M1 / M2 (x 1.5), other subjects (x 1)",
+    "remark": "",
+    "siteURL": "our-programs/school-of-humanities-and-social-science/quantitative-social-analysis"
+  },
+  {
+    "jupas_code": "JS5711",
+    "name": "BSc in Innovation, Design and Technology",
+    "faculty": "Academy of Interdisciplinary Studies",
+    "institution": "HKUST",
+    "data_year_formula": "2026",
+    "data_year_scores": "2025",
+    "engMultiplier": "x2",
+    "secondMultiplier": "x2",
+    "secondMultiplierSubject": "Math",
+    "subjectNum": 5,
+    "max_attainable_weighting": 8.5,
+    "formula_steps": [
+      {
+        "type": "required",
+        "subject": "English Language",
+        "weight": 2.0
+      },
+      {
+        "type": "required",
+        "subject": "Mathematics Compulsory Part",
+        "weight": 2.0
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [
+          "Biology",
+          "Chemistry",
+          "Physics",
+          "Design and Applied Technology",
+          "Information and Communication Technology"
+        ],
+        "weights": [
+          {
+            "subjects": [
+              "Biology",
+              "Chemistry",
+              "Physics",
+              "Design and Applied Technology"
+            ],
+            "weight": 2.0
+          },
+          {
+            "subjects": [
+              "Information and Communication Technology"
+            ],
+            "weight": 1.0
+          }
+        ],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [
+          {
+            "subjects": [
+              "Mathematics Extended Part (Algebra and Calculus) - Module 2",
+              "Mathematics Extended Part (Calculus and Statistics) - Module 1"
+            ],
+            "weight": 1.5
+          }
+        ],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      }
+    ],
+    "subject_weights_2026": {
+      "English Language": 2.0,
+      "Mathematics Compulsory Part": 2.0,
+      "Biology": 2.0,
+      "Chemistry": 2.0,
+      "Physics": 2.0,
+      "Design and Applied Technology": 2.0,
+      "Information and Communication Technology": 1.0,
+      "Mathematics Extended Part (Algebra and Calculus) - Module 2": 1.5,
+      "Mathematics Extended Part (Calculus and Statistics) - Module 1": 1.5
+    },
+    "bonus_6th": {
+      "bonus_percentage": 5,
+      "eligible_categories": [
+        "Core",
+        "Category A",
+        "Category B",
+        "Category C"
+      ]
+    },
+    "is_better_of": false,
+    "score_median": "36.36",
+    "score_lq": "34.72",
+    "expected_score_2026": "33",
+    "min_requirements_2026_raw": {
+      "english": "3",
+      "chinese": "3",
+      "maths_core": "3",
+      "csd": "attained",
+      "elective_subject_1": "3",
+      "elective_subject_2": "3"
+    },
+    "flexible_intake_score": -1,
+    "anotherSpecifiedSubject": "One of: Biology / Chemistry / Physics / Design and Applied Technology / Information and Communication Technology",
+    "otherSubjects_text": "Best from Biology / Chemistry / Physics / Design and Applied Technology / ICT# + Best 2 other subjects^# Weighting: Biology / Chemistry / Physics / Design and Applied Technology (x 2), ICT (x 1)^ Weighting: M1 / M2 (x 1.5), other subjects (x 1)",
+    "remark": "",
+    "siteURL": "our-programs/academy-of-interdisciplinary-studies/integrative-systems-and-design"
+  },
+  {
+    "jupas_code": "JS5811",
+    "name": "BSc in Biotechnology and Business",
+    "faculty": "Joint Programs",
+    "institution": "HKUST",
+    "data_year_formula": "2026",
+    "data_year_scores": "2025",
+    "engMultiplier": "x2",
+    "secondMultiplier": "x2",
+    "secondMultiplierSubject": "Math",
+    "subjectNum": 5,
+    "max_attainable_weighting": 7.5,
+    "formula_steps": [
+      {
+        "type": "required",
+        "subject": "English Language",
+        "weight": 2.0
+      },
+      {
+        "type": "required",
+        "subject": "Mathematics Compulsory Part",
+        "weight": 2.0
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [
+          "Biology",
+          "Chemistry"
+        ],
+        "weights": [
+          {
+            "subjects": [
+              "Biology",
+              "Chemistry"
+            ],
+            "weight": 1.5
+          }
+        ],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      }
+    ],
+    "subject_weights_2026": {
+      "English Language": 2.0,
+      "Mathematics Compulsory Part": 2.0,
+      "Biology": 1.5,
+      "Chemistry": 1.5
+    },
+    "bonus_6th": {
+      "bonus_percentage": 5,
+      "eligible_categories": [
+        "Core",
+        "Category A",
+        "Category B",
+        "Category C"
+      ]
+    },
+    "is_better_of": false,
+    "score_median": "38.63",
+    "score_lq": "36.56",
+    "expected_score_2026": "35",
+    "min_requirements_2026_raw": {
+      "english": "4",
+      "chinese": "3",
+      "maths_core": "3",
+      "csd": "attained",
+      "elective_subject_1": "3",
+      "elective_subject_2": "3"
+    },
+    "flexible_intake_score": -1,
+    "anotherSpecifiedSubject": "One of: Biology / Chemistry",
+    "otherSubjects_text": "Best of Biology / Chemistry x 1.5 + Best 2 other subjects",
+    "remark": "",
+    "siteURL": "our-programs/joint-school-program/biotechnology-and-business"
+  },
+  {
+    "jupas_code": "JS5812",
+    "name": "BSc in Environmental Management and Technology",
+    "faculty": "Academy of Interdisciplinary Studies",
+    "institution": "HKUST",
+    "data_year_formula": "2026",
+    "data_year_scores": "2025",
+    "engMultiplier": "x2",
+    "secondMultiplier": "x2",
+    "secondMultiplierSubject": "Math",
+    "subjectNum": 5,
+    "max_attainable_weighting": 7,
+    "formula_steps": [
+      {
+        "type": "required",
+        "subject": "English Language",
+        "weight": 2.0
+      },
+      {
+        "type": "required",
+        "subject": "Mathematics Compulsory Part",
+        "weight": 2.0
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A",
+          "Category C"
+        ]
+      }
+    ],
+    "subject_weights_2026": {
+      "English Language": 2.0,
+      "Mathematics Compulsory Part": 2.0
+    },
+    "bonus_6th": {
+      "bonus_percentage": 5,
+      "eligible_categories": [
+        "Core",
+        "Category A",
+        "Category B",
+        "Category C"
+      ]
+    },
+    "is_better_of": false,
+    "score_median": "32.50",
+    "score_lq": "31.05",
+    "expected_score_2026": "30",
+    "min_requirements_2026_raw": {
+      "english": "4",
+      "chinese": "3",
+      "maths_core": "3",
+      "csd": "attained",
+      "elective_subject_1": "3",
+      "elective_subject_2": "3"
+    },
+    "flexible_intake_score": -1,
+    "anotherSpecifiedSubject": "No specific subject requirements",
+    "otherSubjects_text": "Best 3 other subjects ▲▲ Category C subjects may be used once in the score calculation.",
+    "remark": "",
+    "siteURL": "our-programs/interdisciplinary-programs/environmental-management-and-technology"
+  },
+  {
+    "jupas_code": "JS5813",
+    "name": "BSc in Mathematics and Economics",
+    "faculty": "Joint Programs",
+    "institution": "HKUST",
+    "data_year_formula": "2026",
+    "data_year_scores": "2025",
+    "engMultiplier": "x2",
+    "secondMultiplier": "x2",
+    "secondMultiplierSubject": "Math",
+    "subjectNum": 5,
+    "max_attainable_weighting": 8,
+    "formula_steps": [
+      {
+        "type": "required",
+        "subject": "English Language",
+        "weight": 2.0
+      },
+      {
+        "type": "required",
+        "subject": "Mathematics Compulsory Part",
+        "weight": 2.0
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [
+          "Biology",
+          "Chemistry",
+          "Physics",
+          "Economics",
+          "Mathematics Extended Part (Algebra and Calculus) - Module 2",
+          "Mathematics Extended Part (Calculus and Statistics) - Module 1"
+        ],
+        "weights": [
+          {
+            "subjects": [
+              "Mathematics Extended Part (Algebra and Calculus) - Module 2",
+              "Mathematics Extended Part (Calculus and Statistics) - Module 1"
+            ],
+            "weight": 2.0
+          },
+          {
+            "subjects": [
+              "Biology",
+              "Chemistry",
+              "Physics",
+              "Economics"
+            ],
+            "weight": 1.5
+          }
+        ],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      }
+    ],
+    "subject_weights_2026": {
+      "English Language": 2.0,
+      "Mathematics Compulsory Part": 2.0,
+      "Mathematics Extended Part (Algebra and Calculus) - Module 2": 2.0,
+      "Mathematics Extended Part (Calculus and Statistics) - Module 1": 2.0,
+      "Biology": 1.5,
+      "Chemistry": 1.5,
+      "Physics": 1.5,
+      "Economics": 1.5
+    },
+    "bonus_6th": {
+      "bonus_percentage": 5,
+      "eligible_categories": [
+        "Core",
+        "Category A",
+        "Category B",
+        "Category C"
+      ]
+    },
+    "is_better_of": false,
+    "score_median": "44.10",
+    "score_lq": "39.20",
+    "expected_score_2026": "38",
+    "min_requirements_2026_raw": {
+      "english": "4",
+      "chinese": "3",
+      "maths_core": "3",
+      "csd": "attained",
+      "elective_subject_1": "3",
+      "elective_subject_2": "3"
+    },
+    "flexible_intake_score": -1,
+    "anotherSpecifiedSubject": "One of: Biology / Chemistry/ Physics / Economics / M1 / M2",
+    "otherSubjects_text": "Best from Biology / Chemistry / Physics / Economics / M1 / M2# + Best 2 other subjects# Weighting: M1 / M2 (x 2), Biology / Chemistry / Physics / Economics (x 1.5)",
+    "remark": "",
+    "siteURL": "our-programs/joint-school-program/mathematics-and-economics"
+  },
+  {
+    "jupas_code": "JS5814",
+    "name": "BSc in Risk Management and Business Intelligence",
+    "faculty": "Joint Programs",
+    "institution": "HKUST",
+    "data_year_formula": "2026",
+    "data_year_scores": "2025",
+    "engMultiplier": "x2",
+    "secondMultiplier": "x2",
+    "secondMultiplierSubject": "Math",
+    "subjectNum": 5,
+    "max_attainable_weighting": 7.5,
+    "formula_steps": [
+      {
+        "type": "required",
+        "subject": "English Language",
+        "weight": 2.0
+      },
+      {
+        "type": "required",
+        "subject": "Mathematics Compulsory Part",
+        "weight": 2.0
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [
+          {
+            "subjects": [
+              "Mathematics Extended Part (Algebra and Calculus) - Module 2",
+              "Mathematics Extended Part (Calculus and Statistics) - Module 1"
+            ],
+            "weight": 1.5
+          }
+        ],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      }
+    ],
+    "subject_weights_2026": {
+      "English Language": 2.0,
+      "Mathematics Compulsory Part": 2.0,
+      "Mathematics Extended Part (Algebra and Calculus) - Module 2": 1.5,
+      "Mathematics Extended Part (Calculus and Statistics) - Module 1": 1.5
+    },
+    "bonus_6th": {
+      "bonus_percentage": 5,
+      "eligible_categories": [
+        "Core",
+        "Category A",
+        "Category C"
+      ]
+    },
+    "is_better_of": false,
+    "score_median": "44.25",
+    "score_lq": "43.50",
+    "expected_score_2026": "40",
+    "min_requirements_2026_raw": {
+      "english": "4",
+      "chinese": "3",
+      "maths_core": "3",
+      "csd": "attained",
+      "elective_subject_1": "3",
+      "elective_subject_2": "3"
+    },
+    "flexible_intake_score": -1,
+    "anotherSpecifiedSubject": "No specific subject requirements",
+    "otherSubjects_text": "Best 3 other subjects^^ Weighting: M1 / M2 (x 1.5), other subjects (x 1)",
+    "remark": "",
+    "siteURL": "our-programs/joint-school-program/risk-management-and-business-intelligence"
+  },
+  {
+    "jupas_code": "JS5822",
+    "name": "BSc in Sustainable and Green Finance",
+    "faculty": "Joint Programs",
+    "institution": "HKUST",
+    "data_year_formula": "2026",
+    "data_year_scores": "2025",
+    "engMultiplier": "x2",
+    "secondMultiplier": "x2",
+    "secondMultiplierSubject": "Math",
+    "subjectNum": 5,
+    "max_attainable_weighting": 7.5,
+    "formula_steps": [
+      {
+        "type": "required",
+        "subject": "English Language",
+        "weight": 2.0
+      },
+      {
+        "type": "required",
+        "subject": "Mathematics Compulsory Part",
+        "weight": 2.0
+      },
+      {
+        "type": "better_of",
+        "options": [
+          [
+            {
+              "type": "best_from_pool",
+              "subject_filter": [],
+              "weights": [],
+              "eligible_categories": [
+                "Core",
+                "Category A"
+              ]
+            },
+            {
+              "type": "best_from_pool",
+              "subject_filter": [],
+              "weights": [],
+              "eligible_categories": [
+                "Core",
+                "Category A"
+              ]
+            },
+            {
+              "type": "best_from_pool",
+              "subject_filter": [],
+              "weights": [],
+              "eligible_categories": [
+                "Core",
+                "Category A"
+              ]
+            }
+          ],
+          [
+            {
+              "type": "best_from_pool",
+              "subject_filter": [
+                "Chemistry",
+                "Physics",
+                "Economics",
+                "Mathematics Extended Part (Algebra and Calculus) - Module 2",
+                "Mathematics Extended Part (Calculus and Statistics) - Module 1"
+              ],
+              "weights": [
+                {
+                  "subjects": [
+                    "Chemistry",
+                    "Physics",
+                    "Economics",
+                    "Mathematics Extended Part (Algebra and Calculus) - Module 2",
+                    "Mathematics Extended Part (Calculus and Statistics) - Module 1"
+                  ],
+                  "weight": 1.5
+                }
+              ],
+              "eligible_categories": [
+                "Core",
+                "Category A"
+              ]
+            },
+            {
+              "type": "best_from_pool",
+              "subject_filter": [],
+              "weights": [],
+              "eligible_categories": [
+                "Core",
+                "Category A"
+              ]
+            },
+            {
+              "type": "best_from_pool",
+              "subject_filter": [],
+              "weights": [],
+              "eligible_categories": [
+                "Core",
+                "Category A"
+              ]
+            }
+          ]
+        ]
+      }
+    ],
+    "subject_weights_2026": {
+      "English Language": 2.0,
+      "Mathematics Compulsory Part": 2.0
+    },
+    "bonus_6th": {
+      "bonus_percentage": 5,
+      "eligible_categories": [
+        "Core",
+        "Category A",
+        "Category C"
+      ]
+    },
+    "is_better_of": true,
+    "score_median": "37.88",
+    "score_lq": "37.13",
+    "expected_score_2026": "38",
+    "min_requirements_2026_raw": {
+      "english": "4",
+      "chinese": "3",
+      "maths_core": "3",
+      "csd": "attained",
+      "elective_subject_1": "3",
+      "elective_subject_2": "3"
+    },
+    "flexible_intake_score": -1,
+    "anotherSpecifiedSubject": "No specific subject requirements",
+    "otherSubjects_text": "Better of Best 3 other subjectsORBest of Chemistry / Economics / Physics / M1 / M2 x 1.5 + Best 2 other subjects",
+    "remark": "",
+    "siteURL": "our-programs/joint-school-program/sustainable-and-green-finance"
+  },
+  {
+    "jupas_code": "JS5901",
+    "name": "BEng/BSc & BBA Dual Degree Program in Technology and Management",
+    "faculty": "Academy of Interdisciplinary Studies",
+    "institution": "HKUST",
+    "data_year_formula": "2026",
+    "data_year_scores": "2025",
+    "engMultiplier": "x2",
+    "secondMultiplier": "x2",
+    "secondMultiplierSubject": "Math",
+    "subjectNum": 5,
+    "max_attainable_weighting": 8.5,
+    "formula_steps": [
+      {
+        "type": "required",
+        "subject": "English Language",
+        "weight": 2.0
+      },
+      {
+        "type": "required",
+        "subject": "Mathematics Compulsory Part",
+        "weight": 2.0
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [
+          "Biology",
+          "Chemistry",
+          "Physics",
+          "Information and Communication Technology"
+        ],
+        "weights": [
+          {
+            "subjects": [
+              "Biology",
+              "Chemistry",
+              "Physics",
+              "Information and Communication Technology"
+            ],
+            "weight": 1.0
+          }
+        ],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [
+          {
+            "subjects": [
+              "Mathematics Extended Part (Algebra and Calculus) - Module 2",
+              "Mathematics Extended Part (Calculus and Statistics) - Module 1"
+            ],
+            "weight": 1.5
+          }
+        ],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      },
+      {
+        "type": "best_from_pool",
+        "subject_filter": [],
+        "weights": [],
+        "eligible_categories": [
+          "Core",
+          "Category A"
+        ]
+      }
+    ],
+    "subject_weights_2026": {
+      "English Language": 2.0,
+      "Mathematics Compulsory Part": 2.0,
+      "Biology": 1.0,
+      "Chemistry": 1.0,
+      "Physics": 1.0,
+      "Information and Communication Technology": 1.0,
+      "Mathematics Extended Part (Algebra and Calculus) - Module 2": 1.5,
+      "Mathematics Extended Part (Calculus and Statistics) - Module 1": 1.5
+    },
+    "bonus_6th": {
+      "bonus_percentage": 5,
+      "eligible_categories": [
+        "Core",
+        "Category A",
+        "Category C"
+      ]
+    },
+    "is_better_of": false,
+    "score_median": "62.48",
+    "score_lq": "60.23",
+    "expected_score_2026": "60",
+    "min_requirements_2026_raw": {
+      "english": "4",
+      "chinese": "3",
+      "maths_core": "3",
+      "csd": "attained",
+      "elective_subject_1": "3",
+      "elective_subject_2": "3"
+    },
+    "flexible_intake_score": -1,
+    "anotherSpecifiedSubject": "One of: Biology / Chemistry / Physics / Information and Communication Technology",
+    "otherSubjects_text": "Best from Biology / Chemistry / Physics / ICT# + Best 2 other subjects^# Weighting: Biology / Chemistry / Physics, ICT (x 1)^ Weighting: M1 / M2 (x 1.5), other subjects (x 1)",
+    "remark": "",
+    "siteURL": "our-programs/interdisciplinary-programs/dual-degree-program-in-technology-and-management"
+  }
+]

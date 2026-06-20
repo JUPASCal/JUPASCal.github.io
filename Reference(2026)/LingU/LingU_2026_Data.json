@@ -1,0 +1,945 @@
+[
+  {
+    "code": "JS7101",
+    "name": "Bachelor of Arts (Hons) in Chinese",
+    "faculty": "FACULTY OF ARTS",
+    "score_median": 25.845,
+    "score_median_grades": {
+      "CHIN": "5",
+      "ENGL": "3",
+      "MATH": "3",
+      "Elective1": "4",
+      "Elective2": "4"
+    },
+    "score_lq": 25.27,
+    "score_lq_grades": {
+      "CHIN": "4",
+      "ENGL": "3",
+      "MATH": "3",
+      "Elective1": "4",
+      "Elective2": "3"
+    },
+    "formula": "Best 5",
+    "data_year_scores": 2025,
+    "data_year_weightings": 2026,
+    "subject_weights": {
+      "Chinese Language": 1.5,
+      "English Language": 1.5,
+      "Chinese History / Chinese Literature": 1.5
+    },
+    "weightings_source": "Admission_Requirements_JUPAS_2026.pdf (LingU, Section 5)",
+    "scores_source": "af_2025_JUPAS.pdf p16-18 (JUPAS combined, LingU section)",
+    "subject_weights_2025": {
+      "Chinese Language": 1.5,
+      "English Language": 1.5,
+      "Chinese History / Chinese Literature": 1.5
+    },
+    "weightings_2025_source": "LingU 2025 Weighting.pdf (Archives/2025 JUPAS 計分器/參考資料(2025)/LingU/)"
+  },
+  {
+    "code": "JS7133",
+    "name": "Bachelor of Arts (Hons) in Animation and Digital Arts",
+    "faculty": "FACULTY OF ARTS",
+    "score_median": 24.0,
+    "score_median_grades": {
+      "CHIN": "4",
+      "ENGL": "4",
+      "MATH": "3",
+      "Elective1": "4",
+      "Elective2": "3"
+    },
+    "score_lq": 23.5,
+    "score_lq_grades": {
+      "CHIN": "3",
+      "ENGL": "3",
+      "MATH": "3",
+      "Elective1": "4",
+      "Elective2": "3"
+    },
+    "formula": "Best 5",
+    "data_year_scores": 2025,
+    "data_year_weightings": 2026,
+    "subject_weights": {
+      "Chinese Language": 1.5,
+      "English Language": 1.5,
+      "Information and Communication Technology": 1.5,
+      "Visual Arts": 1.5
+    },
+    "weightings_source": "Admission_Requirements_JUPAS_2026.pdf (LingU, Section 5)",
+    "scores_source": "af_2025_JUPAS.pdf p16-18 (JUPAS combined, LingU section)",
+    "subject_weights_2025": {
+      "Chinese Language": 1.5,
+      "English Language": 1.5,
+      "Information and Communication Technology": 1.5,
+      "Visual Arts": 1.5
+    },
+    "weightings_2025_source": "LingU 2025 Weighting.pdf (Archives/2025 JUPAS 計分器/參考資料(2025)/LingU/)"
+  },
+  {
+    "code": "JS7204",
+    "name": "Bachelor of Arts (Hons) in Translation",
+    "faculty": "FACULTY OF ARTS",
+    "score_median": 25.125,
+    "score_median_grades": {
+      "CHIN": "4.5",
+      "ENGL": "3",
+      "MATH": "3",
+      "Elective1": "4",
+      "Elective2": "3"
+    },
+    "score_lq": 24.5,
+    "score_lq_grades": {
+      "CHIN": "4",
+      "ENGL": "3",
+      "MATH": "3",
+      "Elective1": "4",
+      "Elective2": "3"
+    },
+    "formula": "Best 5",
+    "data_year_scores": 2025,
+    "data_year_weightings": 2026,
+    "subject_weights": {
+      "Chinese Language": 1.5,
+      "English Language": 2.0,
+      "Chinese Literature": 1.5,
+      "Literature in English": 1.5
+    },
+    "weightings_source": "Admission_Requirements_JUPAS_2026.pdf (LingU, Section 5)",
+    "scores_source": "af_2025_JUPAS.pdf p16-18 (JUPAS combined, LingU section)",
+    "subject_weights_2025": {
+      "Chinese Language": 1.5,
+      "English Language": 2.0,
+      "Chinese Literature": 1.5,
+      "Literature in English": 1.5
+    },
+    "weightings_2025_source": "LingU 2025 Weighting.pdf (Archives/2025 JUPAS 計分器/參考資料(2025)/LingU/)"
+  },
+  {
+    "code": "JS7503",
+    "name": "Bachelor of Arts (Hons) in English Studies",
+    "faculty": "FACULTY OF ARTS",
+    "score_median": 27.05,
+    "score_median_grades": {
+      "CHIN": "4",
+      "ENGL": "4",
+      "MATH": "3",
+      "Elective1": "4",
+      "Elective2": "3"
+    },
+    "score_lq": 26.2,
+    "score_lq_grades": {
+      "CHIN": "3",
+      "ENGL": "4",
+      "MATH": "3",
+      "Elective1": "4",
+      "Elective2": "3"
+    },
+    "formula": "Best 5",
+    "data_year_scores": 2025,
+    "data_year_weightings": 2026,
+    "subject_weights": {
+      "Chinese Language": 1.5,
+      "English Language": 2.5,
+      "Literature in English": 1.5
+    },
+    "weightings_source": "Admission_Requirements_JUPAS_2026.pdf (LingU, Section 5)",
+    "scores_source": "af_2025_JUPAS.pdf p16-18 (JUPAS combined, LingU section)",
+    "subject_weights_2025": {
+      "Chinese Language": 1.5,
+      "English Language": 2.5,
+      "Literature in English": 1.5
+    },
+    "weightings_2025_source": "LingU 2025 Weighting.pdf (Archives/2025 JUPAS 計分器/參考資料(2025)/LingU/)"
+  },
+  {
+    "code": "JS7606",
+    "name": "Bachelor of Arts (Hons) in Cultural Studies",
+    "faculty": "FACULTY OF ARTS",
+    "score_median": 25.15,
+    "score_median_grades": {
+      "CHIN": "4",
+      "ENGL": "3",
+      "MATH": "3",
+      "Elective1": "5",
+      "Elective2": "4"
+    },
+    "score_lq": 24.15,
+    "score_lq_grades": {
+      "CHIN": "4",
+      "ENGL": "3",
+      "MATH": "3",
+      "Elective1": "4",
+      "Elective2": "4"
+    },
+    "formula": "Best 5",
+    "data_year_scores": 2025,
+    "data_year_weightings": 2026,
+    "subject_weights": {
+      "Chinese Language": 1.5,
+      "English Language": 2.0
+    },
+    "weightings_source": "Admission_Requirements_JUPAS_2026.pdf (LingU, Section 5)",
+    "scores_source": "af_2025_JUPAS.pdf p16-18 (JUPAS combined, LingU section)",
+    "subject_weights_2025": {
+      "Chinese Language": 1.5,
+      "English Language": 2.0
+    },
+    "weightings_2025_source": "LingU 2025 Weighting.pdf (Archives/2025 JUPAS 計分器/參考資料(2025)/LingU/)"
+  },
+  {
+    "code": "JS7709",
+    "name": "Bachelor of Arts (Hons) in History",
+    "faculty": "FACULTY OF ARTS",
+    "score_median": 26.2,
+    "score_median_grades": {
+      "CHIN": "4",
+      "ENGL": "3",
+      "MATH": "3",
+      "Elective1": "5",
+      "Elective2": "4"
+    },
+    "score_lq": 26.0,
+    "score_lq_grades": {
+      "CHIN": "4",
+      "ENGL": "3",
+      "MATH": "3",
+      "Elective1": "4",
+      "Elective2": "4"
+    },
+    "formula": "Best 5",
+    "data_year_scores": 2025,
+    "data_year_weightings": 2026,
+    "subject_weights": {
+      "Chinese Language": 1.5,
+      "English Language": 2.0,
+      "Chinese History": 1.2,
+      "History": 1.2
+    },
+    "weightings_source": "Admission_Requirements_JUPAS_2026.pdf (LingU, Section 5)",
+    "scores_source": "af_2025_JUPAS.pdf p16-18 (JUPAS combined, LingU section)",
+    "subject_weights_2025": {
+      "Chinese Language": 1.5,
+      "English Language": 2.0,
+      "Chinese History": 1.2,
+      "History": 1.2
+    },
+    "weightings_2025_source": "LingU 2025 Weighting.pdf (Archives/2025 JUPAS 計分器/參考資料(2025)/LingU/)"
+  },
+  {
+    "code": "JS7802",
+    "name": "Bachelor of Arts (Hons) in Philosophy",
+    "faculty": "FACULTY OF ARTS",
+    "score_median": 26.0,
+    "score_median_grades": {
+      "CHIN": "4",
+      "ENGL": "3",
+      "MATH": "4",
+      "Elective1": "4",
+      "Elective2": "3.5"
+    },
+    "score_lq": 25.0,
+    "score_lq_grades": {
+      "CHIN": "3",
+      "ENGL": "3",
+      "MATH": "3",
+      "Elective1": "4",
+      "Elective2": "3"
+    },
+    "formula": "Best 5",
+    "data_year_scores": 2025,
+    "data_year_weightings": 2026,
+    "subject_weights": {
+      "Chinese Language": 1.5,
+      "English Language": 2.0,
+      "Mathematics (Compulsory Part)": 1.5
+    },
+    "weightings_source": "Admission_Requirements_JUPAS_2026.pdf (LingU, Section 5)",
+    "scores_source": "af_2025_JUPAS.pdf p16-18 (JUPAS combined, LingU section)",
+    "subject_weights_2025": {
+      "Chinese Language": 1.5,
+      "English Language": 2.0,
+      "Mathematics (Compulsory Part)": 1.5
+    },
+    "weightings_2025_source": "LingU 2025 Weighting.pdf (Archives/2025 JUPAS 計分器/參考資料(2025)/LingU/)"
+  },
+  {
+    "code": "JS7905",
+    "name": "Bachelor of Arts (Hons) in Film and Visual Arts",
+    "faculty": "FACULTY OF ARTS",
+    "score_median": 28.0,
+    "score_median_grades": {
+      "CHIN": "4",
+      "ENGL": "3.5",
+      "MATH": "4",
+      "Elective1": "4",
+      "Elective2": "3.5"
+    },
+    "score_lq": 27.0,
+    "score_lq_grades": {
+      "CHIN": "4",
+      "ENGL": "3",
+      "MATH": "4",
+      "Elective1": "3",
+      "Elective2": "3"
+    },
+    "formula": "Best 5",
+    "data_year_scores": 2025,
+    "data_year_weightings": 2026,
+    "subject_weights": {
+      "Chinese Language": 2.0,
+      "English Language": 2.0,
+      "Information and Communication Technology": 1.5,
+      "Visual Arts": 1.5
+    },
+    "weightings_source": "Admission_Requirements_JUPAS_2026.pdf (LingU, Section 5)",
+    "scores_source": "af_2025_JUPAS.pdf p16-18 (JUPAS combined, LingU section)",
+    "subject_weights_2025": {
+      "Chinese Language": 2.0,
+      "English Language": 2.0,
+      "Information and Communication Technology": 1.5,
+      "Visual Arts": 1.5
+    },
+    "weightings_2025_source": "LingU 2025 Weighting.pdf (Archives/2025 JUPAS 計分器/參考資料(2025)/LingU/)"
+  },
+  {
+    "code": "JS7211",
+    "name": "Bachelor of Business Administration (Hons) - Accounting and Corporate Governance",
+    "faculty": "FACULTY OF BUSINESS",
+    "score_median": 27.05,
+    "score_median_grades": {
+      "CHIN": "3",
+      "ENGL": "3",
+      "MATH": "4",
+      "Elective1": "4",
+      "Elective2": "4"
+    },
+    "score_lq": 27.0,
+    "score_lq_grades": {
+      "CHIN": "3",
+      "ENGL": "3",
+      "MATH": "4",
+      "Elective1": "4",
+      "Elective2": "4"
+    },
+    "formula": "Best 5",
+    "data_year_scores": 2025,
+    "data_year_weightings": 2026,
+    "subject_weights": {
+      "English Language": 2.0,
+      "Mathematics (Compulsory Part)": 2.0,
+      "Mathematics Extended Part Module 1 (Calculus & Statistics)": 1.5,
+      "Mathematics Extended Part Module 2 (Algebra & Calculus)": 1.5,
+      "Business, Accounting and Financial Studies": 1.5
+    },
+    "weightings_source": "Admission_Requirements_JUPAS_2026.pdf (LingU, Section 5)",
+    "scores_source": "af_2025_JUPAS.pdf p16-18 (JUPAS combined, LingU section)",
+    "subject_weights_2025": {
+      "English Language": 2.0,
+      "Mathematics (Compulsory Part)": 2.0,
+      "Mathematics Extended Part Module 1 (Calculus & Statistics)": 1.5,
+      "Mathematics Extended Part Module 2 (Algebra & Calculus)": 1.5,
+      "Business, Accounting and Financial Studies": 1.5
+    },
+    "weightings_2025_source": "LingU 2025 Weighting.pdf (Archives/2025 JUPAS 計分器/參考資料(2025)/LingU/)"
+  },
+  {
+    "code": "JS7212",
+    "name": "Bachelor of Business Administration (Hons) - Business Analytics and Innovation",
+    "faculty": "FACULTY OF BUSINESS",
+    "score_median": 27.0,
+    "score_median_grades": {
+      "CHIN": "3",
+      "ENGL": "3",
+      "MATH": "4",
+      "Elective1": "4",
+      "Elective2": "3"
+    },
+    "score_lq": 25.05,
+    "score_lq_grades": {
+      "CHIN": "3",
+      "ENGL": "3",
+      "MATH": "4",
+      "Elective1": "4",
+      "Elective2": "3"
+    },
+    "formula": "Best 5",
+    "data_year_scores": 2025,
+    "data_year_weightings": 2026,
+    "subject_weights": {
+      "English Language": 2.0,
+      "Mathematics (Compulsory Part)": 2.0,
+      "Mathematics Extended Part Module 1 (Calculus & Statistics)": 1.5,
+      "Mathematics Extended Part Module 2 (Algebra & Calculus)": 1.5,
+      "Business, Accounting and Financial Studies": 1.5,
+      "Economics": 1.5,
+      "Information and Communication Technology": 1.5
+    },
+    "weightings_source": "Admission_Requirements_JUPAS_2026.pdf (LingU, Section 5)",
+    "scores_source": "af_2025_JUPAS.pdf p16-18 (JUPAS combined, LingU section)",
+    "subject_weights_2025": {
+      "English Language": 2.0,
+      "Mathematics (Compulsory Part)": 2.0,
+      "Mathematics Extended Part Module 1 (Calculus & Statistics)": 1.5,
+      "Mathematics Extended Part Module 2 (Algebra & Calculus)": 1.5,
+      "Information and Communication Technology": 1.5
+    },
+    "weightings_2025_source": "LingU 2025 Weighting.pdf (Archives/2025 JUPAS 計分器/參考資料(2025)/LingU/)"
+  },
+  {
+    "code": "JS7213",
+    "name": "Bachelor of Business Administration (Hons) - Finance",
+    "faculty": "FACULTY OF BUSINESS",
+    "score_median": 28.75,
+    "score_median_grades": {
+      "CHIN": "3",
+      "ENGL": "3",
+      "MATH": "4",
+      "Elective1": "4",
+      "Elective2": "4"
+    },
+    "score_lq": 27.0,
+    "score_lq_grades": {
+      "CHIN": "3",
+      "ENGL": "3",
+      "MATH": "4",
+      "Elective1": "4",
+      "Elective2": "4"
+    },
+    "formula": "Best 5",
+    "data_year_scores": 2025,
+    "data_year_weightings": 2026,
+    "subject_weights": {
+      "English Language": 2.0,
+      "Mathematics (Compulsory Part)": 2.0,
+      "Mathematics Extended Part Module 1 (Calculus & Statistics)": 1.5,
+      "Mathematics Extended Part Module 2 (Algebra & Calculus)": 1.5,
+      "Business, Accounting and Financial Studies": 1.5,
+      "Economics": 1.5,
+      "Information and Communication Technology": 1.5
+    },
+    "weightings_source": "Admission_Requirements_JUPAS_2026.pdf (LingU, Section 5)",
+    "scores_source": "af_2025_JUPAS.pdf p16-18 (JUPAS combined, LingU section)",
+    "subject_weights_2025": {
+      "English Language": 2.0,
+      "Mathematics (Compulsory Part)": 2.0,
+      "Mathematics Extended Part Module 1 (Calculus & Statistics)": 1.5,
+      "Mathematics Extended Part Module 2 (Algebra & Calculus)": 1.5,
+      "Business, Accounting and Financial Studies": 1.5,
+      "Economics": 1.5,
+      "Information and Communication Technology": 1.5
+    },
+    "weightings_2025_source": "LingU 2025 Weighting.pdf (Archives/2025 JUPAS 計分器/參考資料(2025)/LingU/)"
+  },
+  {
+    "code": "JS7214",
+    "name": "Bachelor of Business Administration (Hons) - Human Resource Management and Analytics",
+    "faculty": "FACULTY OF BUSINESS",
+    "score_median": 28.5,
+    "score_median_grades": {
+      "CHIN": "4",
+      "ENGL": "3",
+      "MATH": "3",
+      "Elective1": "4",
+      "Elective2": "4"
+    },
+    "score_lq": 26.5,
+    "score_lq_grades": {
+      "CHIN": "3",
+      "ENGL": "3",
+      "MATH": "3",
+      "Elective1": "4",
+      "Elective2": "4"
+    },
+    "formula": "Best 5",
+    "data_year_scores": 2025,
+    "data_year_weightings": 2026,
+    "subject_weights": {
+      "English Language": 2.0,
+      "Mathematics (Compulsory Part)": 2.0,
+      "Mathematics Extended Part Module 1 (Calculus & Statistics)": 1.5,
+      "Mathematics Extended Part Module 2 (Algebra & Calculus)": 1.5,
+      "Business, Accounting and Financial Studies": 1.5,
+      "Economics": 1.5,
+      "Information and Communication Technology": 1.5
+    },
+    "weightings_source": "Admission_Requirements_JUPAS_2026.pdf (LingU, Section 5)",
+    "scores_source": "af_2025_JUPAS.pdf p16-18 (JUPAS combined, LingU section)",
+    "subject_weights_2025": {
+      "English Language": 2.0,
+      "Mathematics (Compulsory Part)": 2.0,
+      "Mathematics Extended Part Module 1 (Calculus & Statistics)": 1.5,
+      "Mathematics Extended Part Module 2 (Algebra & Calculus)": 1.5,
+      "Business, Accounting and Financial Studies": 1.5,
+      "Economics": 1.5,
+      "Information and Communication Technology": 1.5
+    },
+    "weightings_2025_source": "LingU 2025 Weighting.pdf (Archives/2025 JUPAS 計分器/參考資料(2025)/LingU/)"
+  },
+  {
+    "code": "JS7215",
+    "name": "Bachelor of Business Administration (Hons) - Marketing and Social Media",
+    "faculty": "FACULTY OF BUSINESS",
+    "score_median": 28.5,
+    "score_median_grades": {
+      "CHIN": "3",
+      "ENGL": "3",
+      "MATH": "4",
+      "Elective1": "4",
+      "Elective2": "4"
+    },
+    "score_lq": 27.05,
+    "score_lq_grades": {
+      "CHIN": "3",
+      "ENGL": "3",
+      "MATH": "3",
+      "Elective1": "4",
+      "Elective2": "4"
+    },
+    "formula": "Best 5",
+    "data_year_scores": 2025,
+    "data_year_weightings": 2026,
+    "subject_weights": {
+      "English Language": 2.0,
+      "Mathematics (Compulsory Part)": 2.0,
+      "Mathematics Extended Part Module 1 (Calculus & Statistics)": 1.5,
+      "Mathematics Extended Part Module 2 (Algebra & Calculus)": 1.5,
+      "Business, Accounting and Financial Studies": 1.5,
+      "Economics": 1.5,
+      "Information and Communication Technology": 1.5
+    },
+    "weightings_source": "Admission_Requirements_JUPAS_2026.pdf (LingU, Section 5)",
+    "scores_source": "af_2025_JUPAS.pdf p16-18 (JUPAS combined, LingU section)",
+    "subject_weights_2025": {
+      "English Language": 2.0,
+      "Mathematics (Compulsory Part)": 2.0,
+      "Mathematics Extended Part Module 1 (Calculus & Statistics)": 1.5,
+      "Mathematics Extended Part Module 2 (Algebra & Calculus)": 1.5,
+      "Business, Accounting and Financial Studies": 1.5,
+      "Economics": 1.5,
+      "Information and Communication Technology": 1.5
+    },
+    "weightings_2025_source": "LingU 2025 Weighting.pdf (Archives/2025 JUPAS 計分器/參考資料(2025)/LingU/)"
+  },
+  {
+    "code": "JS7216",
+    "name": "Bachelor of Business Administration (Hons) in Risk and Insurance Management FACULTY OF SOCIAL SCIENCES",
+    "faculty": "FACULTY OF BUSINESS",
+    "score_median": 27.0,
+    "score_median_grades": {
+      "CHIN": "3",
+      "ENGL": "3",
+      "MATH": "4",
+      "Elective1": "4",
+      "Elective2": "4"
+    },
+    "score_lq": 26.0,
+    "score_lq_grades": {
+      "CHIN": "3",
+      "ENGL": "3",
+      "MATH": "3",
+      "Elective1": "4",
+      "Elective2": "4"
+    },
+    "formula": "Best 5",
+    "data_year_scores": 2025,
+    "data_year_weightings": 2026,
+    "subject_weights": {
+      "English Language": 2.0,
+      "Mathematics (Compulsory Part)": 2.0,
+      "Mathematics Extended Part Module 1 (Calculus & Statistics)": 1.5,
+      "Mathematics Extended Part Module 2 (Algebra & Calculus)": 1.5,
+      "Business, Accounting and Financial Studies": 1.5,
+      "Economics": 1.5,
+      "Information and Communication Technology": 1.5
+    },
+    "weightings_source": "Admission_Requirements_JUPAS_2026.pdf (LingU, Section 5)",
+    "scores_source": "af_2025_JUPAS.pdf p16-18 (JUPAS combined, LingU section)",
+    "subject_weights_2025": {
+      "English Language": 2.0,
+      "Mathematics (Compulsory Part)": 2.0,
+      "Mathematics Extended Part Module 1 (Calculus & Statistics)": 2.0,
+      "Mathematics Extended Part Module 2 (Algebra & Calculus)": 2.0,
+      "Economics": 1.5,
+      "Information and Communication Technology": 1.5
+    },
+    "weightings_2025_source": "LingU 2025 Weighting.pdf (Archives/2025 JUPAS 計分器/參考資料(2025)/LingU/)"
+  },
+  {
+    "code": "JS7301",
+    "name": "Bachelor of Social Sciences (Hons) in Economics",
+    "faculty": "FACULTY OF SOCIAL SCIENCES",
+    "score_median": 26.4,
+    "score_median_grades": {
+      "CHIN": "4",
+      "ENGL": "3",
+      "MATH": "4",
+      "Elective1": "4",
+      "Elective2": "4"
+    },
+    "score_lq": 26.0,
+    "score_lq_grades": {
+      "CHIN": "4",
+      "ENGL": "3",
+      "MATH": "4",
+      "Elective1": "4",
+      "Elective2": "3"
+    },
+    "formula": "Best 5",
+    "data_year_scores": 2025,
+    "data_year_weightings": 2026,
+    "subject_weights": {
+      "English Language": 2.0,
+      "Mathematics (Compulsory Part)": 1.5,
+      "Mathematics Extended Part Module 1 (Calculus & Statistics)": 1.5,
+      "Mathematics Extended Part Module 2 (Algebra & Calculus)": 1.5,
+      "Economics": 1.5
+    },
+    "weightings_source": "Admission_Requirements_JUPAS_2026.pdf (LingU, Section 5)",
+    "scores_source": "af_2025_JUPAS.pdf p16-18 (JUPAS combined, LingU section)",
+    "subject_weights_2025": {
+      "English Language": 2.0,
+      "Mathematics (Compulsory Part)": 1.5,
+      "Mathematics Extended Part Module 1 (Calculus & Statistics)": 1.5,
+      "Mathematics Extended Part Module 2 (Algebra & Calculus)": 1.5,
+      "Economics": 1.5
+    },
+    "weightings_2025_source": "LingU 2025 Weighting.pdf (Archives/2025 JUPAS 計分器/參考資料(2025)/LingU/)"
+  },
+  {
+    "code": "JS7302",
+    "name": "Bachelor of Social Sciences (Hons) in Government and International Affairs",
+    "faculty": "FACULTY OF SOCIAL SCIENCES",
+    "score_median": 28.0,
+    "score_median_grades": {
+      "CHIN": "4",
+      "ENGL": "3",
+      "MATH": "4",
+      "Elective1": "4",
+      "Elective2": "4"
+    },
+    "score_lq": 26.9,
+    "score_lq_grades": {
+      "CHIN": "3",
+      "ENGL": "3",
+      "MATH": "3",
+      "Elective1": "4",
+      "Elective2": "4"
+    },
+    "formula": "Best 5",
+    "data_year_scores": 2025,
+    "data_year_weightings": 2026,
+    "subject_weights": {
+      "English Language": 2.0,
+      "Mathematics (Compulsory Part)": 1.5,
+      "Mathematics Extended Part Module 1 (Calculus & Statistics)": 1.5,
+      "Mathematics Extended Part Module 2 (Algebra & Calculus)": 1.5,
+      "Chinese History": 1.5,
+      "Geography": 1.5,
+      "History": 1.5
+    },
+    "weightings_source": "Admission_Requirements_JUPAS_2026.pdf (LingU, Section 5)",
+    "scores_source": "af_2025_JUPAS.pdf p16-18 (JUPAS combined, LingU section)",
+    "subject_weights_2025": {
+      "English Language": 2.0,
+      "Mathematics (Compulsory Part)": 1.5,
+      "Mathematics Extended Part Module 1 (Calculus & Statistics)": 1.5,
+      "Mathematics Extended Part Module 2 (Algebra & Calculus)": 1.5,
+      "Chinese History": 1.5,
+      "Geography": 1.5,
+      "History": 1.5
+    },
+    "weightings_2025_source": "LingU 2025 Weighting.pdf (Archives/2025 JUPAS 計分器/參考資料(2025)/LingU/)"
+  },
+  {
+    "code": "JS7303",
+    "name": "Bachelor of Social Sciences (Hons) in Psychology",
+    "faculty": "FACULTY OF SOCIAL SCIENCES",
+    "score_median": 25.0,
+    "score_median_grades": {
+      "CHIN": "4",
+      "ENGL": "4",
+      "MATH": "4",
+      "Elective1": "4",
+      "Elective2": "3"
+    },
+    "score_lq": 24.5,
+    "score_lq_grades": {
+      "CHIN": "3",
+      "ENGL": "3",
+      "MATH": "4",
+      "Elective1": "4",
+      "Elective2": "3"
+    },
+    "formula": "Best 5",
+    "data_year_scores": 2025,
+    "data_year_weightings": 2026,
+    "subject_weights": {
+      "English Language": 2.0,
+      "Mathematics (Compulsory Part)": 1.5
+    },
+    "weightings_source": "Admission_Requirements_JUPAS_2026.pdf (LingU, Section 5)",
+    "scores_source": "af_2025_JUPAS.pdf p16-18 (JUPAS combined, LingU section)",
+    "subject_weights_2025": {
+      "English Language": 2.0,
+      "Mathematics (Compulsory Part)": 1.5
+    },
+    "weightings_2025_source": "LingU 2025 Weighting.pdf (Archives/2025 JUPAS 計分器/參考資料(2025)/LingU/)"
+  },
+  {
+    "code": "JS7304",
+    "name": "Bachelor of Social Sciences (Hons) in Sociology",
+    "faculty": "FACULTY OF SOCIAL SCIENCES",
+    "score_median": 25.0,
+    "score_median_grades": {
+      "CHIN": "4",
+      "ENGL": "4",
+      "MATH": "4",
+      "Elective1": "4",
+      "Elective2": "4"
+    },
+    "score_lq": 24.5,
+    "score_lq_grades": {
+      "CHIN": "4",
+      "ENGL": "3",
+      "MATH": "3",
+      "Elective1": "4",
+      "Elective2": "4"
+    },
+    "formula": "Best 5",
+    "data_year_scores": 2025,
+    "data_year_weightings": 2026,
+    "subject_weights": {
+      "English Language": 2.0,
+      "Mathematics (Compulsory Part)": 1.5
+    },
+    "weightings_source": "Admission_Requirements_JUPAS_2026.pdf (LingU, Section 5)",
+    "scores_source": "af_2025_JUPAS.pdf p16-18 (JUPAS combined, LingU section)",
+    "subject_weights_2025": {
+      "English Language": 2.0,
+      "Mathematics (Compulsory Part)": 1.5
+    },
+    "weightings_2025_source": "LingU 2025 Weighting.pdf (Archives/2025 JUPAS 計分器/參考資料(2025)/LingU/)"
+  },
+  {
+    "code": "JS7305",
+    "name": "Bachelor of Social Sciences (Hons) in Health and Social Services Management",
+    "faculty": "FACULTY OF SOCIAL SCIENCES",
+    "score_median": 21.5,
+    "score_median_grades": {
+      "CHIN": "4",
+      "ENGL": "4",
+      "MATH": "4",
+      "Elective1": "4",
+      "Elective2": "4"
+    },
+    "score_lq": 21.0,
+    "score_lq_grades": {
+      "CHIN": "4",
+      "ENGL": "3",
+      "MATH": "3",
+      "Elective1": "4",
+      "Elective2": "3"
+    },
+    "formula": "Best 5",
+    "data_year_scores": 2025,
+    "data_year_weightings": 2026,
+    "subject_weights": {
+      "English Language": 1.5,
+      "Health Management and Social Care": 1.5
+    },
+    "weightings_source": "Admission_Requirements_JUPAS_2026.pdf (LingU, Section 5)",
+    "scores_source": "af_2025_JUPAS.pdf p16-18 (JUPAS combined, LingU section)",
+    "subject_weights_2025": {
+      "English Language": 1.5,
+      "Ethics and Religious Studies": 1.5,
+      "Health Management and Social Care": 1.5
+    },
+    "weightings_2025_source": "LingU 2025 Weighting.pdf (Archives/2025 JUPAS 計分器/參考資料(2025)/LingU/)"
+  },
+  {
+    "code": "JS7306",
+    "name": "Bachelor of Social Sciences (Hons) in Social and Public Policy Studies",
+    "faculty": "FACULTY OF SOCIAL SCIENCES",
+    "score_median": 24.0,
+    "score_median_grades": {
+      "CHIN": "4",
+      "ENGL": "3",
+      "MATH": "4",
+      "Elective1": "4",
+      "Elective2": "3.5"
+    },
+    "score_lq": 23.9,
+    "score_lq_grades": {
+      "CHIN": "3",
+      "ENGL": "3",
+      "MATH": "3",
+      "Elective1": "4",
+      "Elective2": "3"
+    },
+    "formula": "Best 5",
+    "data_year_scores": 2025,
+    "data_year_weightings": 2026,
+    "subject_weights": {
+      "English Language": 2.0,
+      "Mathematics (Compulsory Part)": 1.5,
+      "Mathematics Extended Part Module 1 (Calculus & Statistics)": 1.5,
+      "Mathematics Extended Part Module 2 (Algebra & Calculus)": 1.5
+    },
+    "weightings_source": "Admission_Requirements_JUPAS_2026.pdf (LingU, Section 5)",
+    "scores_source": "af_2025_JUPAS.pdf p16-18 (JUPAS combined, LingU section)",
+    "subject_weights_2025": {
+      "English Language": 2.0,
+      "Mathematics (Compulsory Part)": 1.5,
+      "Mathematics Extended Part Module 1 (Calculus & Statistics)": 1.5,
+      "Mathematics Extended Part Module 2 (Algebra & Calculus)": 1.5
+    },
+    "weightings_2025_source": "LingU 2025 Weighting.pdf (Archives/2025 JUPAS 計分器/參考資料(2025)/LingU/)"
+  },
+  {
+    "code": "JS7307",
+    "name": "Bachelor of Social Sciences (Hons) in Social Data Science SCHOOL OF DATA SCIENCE",
+    "faculty": "FACULTY OF SOCIAL SCIENCES",
+    "score_median": 24.25,
+    "score_median_grades": {
+      "CHIN": "3",
+      "ENGL": "3",
+      "MATH": "4",
+      "Elective1": "4",
+      "Elective2": "4"
+    },
+    "score_lq": 23.0,
+    "score_lq_grades": {
+      "CHIN": "3",
+      "ENGL": "3",
+      "MATH": "4",
+      "Elective1": "4",
+      "Elective2": "3"
+    },
+    "formula": "Best 5",
+    "data_year_scores": 2025,
+    "data_year_weightings": 2026,
+    "subject_weights": {
+      "English Language": 2.0,
+      "Mathematics (Compulsory Part)": 1.5,
+      "Mathematics Extended Part Module 1 (Calculus & Statistics)": 1.5,
+      "Mathematics Extended Part Module 2 (Algebra & Calculus)": 1.5,
+      "Information and Communication Technology": 1.5
+    },
+    "weightings_source": "Admission_Requirements_JUPAS_2026.pdf (LingU, Section 5)",
+    "scores_source": "af_2025_JUPAS.pdf p16-18 (JUPAS combined, LingU section)",
+    "subject_weights_2025": {
+      "English Language": 2.0,
+      "Mathematics (Compulsory Part)": 1.5,
+      "Mathematics Extended Part Module 1 (Calculus & Statistics)": 1.5,
+      "Mathematics Extended Part Module 2 (Algebra & Calculus)": 1.5,
+      "Information and Communication Technology": 1.5
+    },
+    "weightings_2025_source": "LingU 2025 Weighting.pdf (Archives/2025 JUPAS 計分器/參考資料(2025)/LingU/)"
+  },
+  {
+    "code": "JS7225",
+    "name": "Bachelor of Sciences (Hons) in Data Science SCHOOL OF INTERDISCIPLINARY",
+    "faculty": "SCHOOL OF DATA SCIENCE",
+    "score_median": 31.365,
+    "score_median_grades": {
+      "CHIN": "3",
+      "ENGL": "3",
+      "MATH": "4",
+      "Elective1": "4",
+      "Elective2": "4"
+    },
+    "score_lq": 30.17,
+    "score_lq_grades": {
+      "CHIN": "3",
+      "ENGL": "3",
+      "MATH": "4",
+      "Elective1": "4",
+      "Elective2": "3"
+    },
+    "formula": "Best 5",
+    "data_year_scores": 2025,
+    "data_year_weightings": 2026,
+    "subject_weights": {
+      "English Language": 2.0,
+      "Mathematics (Compulsory Part)": 2.0,
+      "Mathematics Extended Part Module 1 (Calculus & Statistics)": 2.0,
+      "Mathematics Extended Part Module 2 (Algebra & Calculus)": 2.0,
+      "Chemistry": 2.0,
+      "Information and Communication Technology": 2.0,
+      "Physics": 1.25
+    },
+    "weightings_source": "Admission_Requirements_JUPAS_2026.pdf (LingU, Section 5)",
+    "scores_source": "af_2025_JUPAS.pdf p16-18 (JUPAS combined, LingU section)",
+    "subject_weights_2025": {
+      "English Language": 2.0,
+      "Mathematics (Compulsory Part)": 2.0,
+      "Mathematics Extended Part Module 1 (Calculus & Statistics)": 2.0,
+      "Mathematics Extended Part Module 2 (Algebra & Calculus)": 2.0,
+      "Chemistry": 2.0,
+      "Information and Communication Technology": 2.0,
+      "Physics": 1.25
+    },
+    "weightings_2025_source": "LingU 2025 Weighting.pdf (Archives/2025 JUPAS 計分器/參考資料(2025)/LingU/)"
+  },
+  {
+    "code": "JS7123",
+    "name": "Bachelor of Social Sciences (Hons) in Global Development and Sustainability",
+    "faculty": "SCHOOL OF INTERDISCIPLINARY",
+    "score_median": 26.96,
+    "score_median_grades": {
+      "CHIN": "4",
+      "ENGL": "3.5",
+      "MATH": "3",
+      "Elective1": "5",
+      "Elective2": "4"
+    },
+    "score_lq": 26.07,
+    "score_lq_grades": {
+      "CHIN": "3",
+      "ENGL": "3",
+      "MATH": "3",
+      "Elective1": "4",
+      "Elective2": "4"
+    },
+    "formula": "Best 5",
+    "data_year_scores": 2025,
+    "data_year_weightings": 2026,
+    "subject_weights": {
+      "English Language": 2.0,
+      "Mathematics (Compulsory Part)": 1.5,
+      "Mathematics Extended Part Module 1 (Calculus & Statistics)": 1.5,
+      "Mathematics Extended Part Module 2 (Algebra & Calculus)": 1.5,
+      "Biology": 1.25,
+      "Business, Accounting and Financial Studies": 1.25,
+      "Chemistry": 1.25,
+      "Design and Applied Technology": 1.25,
+      "Economics": 1.25,
+      "Geography": 1.25,
+      "Health Management and Social Care": 1.25,
+      "Physics": 1.25,
+      "Information and Communication Technology": 1.25,
+      "Technology and Living": 1.25,
+      "Tourism and Hospitality Studies": 1.25
+    },
+    "weightings_source": "Admission_Requirements_JUPAS_2026.pdf (LingU, Section 5)",
+    "scores_source": "af_2025_JUPAS.pdf p16-18 (JUPAS combined, LingU section)",
+    "subject_weights_2025": {
+      "English Language": 2.0,
+      "Mathematics (Compulsory Part)": 1.5,
+      "Mathematics Extended Part Module 1 (Calculus & Statistics)": 1.5,
+      "Mathematics Extended Part Module 2 (Algebra & Calculus)": 1.5,
+      "Biology": 1.25,
+      "Business, Accounting and Financial Studies": 1.25,
+      "Chemistry": 1.25,
+      "Design and Applied Technology": 1.25,
+      "Economics": 1.25,
+      "Geography": 1.5,
+      "Health Management and Social Care": 1.25,
+      "Information and Communication Technology": 1.25,
+      "Physics": 1.25,
+      "Technology and Living": 1.25,
+      "Tourism and Hospitality Studies": 1.25
+    },
+    "weightings_2025_source": "LingU 2025 Weighting.pdf (Archives/2025 JUPAS 計分器/參考資料(2025)/LingU/)"
+  }
+]

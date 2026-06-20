@@ -1,0 +1,427 @@
+{
+  "source": "https://admission.cuhk.edu.hk/wp-content/uploads/2026/03/Interview-Arrangement-2026-Entry.pdf",
+  "fetched": "2026-05-22",
+  "count": 60,
+  "programmes": {
+    "JS4018": {
+      "name": "Chinese Language and Literature",
+      "type": "interview",
+      "timing": "post-results",
+      "before": "",
+      "after": "✓ (for special cases only)"
+    },
+    "JS4032": {
+      "name": "English",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "21 - 22 May",
+      "after": ""
+    },
+    "JS4044": {
+      "name": "Fine Arts",
+      "type": "interview",
+      "timing": "both",
+      "before": "Mid June",
+      "after": "✓"
+    },
+    "JS4068": {
+      "name": "Japanese Studies",
+      "type": "interview",
+      "timing": "post-results",
+      "before": "",
+      "after": "✓"
+    },
+    "JS4082": {
+      "name": "Music",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "Written Test: 15 May Interview: 26 - 28 May",
+      "after": ""
+    },
+    "JS4094": {
+      "name": "Philosophy",
+      "type": "interview",
+      "timing": "post-results",
+      "before": "",
+      "after": "✓"
+    },
+    "JS4100": {
+      "name": "Public Humanities",
+      "type": "interview",
+      "timing": "post-results",
+      "before": "",
+      "after": "✓"
+    },
+    "JS4109": {
+      "name": "Religious Studies",
+      "type": "interview",
+      "timing": "post-results",
+      "before": "",
+      "after": "✓"
+    },
+    "JS4111": {
+      "name": "Theology",
+      "type": "interview",
+      "timing": "post-results",
+      "before": "",
+      "after": "✓"
+    },
+    "JS4136": {
+      "name": "Chinese Studies",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "June - early July",
+      "after": ""
+    },
+    "JS4202": {
+      "name": "Integrated BBA",
+      "type": "interview",
+      "timing": "both",
+      "before": "Mid June - early July",
+      "after": "✓"
+    },
+    "JS4214": {
+      "name": "Global Business Studies",
+      "type": "interview",
+      "timing": "both",
+      "before": "8 - 11 June",
+      "after": "✓"
+    },
+    "JS4226": {
+      "name": "Hospitality and Real Estate",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "1 - 5 June (tentative)",
+      "after": ""
+    },
+    "JS4238": {
+      "name": "Insurance, Financial and Actuarial Analysis",
+      "type": "interview",
+      "timing": "both",
+      "before": "17 - 30 June",
+      "after": "✓"
+    },
+    "JS4240": {
+      "name": "Professional Accountancy",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "17 - 30 June",
+      "after": ""
+    },
+    "JS4252": {
+      "name": "Quantitative Finance",
+      "type": "interview",
+      "timing": "both",
+      "before": "15 - 18 June (tentative)",
+      "after": "✓"
+    },
+    "JS4254": {
+      "name": "Interdisciplinary Major Programme in Global Economics and Finance^",
+      "type": "interview",
+      "timing": "both",
+      "before": "Mid June",
+      "after": "✓"
+    },
+    "JS4264": {
+      "name": "BBA (IBBA) - JD Double Degree Programme^",
+      "type": "interview",
+      "timing": "both",
+      "before": "8 - 12 June",
+      "after": "✓"
+    },
+    "JS4276": {
+      "name": "Quantitative Finance and Risk Management Science^",
+      "type": "interview",
+      "timing": "both",
+      "before": "18 - 30 June",
+      "after": "✓"
+    },
+    "JS4725": {
+      "name": "Biotechnology, Entrepreneurship and Healthcare Management^",
+      "type": "interview",
+      "timing": "post-results",
+      "before": "",
+      "after": "✓"
+    },
+    "JS4760": {
+      "name": "Interdisciplinary Data Analytics & X Double Major Programme^",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "18 June",
+      "after": ""
+    },
+    "JS4320": {
+      "name": "Human Movement Science and Health Studies",
+      "type": "interview",
+      "timing": "post-results",
+      "before": "",
+      "after": "✓"
+    },
+    "JS4329": {
+      "name": "Physical Education, Exercise Science and Health",
+      "type": "interview",
+      "timing": "post-results",
+      "before": "",
+      "after": "✓"
+    },
+    "JS4331": {
+      "name": "BA (Chinese Language Studies) and BEd (Chinese Language Education)",
+      "type": "interview",
+      "timing": "post-results",
+      "before": "",
+      "after": "✓"
+    },
+    "JS4343": {
+      "name": "BA (English Studies) and BEd (English Language Education)",
+      "type": "interview",
+      "timing": "post-results",
+      "before": "",
+      "after": "✓"
+    },
+    "JS4361": {
+      "name": "BEd in Mathematics and Mathematics Education",
+      "type": "interview",
+      "timing": "post-results",
+      "before": "",
+      "after": "✓"
+    },
+    "JS4372": {
+      "name": "BEd in Early Childhood Education",
+      "type": "interview",
+      "timing": "post-results",
+      "before": "",
+      "after": "✓"
+    },
+    "JS4386": {
+      "name": "BSc in Learning Design and Technology^",
+      "type": "interview",
+      "timing": "post-results",
+      "before": "",
+      "after": "✓"
+    },
+    "JS4408": {
+      "name": "Mechanical and Automation Engineering",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "May / June",
+      "after": ""
+    },
+    "JS4412": {
+      "name": "Computer Science and Engineering",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "Mid June",
+      "after": ""
+    },
+    "JS4416": {
+      "name": "Computational Data Science^",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "Mid May - mid June",
+      "after": ""
+    },
+    "JS4434": {
+      "name": "Electronic Engineering",
+      "type": "interview",
+      "timing": "both",
+      "before": "June",
+      "after": "✓"
+    },
+    "JS4446": {
+      "name": "Information Engineering",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "18 - 29 May",
+      "after": ""
+    },
+    "JS4460": {
+      "name": "Biomedical Engineering",
+      "type": "interview",
+      "timing": "both",
+      "before": "May",
+      "after": "✓"
+    },
+    "JS4462": {
+      "name": "Energy and Environmental Engineering",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "May / June",
+      "after": ""
+    },
+    "JS4468": {
+      "name": "Artificial Intelligence: Systems and Technologies",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "Mid June",
+      "after": ""
+    },
+    "JS4470": {
+      "name": "Materials Science and Engineering^",
+      "type": "interview",
+      "timing": "both",
+      "before": "June",
+      "after": "✓"
+    },
+    "JS4733": {
+      "name": "Mathematics and Information Engineering^",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "8 - 12 June",
+      "after": ""
+    },
+    "JS4750": {
+      "name": "Aerospace Science and Earth Informatics & X Double Major Programme^",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "Early - mid May",
+      "after": ""
+    },
+    "JS4903": {
+      "name": "Bachelor of Laws",
+      "type": "interview",
+      "timing": "both",
+      "before": "11 - 16 June",
+      "after": "✓"
+    },
+    "JS4898": {
+      "name": "Diplomacy and International Studies@^",
+      "type": "interview",
+      "timing": "both",
+      "before": "Late June - early July",
+      "after": "✓"
+    },
+    "JS4501": {
+      "name": "Bachelor of Medicine and Bachelor of Surgery (MBChB)",
+      "type": "interview",
+      "timing": "both",
+      "before": "15, 22, 29 May & 16 June",
+      "after": "✓"
+    },
+    "JS4502": {
+      "name": "Bachelor of Medicine and Bachelor of Surgery – Global Physician-Leadership Stream (MBChB-GPS)",
+      "type": "interview",
+      "timing": "both",
+      "before": "15, 22, 29 May & 16 June",
+      "after": "✓"
+    },
+    "JS4513": {
+      "name": "Nursing",
+      "type": "interview",
+      "timing": "both",
+      "before": "8 - 26 June",
+      "after": "✓"
+    },
+    "JS4525": {
+      "name": "Pharmacy",
+      "type": "interview",
+      "timing": "both",
+      "before": "16 - 17 June",
+      "after": "✓"
+    },
+    "JS4542": {
+      "name": "Chinese Medicine",
+      "type": "interview",
+      "timing": "both",
+      "before": "June",
+      "after": "✓"
+    },
+    "JS4550": {
+      "name": "Biomedical Sciences",
+      "type": "interview",
+      "timing": "post-results",
+      "before": "",
+      "after": "✓"
+    },
+    "JS4601": {
+      "name": "Science (board-based)",
+      "type": "interview",
+      "timing": "both",
+      "before": "21 - 22 May",
+      "after": "✓"
+    },
+    "JS4648": {
+      "name": "Earth and Environmental Sciences",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "13 - 15 May (tentative)",
+      "after": ""
+    },
+    "JS4682": {
+      "name": "Enrichment Mathematics",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "7 - 8 May",
+      "after": ""
+    },
+    "JS4690": {
+      "name": "Enrichment Stream in Theoretical Physics",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "3 - 4 June",
+      "after": ""
+    },
+    "JS4719": {
+      "name": "Risk Management Science",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "9 June",
+      "after": ""
+    },
+    "JS4801": {
+      "name": "Social Science (board-based)",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "15 - 16 June",
+      "after": ""
+    },
+    "JS4812": {
+      "name": "Architectural Studies",
+      "type": "interview",
+      "timing": "both",
+      "before": "Late May - early June",
+      "after": "✓"
+    },
+    "JS4824": {
+      "name": "Economics",
+      "type": "interview",
+      "timing": "both",
+      "before": "Late June",
+      "after": "✓"
+    },
+    "JS4836": {
+      "name": "Geography and Resource Management",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "19 May",
+      "after": ""
+    },
+    "JS4838": {
+      "name": "Urban Studies",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "11 May",
+      "after": ""
+    },
+    "JS4858": {
+      "name": "Global Communication",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "June",
+      "after": ""
+    },
+    "JS4874": {
+      "name": "Social Work",
+      "type": "interview",
+      "timing": "post-results",
+      "before": "",
+      "after": "✓"
+    },
+    "JS4886": {
+      "name": "Sociology",
+      "type": "interview",
+      "timing": "both",
+      "before": "Late May",
+      "after": "✓"
+    }
+  }
+}

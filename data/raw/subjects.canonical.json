@@ -1,0 +1,73 @@
+{
+  "_comment": "SINGLE SOURCE OF TRUTH for DSE subject names across the whole JUPAS Cal pipeline. Both the Python data pipeline (unify_2026_data.py, validate_unified.py, audit_eligibility.mjs) and the TS frontend (src/lib/subjects.ts, calculator.ts) consume THIS file. The eligibility matcher compares subject names by exact equality, so every subject stored in the unified JSON MUST be one of the canonical names below (or a token). To add a new subject or institutional spelling: add it here, rerun unify, and the closed-vocabulary check in validate_unified.py / audit_eligibility.mjs will keep everything in sync. Do NOT hand-maintain duplicate subject lists elsewhere.",
+  "core": [
+    "Chinese Language",
+    "English Language",
+    "Mathematics (Compulsory Part)",
+    "Citizenship and Social Development"
+  ],
+  "category_a": [
+    "Biology",
+    "Chemistry",
+    "Physics",
+    "Economics",
+    "Geography",
+    "History",
+    "Chinese History",
+    "Information and Communication Technology",
+    "Business, Accounting and Financial Studies",
+    "Design and Applied Technology",
+    "Health Management and Social Care",
+    "Tourism and Hospitality Studies",
+    "Chinese Literature",
+    "Literature in English",
+    "Technology and Living (Food Science and Technology)",
+    "Visual Arts",
+    "Music",
+    "Physical Education",
+    "Ethics and Religious Studies",
+    "Integrated Science",
+    "Combined Science: Biology + Chemistry",
+    "Combined Science: Biology + Physics",
+    "Combined Science: Physics + Chemistry"
+  ],
+  "category_c": [
+    "French: Advanced Diploma of French Language Studies / Diploma of French Language Studies",
+    "German: Goethe-Certificate",
+    "Japanese: Japanese-Language Proficiency Test",
+    "Korean: Test of Proficiency in Korean II",
+    "Spanish: Diploma of Spanish as a Foreign Language",
+    "Urdu: Urdu (International)"
+  ],
+  "math_extended": {
+    "combined": "Mathematics Extended Part (Module 1 or 2)",
+    "module_1": "Mathematics Extended Part (Module 1)",
+    "module_2": "Mathematics Extended Part (Module 2)"
+  },
+  "tokens": ["Any", "*"],
+  "aliases": {
+    "ICT": "Information and Communication Technology",
+    "DAT": "Design and Applied Technology",
+    "BAFS": "Business, Accounting and Financial Studies",
+    "Business, Accounting and Financial Studies (Accounting)": "Business, Accounting and Financial Studies",
+    "Business, Accounting and Financial Studies (Business Management)": "Business, Accounting and Financial Studies",
+    "Technology and Living": "Technology and Living (Food Science and Technology)",
+    "Combined Science (Biology and Chemistry)": "Combined Science: Biology + Chemistry",
+    "Combined Science (Chemistry and Biology)": "Combined Science: Biology + Chemistry",
+    "Combined Science (Biology and Physics)": "Combined Science: Biology + Physics",
+    "Combined Science (Physics and Biology)": "Combined Science: Biology + Physics",
+    "Combined Science (Physics and Chemistry)": "Combined Science: Physics + Chemistry",
+    "Combined Science (Chemistry and Physics)": "Combined Science: Physics + Chemistry"
+  },
+  "expansions": {
+    "Mathematics Extended Part (Module 1 or 2)": [
+      "Mathematics Extended Part (Module 1)",
+      "Mathematics Extended Part (Module 2)"
+    ],
+    "Combined Science": [
+      "Combined Science: Biology + Chemistry",
+      "Combined Science: Biology + Physics",
+      "Combined Science: Physics + Chemistry"
+    ]
+  }
+}

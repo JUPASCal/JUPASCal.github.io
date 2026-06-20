@@ -1,0 +1,357 @@
+{
+  "source": "https://admissions.hku.hk/apply/jupas/interview",
+  "fetched": "2026-05-22",
+  "count": 50,
+  "programmes": {
+    "JS6004": {
+      "name": "BA(AS) Bachelor of Arts in Architectural Studies",
+      "type": "interview",
+      "timing": "both",
+      "before": "Mid-June",
+      "after": "Late-July"
+    },
+    "JS6016": {
+      "name": "BSc(Surv) Bachelor of Science in Surveying",
+      "type": "interview",
+      "timing": "both",
+      "before": "June",
+      "after": "Late-July"
+    },
+    "JS6028": {
+      "name": "BA(LS) Bachelor of Arts in Landscape Studies",
+      "type": "interview",
+      "timing": "both",
+      "before": "January - February Early-June",
+      "after": "Late-July"
+    },
+    "JS6042": {
+      "name": "BA(US) Bachelor of Arts in Urban Studies",
+      "type": "interview",
+      "timing": "both",
+      "before": "Late-May",
+      "after": "Late-July"
+    },
+    "JS6236": {
+      "name": "BASc(Design+) Bachelor of Arts and Sciences in Design+",
+      "type": "interview",
+      "timing": "both",
+      "before": "Mid-June",
+      "after": "Late-July"
+    },
+    "JS6054": {
+      "name": "BA Bachelor of Arts^",
+      "type": "interview",
+      "timing": "post-results",
+      "before": "-",
+      "after": "July 22 - 23"
+    },
+    "JS6286": {
+      "name": "BA(HDT) Bachelor of Arts in Humanities and Digital Technologies",
+      "type": "interview",
+      "timing": "both",
+      "before": "January - June",
+      "after": "July 23 - 27"
+    },
+    "JS6298": {
+      "name": "BA&BEng(AI&DataSc) Bachelor of Arts and Bachelor of Engineering in Artificial Intelligence and Data Science",
+      "type": "interview",
+      "timing": "both",
+      "before": "June 8 - 12",
+      "after": "July 23 - 24"
+    },
+    "JS6755": {
+      "name": "BBA Bachelor of Business Administration",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "Mid-June",
+      "after": "Selected candidates are ENCOURAGED to attend the interview before the release of HKDSE results. Priority will be given to candidates with outstanding performance in the interview."
+    },
+    "JS6767": {
+      "name": "BEcon/BEcon&Fin Bachelor of Economics / Bachelor of Economics and Finance",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "Mid-June",
+      "after": "Selected candidates are ENCOURAGED to attend the interview before the release of HKDSE results. Priority will be given to candidates with outstanding performance in the interview."
+    },
+    "JS6781": {
+      "name": "BBA(Acc&Fin)/BBA(ADA) Bachelor of Business Administration in Accounting and Finance / Bachelor of Business Administration in Accounting Data Analytics",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "Mid-June",
+      "after": "Selected candidates are ENCOURAGED to attend the interview before the release of HKDSE results. Priority will be given to candidates with outstanding performance in the interview."
+    },
+    "JS6793": {
+      "name": "BBA(BA) Bachelor of Business Administration (Business Analytics)",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "Mid-June",
+      "after": "Selected candidates are ENCOURAGED to attend the interview before the release of HKDSE results. Priority will be given to candidates with outstanding performance in the interview."
+    },
+    "JS6808": {
+      "name": "BBA(Law)&LLB Bachelor of Business Administration (Law) and Bachelor of Laws",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "Mid-June",
+      "after": "Selected candidates are ENCOURAGED to attend the interview before the release of HKDSE results. Priority will be given to candidates with outstanding performance in the interview."
+    },
+    "JS6846": {
+      "name": "BSc(MAT) Bachelor of Science in Marketing Analytics and Technology",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "Mid-June",
+      "after": "Selected candidates are ENCOURAGED to attend the interview before the release of HKDSE results. Priority will be given to candidates with outstanding performance in the interview."
+    },
+    "JS6860": {
+      "name": "BFin(AMPB) Bachelor of Finance in Asset Management and Private Banking",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "Mid-June",
+      "after": "Selected candidates are ENCOURAGED to attend the interview before the release of HKDSE results. Priority will be given to candidates with outstanding performance in the interview."
+    },
+    "JS6884": {
+      "name": "BSc(QFin) Bachelor of Science in Quantitative Finance",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "Mid-June",
+      "after": "Selected candidates are ENCOURAGED to attend the interview before the release of HKDSE results. Priority will be given to candidates with outstanding performance in the interview."
+    },
+    "JS6896": {
+      "name": "BBA(IBGM) Bachelor of Business Administration in International Business and Global Management",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "Mid-June",
+      "after": "Selected candidates are ENCOURAGED to attend the interview before the release of HKDSE results. Priority will be given to candidates with outstanding performance in the interview."
+    },
+    "JS6107": {
+      "name": "BDS Bachelor of Dental Surgery",
+      "type": "interview",
+      "timing": "post-results",
+      "before": "-",
+      "after": "Late-July"
+    },
+    "JS6066": {
+      "name": "BA&BEd(LangEd)-Eng Bachelor of Arts and Bachelor of Education in Language Education - English",
+      "type": "interview",
+      "timing": "post-results",
+      "before": "-",
+      "after": "Late-July"
+    },
+    "JS6080": {
+      "name": "BA&BEd(LangEd)-Chin Bachelor of Arts and Bachelor of Education in Language Education - Chinese",
+      "type": "interview",
+      "timing": "post-results",
+      "before": "-",
+      "after": "Late-July"
+    },
+    "JS6092": {
+      "name": "BEd(ECE&SE) Bachelor of Education in Early Childhood Education and Special Education",
+      "type": "interview",
+      "timing": "post-results",
+      "before": "-",
+      "after": "Late-July"
+    },
+    "JS6157": {
+      "name": "BSc(SLP) Bachelor of Science in Speech-Language Pathology",
+      "type": "interview",
+      "timing": "both",
+      "before": "Mid-June",
+      "after": "Late-July"
+    },
+    "JS6303": {
+      "name": "BEng(Elite) Bachelor of Engineering Elite Programme",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "May / June",
+      "after": "Selected candidates are ENCOURAGED to attend the interview before the release of HKDSE results. Priority will be given to candidates with outstanding performance in the interview."
+    },
+    "JS6315": {
+      "name": "BEng(DASE) Bachelor of Engineering in Data and Systems Engineering",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "May / June",
+      "after": "Selected candidates are ENCOURAGED to attend the interview before the release of HKDSE results. Priority will be given to candidates with outstanding performance in the interview."
+    },
+    "JS6339": {
+      "name": "BEng(ME) Bachelor of Engineering in Mechanical Engineering",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "May / June",
+      "after": "Selected candidates are ENCOURAGED to attend the interview before the release of HKDSE results. Priority will be given to candidates with outstanding performance in the interview."
+    },
+    "JS6353": {
+      "name": "BEng(CivE) Bachelor of Engineering in Civil Engineering",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "May / June",
+      "after": "Selected candidates are ENCOURAGED to attend the interview before the release of HKDSE results. Priority will be given to candidates with outstanding performance in the interview."
+    },
+    "JS6377": {
+      "name": "BEng X + MScEng AIE Bachelor of Engineering and Master of Science in Engineering in Artificial Intelligence in Engineering",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "May / June",
+      "after": "Selected candidates are ENCOURAGED to attend the interview before the release of HKDSE results. Priority will be given to candidates with outstanding performance in the interview."
+    },
+    "JS6937": {
+      "name": "GEBP Global Engineering and Business Programme",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "May / June",
+      "after": "Selected candidates are ENCOURAGED to attend the interview before the release of HKDSE results. Priority will be given to candidates with outstanding performance in the interview."
+    },
+    "JS6987": {
+      "name": "BEng(CE/EE/ElecE) Bachelor of Engineering in Computer Engineering / Electrical Engineering / Electronic Engineering",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "May / June",
+      "after": "Selected candidates are ENCOURAGED to attend the interview before the release of HKDSE results. Priority will be given to candidates with outstanding performance in the interview."
+    },
+    "JS6078": {
+      "name": "BA&LLB Bachelor of Arts and Bachelor of Laws",
+      "type": "interview",
+      "timing": "post-results",
+      "before": "-",
+      "after": "Late-July"
+    },
+    "JS6406": {
+      "name": "LLB Bachelor of Laws",
+      "type": "interview",
+      "timing": "post-results",
+      "before": "-",
+      "after": "Late-July"
+    },
+    "JS6250": {
+      "name": "BASc(GHD) Bachelor of Arts and Sciences in Global Health and Development",
+      "type": "interview",
+      "timing": "both",
+      "before": "Mid-June",
+      "after": "Late-July"
+    },
+    "JS6418": {
+      "name": "BNurs-ALT Bachelor of Nursing Advanced Leadership Track",
+      "type": "interview",
+      "timing": "both",
+      "before": "Mid-June",
+      "after": "Late-July"
+    },
+    "JS6456": {
+      "name": "MBBS Bachelor of Medicine and Bachelor of Surgery",
+      "type": "interview",
+      "timing": "both",
+      "before": "Mid-June",
+      "after": "Late-July"
+    },
+    "JS6468": {
+      "name": "BNurs Bachelor of Nursing",
+      "type": "interview",
+      "timing": "both",
+      "before": "Mid-June",
+      "after": "Late-July"
+    },
+    "JS6482": {
+      "name": "BChinMed Bachelor of Chinese Medicine",
+      "type": "interview",
+      "timing": "both",
+      "before": "Mid-June",
+      "after": "Late-July"
+    },
+    "JS6494": {
+      "name": "BPharm Bachelor of Pharmacy",
+      "type": "interview",
+      "timing": "both",
+      "before": "Mid-June",
+      "after": "Late-July"
+    },
+    "JS6626": {
+      "name": "MBBS(DMS) Bachelor of Medicine and Bachelor of Surgery (Distinguished MedScholar)",
+      "type": "interview",
+      "timing": "both",
+      "before": "Mid-June",
+      "after": "Late-July"
+    },
+    "JS6949": {
+      "name": "BBiomedSc Bachelor of Biomedical Sciences",
+      "type": "interview",
+      "timing": "both",
+      "before": "Mid-June",
+      "after": "Late-July"
+    },
+    "JS6688": {
+      "name": "SMC Science Master Class",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "January June / July",
+      "after": "Selected candidates are ENCOURAGED to attend the interview before the release of HKDSE results. Priority will be given to candidates with outstanding performance in the interview."
+    },
+    "JS6858": {
+      "name": "BSc&LLB Bachelor of Science and Bachelor of Laws",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "January / February July",
+      "after": "Selected candidates are ENCOURAGED to attend the interview before the release of HKDSE results. Priority will be given to candidates with outstanding performance in the interview."
+    },
+    "JS6731": {
+      "name": "BSW Bachelor of Social Work",
+      "type": "interview",
+      "timing": "both",
+      "before": "Mid-June",
+      "after": "Late-July"
+    },
+    "JS6925": {
+      "name": "BEng(BME) Bachelor of Engineering in Biomedical Engineering",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "Mid-June",
+      "after": "Selected candidates are ENCOURAGED to attend the interview before the release of HKDSE results. Priority will be given to candidates with outstanding performance in the interview."
+    },
+    "JS6200": {
+      "name": "CDS(Delta+) Computing and Data Science (Delta+)",
+      "type": "interview",
+      "timing": "both",
+      "before": "January June",
+      "after": "July"
+    },
+    "JS6224": {
+      "name": "BASc(AppliedAI) Bachelor of Arts and Sciences in Applied Artificial Intelligence",
+      "type": "interview",
+      "timing": "both",
+      "before": "January June",
+      "after": "July"
+    },
+    "JS6248": {
+      "name": "BASc(FinTech) Bachelor of Arts and Sciences in Financial Technology",
+      "type": "interview",
+      "timing": "both",
+      "before": "January June",
+      "after": "July"
+    },
+    "JS6999": {
+      "name": "CDS Computing and Data Science",
+      "type": "interview",
+      "timing": "both",
+      "before": "January June",
+      "after": "July"
+    },
+    "JS6274": {
+      "name": "BA(GCIN) Bachelor of Arts in Global Creative Industries",
+      "type": "interview",
+      "timing": "both",
+      "before": "June 16 - 18",
+      "after": "Late-July"
+    },
+    "JS6822": {
+      "name": "BJMAI Bachelor of Journalism, Media and Artificial Intelligence",
+      "type": "interview",
+      "timing": "pre-results",
+      "before": "June 10 - 12",
+      "after": "Selected candidates are ENCOURAGED to attend the interview before the release of HKDSE results. Priority will be given to candidates with outstanding performance in the interview."
+    },
+    "JS6602": {
+      "name": "BSc(I&T) Bachelor of Science in Innovation and Technology",
+      "type": "interview",
+      "timing": "both",
+      "before": "January - June",
+      "after": "July"
+    }
+  }
+}

@@ -1,0 +1,238 @@
+{
+  "source": "https://www.polyu.edu.hk/study/ug/admissions/jupas/jupas-interview-arrangement",
+  "fetched": "2026-05-22",
+  "count": 33,
+  "programmes": {
+    "JS3000": {
+      "name": "Interdisciplinary Studies",
+      "type": "interview",
+      "timing": "both",
+      "date": "June/July",
+      "remarks": "Suitable candidates may be invited for an interview."
+    },
+    "JS3003": {
+      "name": "Business Administration",
+      "type": "interview",
+      "timing": "both",
+      "date": "June/July, if necessary",
+      "remarks": "Suitable candidates may be invited for an interview."
+    },
+    "JS3006": {
+      "name": "Computer and Mathematical Sciences",
+      "type": "interview",
+      "timing": "post-results",
+      "date": "After the announcement of HKDSE results",
+      "remarks": "Suitable candidates may be invited for an interview."
+    },
+    "JS3007": {
+      "name": "Humanities",
+      "type": "interview",
+      "timing": "post-results",
+      "date": "Late July, if necessary",
+      "remarks": "-"
+    },
+    "JS3008": {
+      "name": "Science",
+      "type": "interview",
+      "timing": "post-results",
+      "date": "After the announcement of HKDSE results, if necessary",
+      "remarks": "Only selected applicants will be invited for interview, if necessary"
+    },
+    "JS3011": {
+      "name": "Biotechnology and Chemical Technology",
+      "type": "interview",
+      "timing": "post-results",
+      "date": "After the announcement of HKDSE results, if necessary",
+      "remarks": "Only selected applicants will be invited for interview, if necessary."
+    },
+    "JS3030": {
+      "name": "Physics with a Secondary Major in Artificial Intelligence & Data Analytics (AIDA) / Innovation and Entrepreneurship (IE)",
+      "type": "interview",
+      "timing": "post-results",
+      "date": "After the announcement of HKDSE results, if necessary",
+      "remarks": "Only selected applicants will be invited to the interview, if necessary."
+    },
+    "JS3050": {
+      "name": "Fashion (Fashion Design / Knitwear Design / Contour Fashion and Activewear / Fashion Business / Fashion Innovation and Technology)",
+      "type": "interview",
+      "timing": "both",
+      "date": "Admission interviews are scheduled for all Band A applicants after the submission of a JUPAS application. Selective interviews/assessments are scheduled before the announcement of the HKDSE results. Final interviews/assessments will be held for selected applicants after the announcement of the HKDSE results.",
+      "remarks": "All bands of applicants are considered, with preference for Band A and B applicants. Admission to the programme is primarily based on academic merit. The programme will directly offer a place to those candidates with outstanding performance in HKDSE, waiving the interview requirement. Detailed interview/assessment arrangements will be announced to JUPAS applicants via email one week before the dates of the group interviews/individual assessments. Applicants with good interview/assessment performance will be given bonus scores to increase their chances of being admitted to the programme. All students who are admitted with HKDSE results start the programme with two common semesters of foundational training in fashion and textiles, after which they are streamed into one of the five specialisms. Important dates: Mid-/end of December – Admission schedule/details announced via email to all Band A candidates Mid-June – Admission schedule/details announced via email to selected candidates Mid-July – HKDSE results announced Mid-/end of July – Final interviews/assessments for selected candidates"
+    },
+    "JS3060": {
+      "name": "Accounting and Finance (Accountancy / Accounting and Finance / Digital Finance and Investment)",
+      "type": "interview",
+      "timing": "pre-results",
+      "date": "In June, before the release of HKDSE results",
+      "remarks": "Suitable candidates in Band A may be invited for an interview. No make-up interviews or earlier interviews will be arranged for applicants who fail to attend the scheduled interviews."
+    },
+    "JS3070": {
+      "name": "Global Business and Logistics, Aviation, Maritime, and Supply Chain Management",
+      "type": "interview",
+      "timing": "post-results",
+      "date": "July or August",
+      "remarks": "Selected applicants will be invited for an interview."
+    },
+    "JS3080": {
+      "name": "Management and Marketing (Management / Marketing)",
+      "type": "interview",
+      "timing": "pre-results",
+      "date": "In June",
+      "remarks": "Selected applicants will be invited for an interview. No make-up or early interviews will be arranged for applicants who fail to attend the scheduled interviews."
+    },
+    "JS3130": {
+      "name": "Spatial Data Science and Smart Cities (Land Surveying and Geo-Informatics / Urban Informatics and Smart Cities)",
+      "type": "interview",
+      "timing": "both",
+      "date": "Admission interviews are scheduled for selected Band A and Band B applicants after the submission of a JUPAS application. Selective interviews/assessments are scheduled before the announcement of the HKDSE results. Final interviews/assessments will be held for selected applicants after the announcement of the HKDSE results.",
+      "remarks": "-"
+    },
+    "JS3211": {
+      "name": "Building Sciences and Engineering",
+      "type": "interview",
+      "timing": "post-results",
+      "date": "After the announcement of HKDSE results",
+      "remarks": "Only Band A and Band B applicants with identical admission scores may be considered for an interview."
+    },
+    "JS3214": {
+      "name": "Architectural Studies",
+      "type": "interview",
+      "timing": "pre-results",
+      "date": "Before the announcement of HKDSE results.",
+      "remarks": "Selected Band A applicants will be required to submit a personal portfolio to showcase their design capabilities and attend aptitude tests and/or interviews. These processes are expected to take place between January and June 2026."
+    },
+    "JS3220": {
+      "name": "Applied Mathematics and Finance Analytics (Applied Mathematics / Investment Science and Finance Analytics / Quantitative Finance and FinTech)",
+      "type": "interview",
+      "timing": "both",
+      "date": "June/July",
+      "remarks": "Suitable candidates may be invited for interviews."
+    },
+    "JS3223": {
+      "name": "Data Science and Artificial Intelligence (Data Science and Analytics / Financial Technology and Artificial Intelligence)",
+      "type": "interview",
+      "timing": "both",
+      "date": "June/July",
+      "remarks": "Suitable candidates may be invited for interview."
+    },
+    "JS3242": {
+      "name": "Speech Therapy",
+      "type": "interview",
+      "timing": "post-results",
+      "date": "Late July, on selective basis",
+      "remarks": "Only applicants who have put BScST as their Band A choice would be shortlisted and invited for interview."
+    },
+    "JS3243": {
+      "name": "Language Science and Technology",
+      "type": "interview",
+      "timing": "post-results",
+      "date": "Late July, if necessary",
+      "remarks": "-"
+    },
+    "JS3250": {
+      "name": "Applied Social Sciences (Social Work / Social Policy and Social Entrepreneurship)",
+      "type": "interview",
+      "timing": "post-results",
+      "date": "After the announcement of HKDSE results",
+      "remarks": "Only Band A applicants will be considered for admission. Selected applicants may be invited to attend a group interview upon the release of the HKDSE results."
+    },
+    "JS3255": {
+      "name": "Food Science and Nutrition (Food Safety and Technology / Human Nutrition and Health)",
+      "type": "interview",
+      "timing": "post-results",
+      "date": "After the announcement of HKDSE results, if necessary",
+      "remarks": "Only selected applicants will be invited for interviews, and when necessary."
+    },
+    "JS3310": {
+      "name": "Hotel and Tourism Management (Hotel Management / Smart Tourism and Hospitality / Event and Experience Management)",
+      "type": "interview",
+      "timing": "post-results",
+      "date": "After the announcement of HKDSE results",
+      "remarks": "Preference will be given to Band A applicants, and only Band A applicants will be invited for interview."
+    },
+    "JS3337": {
+      "name": "Mental Health Nursing",
+      "type": "interview",
+      "timing": "both",
+      "date": "Between May and July",
+      "remarks": "Suitable applicants may be invited to interviews"
+    },
+    "JS3375": {
+      "name": "Environmental Engineering and Sustainable Development",
+      "type": "interview",
+      "timing": "both",
+      "date": "Interviews may be arranged after the announcement of the HKDSE results.",
+      "remarks": "Usually, only Band A applicants are invited to interview."
+    },
+    "JS3478": {
+      "name": "Medical Laboratory Science",
+      "type": "interview",
+      "timing": "post-results",
+      "date": "After the announcement of HKDSE results",
+      "remarks": "Only Band A applicants will be shortlisted and invited for the interview."
+    },
+    "JS3569": {
+      "name": "Design (Advertising Design / Environmental Design / Immersive Media and Game Design / Information Design / Interaction Design / Interior Design / Product Design / Service Design / Social Design)",
+      "type": "interview",
+      "timing": "post-results",
+      "date": "Admission interviews are scheduled after the HKDSE results are announced.",
+      "remarks": "Only Band A applicants will be considered for admission. Applicants must submit a portfolio in June. Upon release of their HKDSE results, applicants will be shortlisted for interviews. Shortlisted applicants will be invited for an individual interview with their physical/digital portfolio, as well as their prototypes or models (if applicable). Top HKDSE scorers (e.g., average weighted score of 5 in 2025/26) will be exempted from portfolio submission in June and invited for an admission interview after the JUPAS results are announced. Important Dates Mid-/end of March – Admissions schedule/details announced via email Mid-June – Portfolio submission Mid July – HKDSE results announced Mid-/end of July – Admission interviews"
+    },
+    "JS3612": {
+      "name": "Radiography",
+      "type": "interview",
+      "timing": "post-results",
+      "date": "After the announcement of HKDSE results",
+      "remarks": "Only Band A applicants will be shortlisted and invited for the interview."
+    },
+    "JS3624": {
+      "name": "Occupational Therapy",
+      "type": "interview",
+      "timing": "post-results",
+      "date": "After the announcement of HKDSE results",
+      "remarks": "Band A applicants may be invited for interview as needed."
+    },
+    "JS3636": {
+      "name": "Physiotherapy",
+      "type": "interview",
+      "timing": "post-results",
+      "date": "After the announcement of HKDSE results. Students shortlisted for the non-academic admission scheme will be interviewed prior to the announcement of HKDSE results.",
+      "remarks": "Only Band A applicants will be shortlisted and invited for interview."
+    },
+    "JS3648": {
+      "name": "Nursing",
+      "type": "interview",
+      "timing": "both",
+      "date": "Between May and August",
+      "remarks": "Band A applicants will be considered for interview."
+    },
+    "JS3739": {
+      "name": "Civil Engineering",
+      "type": "interview",
+      "timing": "both",
+      "date": "Interviews may be arranged after the announcement of HKDSE results.",
+      "remarks": "Usually, only Band A applicants will be invited to an interview."
+    },
+    "JS3789": {
+      "name": "Surveying",
+      "type": "interview",
+      "timing": "post-results",
+      "date": "After the announcement of HKDSE results",
+      "remarks": "Selected Band A applicants will be invited to attend an interview after the announcement of the HKDSE results scheduled for late July 2026."
+    },
+    "JS3791": {
+      "name": "Building Engineering and Management",
+      "type": "interview",
+      "timing": "post-results",
+      "date": "After the announcement of HKDSE results",
+      "remarks": "Only selected Band A applicants will be invited to attend an interview after the announcement of HKDSE results, which is scheduled to occur in late July 2026."
+    },
+    "JS3868": {
+      "name": "Computing and AI (Computer Science / Enterprise Information Systems)",
+      "type": "interview",
+      "timing": "post-results",
+      "date": "July",
+      "remarks": "Usually only Band A applicants will be invited to an interview."
+    }
+  }
+}

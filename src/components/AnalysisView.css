@@ -1,0 +1,312 @@
+/* Analysis page – chance-list styles.
+   Kept in a component stylesheet (not the shared styles.css) so this work
+   doesn't collide with concurrent edits there. The verdict banner,
+   findings list, slot chips and detail CTA are styled in styles.css under
+   the "Analysis (portfolio strategy read)" block; only the per-pick
+   chance list lives here. Tokens (--good/--warn/--bad/--muted/--line/
+   --space-* …) are the global vars from styles.css :root. */
+
+/* Floating bottom action bar (Back + Share) — reuses .stepper-footer's look.
+   The analysis-view has a transform (entrance/exit animation), which makes a
+   `position:fixed` child resolve against it (and scroll with content) instead
+   of the viewport. So we use `position: sticky; bottom` — it pins to the
+   bottom of the scroll container regardless of the ancestor transform, and
+   rests in-flow at the end so it never hides the last content. */
+.analysis-footer {
+  position: sticky;
+  left: auto;
+  right: auto;
+  bottom: var(--space-3);
+  width: min(760px, calc(100% - var(--space-4)));
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* The big bottom padding on .app-shell exists to clear a FIXED footer; our
+   sticky footer is in-flow, so drop it (its own margin gives the gap) and the
+   bar sits near the bottom edge like the Step 1-3 bar. Element+class beats the
+   .app-shell rule at all widths. */
+main.analysis-view {
+  padding-bottom: 0;
+}
+
+/* In the integrated "Step 4" layout the STEPPER BAR is the sticky top element
+   (exactly like Steps 1-3), so the header scrolls away with the page. Override
+   the share/analysis sticky-header rule from styles.css for this view.
+   Element+class > the styles.css `.analysis-view > .app-topbar` selector. */
+main.analysis-view > .app-topbar {
+  position: static;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+/* Inline (Step-3 pane) Analysis: the heading must NOT inherit the
+   calculator's sticky step-title chrome from `.stepper-panel .panel-heading`
+   (position:sticky; top:45px; negative margins + padding sized for the
+   Grades/Programme/Compare panels). Inside the analysis card that left a
+   big empty gap above the heading and stuck it down over the verdict. Render
+   it as the plain, in-flow share heading, exactly like the standalone page. */
+.stepper-panel .analysis-panel .panel-heading.share-panel-heading {
+  position: static;
+  top: auto;
+  z-index: auto;
+  margin: 0;
+  padding: 0;
+  background: none;
+  border-bottom: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.analysis-chances {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface-strong);
+}
+
+.chance-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* Band B and below are real but rarely reached – visually subordinate to
+   Band A so the eye lands on what matters. */
+.chance-group.is-muted {
+  opacity: 0.9;
+}
+
+.chance-group-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.chance-group-eyebrow {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.chance-group.is-muted .chance-group-eyebrow {
+  color: var(--muted);
+}
+
+.chance-group-note {
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+.chance-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.chance-row {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+.chance-group.is-muted .chance-row {
+  background: color-mix(in srgb, var(--surface) 55%, transparent);
+}
+
+/* Clickable variant – resets the <button> defaults and adds affordance. */
+.chance-row-button {
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.chance-row-button:hover,
+.chance-row-button:focus-visible {
+  border-color: var(--accent);
+  background: var(--hover);
+  outline: none;
+}
+
+.chance-chevron {
+  color: var(--muted);
+  flex: 0 0 auto;
+}
+
+.chance-row-button:hover .chance-chevron,
+.chance-row-button:focus-visible .chance-chevron {
+  color: var(--accent);
+}
+
+/* Collapsed Band B and below. */
+.chance-lower {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.chance-lower-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  padding: 6px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.chance-lower-toggle:hover {
+  border-color: var(--accent);
+  color: var(--ink);
+}
+
+.chance-lower-toggle svg {
+  transition: transform 0.18s ease;
+}
+
+.chance-lower-toggle.open svg {
+  transform: rotate(180deg);
+}
+
+.chance-slot {
+  font-weight: 900;
+  font-size: 0.8rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.chance-prog {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.chance-prog-top {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.chance-prog-top strong {
+  font-size: 0.9rem;
+  font-weight: 900;
+}
+
+.chance-prog-top small {
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.chance-prog em {
+  font-style: normal;
+  font-size: 0.8rem;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Soft-factor context (interview, few places) – neutral, not an alarm.
+   Risk is signalled by the chance tag colour + the advisor findings. */
+.chance-note {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.chance-tag {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  border-radius: 999px;
+  padding: var(--space-1) var(--space-2);
+  font-size: 0.74rem;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.chance-tag.tone-good { background: var(--soft-good); color: var(--good); }
+.chance-tag.tone-warn { background: var(--soft-warn); color: var(--warn); }
+.chance-tag.tone-alert { background: var(--soft-alert); color: var(--alert); }
+.chance-tag.tone-bad { background: var(--soft-bad); color: var(--bad); }
+.chance-tag.tone-neutral { background: var(--soft-neutral); color: var(--muted); }
+
+.chance-empty {
+  margin: 0;
+  padding: var(--space-2) 0;
+  font-size: 0.84rem;
+  color: var(--muted);
+}
+
+/* Shared section header (Advisor read). Mirrors the snapshot head that
+   used to live in styles.css for the old reach/target/safe block. */
+.analysis-section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.analysis-section-head .eyebrow {
+  margin: 0;
+}
+
+.analysis-section-head .muted {
+  font-size: 0.78rem;
+}
+
+/* "Viewing a shared plan" badge — shown at the top of a received analysis so
+   it's clear you're looking at someone else's plan, not your own. */
+.analysis-viewmode-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  padding: 5px 11px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface-strong));
+  color: var(--accent);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+/* Candidate's raw DSE grades, shown before the verdict so the advisor can read
+   the profile behind the scores. Reuses the .grade-title-summary pill grid. */
+.analysis-grades {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.analysis-grades .grade-title-summary {
+  margin-top: 0;
+}
