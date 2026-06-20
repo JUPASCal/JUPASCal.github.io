@@ -1326,31 +1326,14 @@ button {
 
 .advisor-empty {
   padding: var(--space-6);
-  /* Two-up so the wide console panel isn't half-empty: intro (eyebrow + headline
-     + lede) on the LEFT, the "what we'll check" list filling the RIGHT, and the
-     footnote spanning both at the bottom. */
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
-  grid-template-areas:
-    "intro checks"
-    "foot  foot";
-  align-items: start;
-  gap: var(--space-5) var(--space-6);
+  /* Single column, full width: intro (eyebrow + headline + lede), then the
+     "what we'll check" list, then the footnote — each block uses the panel's
+     full measure rather than capping to a narrow column. */
+  display: flex;
+  flex-direction: column;
 }
 
-/* Stack on a narrow console (small laptop / scaled-down) so the columns don't cram. */
-@media (max-width: 1024px) {
-  .advisor-empty {
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      "intro"
-      "checks"
-      "foot";
-  }
-}
-
-.advisor-empty-intro { grid-area: intro; }
-.advisor-empty-checks { grid-area: checks; }
+.advisor-empty-intro { margin-bottom: var(--space-5); }
 
 /* Tighter tracking than the global eyebrow — 0.06em reads loose on the Chinese
    labels here ("風險分析" / "系統會自動檢查"); 0.03em still spaces the English caps. */
@@ -1376,7 +1359,6 @@ button {
 }
 
 .advisor-empty .advisor-empty-heading {
-  /* Top of the right column — the column gap is the section break now. */
   margin: 0 0 var(--space-3);
   font-size: 0.74rem;
   font-weight: 800;
@@ -1417,8 +1399,7 @@ button {
 }
 
 .advisor-empty .advisor-empty-footnote {
-  grid-area: foot;
-  margin: 0;
+  margin: var(--space-5) 0 0;
   font-size: 0.78rem;
   line-height: 1.55;
   color: var(--muted);
