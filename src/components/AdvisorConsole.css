@@ -946,6 +946,7 @@ html:has(.advisor-console) body {
 }
 
 .suggest-row {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -992,6 +993,7 @@ html:has(.advisor-console) body {
 
 .suggest-info {
   min-width: 0;
+  padding-right: 112px;
 }
 
 .suggest-line {
@@ -1017,10 +1019,13 @@ html:has(.advisor-console) body {
   flex: 0 0 auto;
 }
 
-/* Inline with the identity (not pushed to the far edge) so it doesn't pair up
-   visually with the Add button on the right. */
 .suggest-tag {
-  flex: 0 0 auto;
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-3);
+  max-width: 104px;
+  justify-content: center;
+  white-space: nowrap;
 }
 
 .suggest-name {
@@ -1688,8 +1693,8 @@ html:has(.advisor-console) body {
    fixed to just fit their content. */
 .console-browse .results-table th:nth-child(2),  /* School (short codes) */
 .console-browse .results-table td:nth-child(2) { width: 64px; }
-.console-browse .results-table th:nth-child(3),  /* Status (pill min ~92) */
-.console-browse .results-table td:nth-child(3) { width: 92px; }
+.console-browse .results-table th:nth-child(3),  /* Quota */
+.console-browse .results-table td:nth-child(3) { width: 64px; }
 .console-browse .results-table th:nth-child(4),  /* Score (5-char number) */
 .console-browse .results-table td:nth-child(4) { width: 54px; }
 .console-browse .results-table th:nth-child(5),  /* Band */
@@ -1740,6 +1745,28 @@ html:has(.advisor-console) body {
   color: var(--ink);
   font-size: 0.86rem;
   line-height: 1.05;
+}
+
+.console-browse .results-table .programme-cell-text strong .status {
+  display: inline-flex;
+  min-height: 17px;
+  padding: 2px 6px;
+  font-size: 0.62rem;
+  line-height: 1;
+  letter-spacing: 0;
+  vertical-align: middle;
+}
+
+.console-browse .results-table td:nth-child(3) .quota-badge {
+  display: inline-flex;
+  min-height: 18px;
+  padding: 2px 7px;
+  font-size: 0.82rem;
+  font-weight: 400;
+}
+
+.console-browse .results-table td:nth-child(4) {
+  font-weight: 900;
 }
 
 /* Programme name truncates within its (auto-sized) column instead of forcing

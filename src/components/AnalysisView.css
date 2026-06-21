@@ -114,6 +114,9 @@ main.analysis-view > .app-topbar {
 }
 
 .chance-row {
+  --chance-tone: var(--line);
+  --chance-fill: var(--surface);
+  position: relative;
   display: grid;
   grid-template-columns: 32px minmax(0, 1fr) auto auto;
   align-items: center;
@@ -121,11 +124,41 @@ main.analysis-view > .app-topbar {
   padding: var(--space-2) var(--space-3);
   border: 1px solid var(--line);
   border-radius: 12px;
-  background: var(--surface);
+  background: color-mix(in srgb, var(--chance-fill) 48%, transparent);
+  overflow: hidden;
+}
+
+.chance-row::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+  background: var(--chance-tone);
+}
+
+.chance-row.tone-good {
+  --chance-tone: var(--good);
+  --chance-fill: var(--soft-good);
+}
+.chance-row.tone-warn {
+  --chance-tone: var(--warn);
+  --chance-fill: var(--soft-warn);
+}
+.chance-row.tone-alert {
+  --chance-tone: var(--alert);
+  --chance-fill: var(--soft-alert);
+}
+.chance-row.tone-bad {
+  --chance-tone: var(--bad);
+  --chance-fill: var(--soft-bad);
+}
+.chance-row.tone-neutral {
+  --chance-tone: var(--muted);
+  --chance-fill: var(--soft-neutral);
 }
 
 .chance-group.is-muted .chance-row {
-  background: color-mix(in srgb, var(--surface) 55%, transparent);
+  background: color-mix(in srgb, var(--chance-fill) 48%, transparent);
 }
 
 /* Clickable variant – resets the <button> defaults and adds affordance. */
@@ -141,7 +174,7 @@ main.analysis-view > .app-topbar {
 .chance-row-button:hover,
 .chance-row-button:focus-visible {
   border-color: var(--accent);
-  background: var(--hover);
+  background: color-mix(in srgb, var(--chance-fill) 74%, var(--hover));
   outline: none;
 }
 
@@ -252,11 +285,26 @@ main.analysis-view > .app-topbar {
   white-space: nowrap;
 }
 
-.chance-tag.tone-good { background: var(--soft-good); color: var(--good); }
-.chance-tag.tone-warn { background: var(--soft-warn); color: var(--warn); }
-.chance-tag.tone-alert { background: var(--soft-alert); color: var(--alert); }
-.chance-tag.tone-bad { background: var(--soft-bad); color: var(--bad); }
-.chance-tag.tone-neutral { background: var(--soft-neutral); color: var(--muted); }
+.chance-tag.tone-good {
+  background: var(--soft-good);
+  color: var(--good);
+}
+.chance-tag.tone-warn {
+  background: var(--soft-warn);
+  color: color-mix(in srgb, var(--warn) 72%, var(--ink));
+}
+.chance-tag.tone-alert {
+  background: var(--soft-alert);
+  color: var(--alert);
+}
+.chance-tag.tone-bad {
+  background: var(--soft-bad);
+  color: var(--bad);
+}
+.chance-tag.tone-neutral {
+  background: var(--soft-neutral);
+  color: var(--muted);
+}
 
 .chance-empty {
   margin: 0;

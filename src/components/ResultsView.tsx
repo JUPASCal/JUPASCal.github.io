@@ -87,6 +87,13 @@ export function ResultsView({ results, selectedCodes, activeCode, compact, delta
     onPick(code);
   }
 
+  function resultClassName(code: string, base = "") {
+    const classes = base ? [base] : [];
+    if (activeCode === code) classes.push("selected");
+    if (selectedCodes.includes(code)) classes.push("picked");
+    return classes.join(" ");
+  }
+
   // On a wide viewport the default is the full sortable table. The "Compact"
   // toggle drops to the card list — on desktop this is the only thing it does
   // (the table is already the dense view), and on the Advisor Console's narrow
@@ -103,7 +110,7 @@ export function ResultsView({ results, selectedCodes, activeCode, compact, delta
             <tr>
               <SortableHeader label={t("results.col.programme")} column="code" sortKey={sortKey} sortDirection={sortDirection} onSortChange={onSortChange} />
               <SortableHeader label={t("results.col.institution")} column="institution" sortKey={sortKey} sortDirection={sortDirection} onSortChange={onSortChange} />
-              <SortableHeader label={t("results.col.status")} column="eligibility" sortKey={sortKey} sortDirection={sortDirection} onSortChange={onSortChange} />
+              <SortableHeader label={t("filters.sort.quota")} column="quota" sortKey={sortKey} sortDirection={sortDirection} onSortChange={onSortChange} />
               <SortableHeader label={t("results.col.score")} column="score" sortKey={sortKey} sortDirection={sortDirection} onSortChange={onSortChange} />
               <SortableHeader label={t("results.col.band")} column="benchmark" sortKey={sortKey} sortDirection={sortDirection} onSortChange={onSortChange} />
               <SortableHeader label={t("results.col.lqDiff")} column="lq" sortKey={sortKey} sortDirection={sortDirection} onSortChange={onSortChange} />
@@ -116,7 +123,7 @@ export function ResultsView({ results, selectedCodes, activeCode, compact, delta
               <tr
                 key={result.programme.jupas_code}
                 data-code={result.programme.jupas_code}
-                className={activeCode === result.programme.jupas_code ? "selected" : selectedCodes.includes(result.programme.jupas_code) ? "picked" : ""}
+                className={resultClassName(result.programme.jupas_code)}
                 role={readOnly ? undefined : "button"}
                 tabIndex={readOnly ? -1 : 0}
                 onClick={readOnly ? undefined : () => {
@@ -139,13 +146,14 @@ export function ResultsView({ results, selectedCodes, activeCode, compact, delta
                       <strong>
                         {slotByCode.get(result.programme.jupas_code) ? <SlotBadge slot={slotByCode.get(result.programme.jupas_code)!} /> : null}
                         {result.programme.jupas_code}
+                        <StatusBadge pass={result.eligibility.eligible} compact />
                       </strong>
                       <span>{pickName(result.programme, lang)}</span>
                     </span>
                   </span>
                 </td>
                 <td>{institutionLabel(result.programme.institution)}</td>
-                <td><StatusBadge pass={result.eligibility.eligible} /></td>
+                <td><QuotaBadge quota={result.programme.quota} compact label={false} /></td>
                 <td>{result.calculation.totalScore.toFixed(2)}</td>
                 <td><span className={`band ${result.band}`}>{t(bandLabelKey(result.band))}</span></td>
                 <DeltaCell result={result} keyName="lq" deltaMode={deltaMode} />
@@ -168,7 +176,7 @@ export function ResultsView({ results, selectedCodes, activeCode, compact, delta
             role={readOnly ? undefined : "button"}
             tabIndex={readOnly ? -1 : 0}
             data-code={result.programme.jupas_code}
-            className={activeCode === result.programme.jupas_code ? "mobile-card selected" : selectedCodes.includes(result.programme.jupas_code) ? "mobile-card picked" : "mobile-card"}
+            className={resultClassName(result.programme.jupas_code, "mobile-card")}
             key={result.programme.jupas_code}
             onClick={readOnly ? undefined : () => togglePick(result.programme.jupas_code)}
             onKeyDown={readOnly ? undefined : (event) => {
@@ -184,7 +192,10 @@ export function ResultsView({ results, selectedCodes, activeCode, compact, delta
                 <span className="card-code">{result.programme.jupas_code}</span>
                 <span>{institutionLabel(result.programme.institution)}</span>
               </span>
-              <StatusBadge pass={result.eligibility.eligible} />
+              <span className="card-badges">
+                <QuotaBadge quota={result.programme.quota} />
+                <StatusBadge pass={result.eligibility.eligible} />
+              </span>
               {readOnly ? null : <PickButton picked={selectedCodes.includes(result.programme.jupas_code)} onClick={() => togglePick(result.programme.jupas_code)} />}
             </span>
             <div className="mobile-card-main">
@@ -298,9 +309,15 @@ function DeltaCell({ result, keyName, deltaMode }: { result: ProgrammeResult; ke
   );
 }
 
-function StatusBadge({ pass }: { pass: boolean }) {
+function StatusBadge({ pass, compact = false }: { pass: boolean; compact?: boolean }) {
   const { t } = useLang();
-  return <span className={pass ? "status pass" : "status fail"}>{pass ? t("results.eligible") : t("results.checkReq")}</span>;
+  return <span className={`${pass ? "status pass" : "status fail"}${compact ? " is-compact" : ""}`}>{pass ? t("results.eligible") : t("results.checkReq")}</span>;
+}
+
+function QuotaBadge({ quota, compact = false, label = true }: { quota?: number | null; compact?: boolean; label?: boolean }) {
+  const { t } = useLang();
+  if (typeof quota !== "number" || quota <= 0) return null;
+  return <span className={compact ? "quota-badge is-compact" : "quota-badge"}>{label ? `${t("results.quotaShort")} ${quota}` : quota}</span>;
 }
 
 function benchmarkDiff(comparison: { delta: number; percent: number } | undefined, deltaMode: "points" | "percent") {

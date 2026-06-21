@@ -46,11 +46,6 @@ export const ShareButton = memo(({ onShare, label = "Share", title = "Open the s
     >
       {icon}
       <span className="share-btn-label">{label}</span>
-      {/* Invisible spacer mirroring the leading icon's footprint –
-          with flex justify-content: center this balances the label so
-          it sits at the button's optical centre rather than drifting
-          right because of the icon on the left. */}
-      <span className="share-btn-icon-mirror" aria-hidden="true">{icon}</span>
     </button>
   );
 });

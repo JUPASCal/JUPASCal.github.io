@@ -453,6 +453,7 @@ function ChanceGroup({
 function ChanceRow({ pick, onOpenDetail }: { pick: PickChance; onOpenDetail?: (code: string) => void }) {
   const { t, lang } = useLang();
   const meta = chanceMeta(pick);
+  const rowClass = `chance-row tone-${meta.tone}`;
   const { programme } = pick.result;
   // Soft factors are context, not alarms – a non-academic requirement isn't a
   // risk. The chance tag's colour + the findings carry the actual risk signal.
@@ -489,7 +490,7 @@ function ChanceRow({ pick, onOpenDetail }: { pick: PickChance; onOpenDetail?: (c
       <li>
         <button
           type="button"
-          className="chance-row chance-row-button"
+          className={`${rowClass} chance-row-button`}
           onClick={() => onOpenDetail(programme.jupas_code)}
           aria-label={t("analysis.openDetailAria", { code: programme.jupas_code, name: pickName(programme, lang) })}
         >
@@ -498,7 +499,7 @@ function ChanceRow({ pick, onOpenDetail }: { pick: PickChance; onOpenDetail?: (c
       </li>
     );
   }
-  return <li className="chance-row">{body}</li>;
+  return <li className={rowClass}>{body}</li>;
 }
 
 function chanceMeta(pick: PickChance): ReturnType<typeof riskMeta> {

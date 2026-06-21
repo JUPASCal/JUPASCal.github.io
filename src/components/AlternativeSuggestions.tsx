@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { institutionLabel } from "../lib/institutions";
 import { effectiveBenchmarks } from "../lib/results";
 import { suggestAlternatives } from "../lib/suggestions";
@@ -16,8 +16,11 @@ import type { ProgrammeResult } from "../types/jupas";
 // it doesn't re-collapse every time the analysis re-renders / is revisited.
 const SUGGEST_OPEN_KEY = "jupas-staging-suggest-open";
 
-// How many suggestions to show before the "show more" reveal.
-const INITIAL_VISIBLE = 4;
+// How many suggestions to show before the "show more" reveal. Mobile stays
+// compact because the panel is collapsible and single-column; desktop is
+// recalculated from the actual CSS grid columns so the default view fills rows.
+const INITIAL_VISIBLE_MOBILE = 4;
+const INITIAL_VISIBLE_DESKTOP_FALLBACK = 6;
 
 type Props = {
   results: (ProgrammeResult | null)[];
@@ -48,6 +51,25 @@ export function AlternativeSuggestions({ results, allResults, onAdd, onSwap, onO
     return next;
   });
   const [showAll, setShowAll] = useState(false);
+  const listRef = useRef<HTMLUListElement | null>(null);
+  const [desktopInitialVisible, setDesktopInitialVisible] = useState(INITIAL_VISIBLE_DESKTOP_FALLBACK);
+
+  useEffect(() => {
+    if (collapsible) return;
+    const list = listRef.current;
+    if (!list) return;
+
+    const updateVisibleCount = () => {
+      const template = window.getComputedStyle(list).gridTemplateColumns;
+      const columns = template && template !== "none" ? template.split(" ").filter(Boolean).length : 1;
+      setDesktopInitialVisible(Math.max(4, columns * 2));
+    };
+
+    updateVisibleCount();
+    const observer = new ResizeObserver(updateVisibleCount);
+    observer.observe(list);
+    return () => observer.disconnect();
+  }, [collapsible, suggestions.length]);
 
   // Nothing to surface (no risky picks AND no backups found) → hide entirely.
   if (!show) return null;
@@ -56,14 +78,15 @@ export function AlternativeSuggestions({ results, allResults, onAdd, onSwap, onO
     ? <span className="muted">{t("suggest.note", { n: suggestions.length })}</span>
     : null;
 
-  const visible = showAll ? suggestions : suggestions.slice(0, INITIAL_VISIBLE);
+  const initialVisible = collapsible ? INITIAL_VISIBLE_MOBILE : desktopInitialVisible;
+  const visible = showAll ? suggestions : suggestions.slice(0, initialVisible);
 
   const body = suggestions.length === 0 ? (
     <p className="suggest-empty muted">{t("suggest.none")}</p>
   ) : (
     <>
       <p className="suggest-intro muted">{t("suggest.intro")}</p>
-      <ul className="suggest-list">
+      <ul className="suggest-list" ref={listRef}>
             {visible.map((s) => {
               const p = s.result.programme;
               const median = effectiveBenchmarks(p).median;
@@ -138,9 +161,9 @@ export function AlternativeSuggestions({ results, allResults, onAdd, onSwap, onO
               );
             })}
           </ul>
-          {suggestions.length > INITIAL_VISIBLE ? (
+          {suggestions.length > initialVisible ? (
             <button type="button" className="suggest-more" onClick={() => setShowAll((v) => !v)}>
-              {showAll ? t("suggest.showFewer") : t("suggest.showMore", { n: suggestions.length - INITIAL_VISIBLE })}
+              {showAll ? t("suggest.showFewer") : t("suggest.showMore", { n: suggestions.length - initialVisible })}
             </button>
           ) : null}
         </>
