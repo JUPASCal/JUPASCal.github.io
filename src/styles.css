@@ -8576,6 +8576,30 @@ select {
   }
 }
 
+/* ── Info (About) + Share pages: same desktop chrome as the calculator ──────
+   These pages used to cap the ENTIRE shell — top nav bar included — to a
+   narrow centred column (.about-view 760px / .share-view 1120px), so on
+   desktop/iPad the nav bar looked "squeezed into a phone" while the
+   calculator's bar stretched the full screen. Drop the cap so the shell (and
+   thus the top bar) spans like the calculator's .app-shell (min(1760px,100%)
+   with the same page padding) — the bar is then byte-identical across pages —
+   and centre only the readable CONTENT underneath. Scoped to ≥921px so mobile
+   keeps its full-bleed single column untouched. */
+@media (min-width: 921px) {
+  .about-view,
+  .share-view {
+    max-width: none;
+  }
+
+  /* .about-doc already centres itself (640px). Centre the share content at
+     the width the page used to cap to — everything except the full-width top
+     bar and the out-of-flow toast. */
+  .share-view > :not(.app-topbar):not(.share-toast) {
+    width: min(1120px, 100%);
+    margin-inline: auto;
+  }
+}
+
 
 .share-profile-card {
   display: flex;
