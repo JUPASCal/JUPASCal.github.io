@@ -110,15 +110,15 @@ export const STRINGS = {
 
   // – Advisor empty state –
   "advisorEmpty.eyebrow": { en: "Risk Analysis", zh: "風險分析" },
-  "advisorEmpty.title": { en: "Pick programmes to start analysing", zh: "選擇課程後開始分析" },
-  "advisorEmpty.lede": { en: "Add the JUPAS programmes you're considering. This panel scores your whole plan against past admission data, flags the risks, and suggests safer options in the same direction.", zh: "加入你正在考慮的 JUPAS 志願，本面板便會根據歷年收生數據評估整個方案、指出當中風險，並建議同方向而較穩妥的選擇。" },
-  "advisorEmpty.checkHeading": { en: "What we'll check automatically", zh: "系統會自動檢查" },
-  "advisorEmpty.check1": { en: "Whether each choice meets its 2026 entry requirements at your grades.", zh: "按你的成績，檢查每個志願是否符合其 2026 年入學要求。" },
-  "advisorEmpty.check2": { en: "Where each calculated score sits against the 2025 LQ / median / UQ — and the admission risk for that slot.", zh: "每個計算分數相對 2025 年 LQ／中位數／UQ 的位置，以及該志願的取錄風險。" },
-  "advisorEmpty.check3": { en: "Whether Band A (A1–A3) holds enough realistic options, flagging reaches and empty slots.", zh: "Band A（A1–A3）是否有足夠可行選擇，並標示過於進取或空置的志願。" },
-  "advisorEmpty.check4": { en: "Requirements beyond grades — interviews, portfolios, or other tests — a choice may ask for.", zh: "成績以外的要求，例如面試、作品集或其他測試。" },
-  "advisorEmpty.check5": { en: "Safer same-direction alternatives you're likelier to get into, for any risky Band-A choice.", zh: "為偏進取的 Band A 志願，建議同方向而較有把握的替代課程。" },
-  "advisorEmpty.footnote": { en: "Scores are estimates based on 2025 admission data and 2026 weightings. Final admission depends on JUPAS ranking, places, interviews, and competition.", zh: "分數乃根據 2025 年收生數據及 2026 年計分比重估算。最終能否取錄，仍視乎 JUPAS 排位、學額、面試及整體競爭情況。" },
+  "advisorEmpty.title": { en: "Add programmes to assess your plan", zh: "加入課程後評估整體志願" },
+  "advisorEmpty.lede": { en: "Once you add programmes, this panel weighs each choice against past admission data, highlights the main risks, and suggests safer alternatives in the same field.", zh: "加入課程後，本面板會對照歷年收生數據評估各個志願，指出主要風險，並建議方向相近而較穩妥的選擇。" },
+  "advisorEmpty.checkHeading": { en: "What the analysis covers", zh: "分析涵蓋以下各項" },
+  "advisorEmpty.check1": { en: "Whether your grades meet each programme's 2026 entry requirements.", zh: "按你的成績，檢查各志願是否符合 2026 年入學要求。" },
+  "advisorEmpty.check2": { en: "Where each score sits against the 2025 LQ, median, and UQ.", zh: "各志願的計算分數相對 2025 年 LQ／中位數／UQ 的位置。" },
+  "advisorEmpty.check3": { en: "Whether your Band A choices are realistic, and which ones are a reach.", zh: "Band A（A1–A3）的選擇是否穩妥，哪些則較為進取。" },
+  "advisorEmpty.check4": { en: "Extra requirements like interviews, portfolios, or admission tests.", zh: "成績以外的要求，例如面試、作品集或入學試。" },
+  "advisorEmpty.check5": { en: "Safer alternatives in a similar field for any risky Band A choice.", zh: "為較進取的 Band A 志願，建議方向相近而較穩妥的替代課程。" },
+  "advisorEmpty.footnote": { en: "Scores are estimates based on 2025 admission data and 2026 weightings. Actual offers still depend on JUPAS ranking, places, interviews, and competition.", zh: "分數乃根據 2025 年收生數據及 2026 年計分比重估算；最終能否取錄，仍視乎 JUPAS 排位、學額、面試及競爭情況。" },
 
   // – Step 1: grade input –
   "grade.ariaPanel": { en: "DSE grades", zh: "DSE 成績" },
