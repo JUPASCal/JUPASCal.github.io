@@ -639,13 +639,14 @@ export function ShareView({ mode: _mode = "advisor", profileName, results, profi
               const result = results[index] ?? null;
               // Skip empty slots entirely — only filled A1–A3 picks show.
               if (!result) return null;
+              const eligible = result.eligibility.eligible;
               return (
-                <div key={slot} className={`recap-bar filled band-${result.band}`}>
+                <div key={slot} className={`recap-bar filled band-${result.band}${eligible ? "" : " is-ineligible"}`}>
                   <div className="recap-bar-headline">
                     <span className="recap-bar-slot">{slot}</span>
                     <strong>{result.programme.jupas_code}</strong>
                     <span className="recap-bar-inst">{institutionLabel(result.programme.institution)}</span>
-                    <b className={`band ${result.band}`}>{t(bandLabelKey(result.band))}</b>
+                    <b className={`band ${result.band}`}>{eligible ? t(bandLabelKey(result.band)) : t("compare.notEligible")}</b>
                     <em className="recap-bar-name">
                       <span className="recap-bar-name-en">{shortenProgrammeName(pickName(result.programme, lang))}</span>
                       {(lang === "zh" ? result.programme.name_en : result.programme.name_zh) ? (

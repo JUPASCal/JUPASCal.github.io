@@ -4478,6 +4478,19 @@ select {
 .mc-marker.band-below-lq      { background: var(--bad); }
 .mc-marker.band-no-score      { display: none; }
 
+/* Ineligible override for the score scale — the band colour (green/amber) is
+   misleading when the student can't apply at all, so force the red "not
+   eligible" tone on the bubble, its pointer, and the marker dot. Placed AFTER
+   all the band-* rules so equal-specificity ordering wins. Mirrors the Compare
+   row's `.mc-row-filled.is-ineligible` treatment. */
+.mc-score-bubble.is-ineligible {
+  --bubble-bg: var(--bad);
+  --bubble-fg: var(--surface-strong);
+  border-color: var(--bad);
+}
+.mc-bubble-arrow.is-ineligible { border-top-color: var(--bad); }
+.mc-marker.is-ineligible { background: var(--bad); }
+
 /* Mini-table: places / Band A applicants / applicants per place.
    The score, band, and eligibility moved into the scale + header,
    so this is now the only structured stats block per row. */
@@ -8728,6 +8741,10 @@ select {
 .recap-bar.filled.band-above-lq      { --band-tone: var(--warn); }
 .recap-bar.filled.band-below-lq      { --band-tone: var(--bad); }
 .recap-bar.filled.band-no-score      { --band-tone: var(--muted); }
+/* Ineligible overrides the band tint with red — the benchmark colour is moot
+   when the student can't apply. Drives the card wash, border, stripe, the band
+   chip + slot badge (all read --band-tone). After the band rules so it wins. */
+.recap-bar.filled.is-ineligible      { --band-tone: var(--bad); }
 
 .recap-bar.filled {
   /* Plain band wash (no pattern): a faint band-tinted surface so each card
@@ -8804,8 +8821,13 @@ select {
   border-width: 1px;
 }
 
-.recap-bar .mc-score-bubble::after {
-  bottom: -4px;
+/* The pointer is now a standalone `.mc-bubble-arrow` (not the bubble's ::after,
+   which was dropped in the iOS container-query fix). Its default sits at
+   bottom:10px — above the compact recap bubble's bottom:9px — so it overlapped
+   the pill. Pin it just UNDER the smaller bubble (top edge at the bubble's 9px
+   bottom) and shrink it to match. */
+.recap-bar .mc-bubble-arrow {
+  bottom: 5px;
   border-left-width: 4px;
   border-right-width: 4px;
   border-top-width: 4px;

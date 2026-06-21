@@ -45,6 +45,11 @@ export function ScoreScale({ result, showScore = true }: Props) {
   const { lq, median, uq, source } = effectiveBenchmarks(result.programme);
   const medLabel = source === "mean" ? "MEAN" : source === "expected" ? "EST" : "MED";
   const total = result.calculation.totalScore;
+  // Eligibility gates the band signal: if the student can't apply at all, a high
+  // score sitting "Above UQ" (green) is misleading, so the bubble/arrow/marker
+  // get the red "not eligible" treatment that overrides the band colour. Mirrors
+  // the Compare row's `.mc-row-filled.is-ineligible` rule.
+  const ineligibleCls = result.eligibility.eligible ? "" : " is-ineligible";
 
   if (lq == null && median == null && uq == null) {
     // No benchmark – surface the calculated score (when shown) with a caption,
@@ -56,7 +61,7 @@ export function ScoreScale({ result, showScore = true }: Props) {
         aria-label={t("scale.ariaNoData", { score: total.toFixed(2) })}
       >
         {showScore ? (
-          <div className="mc-score-bubble band-no-score is-static">{total.toFixed(2)}</div>
+          <div className={`mc-score-bubble band-no-score is-static${ineligibleCls}`}>{total.toFixed(2)}</div>
         ) : null}
         <span className="mc-no-data-caption">{t("scale.no2025")}</span>
       </div>
@@ -167,14 +172,14 @@ export function ScoreScale({ result, showScore = true }: Props) {
                 needing container-query units (cqw broke on iOS). The clamp delta
                 is small enough (≤~4%) that the arrow stays under the bubble. */}
             <div
-              className={`mc-score-bubble band-${result.band}`}
+              className={`mc-score-bubble band-${result.band}${ineligibleCls}`}
               style={{ left: `${Math.max(6, Math.min(94, userPct))}%` }}
               aria-label={t("scale.ariaBubble", { score: total.toFixed(2), band: shortBandLabel(t, result.band) })}
             >
               {total.toFixed(2)}
             </div>
             <span
-              className={`mc-bubble-arrow band-${result.band}`}
+              className={`mc-bubble-arrow band-${result.band}${ineligibleCls}`}
               style={{ left: `${userPct}%` }}
               aria-hidden="true"
             />
@@ -196,7 +201,7 @@ export function ScoreScale({ result, showScore = true }: Props) {
             </Fragment>
           ))}
           <span
-            className={`mc-marker band-${result.band}`}
+            className={`mc-marker band-${result.band}${ineligibleCls}`}
             style={{ left: `${userPct}%` }}
             aria-hidden="true"
           />
