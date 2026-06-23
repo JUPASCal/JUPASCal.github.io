@@ -1748,9 +1748,13 @@ html:has(.advisor-console) body {
 }
 
 .console-browse .results-table .programme-cell-text strong {
+  display: flex !important;
+  flex-wrap: wrap;
   color: var(--ink);
   font-size: 0.86rem;
   line-height: 1.05;
+  max-width: 100%;
+  min-width: 0;
 }
 
 .console-browse .results-table .programme-cell-text strong .status {
@@ -1761,6 +1765,18 @@ html:has(.advisor-console) body {
   line-height: 1;
   letter-spacing: 0;
   vertical-align: middle;
+}
+
+.console-browse .results-table .programme-cell-text strong .interview-flag {
+  flex-basis: 100%;
+  width: fit-content;
+  max-width: 100%;
+  min-height: 0;
+  padding: 2px 6px;
+  font-size: 0.58rem;
+  line-height: 1.05;
+  white-space: normal;
+  text-align: left;
 }
 
 .console-browse .results-table td:nth-child(3) .quota-badge {
