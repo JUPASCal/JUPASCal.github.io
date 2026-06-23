@@ -1,13 +1,19 @@
 import { calculateScore, checkEligibility } from "./calculator";
+import { hasPostReleaseInterview, hasPreReleaseOnlyInterview } from "./selection";
 import type { BenchmarkBand, BenchmarkComparison, BenchmarkKey, Programme, ProgrammeResult, StudentGrades } from "../types/jupas";
 
 export type SortKey = "benchmark" | "code" | "name" | "institution" | "eligibility" | "score" | "lq" | "median" | "uq" | "quota";
+
+// Interview-timing filter based on official source timing only. Vague entries
+// such as "When necessary" are excluded from both timing filters.
+export type InterviewFilter = "all" | "after" | "before";
 
 export type Filters = {
   query: string;
   institutions: string[];
   eligibleOnly: boolean;
   band: BenchmarkBand | "all";
+  interview: InterviewFilter;
 };
 
 export function buildProgrammeResult(programme: Programme, grades: StudentGrades): ProgrammeResult {
@@ -33,6 +39,10 @@ export function filterResults(results: ProgrammeResult[], filters: Filters) {
     if (filters.institutions.length > 0 && !filters.institutions.includes(programme.institution)) return false;
     if (filters.eligibleOnly && !result.eligibility.eligible) return false;
     if (filters.band !== "all" && result.band !== filters.band) return false;
+    if (filters.interview !== "all") {
+      if (filters.interview === "after" && !hasPostReleaseInterview(programme)) return false;
+      if (filters.interview === "before" && !hasPreReleaseOnlyInterview(programme)) return false;
+    }
     if (!query) return true;
     const index = searchIndexFor(programme);
     if (isShortSearch(query, compactQuery)) return compactMatch(compactQuery, index);

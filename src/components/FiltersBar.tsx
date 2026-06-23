@@ -4,6 +4,8 @@ import type { BenchmarkBand } from "../types/jupas";
 import type { Filters, SortKey } from "../lib/results";
 import { institutionLabel } from "../lib/institutions";
 import { useLang, type Translate } from "../lib/i18n";
+import "./FiltersBar.css";
+
 
 type Props = {
   filters: Filters;
@@ -34,7 +36,7 @@ const sortOptions: SortKey[] = ["code", "lq", "median", "uq", "quota"];
 
 export function FiltersBar({ filters, open, institutions, total, shown, selectedCount, selectedOnly, compactResults, deltaMode, sortKey, sortDirection, showStepEyebrow = true, onFiltersChange, onOpenChange, onSelectedOnlyChange, onCompactResultsChange, onDeltaModeChange, onSortChange, onReviewSelected, onResetSelected, selectedOrder }: Props) {
   const { t } = useLang();
-  const activeFilterCount = filters.institutions.length + Number(filters.eligibleOnly) + Number(filters.band !== "all") + Number(selectedOnly);
+  const activeFilterCount = filters.institutions.length + Number(filters.eligibleOnly) + Number(filters.band !== "all") + Number(filters.interview !== "all") + Number(selectedOnly);
   const [sortOpen, setSortOpen] = useState(false);
 
   // Mobile: while the search input is focused, the four toolbar pills fold into
@@ -43,6 +45,35 @@ export function FiltersBar({ filters, open, institutions, total, shown, selected
   // blurs below; tapping the stand-in; or tapping anywhere away).
   const [searchFocused, setSearchFocused] = useState(false);
   const searchInputRef = useRef<HTMLInputElement | null>(null);
+  const sentinelRef = useRef<HTMLDivElement>(null);
+  const [isStuck, setIsStuck] = useState(false);
+
+  useEffect(() => {
+    if (!showStepEyebrow) return;
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+    const updateStuck = () => {
+      setIsStuck(sentinel.getBoundingClientRect().top <= 45);
+    };
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsStuck(!entry.isIntersecting),
+      { threshold: 0 },
+    );
+    observer.observe(sentinel);
+    updateStuck();
+    const updateSoon = () => window.requestAnimationFrame(updateStuck);
+    document.addEventListener("visibilitychange", updateSoon);
+    window.addEventListener("pageshow", updateSoon);
+    window.addEventListener("focus", updateSoon);
+    window.addEventListener("scroll", updateSoon, true);
+    return () => {
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", updateSoon);
+      window.removeEventListener("pageshow", updateSoon);
+      window.removeEventListener("focus", updateSoon);
+      window.removeEventListener("scroll", updateSoon, true);
+    };
+  }, [showStepEyebrow]);
 
   // Info popover (mobile) – explains the step + its less-obvious gestures.
   // Mirrors the Step 3 "ⓘ" pattern: a corner button toggling a panel that
@@ -62,7 +93,8 @@ export function FiltersBar({ filters, open, institutions, total, shown, selected
   }, [infoOpen]);
 
   return (
-    <div className={open ? "filters-sticky-group filters-open" : "filters-sticky-group"}>
+    <div className={`${open ? "filters-sticky-group filters-open" : "filters-sticky-group"}${isStuck ? " is-stuck" : ""}`}>
+      {showStepEyebrow ? <div ref={sentinelRef} aria-hidden="true" className="sticky-sentinel" /> : null}
       <div className="filters-topline">
         <div className="filters-title">
           {showStepEyebrow ? <p className="eyebrow">{t("filters.eyebrow")}</p> : null}
@@ -327,7 +359,7 @@ export function FiltersBar({ filters, open, institutions, total, shown, selected
         <div className="advanced-filters">
           <button
             type="button"
-            className={selectedOnly ? "pill active" : "pill"}
+            className={selectedOnly ? "pill selected-only-pill active" : "pill selected-only-pill"}
             disabled={selectedCount === 0}
             onClick={() => onSelectedOnlyChange(!selectedOnly)}
           >
@@ -340,6 +372,14 @@ export function FiltersBar({ filters, open, institutions, total, shown, selected
           >
             {t("filters.eligibleOnly")}
           </button>
+          <label className="score-range-filter interview-filter">
+            <span className="filter-label-text">{t("filters.interview")}</span>
+            <select value={filters.interview} onChange={(event) => onFiltersChange({ ...filters, interview: event.target.value as Filters["interview"] })}>
+              <option value="all">{t("filters.interviewAny")}</option>
+              <option value="after">{t("filters.interviewAfter")}</option>
+              <option value="before">{t("filters.interviewBefore")}</option>
+            </select>
+          </label>
           <label className="score-range-filter">
             <span className="filter-label-text">{t("filters.scoreRange")}</span>
             <select value={filters.band} onChange={(event) => onFiltersChange({ ...filters, band: event.target.value as BenchmarkBand | "all" })}>

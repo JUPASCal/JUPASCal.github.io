@@ -1,0 +1,599 @@
+/* GradeInput styles */
+
+
+
+.desktop-grade-column .grade-panel:not(.mobile-collapsed) .mobile-collapse-toggle {
+  display: none;
+}
+
+.desktop-grade-column .grade-panel.mobile-collapsed .mobile-collapse-toggle {
+  display: inline-flex;
+}
+
+
+.desktop-grade-column .grade-footer-actions {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  flex-wrap: wrap;
+}
+
+
+.desktop-grade-column .grade-footer-actions .grade-reset-button {
+  flex: 1 1 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0 var(--space-3);
+  font-size: 0.86rem;
+  font-weight: 800;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+
+.desktop-grade-column .grade-footer-actions .done-button {
+  flex: 1 1 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0 var(--space-3);
+  font-size: 0.86rem;
+  font-weight: 800;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+
+.desktop-grade-column .grade-footer-actions .done-button {
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: var(--bg);
+}
+
+
+.desktop-grade-column .grade-footer-actions .done-button:hover {
+  filter: brightness(0.95);
+}
+
+
+.desktop-grade-column .grade-footer-actions .grade-reset-button {
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+
+.desktop-grade-column .grade-footer-actions .grade-reset-button:hover {
+  border-color: var(--bad);
+  color: var(--bad);
+}
+
+
+:root[data-theme="dark"] .desktop-grade-column .grade-footer-actions .done-button {
+  color: #15120f;
+}
+
+
+.desktop-grade-column .grade-panel.mobile-collapsed .grade-panel-body {
+  display: none;
+}
+
+
+.desktop-grade-column .grade-panel.mobile-collapsed .grade-summary {
+  display: flex;
+  margin-top: var(--space-3);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--row-bg);
+  padding: var(--space-3);
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+
+/* Step 1: 24px gap between heading block and section content */
+.grade-panel .panel-heading {
+  margin-bottom: var(--space-5);
+}
+
+
+.panel-heading > .grade-title-summary {
+  flex: 1 1 100%;
+  margin-top: var(--space-2);
+}
+
+
+.grade-actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+
+.grade-title-summary {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: var(--space-1);
+  grid-column: 1 / -1;
+  margin-top: var(--space-3);
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.35;
+  min-width: 0;
+  max-width: 100%;
+}
+
+
+.grade-summary-cell {
+  /* Flex column with justify-content: center so the label+digit stack
+     is centred vertically as a group. The previous `display: grid` +
+     `place-items: center` recipe centred each item inside its own
+     auto-sized row but defaulted `align-content: start`, which left
+     the row stack glued to the top of the cell – visually skewing
+     short labels (MATH, BAFS) upward against the larger digit below. */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--line) 78%, transparent);
+  border-radius: 12px;
+  background: var(--row-bg);
+  padding: var(--space-2) 2px;
+  color: var(--muted);
+  text-align: center;
+}
+
+
+.grade-summary-cell b {
+  display: block;
+  width: 100%;
+  overflow: visible;
+  text-overflow: unset;
+  white-space: nowrap;
+  font-size: 0.58rem;
+  line-height: 1;
+  text-transform: uppercase;
+  /* letter-spacing kept at 0 so all labels share the same optical
+     centre – a non-zero value adds trailing space after the last
+     glyph which, under text-align: center, visually shifts shorter
+     labels (CHI / ENG / CSD) left of where MATH / BAFS sit. */
+  letter-spacing: 0;
+  text-align: center;
+}
+
+
+.grade-summary-cell b.compact-label {
+  font-size: 0.53rem;
+}
+
+
+.grade-summary-cell em {
+  display: block;
+  width: 100%;
+  color: color-mix(in srgb, var(--muted) 70%, transparent);
+  font-style: normal;
+  font-size: 0.92rem;
+  line-height: 1.1;
+  font-weight: 900;
+  text-align: center;
+}
+
+
+.grade-summary-cell.filled {
+  border-color: color-mix(in srgb, var(--accent) 38%, var(--line));
+  background: var(--active);
+  color: var(--accent);
+}
+
+
+.grade-summary-cell.filled em {
+  color: var(--accent);
+}
+
+
+.mobile-collapse-toggle {
+  display: none;
+}
+
+
+.grade-footer-actions {
+  display: flex;
+}
+
+
+.grade-grid {
+  display: grid;
+  gap: var(--space-5);
+}
+
+
+.elective-block {
+  display: grid;
+  gap: var(--space-5);
+}
+
+
+.grade-grid {
+  margin-top: var(--space-5);
+}
+
+
+.grade-buttons {
+  display: flex;
+  gap: var(--space-1);
+  overflow-x: visible;
+}
+
+
+.grade-buttons.compact {
+  display: flex;
+}
+
+
+.grade-chip {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 32px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--surface-strong);
+  color: var(--muted);
+  padding: 0 var(--space-1);
+  font-size: 0.78rem;
+  font-weight: 900;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: transform 120ms ease, border-color 120ms ease, background 120ms ease, color 120ms ease;
+}
+
+
+.grade-chip.active {
+  border-color: var(--accent);
+  background: var(--active);
+  color: var(--accent);
+}
+
+
+.grade-chip:disabled {
+  cursor: not-allowed;
+  opacity: 0.38;
+}
+
+
+.grade-chip:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+
+.grade-chip:focus {
+  outline: none;
+}
+
+
+.grade-chip:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+
+.elective-block {
+  margin-top: var(--space-5);
+}
+
+
+.elective-block h3 {
+  font-size: 1rem;
+  font-weight: 850;
+  color: var(--ink);
+  margin: 0;
+}
+
+
+.grade-section-divider {
+  border: none;
+  border-top: 1px solid var(--line);
+  margin: var(--space-5) 0;
+}
+
+
+.elective-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-2);
+}
+
+
+
+.share-result-card .grade-section-divider {
+  margin: -12px calc(-1 * var(--space-5)) 0;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .grade-chip:hover:not(:disabled) {
+      border-color: var(--accent);
+      background: var(--active);
+      color: var(--accent);
+    }
+}
+
+
+@media (min-width: 921px) {
+
+
+    .grade-grid .field {
+      grid-template-columns: 320px 1fr;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+
+    .elective-row {
+      grid-template-columns: 320px 1fr;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+
+    .desktop-grade-column .grade-grid .field {
+      grid-template-columns: 1fr;
+      align-items: stretch;
+      gap: var(--space-2);
+    }
+
+
+    .desktop-grade-column .elective-row {
+      grid-template-columns: 1fr;
+      align-items: stretch;
+      gap: var(--space-2);
+    }
+
+
+    .desktop-grade-column .grade-grid {
+      gap: var(--space-4);
+    }
+
+
+    .desktop-grade-column .elective-block {
+      gap: var(--space-4);
+    }
+
+
+    .desktop-grade-column .grade-chip {
+      min-height: 30px;
+      font-size: 0.74rem;
+    }
+
+
+    .desktop-grade-column .grade-title-summary {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+}
+
+
+@media (max-width: 920px) {
+
+
+    .grade-panel {
+      position: relative;
+      overflow: hidden;
+      transition: padding 300ms cubic-bezier(0.22, 1, 0.36, 1), margin 300ms cubic-bezier(0.22, 1, 0.36, 1), border-color 300ms ease, background 300ms ease;
+    }
+
+
+    /* Allow grid items + flex chip rows to actually shrink inside the panel –
+       without these, long subject rows (Chinese/English Lang) would push the
+       chips out past the panel border. */
+    .grade-panel .field {
+      min-width: 0;
+    }
+
+
+    /* Allow grid items + flex chip rows to actually shrink inside the panel –
+       without these, long subject rows (Chinese/English Lang) would push the
+       chips out past the panel border. */
+    .grade-panel .elective-row {
+      min-width: 0;
+    }
+
+
+    .grade-panel .grade-buttons {
+      min-width: 0;
+      max-width: 100%;
+    }
+
+
+    .grade-panel .grade-chip {
+      min-width: 0;
+      padding: 0 2px;
+      font-size: 0.74rem;
+    }
+
+
+    .grade-panel .panel-heading {
+      position: sticky;
+      top: 45px;
+      z-index: 26;
+      /* Match the panel body (--surface-mix) so the sticky heading reads as one
+         continuous surface with the content below it. The .is-stuck box-shadow
+         provides separation from the page when scrolled. */
+      background: var(--surface-mix);
+      border: 0;
+      border-bottom: 1px solid var(--line);
+      border-radius: 20px 20px 0 0;
+      box-shadow: none;
+      transition: box-shadow 200ms ease;
+      margin: 0;
+      padding: var(--space-3) 0 var(--space-2);
+    }
+
+    .stepper-panel .grade-panel .panel-heading {
+      margin: calc(-1 * var(--space-4)) calc(-1 * var(--space-4)) 0;
+      padding: var(--space-3) var(--space-4) var(--space-2);
+    }
+
+
+
+    .grade-panel .panel-heading.is-stuck {
+      box-shadow: 0 8px 18px rgba(29, 42, 47, 0.08);
+    }
+
+
+    .grade-panel .panel-heading {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: end;
+      gap: var(--space-3);
+    }
+
+
+    :root[data-theme="dark"] .grade-panel .panel-heading.is-stuck {
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.24);
+    }
+
+
+    .grade-panel .panel-heading h2 {
+      font-size: 1.05rem;
+      line-height: 1.15;
+      letter-spacing: -0.015em;
+    }
+
+
+    .grade-title-summary {
+      grid-column: 1 / -1;
+      margin-top: var(--space-2);
+      max-width: 100%;
+    }
+
+
+    .grade-summary-cell {
+      border-radius: 10px;
+      padding: var(--space-1) var(--space-1) var(--space-2);
+    }
+
+
+    .grade-summary-cell b {
+      font-size: 0.52rem;
+    }
+
+
+    .grade-summary-cell b.compact-label {
+      font-size: 0.48rem;
+    }
+
+
+    .grade-summary-cell em {
+      font-size: 0.84rem;
+    }
+
+
+    .grade-panel .panel-heading .grade-title-summary {
+      margin-top: 0;
+    }
+
+
+    .grade-panel .panel-heading .eyebrow {
+      margin-bottom: 2px;
+      font-size: 0.65rem;
+      letter-spacing: 0.06em;
+    }
+
+
+    .grade-panel.mobile-collapsed .panel-heading {
+      margin-bottom: 0;
+      border-radius: 20px;
+      border-bottom-color: transparent;
+    }
+
+
+    .grade-panel.mobile-collapsed {
+      margin-bottom: calc(-1 * var(--space-2));
+      padding: var(--space-4);
+    }
+
+
+    .grade-actions {
+      align-items: center;
+      flex-shrink: 0;
+      gap: var(--space-2);
+    }
+
+
+    .grade-actions .ghost-button {
+      padding: var(--space-1) var(--space-3);
+      font-size: 0.78rem;
+    }
+
+
+    .mobile-collapse-toggle {
+      display: flex;
+    }
+
+
+    .grade-panel.mobile-collapsed .grade-summary {
+      max-height: 0;
+      opacity: 0;
+      margin-top: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+      border-width: 0;
+      overflow: hidden;
+    }
+
+
+    .grade-panel-body {
+      overflow: hidden;
+      transition: max-height 300ms cubic-bezier(0.22, 1, 0.36, 1), opacity 220ms ease, margin-top 300ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+
+    .grade-panel.mobile-collapsed .grade-panel-body {
+      max-height: 0;
+      margin-top: 0;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+
+    .grade-panel:not(.mobile-collapsed) .grade-panel-body {
+      max-height: 1200px;
+      opacity: 1;
+      margin-top: var(--space-4);
+    }
+
+
+    .grade-footer-actions {
+      display: flex;
+      gap: var(--space-2);
+      margin-top: var(--space-4);
+      flex-wrap: wrap;
+    }
+
+
+    .grade-buttons {
+      overflow-x: visible;
+    }
+
+
+    .grade-chip {
+      flex: 1 1 0;
+      min-width: 0;
+      padding-inline: var(--space-1);
+      font-size: 0.72rem;
+    }
+}
+
+
+@media (max-width: 560px) {
+
+
+    .elective-row {
+      grid-template-columns: 1fr;
+    }
+}

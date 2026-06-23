@@ -4,6 +4,8 @@ import { localizedShortSubject, localizedSubject, localizedSubjectChip } from ".
 import { useLang, type Lang } from "../lib/i18n";
 import { MOBILE_MEDIA_QUERY } from "../lib/useMediaQuery";
 import type { StudentGrades } from "../types/jupas";
+import "./GradeInput.css";
+
 
 type Props = {
   grades: StudentGrades;

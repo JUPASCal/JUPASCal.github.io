@@ -47,7 +47,52 @@ This document is the single source of truth for all AI agents (Gemini, Claude, e
 
 ---
 
-## 4. Core Operational Rules
+## 4. Current Web App Architecture
+
+### App Shell & Breakpoint
+- `src/lib/useMediaQuery.ts` defines the single layout breakpoint: desktop is `min-width: 921px`; mobile is `max-width: 920px`.
+- `App.tsx` chooses between `layout-desktop` and `layout-mobile`. Shared state lives in `App.tsx`; desktop and mobile are different presentations of the same grades, results, picks, filters, and share state.
+
+### Desktop / iPad Landscape
+- Desktop renders `AdvisorConsole` inside `<main className="app-shell layout-desktop">`.
+- `AdvisorConsole` has a left rail and main workspace:
+  - Left rail: `ProfileNameRow`, `GradeInput`, and `PreferencePlanner`.
+  - `PreferencePlanner`: selected programme order, quick Browse entry, reorder/swap/remove, and clear-all action.
+  - Main workspace tabs: `Analysis` (default), `Browse`, and transient `Detail`.
+- Desktop `Browse` uses the reusable `programmePicker` node from `App.tsx`: `FiltersBar` + `ResultsView`.
+- Desktop `Detail` is not a standalone route. It is a transient drill-in view in `AdvisorConsole` showing `DetailPanel` for the active programme, with a back-to-analysis tab state.
+
+### Mobile
+- Mobile renders `<main className="app-shell layout-mobile">` with a stepper flow:
+  - Step 1: `GradeInput`
+  - Step 2: `programmePicker` (`FiltersBar` + `ResultsView`)
+  - Step 3: comparison/plan view, `DetailPanel` drill-in, and in-flow `AnalysisBody`
+- Heavy panels render only when their step is active, to avoid reconciling the full programme list while editing grades.
+- Mobile footer owns Back/Next/Reset/Analysis/Share actions. Browser or hardware Back is coordinated through `App.tsx` history sentinels.
+
+### DetailPanel
+- `DetailPanel` is the reusable programme-detail surface, used by desktop drill-in and mobile detail drill-in.
+- It shows programme metadata, benchmarks, eligibility checks, formulas/weights, offer statistics, competition, and non-academic requirements.
+- Non-academic requirement rows come from `src/lib/selection.ts`; interview rows may include quoted source text from `programme.non_academic[].when`.
+
+### Browse, Results, and Interview Labels
+- `FiltersBar` owns search, institution filter, eligibility filter, interview timing filter, score range, sorting, compact mode, selected-only mode, and delta mode.
+- `ResultsView` renders the desktop table or mobile cards and window-renders results in chunks.
+- Interview labels are based on official timing only:
+  - `pre-results` → pre-results interview / 放榜前面試
+  - `post-results` → post-results interview / 放榜後面試
+  - `both` → pre/post-results interview / 放榜前後面試
+  - vague source text such as "When necessary" is treated as tentative: show it in `DetailPanel`, but do not label it in Browse or call it out in analysis.
+- Do not reintroduce discipline-based "serious interview" logic. We are not the authority deciding whether a programme takes interviews seriously.
+
+### Analysis and Share Views
+- `src/lib/analysis.ts` computes advisory findings and verdicts. Non-academic requirements are informational reminders, not score penalties.
+- `AnalysisView` is the standalone/share-friendly analysis page; `AnalysisBody` is reused inside `AdvisorConsole` and mobile Step 3.
+- `ShareView` handles social/advisor sharing and received-share read-only previews. In read-only mode, edit actions are hidden or disabled; users may save a received share as their own profile.
+
+---
+
+## 5. Core Operational Rules
 
 ### Technical Environment
 - **Python Path**: Always use `~/miniconda3/envs/jupascal/bin/python`.
@@ -74,23 +119,24 @@ This document is the single source of truth for all AI agents (Gemini, Claude, e
 
 ---
 
-## 5. Institutions & Admission Baselines
+## 6. Institutions & Admission Baselines
 - **332A33 (General UGC)**: HKU, CUHK, HKUST, PolyU, CityUHK, HKBU.
 - **332A22 (Others)**: LingnanU, EdUHK, HKMU, SSSDP.
 - **Total**: 8 UGC-funded universities + HKMU (self-funded) + SSSDP (multi-institution).
 
 ---
 
-## 6. Key Documentation (Manuals)
+## 7. Key Documentation (Manuals)
 - `docs/manuals/WEBAPP_PLAN.md`: Architecture & UI/UX strategy.
 - `docs/manuals/CALCULATION_LOGIC.md`: Grade scales and score pipelines.
 - `docs/manuals/SCORE_LOGIC.md`: Institutional score type definitions.
 - `docs/manuals/DATA_UNIFICATION_LEARNINGS.md`: Institutional quirks & maintenance.
 - `docs/manuals/JUPAS_2026_INSTRUCTIONS.md`: Update workflow & scraper reference.
+- `docs/manuals/INTERVIEW_SCRAPING.md`: Interview/non-academic requirement scraping and timing rules.
 
 ---
 
-## 7. Annual Update Workflow
+## 8. Annual Update Workflow
 1. Run school-specific scrapers in `scripts/extraction/`.
 2. Run the unification script:
    ```bash

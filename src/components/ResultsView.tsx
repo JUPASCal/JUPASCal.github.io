@@ -2,10 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import { institutionLabel } from "../lib/institutions";
 import { slotLabel } from "../lib/slots";
 import { bandLabelKey, formatDelta, formatPercent } from "../lib/results";
+import { hasDisplayInterview, interviewTiming } from "../lib/selection";
 import { useMediaQuery, DESKTOP_MEDIA_QUERY } from "../lib/useMediaQuery";
 import { useLang, pickName } from "../lib/i18n";
 import type { SortKey } from "../lib/results";
-import type { BenchmarkKey, ProgrammeResult } from "../types/jupas";
+import type { BenchmarkKey, Programme, ProgrammeResult } from "../types/jupas";
+import "./ResultsView.css";
+
 
 // Windowed-render chunk sizes. INITIAL fills a tall desktop viewport on
 // first paint; CHUNK is how many more stream in each time the user nears
@@ -147,6 +150,7 @@ export function ResultsView({ results, selectedCodes, activeCode, compact, delta
                         {slotByCode.get(result.programme.jupas_code) ? <SlotBadge slot={slotByCode.get(result.programme.jupas_code)!} /> : null}
                         {result.programme.jupas_code}
                         <StatusBadge pass={result.eligibility.eligible} compact />
+                        <InterviewFlag programme={result.programme} compact />
                       </strong>
                       <span>{pickName(result.programme, lang)}</span>
                     </span>
@@ -215,7 +219,10 @@ export function ResultsView({ results, selectedCodes, activeCode, compact, delta
                 <em>{t("results.yourScore")}</em>
                 <b>{result.calculation.totalScore.toFixed(2)}</b>
               </span>
-              <span className={`band ${result.band}`}>{t(bandLabelKey(result.band))}</span>
+              <span className="card-score-badges">
+                <InterviewFlag programme={result.programme} compact />
+                <span className={`band ${result.band}`}>{t(bandLabelKey(result.band))}</span>
+              </span>
             </span>
             <span className="card-benchmarks">
               <BenchmarkChip result={result} benchmarkKey="lq" label={t("common.lq")} deltaMode={deltaMode} />
@@ -320,6 +327,34 @@ function QuotaBadge({ quota, compact = false, label = true }: { quota?: number |
   return <span className={compact ? "quota-badge is-compact" : "quota-badge"}>{label ? `${t("results.quotaShort")} ${quota}` : quota}</span>;
 }
 
+// At-a-glance marker for officially listed interviews. Vague "when necessary"
+// entries are kept in Detail only.
+function InterviewFlag({ programme, compact = false }: { programme: Programme; compact?: boolean }) {
+  const { t } = useLang();
+  if (!hasDisplayInterview(programme)) return null;
+  const timing = interviewTiming(programme);
+  const title = timing === "both"
+    ? t("results.interviewFlag.titleBoth")
+    : timing === "post-results"
+      ? t("results.interviewFlag.titleAfter")
+      : t("results.interviewFlag.titleBefore");
+  const label = timing === "both"
+    ? t("results.interviewFlag.labelBoth")
+    : timing === "post-results"
+      ? t("results.interviewFlag.labelAfter")
+      : t("results.interviewFlag.labelBefore");
+  const className = [
+    "interview-flag",
+    compact ? "is-compact" : "",
+    `is-${timing}`,
+  ].filter(Boolean).join(" ");
+  return (
+    <span className={className} title={title} aria-label={title} data-timing={timing}>
+      <span>{label}</span>
+    </span>
+  );
+}
+
 function benchmarkDiff(comparison: { delta: number; percent: number } | undefined, deltaMode: "points" | "percent") {
   if (!comparison) return "-";
   return deltaMode === "percent" ? formatPercent(comparison.percent) : formatDelta(comparison.delta);
@@ -355,8 +390,11 @@ function CompactBenchmark({ result, benchmarkKey, label, deltaMode = "points" }:
   const positive = comparison ? comparison.delta >= 0 : false;
   return (
     <span className={!comparison ? "compact-benchmark muted" : positive ? "compact-benchmark positive" : "compact-benchmark negative"}>
-      <em>{label}</em>
-      <strong>{benchmarkDiff(comparison, deltaMode)}</strong>
+      <span className="compact-benchmark-score">
+        <em>{label}</em>
+        <strong>{comparison ? comparison.score.toFixed(2) : "-"}</strong>
+      </span>
+      <b>{benchmarkDiff(comparison, deltaMode)}</b>
     </span>
   );
 }

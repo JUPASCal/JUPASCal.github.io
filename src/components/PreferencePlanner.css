@@ -1,0 +1,699 @@
+/* PreferencePlanner styles */
+
+
+
+.desktop-planner-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+
+.preference-planner-panel {
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+
+.preference-planner-panel .planner-heading h2 {
+  font-size: 1.05rem;
+  margin: 2px 0 4px;
+}
+
+
+.preference-planner-panel .planner-subtitle {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+
+/* Spreadsheet-style preference planner – A1/A2/A3 rows with columns for code,
+   institution, programme, formula, UQ/Median/LQ benchmarks (with delta %),
+   your score, quota, eligibility, and inline actions. */
+.planner-table-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+
+.planner-table-scroll {
+  overflow-x: auto;
+  margin: 0 calc(var(--space-4) * -1);
+  padding: 0 var(--space-4);
+}
+
+
+.planner-table {
+  --planner-cols: 28px 70px 50px minmax(140px, 2fr) 70px 60px 60px 60px 60px 44px 32px auto;
+  min-width: 720px;
+  display: grid;
+  grid-template-columns: var(--planner-cols);
+  row-gap: 2px;
+  align-items: stretch;
+}
+
+
+.planner-row {
+  display: contents;
+}
+
+
+.planner-row > * {
+  display: flex;
+  align-items: center;
+  padding: 6px 6px;
+  font-size: 0.78rem;
+  line-height: 1.18;
+  background: var(--surface-strong);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  min-width: 0;
+}
+
+
+.planner-row > *:first-child {
+  border-left: 1px solid var(--line);
+  border-radius: 8px 0 0 8px;
+}
+
+
+.planner-row > *:last-child {
+  border-right: 1px solid var(--line);
+  border-radius: 0 8px 8px 0;
+}
+
+
+.planner-row.planner-row-head > * {
+  background: transparent;
+  border: none;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 4px 6px;
+}
+
+
+.planner-row.empty > * {
+  background: transparent;
+  border-top-style: dashed;
+  border-bottom-style: dashed;
+  color: var(--muted);
+}
+
+
+.planner-row.empty > *:first-child {
+  border-left-style: dashed;
+}
+
+
+.planner-row.empty > *:last-child {
+  border-right-style: dashed;
+}
+
+
+.planner-row.active > * {
+  background: var(--active);
+  border-color: var(--accent);
+}
+
+
+.cell-slot {
+  justify-content: center;
+  font-weight: 900;
+  color: var(--muted);
+  font-size: 0.76rem;
+  letter-spacing: 0.04em;
+}
+
+
+.planner-row.active .cell-slot {
+  color: var(--accent);
+}
+
+
+.cell-code {
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: 0.02em;
+}
+
+
+.cell-code-link {
+  background: none;
+  border: none;
+  padding: 6px 6px;
+  cursor: pointer;
+  color: var(--ink);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  text-align: left;
+}
+
+
+.cell-code-link.active {
+  color: var(--accent);
+}
+
+
+.cell-code-link:hover {
+  color: var(--accent);
+}
+
+
+.cell-formula {
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+.cell-bench {
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+  text-align: right;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+
+.cell-bench b {
+  font-weight: 800;
+}
+
+
+.cell-bench .delta {
+  font-size: 0.66rem;
+  font-weight: 700;
+  font-style: normal;
+  line-height: 1;
+}
+
+
+.cell-bench .delta.pos {
+  color: var(--good);
+}
+
+
+.cell-bench .delta.neg {
+  color: var(--bad);
+}
+
+
+.cell-score {
+  justify-content: flex-end;
+  font-weight: 900;
+  color: var(--accent);
+  text-align: right;
+}
+
+
+.cell-quota {
+  justify-content: flex-end;
+  color: var(--ink);
+}
+
+
+.cell-elig {
+  justify-content: center;
+  font-weight: 900;
+}
+
+
+.cell-elig.pass {
+  color: var(--good);
+}
+
+
+.cell-elig.fail {
+  color: var(--bad);
+}
+
+
+.empty-row-preview {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+
+.empty-row-hint {
+  color: var(--muted);
+}
+
+
+.empty-row-error {
+  color: var(--bad);
+  font-weight: 700;
+}
+
+
+.slot-input-btn-inline {
+  padding: 2px 8px;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--accent);
+  font-size: 0.7rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+
+.slot-input-btn-inline:hover {
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+
+.slot-input {
+  width: 100%;
+  padding: 4px 6px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface-strong);
+  color: var(--ink);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+
+.slot-input::placeholder {
+  color: color-mix(in srgb, var(--muted) 70%, transparent);
+  letter-spacing: 0.04em;
+  text-transform: none;
+  font-weight: 600;
+}
+
+
+.slot-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+
+.slot-input.has-error {
+  border-color: var(--bad);
+}
+
+
+.slot-input-side {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 0.74rem;
+  line-height: 1.25;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+.slot-input-side.preview {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+
+.slot-input-side.hint {
+  color: var(--muted);
+}
+
+
+.slot-input-side.error {
+  color: var(--bad);
+  font-weight: 700;
+}
+
+
+.slot-input-btn {
+  flex: 0 0 auto;
+  padding: 4px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ink);
+  font-size: 0.74rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: border-color 120ms ease, color 120ms ease;
+}
+
+
+.slot-input-btn:not(:disabled):hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+
+.slot-input-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+
+.planner-add-slot {
+  margin-top: var(--space-2);
+  align-self: stretch;
+  padding: 6px 12px;
+  border: 1px dashed var(--line);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 140ms ease, color 140ms ease;
+}
+
+
+.planner-add-slot:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+
+.planner-slot-code {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: 0.02em;
+}
+
+
+.planner-slot-name {
+  font-size: 0.8rem;
+  color: var(--ink);
+  line-height: 1.25;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+.planner-slot-meta {
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+
+.planner-slot-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+
+.planner-icon-btn {
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.7rem;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+
+.planner-icon-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+
+.planner-icon-btn:not(:disabled):hover {
+  border-color: var(--line);
+  background: var(--surface-mix);
+  color: var(--ink);
+}
+
+
+.planner-icon-btn.planner-remove:not(:disabled):hover {
+  color: #c2410c;
+  border-color: #fed7aa;
+  background: #fff7ed;
+}
+
+
+.planner-share {
+  margin-top: var(--space-2);
+  display: flex;
+  justify-content: stretch;
+}
+
+
+.planner-share > * {
+  width: 100%;
+  justify-content: center;
+}
+
+
+.preference-planner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  padding: 7px var(--space-5);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: color-mix(in srgb, var(--surface-strong) 42%, transparent);
+}
+
+
+/* The whole bar is a tap target that opens the reorganize sheet; the pick
+   strip inside still scrolls horizontally (a swipe scrolls, a tap expands). */
+.preference-bar {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  border: 0;
+  background: transparent;
+  text-align: left;
+  border-radius: 8px;
+}
+
+
+.preference-planner:not(.is-readonly) .preference-bar {
+  cursor: pointer;
+}
+
+
+.preference-bar:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+
+.preference-bar-expand {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--surface-strong);
+  color: var(--muted);
+  transition: color 120ms ease, border-color 120ms ease;
+}
+
+
+.preference-planner:not(.is-readonly) .preference-bar:hover .preference-bar-expand {
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+}
+
+
+.preference-line-label {
+  flex: 0 0 auto;
+  color: var(--muted);
+  font-size: 0.66rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+}
+
+
+.preference-line {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  width: 0;
+  max-width: 100%;
+  flex: 1 1 auto;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 2px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -webkit-mask-image: linear-gradient(to right, #000 0%, #000 94%, transparent 100%);
+  mask-image: linear-gradient(to right, #000 0%, #000 94%, transparent 100%);
+  margin-top: 2px; /* Nudge down to match label baseline */
+}
+
+
+.preference-line::-webkit-scrollbar {
+  display: none;
+}
+
+
+.preference-text {
+  flex: 0 0 auto;
+  color: var(--muted);
+  font-size: 0.66rem;
+  font-weight: 650;
+  white-space: nowrap;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+}
+
+
+.preference-text {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  gap: 4px;
+}
+
+
+.preference-text.filled {
+  color: var(--ink);
+}
+
+
+.preference-text.active {
+  color: var(--accent);
+  font-weight: 800;
+}
+
+
+.preference-text:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+
+
+.preference-text.draggable {
+  /* Body swipes scroll the overflowing bar (pan-x) so hidden picks are
+     reachable; reorder is initiated from the grip handle below, which
+     opts out of scrolling with touch-action: none. */
+  cursor: pointer;
+  touch-action: pan-x;
+  user-select: none;
+  -webkit-user-select: none;
+  position: relative;
+}
+
+
+.preference-text.dragging {
+  z-index: 2;
+  opacity: 0.9;
+}
+
+
+/* Long-press "Remove" affordance (mobile reorder pills). Only the subject
+   LABEL gets a faint highlight (not the grip), so it reads as "this one"
+   without the heavy coloured wrap. A neutral tint keeps it subtle; the
+   popover's arrow already signals the remove action. Horizontal
+   padding/negative-margin pair adds breathing room without nudging
+   neighbours, and there's no outward shadow to be clipped by the bar's
+   overflow-y: hidden. */
+.preference-text.removing .preference-text-label {
+  margin: 0 -4px;
+  padding: 0 4px;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--ink) 9%, transparent);
+}
+
+
+.audit-cell.unused .audit-cell-score b {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+
+.audit-cell.unused .audit-cell-score b {
+  text-decoration: line-through;
+  text-decoration-color: color-mix(in srgb, var(--muted) 60%, transparent);
+}
+
+
+.audit-cell-score {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  min-width: 0;
+  text-align: right;
+}
+
+
+.audit-cell-score em {
+  font-style: normal;
+  color: var(--muted);
+  text-transform: uppercase;
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+}
+
+
+.audit-cell-score b {
+  font-weight: 900;
+  color: var(--ink);
+  font-size: 0.86rem;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+
+.audit-cell.used .audit-cell-score b {
+  color: var(--accent);
+}
+
+@media (max-width: 920px) {
+
+
+    .preference-planner {
+      margin: 0;
+      padding: 5px var(--space-4) 6px;
+      border: 0;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background: color-mix(in srgb, var(--surface-mix) 94%, transparent);
+    }
+
+
+    .preference-line-label {
+      font-size: 0.62rem;
+    }
+
+
+    .preference-text {
+      font-size: 0.62rem;
+    }
+}
+

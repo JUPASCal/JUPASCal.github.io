@@ -1,0 +1,642 @@
+/* StepperBar styles */
+
+
+
+/* ── Mobile pane slide animation ─────────────────────────────────
+   One animation system covers both Step 1↔2↔3 step changes AND the
+   in-Step-3 compare↔detail swap. Same direction variants and the
+   same timing/easing so they read as one cohesive gesture across
+   the whole flow.
+
+   NOTE: end keyframe resolves to `transform: none` (not
+   `translateX(0)`) – any non-`none` transform on an ancestor
+   creates a new containing block for `position: sticky` /
+   `position: fixed` descendants (the panel-heading inside
+   MobileComparison, the .detail-edge-tap buttons inside
+   DetailPanel), which would pin them to the pane instead of the
+   viewport. Clearing transform at 100% restores normal behaviour
+   once the animation finishes. For the same reason we don't set
+   `will-change: transform` – the will-change hint would itself
+   create a containing block even when transform is `none`, which
+   would silently break the edge-tap buttons' viewport-fixed
+   positioning. Modern browsers auto-promote animated transforms
+   to the GPU without the hint. */
+.stepper-content.vt-forward > .stepper-panel.active {
+  animation: pane-slide-in 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+
+/* ── Mobile pane slide animation ─────────────────────────────────
+   One animation system covers both Step 1↔2↔3 step changes AND the
+   in-Step-3 compare↔detail swap. Same direction variants and the
+   same timing/easing so they read as one cohesive gesture across
+   the whole flow.
+
+   NOTE: end keyframe resolves to `transform: none` (not
+   `translateX(0)`) – any non-`none` transform on an ancestor
+   creates a new containing block for `position: sticky` /
+   `position: fixed` descendants (the panel-heading inside
+   MobileComparison, the .detail-edge-tap buttons inside
+   DetailPanel), which would pin them to the pane instead of the
+   viewport. Clearing transform at 100% restores normal behaviour
+   once the animation finishes. For the same reason we don't set
+   `will-change: transform` – the will-change hint would itself
+   create a containing block even when transform is `none`, which
+   would silently break the edge-tap buttons' viewport-fixed
+   positioning. Modern browsers auto-promote animated transforms
+   to the GPU without the hint. */
+.stepper-content.vt-backward > .stepper-panel.active {
+  animation: pane-slide-in 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+
+.stepper-content.vt-forward > .stepper-panel.active {
+  --slide-from: 28px;
+}
+
+
+.stepper-content.vt-backward > .stepper-panel.active {
+  --slide-from: -28px;
+}
+
+
+/* ── Stepper ────────────────────────────────────────────── */
+
+.stepper-bar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  /* No bottom margin – the sticky panel-headings (top: 45px) tuck
+     directly under the bar. The previous var(--space-3) margin
+     left a 12px band where scrolling card content was visible
+     between the stepper and the panel-heading. */
+  margin: 0 calc(-1 * var(--space-6)) 0;
+  padding: 5px var(--space-6);
+  /* Solid bg so scrolling content underneath is fully masked.
+     3px bottom border – thick enough to read as a deliberate
+     divider between the stepper and the panel content below
+     rather than a stray 1px seam (the thin version kept getting
+     misread as a content gap). */
+  background: var(--bg);
+  border-bottom: 3px solid var(--line);
+}
+
+
+.stepper-step {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 0;
+  padding: 3px 12px 3px 4px;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  white-space: nowrap;
+  transition: color 200ms ease, background 200ms ease;
+}
+
+
+.stepper-step:not(:disabled) {
+  cursor: pointer;
+}
+
+
+.stepper-step:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+
+.stepper-step.active {
+  color: var(--ink);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+
+.stepper-step.done {
+  color: var(--accent);
+}
+
+
+.stepper-badge {
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ink) 8%, transparent);
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-weight: 800;
+  font-feature-settings: "tnum";
+  transition: background 200ms ease, color 200ms ease;
+}
+
+
+.stepper-step.active .stepper-badge {
+  background: var(--accent);
+  color: var(--surface);
+  box-shadow: 0 1px 4px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+
+:root[data-theme="dark"] .stepper-step.active .stepper-badge {
+  color: #15120f;
+}
+
+
+.stepper-step.done .stepper-badge {
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  color: var(--accent);
+}
+
+
+.stepper-connector {
+  flex: 0 0 28px;
+  height: 1px;
+  background: var(--line);
+  transition: background 240ms ease;
+}
+
+
+.stepper-step.done + .stepper-connector {
+  background: color-mix(in srgb, var(--accent) 50%, var(--line));
+}
+
+
+/* Step panels – one visible at a time */
+.stepper-panel {
+  display: none;
+}
+
+
+.stepper-panel.active {
+  display: block;
+}
+
+
+/* Step 1: constrain grade input to a readable width */
+.stepper-panel > .grade-panel {
+  max-width: 100%;
+  overflow: visible;
+}
+
+
+/* Step 3: sticky heading inside the panel needs an unclipped ancestor –
+   the base `.panel { overflow: hidden }` rule otherwise breaks
+   `position: sticky` on the heading and causes it to render at
+   `top:55px` offset from its natural flow, overlapping the first
+   row card below. Targets the panel anywhere inside .stepper-panel
+   (descendant, not child) because the .mobile-step3-pane wrapper
+   sits between them for the slide animation. */
+.stepper-panel .mc-panel {
+  overflow: visible;
+}
+
+
+.stepper-panel .panel-heading {
+  flex-wrap: wrap;
+  position: sticky;
+  top: 45px;
+  z-index: 26;
+  background: var(--surface-mix);
+  border-bottom: 1px solid var(--line);
+  border-radius: 20px 20px 0 0;
+  box-shadow: none;
+  transition: box-shadow 200ms ease;
+  margin: calc(-1 * var(--space-5)) calc(-1 * var(--space-5)) 0;
+  padding: var(--space-5) var(--space-5) var(--space-4);
+}
+
+
+.stepper-panel .panel-heading.is-stuck {
+  box-shadow: 0 8px 18px rgba(29, 42, 47, 0.08);
+}
+
+
+.stepper-panel .grade-title-summary {
+  flex: 0 0 100%;
+  margin-top: 0;
+}
+
+
+
+.stepper-panel .grade-actions .ghost-button {
+  padding: var(--space-1) var(--space-3);
+  font-size: 0.78rem;
+}
+
+
+/* Step 2: recalculate table scroll area for full-width view */
+.stepper-panel .table-shell {
+  max-height: calc(100vh - 260px);
+}
+
+
+/* Step 3: remove sticky / internal-scroll constraints */
+.stepper-panel .detail-panel {
+  position: static;
+  max-height: none;
+  overflow: visible;
+  max-width: 100%;
+}
+
+
+/* Hide GradeInput controls that are superseded by the sticky footer */
+.stepper-panel .done-button {
+  display: none !important;
+}
+
+
+/* Hide GradeInput controls that are superseded by the sticky footer */
+.stepper-panel .mobile-collapse-toggle {
+  display: none !important;
+}
+
+
+/* Sticky navigation footer */
+.stepper-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  display: grid;
+  grid-template-columns: minmax(110px, 1fr) auto;
+  align-items: center;
+  gap: var(--space-3);
+  width: min(1080px, calc(100% - var(--space-6)));
+  margin: 0 auto var(--space-3);
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  /* Flat, professional bar – solid surface, no glass gradient/blur. The
+     hairline border does the separating; the shadow is barely-there. */
+  background: var(--surface-strong);
+  box-shadow: 0 -1px 2px rgba(29, 42, 47, 0.03);
+}
+
+
+.stepper-footer .ghost-button {
+  min-height: 44px;
+  border-radius: 16px;
+  border-color: transparent;
+  background: transparent;
+  color: var(--muted);
+  padding: 0 var(--space-4);
+  font-size: 0.9rem;
+  font-weight: 800;
+  box-shadow: none;
+  /* Keep the label on one line and at its content width — without this the
+     Back/Reset labels (esp. short CJK like 重設) get squeezed by the full-width
+     Next button and wrap one character per line. */
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background 160ms ease, color 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+
+.stepper-footer .ghost-button:hover {
+  border-color: var(--line);
+  background: color-mix(in srgb, var(--ink) 5%, transparent);
+  color: var(--ink);
+  outline: none;
+}
+
+
+.stepper-footer .ghost-button:focus-visible {
+  border-color: var(--line);
+  background: color-mix(in srgb, var(--ink) 5%, transparent);
+  color: var(--ink);
+  outline: none;
+}
+
+
+.stepper-footer .ghost-button:disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
+  color: var(--muted);
+  background: transparent;
+}
+
+
+.stepper-footer .ghost-button:disabled:hover {
+  border-color: transparent;
+  background: transparent;
+  color: var(--muted);
+}
+
+
+.stepper-footer .ghost-button:active {
+  transform: translateY(1px);
+}
+
+
+.stepper-next-btn:active {
+  transform: translateY(1px);
+}
+
+
+.stepper-next-btn {
+  min-height: 48px;
+  border-radius: 17px;
+  padding: 0 var(--space-5);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  border: 1px solid color-mix(in srgb, var(--accent) 86%, black);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--accent) 92%, white), var(--accent));
+  color: #ffffff;
+  font-weight: 900;
+  font-size: 0.92rem;
+  white-space: nowrap;
+  cursor: pointer;
+  /* Tight neutral lift instead of a wide accent-tinted glow – the
+     coloured halo read as too much bloom. */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+  transition: opacity 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+}
+
+
+.stepper-next-btn:hover {
+  opacity: 0.94;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.16);
+}
+
+
+.stepper-next-btn:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+}
+
+
+:root[data-theme="dark"] .stepper-next-btn {
+  color: #15120f;
+}
+
+
+:root[data-theme="dark"] .stepper-footer {
+  background: var(--surface-strong);
+  box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.12);
+}
+
+
+.stepper-footer-left {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-width: 0;
+}
+
+
+.stepper-footer-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+
+.stepper-footer-info {
+  color: var(--muted);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stepper-content.vt-forward > .stepper-panel.active {
+      animation: none;
+    }
+  .stepper-content.vt-backward > .stepper-panel.active {
+      animation: none;
+    }
+}
+
+
+@media (hover: hover) and (pointer: fine) {
+  .stepper-step:not(:disabled):not(.active):hover {
+      color: var(--ink);
+      background: color-mix(in srgb, var(--ink) 5%, transparent);
+    }
+}
+
+
+@media (min-width: 921px) {
+
+
+    .stepper-panel .grade-section-title:first-child {
+      margin-top: 24px;
+    }
+
+
+    .stepper-panel .grade-grid {
+      max-width: 100%;
+    }
+
+
+    .stepper-panel .elective-block {
+      max-width: 100%;
+    }
+
+
+    .stepper-panel .filters-sticky-group {
+      display: block;
+      position: sticky;
+      top: 45px;
+      z-index: 28;
+      background: var(--surface-mix);
+      border-bottom: 1px solid var(--line);
+      border-radius: 20px 20px 0 0;
+      margin: 0;
+    }
+
+
+    .stepper-panel .filters-panel.mobile-closed {
+      display: none;
+    }
+
+
+    .stepper-panel .filters-panel > .panel-collapse-inner {
+      padding: 16px var(--space-5);
+    }
+
+
+    .stepper-panel .search-field > span {
+      display: none;
+    }
+
+
+    .stepper-panel .filter-label-text {
+      display: none;
+    }
+
+
+    .stepper-panel .institution-filter-group {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: var(--space-2);
+    }
+
+
+    .stepper-panel .institution-pills {
+      display: contents;
+    }
+
+
+    .stepper-panel .institution-filter-group .pill {
+      flex: 1 1 0;
+    }
+
+
+    .stepper-panel .filters-topline {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: var(--space-2) var(--space-3);
+      align-items: center;
+      padding: var(--space-4) 0 var(--space-3);
+      border-bottom: 0;
+    }
+
+
+    .stepper-panel .filters-topline .filters-controls {
+      display: contents;
+    }
+
+
+    .stepper-panel .filters-topline .search-row {
+      grid-column: 1 / -1;
+      grid-row: 2;
+    }
+
+
+    .stepper-panel .filters-title-count {
+      margin-top: var(--space-1);
+    }
+
+
+    .stepper-panel .preference-planner {
+      top: 156px;
+      z-index: 27;
+    }
+}
+
+
+@media (max-width: 920px) {
+
+
+    .stepper-content {
+      overflow: visible;
+    }
+
+
+    .stepper-bar {
+      /* No bottom margin on mobile – the sticky panel-heading sits
+         at top:45px right under the bar, so any margin here just
+         creates a band where scrolling content shows through. */
+      margin: 0 calc(-1 * var(--space-4)) 0;
+      padding: 8px var(--space-4);
+    }
+
+
+    .stepper-step {
+      padding: 4px 10px 4px 4px;
+      font-size: 0.78rem;
+      gap: 6px;
+    }
+
+
+    .stepper-badge {
+      width: 20px;
+      height: 20px;
+      font-size: 0.7rem;
+    }
+
+
+    .stepper-connector {
+      flex-basis: 16px;
+    }
+
+
+    .stepper-footer {
+      /* Same outer grid for all steps: Back content-sized on the
+         left, right column takes remaining space. On step 3 the
+         right column hosts the two-cell 1fr 1fr share-button grid,
+         so the buttons split that column equally with no chasm. */
+      grid-template-columns: auto minmax(0, 1fr);
+      width: calc(100% - var(--space-4));
+      margin-bottom: var(--space-2);
+      padding: 6px;
+      gap: var(--space-2);
+      border-radius: 18px;
+    }
+
+
+    .stepper-footer .ghost-button {
+      min-height: 40px;
+      padding: 0 10px;
+      font-size: 0.82rem;
+    }
+
+
+    .stepper-next-btn {
+      min-height: 42px;
+      width: 100%;
+      min-width: 0;
+      padding: 0 12px;
+      font-size: 0.82rem;
+      gap: 6px;
+    }
+
+    /* In share-mode (step 3) width: 100% on each share button makes
+       them fill their 1fr grid cell so Share and Analysis end up
+       equal-width. The same `width: 100%` also makes the lone Next
+       button on steps 1-2 fill the flex right column, pushing Reset
+       to its content size on the right – both behaviours work off
+       the single default rule above. */
+
+    .stepper-next-btn svg {
+      width: 14px;
+      height: 11px;
+    }
+
+
+    .stepper-footer-right {
+      gap: var(--space-2);
+      min-width: 0;
+      justify-content: flex-end;
+    }
+
+    /* Equal-width column grid only in share mode (step 3 with two
+       .stepper-next-btn share buttons). On steps 1-2 the right side
+       contains Reset (.ghost-button) + Next (.stepper-next-btn) and
+       should stay in the default flex layout, otherwise Reset bloats
+       to match Next's width. */
+    .stepper-footer-right.is-share-mode {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: 1fr;
+    }
+}
+
+
+@media (max-width: 560px) {
+  .stepper-connector {
+      min-width: var(--space-2);
+    }
+
+
+    .share-cta-actions .stepper-next-btn {
+      width: 100%;
+    }
+}

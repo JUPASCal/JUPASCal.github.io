@@ -24,7 +24,7 @@ import type { OfferStatistic, Programme, ProgrammeResult } from "../types/jupas"
 // distributions: Band-A offer rate quartiles ≈ 7% / 13% / 21%; quota
 // quartiles ≈ 20 / 32 / 80.
 
-// Shared domain thresholds (also consumed by lib/suggestions.ts — import from
+// Shared domain thresholds (also consumed by lib/suggestions.ts – import from
 // here, don't re-declare, so the two stay in lockstep).
 export const FEW_QUOTA = 20; // intake at/below this → noisy cut-off, never fully "safe"
 export const A_SLOT_COUNT = 3; // Band A = the first 3 choices (where offers come from)
@@ -96,7 +96,7 @@ export type PickChance = {
   result: ProgrammeResult;
   tier: RiskLevel;
   // Non-academic requirements (interview / portfolio / test) for this pick.
-  // Informational only — these never affect the risk tier (a duty is a duty to
+  // Informational only – these never affect the risk tier (a duty is a duty to
   // prepare for, not a score penalty); surfaced as a reminder in the findings.
   selection: SelectionItem[];
   // Small intake (quota ≤ FEW_QUOTA) → noisy cut-off, treat as less safe.
@@ -145,7 +145,7 @@ export function getCompetition(programme: Programme): Competition {
 }
 
 // Non-academic requirements (interview / portfolio / test) come from the shared
-// selection model (official scrape > text > heuristic) in ./selection — no
+// selection model (official scrape > text > heuristic) in ./selection – no
 // regex here. They feed an informational reminder, never the risk tier.
 
 // Where the student's total sits relative to a programme's 2025 benchmarks
@@ -246,7 +246,7 @@ export function riskMeta(tier: RiskLevel): { label: string; tone: "good" | "warn
   }
 }
 
-// i18n key for a risk tier's label — feed to `t()` so the chance tags localize.
+// i18n key for a risk tier's label – feed to `t()` so the chance tags localize.
 export function riskLabelKey(tier: RiskLevel): string {
   switch (tier) {
     case "safe": return "risk.safe";
@@ -263,8 +263,8 @@ const SEVERITY_ORDER: Record<Severity, number> = { critical: 0, warning: 1, info
 
 const slotRef = (p: PickChance): SlotRef => ({ slot: p.slot, code: p.result.programme.jupas_code });
 
-// Joins picks as "A2 (JS1234)" — referencing both the slot and the JUPAS code.
-// Text references slots only (A1, A2 …) — the JUPAS code is shown once, in the
+// Joins picks as "A2 (JS1234)" – referencing both the slot and the JUPAS code.
+// Text references slots only (A1, A2 …) – the JUPAS code is shown once, in the
 // clickable pills below each finding (and on the chance rows), so we don't repeat
 // "A1 (JS4501)" inline everywhere.
 function listSlots(refs: SlotRef[], lang: Lang): string {
@@ -319,7 +319,7 @@ export function analyzePortfolio(rawPicks: (ProgrammeResult | null)[], t: Transl
     // Green (safe/fair) = a genuine shot for this slot. Red (unsafe) = a reach.
     // Amber/orange (risky/high-risk) are the in-between picks to call out; a tiny
     // intake pushes a plain "risky" from borderline into clearly risky. A
-    // non-academic requirement (interview/portfolio) does NOT affect risk — it's
+    // non-academic requirement (interview/portfolio) does NOT affect risk – it's
     // a duty surfaced as a reminder, not a score penalty.
     if (p.tier === "safe" || p.tier === "fair") return "solid";
     if (p.tier === "unsafe") return "reach";
@@ -338,7 +338,7 @@ export function analyzePortfolio(rawPicks: (ProgrammeResult | null)[], t: Transl
   // "No data" (a new / unrecorded programme with no 2025 benchmark) is its OWN
   // category, NOT a risk. A reach is below a known range; an unknown is simply
   // unestimable. We keep it out of the "problem" buckets (aUnusable / review)
-  // so a no-data pick never reads as a risky choice to replace — instead it
+  // so a no-data pick never reads as a risky choice to replace – instead it
   // gets a neutral "no data, check it yourself" note (see band-a-no-data).
   const aUnknown = aBuckets.filter((x) => x.bucket === "unknown");
   const aUnusable = aBuckets.filter((x) => x.bucket === "blocked" || x.bucket === "reach");
@@ -380,7 +380,7 @@ export function analyzePortfolio(rawPicks: (ProgrammeResult | null)[], t: Transl
 
   function bandAAction(): string {
     // "review" = a score/risk pick to act on. EXCLUDES no-data (own neutral note)
-    // AND blocked/ineligible — the eligibility finding owns those, so we don't
+    // AND blocked/ineligible – the eligibility finding owns those, so we don't
     // repeat "remove the ineligible pick" in another finding's action.
     const review = aBuckets.filter((x) => x.bucket !== "solid" && x.bucket !== "unknown" && x.bucket !== "blocked");
     const highRisk = review.filter((x) => x.bucket === "risky" || x.bucket === "reach");
@@ -398,7 +398,7 @@ export function analyzePortfolio(rawPicks: (ProgrammeResult | null)[], t: Transl
 
   function bandAReviewDetail(): string {
     // No-data picks excluded (not a problem to fix here); blocked picks excluded
-    // too — the eligibility finding owns them, so they don't double-appear in a
+    // too – the eligibility finding owns them, so they don't double-appear in a
     // Band-A "review these" list.
     const review = aBuckets.filter((x) => x.bucket !== "solid" && x.bucket !== "unknown" && x.bucket !== "blocked");
     const action = bandAAction();
@@ -479,7 +479,7 @@ export function analyzePortfolio(rawPicks: (ProgrammeResult | null)[], t: Transl
       return t("find.weak.reason.belowMedian.one", { slot: x.p.slot, code });
     }
     if (x.bucket === "reach") return t("find.weak.reason.belowRange.one", { slot: x.p.slot, code });
-    // Intake size is NOT mentioned here — the few-places finding owns that caveat,
+    // Intake size is NOT mentioned here – the few-places finding owns that caveat,
     // so "very few places" never appears in both a weak reason AND that finding.
     const bits = [t(scoreBand === "below-lq" || scoreBand === "far-below-lq" ? "find.weak.bit.belowRange" : "find.weak.bit.slotRisk")];
     return t("find.weak.reason.has", { slot: x.p.slot, code, bits: humanList(bits, lang) });
@@ -614,7 +614,7 @@ export function analyzePortfolio(rawPicks: (ProgrammeResult | null)[], t: Transl
   //    lot year to year, so even a Band A pick comfortably above the
   //    median isn't as safe as the score alone suggests. Flagged on its
   //    own so it stands out (and getSlotRisk already caps "safe" here).
-  // few-places is its own caveat (volatile cut-off) and THIS finding owns it — the
+  // few-places is its own caveat (volatile cut-off) and THIS finding owns it – the
   // weak reasons no longer mention intake, so there's no overlap. Exclude only
   // ineligible picks: a small-intake note is moot when you can't enter at all (and
   // the eligibility finding owns them).
@@ -642,27 +642,51 @@ export function analyzePortfolio(rawPicks: (ProgrammeResult | null)[], t: Transl
   //    and never critical: our data may be incomplete and these don't change the
   //    calculated score. Each pick's own chance row already lists its requirements
   //    inline, so here we summarise COMPACTLY by requirement TYPE → which slots
-  //    need it (bounded by the ~8 types, not by the number of picks — which kept
+  //    need it (bounded by the ~8 types, not by the number of picks – which kept
   //    the old per-programme enumeration very long).
-  // Exclude ineligible picks — reminding someone to prep an interview/portfolio
+  // Exclude ineligible picks – reminding someone to prep an interview/portfolio
   // for a programme they can't enter is moot, and double-counts the eligibility
   // finding. Duties are for picks still in play.
-  const dutyPicks = picks.filter((p) => p.selection.length > 0 && p.result.eligibility.eligible);
+  const isTentativeInterviewItem = (it: SelectionItem) => {
+    const when = (it.when || "").toLowerCase();
+    return it.type === "interview" && (!it.timing || /\bwhen necessary\b|\bif necessary\b|\bif required\b|\bwhere necessary\b/.test(when));
+  };
+  const dutyPicks = picks
+    .map((p) => ({ ...p, selection: p.selection.filter((it) => !isTentativeInterviewItem(it)) }))
+    .filter((p) => p.selection.length > 0 && p.result.eligibility.eligible);
   if (dutyPicks.length > 0) {
     const dutyRefs = dutyPicks.map(slotRef);
     const TYPE_ORDER: SelectionType[] = ["interview", "portfolio", "audition", "physical-test", "practical-test", "written-test", "aptitude-test", "oea"];
-    const slotsByType = new Map<SelectionType, string[]>();
-    for (const p of dutyPicks) {
-      for (const it of p.selection) {
-        const slots = slotsByType.get(it.type) ?? [];
-        if (!slots.includes(p.slot)) slots.push(p.slot);
-        slotsByType.set(it.type, slots);
+    const slotSep = lang === "zh" ? "、" : ", ";
+    // Group label → slots. Interviews are split by official timing. Vague
+    // "when necessary" entries are shown in Detail only, not called out here.
+    const groupSlots = new Map<string, string[]>();
+    const groupOrder: string[] = [];
+    const addGroup = (label: string, slot: string) => {
+      let slots = groupSlots.get(label);
+      if (!slots) { slots = []; groupSlots.set(label, slots); groupOrder.push(label); }
+      if (!slots.includes(slot)) slots.push(slot);
+    };
+    for (const ty of TYPE_ORDER) {
+      for (const p of dutyPicks) {
+        for (const it of p.selection) {
+          if (it.type !== ty) continue;
+          const label = ty === "interview"
+            ? (it.timing === "both"
+                ? t("find.duties.interviewBoth")
+                : it.timing === "post-results"
+                ? t("find.duties.interviewAfter")
+                : it.timing === "pre-results"
+                  ? t("find.duties.interviewBefore")
+                  : t(selectionTypeKey(ty)))
+            : t(selectionTypeKey(ty));
+          addGroup(label, p.slot);
+        }
       }
     }
-    const slotSep = lang === "zh" ? "、" : ", ";
-    const groups = TYPE_ORDER.filter((ty) => slotsByType.has(ty))
-      .map((ty) => `${t(selectionTypeKey(ty))} — ${slotsByType.get(ty)!.join(slotSep)}`)
-      .join(" · ");
+    const groupJoin = lang === "zh" ? "、" : " · ";
+    const labelSep = lang === "zh" ? "： " : " – ";
+    const groups = groupOrder.map((label) => `${label}${labelSep}${groupSlots.get(label)!.join(slotSep)}`).join(groupJoin);
     findings.push({
       id: "non-academic-duties",
       severity: "info",
@@ -689,17 +713,7 @@ export function analyzePortfolio(rawPicks: (ProgrammeResult | null)[], t: Transl
     });
   }
 
-  // 6. Institution concentration – minor, only when literally all in one.
-  if (total >= 4 && institutions === 1) {
-    findings.push({
-      id: "institution",
-      severity: "info",
-      title: t("find.institution.title"),
-      detail: t("find.institution.detail"),
-    });
-  }
-
-  // 7. Score-isn't-everything caveat. A published LQ sitting ABOVE the median
+  // 6. Score-isn't-everything caveat. A published LQ sitting ABOVE the median
   //    can't be a normal score distribution – it signals the programme isn't
   //    selecting on DSE results alone (interview / portfolio / band choice /
   //    other factors), so the numbers are reference-only, not predictive.
@@ -756,7 +770,7 @@ export function analyzePortfolio(rawPicks: (ProgrammeResult | null)[], t: Transl
     // An ineligible Band A pick beside a realistic anchor → critical (the slot
     // can't yield an offer). A score-reach alone does NOT reach here; it falls
     // to the "weak" branch below as a warning, matching its band-a-weak finding.
-    // The sub names ONLY the ineligible pick(s) — weak/reach picks get their own
+    // The sub names ONLY the ineligible pick(s) – weak/reach picks get their own
     // band-a-weak finding, so don't lump them under "ineligible" in this verdict.
     verdict = {
       tone: "critical",

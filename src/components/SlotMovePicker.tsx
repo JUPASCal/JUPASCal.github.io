@@ -1,6 +1,8 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { slotLabel } from "../lib/slots";
 import { useLang } from "../lib/i18n";
+import "./SlotMovePicker.css";
+
 
 type Props = {
   // Current 0-based position of the item being swapped.

@@ -1,0 +1,342 @@
+/* ResultsView styles */
+
+
+
+.main-column {
+  display: grid;
+  gap: 0;
+}
+
+
+.results-panel {
+  padding: 0;
+  overflow: hidden;
+  overflow-anchor: none;
+}
+
+
+/* Windowed-render sentinels (ResultsView): tiny, invisible markers that
+   trigger loading the next chunk when scrolled near. Kept observable
+   (1px) but visually inert. */
+.results-sentinel {
+  height: 1px;
+}
+
+
+.results-sentinel-row td {
+  padding: 0;
+  border: 0;
+  height: 1px;
+}
+
+
+.table-shell {
+  max-height: calc(100vh - 350px);
+  overflow: auto;
+}
+
+
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.84rem;
+}
+
+
+.results-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--thead);
+}
+
+
+.results-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background: var(--thead);
+}
+
+
+.results-table th {
+  border-bottom: 1px solid var(--line);
+  padding: 10px var(--space-3);
+  text-align: left;
+  vertical-align: top;
+}
+
+
+.results-table td {
+  border-bottom: 1px solid var(--line);
+  padding: 10px var(--space-3);
+  text-align: left;
+  vertical-align: top;
+}
+
+
+.results-table th {
+  color: var(--muted);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+
+.sort-header {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  border: 0;
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  text-transform: inherit;
+  letter-spacing: inherit;
+  font-size: inherit;
+  font-weight: 900;
+}
+
+
+.sort-header span {
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+
+.sort-header.active {
+  color: var(--accent);
+}
+
+
+.results-table tbody tr {
+  background: var(--row-bg);
+}
+
+
+.results-table tbody tr[role="button"] {
+  cursor: pointer;
+}
+
+
+.results-table tbody tr:hover {
+  background: var(--hover);
+}
+
+
+.results-table tbody tr.selected {
+  background: var(--hover);
+}
+
+
+.results-table tbody tr.picked {
+  background: var(--active);
+}
+
+
+.results-table td:first-child {
+  min-width: 290px;
+}
+
+
+.results-table td:first-child strong {
+  display: block;
+}
+
+
+.results-table td:first-child span {
+  display: block;
+}
+
+
+.programme-cell-head {
+  display: flex !important;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+
+.programme-cell-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+
+.programme-cell-text strong {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 6px;
+}
+
+
+.selected-slot-badge {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 20px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--surface-strong);
+  padding: 0 7px;
+  font-size: 0.68rem;
+  font-weight: 950;
+  line-height: 1;
+  letter-spacing: 0;
+  vertical-align: middle;
+}
+
+
+/* Preview badge (a clicked suggestion, not in the plan): green ★ so it reads as
+   a "suggested safer option", distinct from the accent plan-slot badges. */
+.selected-slot-badge.is-preview {
+  background: var(--good);
+}
+
+
+:root[data-theme="dark"] .selected-slot-badge {
+  color: #15120f;
+}
+
+
+.results-table td:first-child .programme-cell-text > span {
+  color: var(--muted);
+  line-height: 1.25;
+}
+
+
+.pick-button {
+  display: inline-grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  border: 1.5px solid var(--line);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--bg);
+  padding: 0;
+  font-size: 0.78rem;
+  font-weight: 950;
+}
+
+
+.pick-button.picked {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--bg);
+}
+
+
+.results-table td strong {
+  display: block;
+}
+
+
+.results-table td small {
+  display: block;
+}
+
+
+.results-table td span {
+  display: block;
+}
+
+
+.result-cards {
+  display: none;
+}
+
+@media (max-width: 920px) {
+
+
+    .results-panel {
+      position: relative;
+      overflow: visible;
+    }
+
+
+    .table-shell {
+      display: none;
+    }
+
+
+    .result-cards {
+      display: grid;
+      gap: 7px;
+      margin-top: var(--space-3);
+      max-height: none;
+      overflow: visible;
+      opacity: 1;
+      transition: opacity 160ms ease;
+    }
+
+
+    .result-cards.compact-results {
+      padding: 0;
+      margin: var(--space-3) var(--space-4) 0;
+      transition: none;
+    }
+
+
+    .results-panel.mobile-collapsed .result-cards {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      padding-top: 0;
+      padding-bottom: 0;
+      pointer-events: none;
+    }
+
+
+    .results-panel.mobile-collapsed .selection-tray {
+      display: none;
+    }
+
+
+    .results-panel.mobile-collapsed .selected-programme-summary {
+      display: grid;
+      animation: collapseIn 220ms ease both;
+    }
+
+
+    .mobile-card .pick-button {
+      width: 18px;
+      height: 18px;
+      flex-basis: 18px;
+    }
+
+
+    .result-cards .mobile-card {
+      contain: layout paint;
+    }
+
+
+    .mobile-card .selected-slot-badge {
+      min-width: 26px;
+      height: 19px;
+      padding-inline: 7px;
+      font-size: 0.66rem;
+    }
+
+
+    .compact-results .mobile-card .pick-button {
+      grid-column: 3;
+    }
+}
+
+
+@media print {
+
+
+    .results-panel {
+      display: none !important;
+    }
+
+
+    .main-column {
+      display: none;
+    }
+}

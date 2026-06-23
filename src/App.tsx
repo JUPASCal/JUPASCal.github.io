@@ -49,6 +49,7 @@ const DEFAULT_FILTERS: Filters = {
   institutions: [],
   eligibleOnly: false,
   band: "all",
+  interview: "all",
 };
 
 const INITIAL_HASH_STATE = readHashState();
@@ -128,15 +129,32 @@ function App() {
   const [route, setRoute] = useState<"home" | "about">(() => getRoute());
   useEffect(() => {
     const onHashChange = () => setRoute(getRoute());
+    const onOpenAbout = () => setRoute("about");
     window.addEventListener("hashchange", onHashChange);
-    return () => window.removeEventListener("hashchange", onHashChange);
+    window.addEventListener("jupas:open-about", onOpenAbout);
+    return () => {
+      window.removeEventListener("hashchange", onHashChange);
+      window.removeEventListener("jupas:open-about", onOpenAbout);
+    };
   }, []);
 
-  if (route === "about") {
-    return <AboutPage />;
+  function closeAbout() {
+    setRoute("home");
+    if (window.location.hash === "#about") {
+      window.history.replaceState(
+        window.history.state,
+        "",
+        window.location.pathname + window.location.search,
+      );
+    }
   }
 
-  return <CalculatorApp />;
+  return (
+    <>
+      <CalculatorApp />
+      {route === "about" ? <AboutPage onClose={closeAbout} /> : null}
+    </>
+  );
 }
 
 function CalculatorApp() {
@@ -439,6 +457,12 @@ function CalculatorApp() {
     setShowWelcome(true);
   }
 
+  function openAboutFromWelcome() {
+    setWelcomeExiting(false);
+    setShowWelcome(false);
+    window.dispatchEvent(new Event("jupas:open-about"));
+  }
+
   useEffect(() => {
     let cancelled = false;
 
@@ -725,11 +749,11 @@ function CalculatorApp() {
   // useLayoutEffect runs before paint and a direct scrollTop assignment is
   // instant (scroll-behavior is forced auto), so there's no flash.
   //
-  // Going FORWARD a view opens at the top (preserving the header-reveal state).
-  // Going BACK restores the scroll you left that view at — so detail→compare or
-  // step-3→step-2 returns you where you were, not to the top. Per-view scroll is
-  // remembered in viewScrollRef, captured here on leave (el.scrollTop still holds
-  // the leaving view's position until we overwrite it).
+  // New views open at the top (preserving the header-reveal state). Views with a
+  // saved position restore it no matter which direction you navigated — so
+  // Step 3 behaves like Steps 1/2 when you leave it and come back. Per-view
+  // scroll is remembered in viewScrollRef, captured here on leave (el.scrollTop
+  // still holds the leaving view's position until we overwrite it).
   const viewScrollRef = useRef<Record<string, number>>({});
   // The live scroll of the app-shell, updated synchronously on every scroll. The
   // per-view save below MUST read this (not el.scrollTop): when a view switches
@@ -756,10 +780,8 @@ function CalculatorApp() {
       // el.scrollTop, which would lose the real position.
       viewScrollRef.current[prevKey] = lastScrollRef.current;
 
-      // Back = step decreased, or the Step-3 sub-view slid backward.
-      const goingBack = prevStep !== step ? step < (prevStep as number) : mobileDetailDirection === "backward";
       const saved = viewScrollRef.current[newKey];
-      if (goingBack && typeof saved === "number") {
+      if (typeof saved === "number") {
         el.scrollTop = saved;
       } else {
         const headerWasShowing = lastScrollRef.current < h / 2;
@@ -971,6 +993,7 @@ function CalculatorApp() {
     worker.postMessage({ type: "compute", grades: deferredGrades, token });
   }, [programmes, deferredGrades]);
 
+  const selectedOnlyFilterKey = selectedOnly ? pickedCodes.join("|") : "";
   const filteredResults = useMemo(() => {
     const selectedSet = new Set(pickedCodes.filter((c): c is string => c !== null));
     const baseResults = selectedOnly
@@ -983,7 +1006,7 @@ function CalculatorApp() {
       return sortResults(filterResults(baseResults, filters), sortKey, sortDirection, deltaMode);
     }
     return sortResults(baseResults, sortKey, sortDirection, deltaMode);
-  }, [allResults, filters, pickedCodes, selectedOnly, sortDirection, sortKey, deltaMode]);
+  }, [allResults, filters, selectedOnly, selectedOnlyFilterKey, sortDirection, sortKey, deltaMode]);
 
   // Defer the heavy filtered list – ResultsView renders ~864 row
   // elements (table + cards across desktop/mobile) per result, so
@@ -1249,7 +1272,16 @@ function CalculatorApp() {
       activeProfileId: sharedViewActive ? undefined : activeProfileId,
       onProfileChange: sharedViewActive ? undefined : setActiveProfileId,
       onRename: sharedViewActive ? undefined : (name: string) => renameProfile(activeProfileId, name),
+      // Full profile-switcher chip in the header (same as the calculator). The
+      // add / rename-by-id / delete / reset callbacks below satisfy AppHeader's
+      // chip guard. Omitted for received shares (you don't manage the sender's
+      // profiles), which falls the header back to a bare brand + settings tray.
+      onProfileAdd: sharedViewActive ? undefined : addProfile,
+      onProfileRenameById: sharedViewActive ? undefined : renameProfile,
+      onProfileDelete: sharedViewActive ? undefined : deleteProfile,
+      onResetAll: sharedViewActive ? undefined : resetAllData,
       // "Edit Profile" (top-bar pill) → grade selection of the current profile.
+      // Only shown when the chip isn't (received shares); the chip supersedes it.
       onEditProfile: sharedViewActive ? undefined : () => { setStep(1); exitShareMode(); },
       onExitShareMode: exitShareModeAnimated,
       exiting: shareViewExiting,
@@ -1294,7 +1326,7 @@ function CalculatorApp() {
 
   if (loadError) {
     return (
-      <main className="app-shell">
+      <main className={`app-shell ${isDesktop ? "layout-desktop" : "layout-mobile"}`}>
         <section className="panel error-panel">
           <h1>{t("app.loadError.title")}</h1>
           <p>{loadError}</p>
@@ -1673,6 +1705,7 @@ function CalculatorApp() {
           onReorder={reorderPickedCodes}
           onSwap={swapPickedCodes}
           onRemove={removePickedCode}
+          onClearAll={resetSelectedProgrammes}
           onSetSlotCode={setSlotCode}
           shareButtons={desktopShareButtons}
           allResults={allResults}
@@ -1869,6 +1902,7 @@ function CalculatorApp() {
         theme={theme}
         onThemeChange={setTheme}
         onStart={startFromWelcome}
+        onAbout={openAboutFromWelcome}
         exiting={welcomeExiting}
       />
     ) : null}

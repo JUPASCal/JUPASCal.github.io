@@ -1,0 +1,479 @@
+/* AppHeader styles */
+
+
+
+.app-topbar {
+  position: relative;
+  /* Sits above sticky panel headers (z-26) and stepper-bar (z-30) so the
+     profile dropdown – which lives inside this stacking context – can paint
+     over them without being clipped. */
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  /* Desktop breathing room: vertical padding so the banner text
+     isn't flush against its own box edges, plus a clear gap below
+     so it doesn't crowd the panels. The mobile media queries
+     override both to 0 – there the stepper-bar tucks flush under
+     the topbar and draws its own divider. */
+  margin-bottom: var(--space-6);
+  padding: var(--space-4) 0 var(--space-2);
+  /* Transparent on desktop so the banner blends into the body's
+     warm gradient – a solid --bg here paints a mismatched dark
+     rectangle over the gradient. On mobile the topbar gets a solid
+     --bg (see the @920 rule) to match the sticky stepper-bar below
+     and mask scrolling content; that's where the seam concern was. */
+  background: transparent;
+}
+
+
+.app-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  min-width: 0;
+  text-decoration: none;
+  color: inherit;
+  outline: none;
+}
+
+
+/* Cap icon before the wordmark. Cap follows --ink (matches "JUPASCal"); the
+   tassel stays gold. Sized a touch under the wordmark's cap height. */
+.app-brand-logo {
+  height: clamp(1.1rem, 2vw, 1.4rem);
+  width: auto;
+  flex: 0 0 auto;
+  color: var(--ink);
+}
+
+
+.app-brand:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+
+.app-topbar-left {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+
+/* "Edit Profile" pill on the share / analysis top bar (sits where the profile
+   pill is on the calculator pages); returns to grade selection. Mirrors the
+   profile-chip pill so the header reads consistently. */
+.topbar-edit-profile {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--surface-strong) 82%, transparent);
+  padding: 0 13px;
+  border-radius: 999px;
+  color: var(--ink);
+  font-size: 0.86rem;
+  font-weight: 750;
+  letter-spacing: -0.005em;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  transition: border-color 160ms ease, color 160ms ease, background 160ms ease;
+}
+
+
+.topbar-edit-profile:hover {
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 50%, var(--line));
+  background: var(--active);
+  outline: none;
+}
+
+
+.topbar-edit-profile:focus-visible {
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 50%, var(--line));
+  background: var(--active);
+  outline: none;
+}
+
+
+.app-brand-name {
+  font-family: "Gelasio", Georgia, "Times New Roman", "Source Serif Pro", ui-serif, serif;
+  font-size: clamp(1.6rem, 3vw, 2.1rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+
+.app-brand-year {
+  color: var(--accent);
+  margin-left: 0.18em;
+}
+
+
+.app-topbar-actions {
+  display: inline-flex;
+  gap: var(--space-2);
+  align-items: center;
+  justify-content: flex-end;
+}
+
+
+.topbar-link {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  padding: 8px 10px;
+  border-radius: 8px;
+  color: var(--muted);
+  font-size: 0.86rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition: color 160ms ease, background 160ms ease;
+}
+
+
+.topbar-link:hover {
+  color: var(--ink);
+  background: color-mix(in srgb, var(--ink) 6%, transparent);
+  outline: none;
+}
+
+
+.topbar-link:focus-visible {
+  color: var(--ink);
+  background: color-mix(in srgb, var(--ink) 6%, transparent);
+  outline: none;
+}
+
+
+.topbar-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  flex: 0 0 auto;
+  border-radius: 10px;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 160ms ease, background 160ms ease, transform 160ms ease;
+}
+
+
+.topbar-icon:hover {
+  color: var(--ink);
+  background: color-mix(in srgb, var(--ink) 6%, transparent);
+  outline: none;
+}
+
+
+.topbar-icon:focus-visible {
+  color: var(--ink);
+  background: color-mix(in srgb, var(--ink) 6%, transparent);
+  outline: none;
+}
+
+
+.topbar-icon:active {
+  transform: scale(0.94);
+}
+
+
+/* Settings gear + popover (collapses Language + Dark mode). */
+.topbar-settings {
+  position: relative;
+  display: inline-flex;
+}
+
+
+.settings-popover {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: row;
+  gap: 2px;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface-strong);
+  box-shadow: var(--shadow);
+}
+
+
+/* Original Language + Dark-mode icon buttons, now living inside the settings
+   popover (square topbar-icon footprint). */
+.settings-popover .topbar-icon {
+  color: var(--ink);
+}
+
+
+.settings-popover .topbar-icon:hover {
+  background: color-mix(in srgb, var(--ink) 8%, transparent);
+}
+
+
+.settings-popover .topbar-icon:focus-visible {
+  background: color-mix(in srgb, var(--ink) 8%, transparent);
+}
+
+
+.lang-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  position: relative;
+}
+
+
+.lang-toggle-current {
+  line-height: 1;
+}
+
+
+/* Tiny swap arrow affordance, bottom-right where the glyph doesn't reach. */
+.lang-toggle-swap {
+  position: absolute;
+  bottom: 3px;
+  right: 3px;
+  width: 8px;
+  height: 8px;
+  opacity: 0.55;
+  transition: opacity 160ms ease, transform 200ms ease;
+}
+
+
+.lang-toggle:hover .lang-toggle-swap {
+  opacity: 1;
+  transform: rotate(180deg);
+}
+
+
+.lang-toggle:focus-visible .lang-toggle-swap {
+  opacity: 1;
+  transform: rotate(180deg);
+}
+
+
+.theme-icon[aria-pressed="true"] {
+  color: var(--accent);
+}
+
+
+.welcome-brand .app-brand-name {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+}
+
+
+/* ── Share View ─────────────────────────────────────── */
+
+/* Share view shares the same shell as the calculator
+   (.app-shell.layout-mobile), so padding/width/scroll behaviour
+   come from those classes. We only override what's specific to the
+   share view: a narrower max-width readable line length and the
+   flex column for inter-section gap. */
+/* Back to the calculator (Step 3) from the Analysis / Share page. Lives
+   in the LEFT of the (sticky) header, so it stays in reach while
+   scrolling instead of scrolling away. */
+/* Matches .topbar-icon (the right-side info/gear) exactly — borderless,
+   transparent, same 36px box — so the left arrow and right icons stay aligned
+   and equal in weight. */
+.topbar-back {
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  flex: 0 0 auto;
+  margin-right: var(--space-1);
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 160ms ease, background 160ms ease, transform 120ms ease;
+}
+
+
+.topbar-back:hover {
+  color: var(--ink);
+  background: color-mix(in srgb, var(--ink) 6%, transparent);
+  outline: none;
+}
+
+
+.topbar-back:focus-visible {
+  color: var(--ink);
+  background: color-mix(in srgb, var(--ink) 6%, transparent);
+  outline: none;
+}
+
+
+.topbar-back:active {
+  transform: translateX(-2px);
+}
+
+@media (max-width: 920px) {
+
+
+    .app-topbar {
+      align-items: center;
+      gap: var(--space-2);
+      /* extend to viewport edges so the bar's bg fully covers the glass veil
+         behind it (no gutter strip showing the tinted veil). No bottom
+         margin AND no bottom padding so the AppHeader sits flush against
+         the stepper bar below (stepper has its own 5px top padding).
+         No border-bottom – the stepper-bar below draws the divider; a
+         second border here produced a visible 1px seam between them. */
+      margin: 0 calc(-1 * var(--space-4)) 0;
+      padding: var(--space-2) var(--space-4) 0;
+      /* Solid fill on mobile so the sticky topbar matches the
+         stepper-bar's --bg (no colour seam) and masks content
+         scrolling underneath. Desktop stays transparent to blend
+         with the body gradient. */
+      background: var(--bg);
+    }
+
+
+    .app-brand-name {
+      font-size: 1.15rem;
+      letter-spacing: -0.025em;
+    }
+
+
+    .app-brand-year {
+      margin-left: 0.14em;
+    }
+
+
+    .topbar-edit-profile {
+      min-height: 32px;
+      padding: 0 11px;
+      font-size: 0.78rem;
+    }
+
+
+    .topbar-icon {
+      width: 32px;
+      height: 32px;
+    }
+
+
+    .app-topbar-actions {
+      gap: 4px;
+      min-width: 0;
+    }
+
+
+    .app-brand {
+      gap: var(--space-2);
+    }
+
+
+    /* These pages have no stepper-bar, so the topbar itself is the sticky
+       top chrome – the same role `.stepper-bar` plays in the calculator,
+       so the header stays put while the plan scrolls. The mobile
+       `.app-topbar` rule already gives it a solid `--bg` fill and
+       full-bleed side margins; we add the stick + a 3px bottom border so
+       it reads as a divider and masks content scrolling beneath it. */
+    .share-view > .app-topbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      padding-bottom: var(--space-2);
+      border-bottom: 3px solid var(--line);
+    }
+
+
+    /* These pages have no stepper-bar, so the topbar itself is the sticky
+       top chrome – the same role `.stepper-bar` plays in the calculator,
+       so the header stays put while the plan scrolls. The mobile
+       `.app-topbar` rule already gives it a solid `--bg` fill and
+       full-bleed side margins; we add the stick + a 3px bottom border so
+       it reads as a divider and masks content scrolling beneath it. */
+    .analysis-view > .app-topbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      padding-bottom: var(--space-2);
+      border-bottom: 3px solid var(--line);
+    }
+}
+
+
+@media (max-width: 400px) {
+  .app-brand-name {
+      font-size: 1.05rem;
+    }
+}
+
+
+@media (max-width: 560px) {
+  .app-topbar {
+      /* No bottom margin / no bottom padding so the topbar sits
+         flush against the sticky stepper bar – the stepper has its
+         own 5px top padding for breathing room. */
+      margin-bottom: 0;
+      padding-block: var(--space-2) 0;
+    }
+
+
+    .topbar-link {
+      padding: 6px 8px;
+      font-size: 0.82rem;
+    }
+
+
+    .topbar-icon {
+      width: 32px;
+      height: 32px;
+    }
+}
+
+
+@media (min-width: 921px) {
+
+
+    /* .about-doc already centres itself (640px). Centre the share content at
+       the width the page used to cap to — everything except the full-width top
+       bar and the out-of-flow toast. */
+    .share-view > :not(.app-topbar):not(.share-toast) {
+      width: min(1120px, 100%);
+      margin-inline: auto;
+    }
+}
+
+
+@media print {
+
+
+    .app-topbar {
+      display: none !important;
+    }
+
+
+    .app-topbar-actions {
+      display: none !important;
+    }
+}
+

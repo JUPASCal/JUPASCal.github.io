@@ -1,0 +1,86 @@
+/* NameModal styles */
+
+
+
+/* ── Rename Modal ───────────────────────────────────────── */
+
+.rename-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(29, 42, 47, 0.35);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-5);
+}
+
+
+.rename-modal {
+  background: var(--surface-strong);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: var(--space-5);
+  width: 100%;
+  max-width: 380px;
+  box-shadow: 0 8px 40px rgba(29, 42, 47, 0.18);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+
+.rename-modal-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0;
+}
+
+
+.rename-modal-input {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 0.95rem;
+  padding: var(--space-3) var(--space-4);
+  outline: none;
+  transition: border-color 0.15s;
+  margin-bottom: var(--space-4);
+}
+
+
+.rename-modal-input:focus {
+  border-color: var(--accent);
+}
+
+
+.rename-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+}
+
+
+.rename-modal-actions .stepper-next-btn {
+  min-height: 38px;
+  padding: 0 var(--space-5);
+  font-size: 0.9rem;
+  border-radius: 12px;
+}
+
+
+.rename-modal-actions .ghost-button {
+  min-height: 38px;
+  border-radius: 12px;
+  padding: 0 var(--space-4);
+  /* Don't let the full-width Save button (mobile .stepper-next-btn rule) squeeze
+     Cancel until its label wraps — keep it on one line at its content width. */
+  white-space: nowrap;
+  flex-shrink: 0;
+}

@@ -5,9 +5,11 @@ import { bandLabelKey, formatDelta, formatPercent } from "../lib/results";
 import { slotLabel } from "../lib/slots";
 import { useLang, pickName, type Lang, type Translate } from "../lib/i18n";
 import { localizedShortSubject } from "../lib/subjectsI18n";
-import { getSelection, selectionTypeKey, selectionTimingKey, selectionSalienceKey } from "../lib/selection";
+import { getSelection, selectionTypeKey, selectionTimingKey, selectionSalienceKey, translateSelectionText } from "../lib/selection";
 import { loadProgrammeDetails, type DescBlock, type ProgrammeDetail } from "../lib/programmeDetails";
 import type { CandidateScore, EligibilityDetail, OfferStatistic, Programme, ProgrammeResult } from "../types/jupas";
+import "./DetailPanel.css";
+
 
 // Defence-in-depth for every href that originates from SCRAPED programme data
 // (overview links, tuition page, JUPAS/institution sites). The scrape step only
@@ -45,6 +47,18 @@ type Props = {
   onSwapToSlot?: (code: string) => void;
 };
 
+function scrollParentFor(node: HTMLElement | null): HTMLElement | null {
+  let parent = node?.parentElement ?? null;
+  while (parent) {
+    const style = window.getComputedStyle(parent);
+    if (/(auto|scroll|overlay)/.test(`${style.overflow}${style.overflowY}`)) {
+      return parent;
+    }
+    parent = parent.parentElement;
+  }
+  return null;
+}
+
 export function DetailPanel({ results, activeCode, reviewRequest, onActiveCodeChange, onRemove, readOnly = false, previewCode, suggestionSlots, onAddToPlan, onSwapToSlot }: Props) {
   const { t, lang } = useLang();
   const [auditOpen, setAuditOpen] = useState(false);
@@ -67,17 +81,28 @@ export function DetailPanel({ results, activeCode, reviewRequest, onActiveCodeCh
   useEffect(() => {
     const panel = panelRef.current;
     if (!panel) return;
+    const scrollParent = scrollParentFor(panel);
     const update = () => {
-      // Desktop: panel scrolls internally
-      if (panel.scrollTop > 0) { setIsStuck(true); return; }
-      // Mobile: page scrolls – use -8px tolerance so scrollIntoView (which lands at 0)
-      // doesn't prematurely trigger the minimal header state
+      // Desktop: panel scrolls internally.
+      if (panel.scrollTop > 0) {
+        setIsStuck(true);
+        return;
+      }
+      if (scrollParent && scrollParent !== panel && scrollParent.scrollTop > 0) {
+        setIsStuck(true);
+        return;
+      }
+      // Mobile: page scrolls – use -8px tolerance so scrollIntoView (which lands
+      // at 0) doesn't prematurely trigger the minimal header state.
       setIsStuck(panel.getBoundingClientRect().top < -8);
     };
     panel.addEventListener("scroll", update, { passive: true });
+    scrollParent?.addEventListener("scroll", update, { passive: true });
     window.addEventListener("scroll", update, { passive: true });
+    update();
     return () => {
       panel.removeEventListener("scroll", update);
+      scrollParent?.removeEventListener("scroll", update);
       window.removeEventListener("scroll", update);
     };
   }, []);
@@ -386,14 +411,48 @@ export function DetailPanel({ results, activeCode, reviewRequest, onActiveCodeCh
               <ul className="detail-selection-list">
                 {selection.items.map((item) => {
                   const timingKey = selectionTimingKey(item.timing);
+                  const tentativeInterview = item.type === "interview" && /\bwhen necessary\b|\bif necessary\b|\bif required\b|\bwhere necessary\b/i.test(item.when || "");
                   return (
                     <li key={item.type} className={`detail-selection-item sal-${item.salience}`}>
                       <strong>{t(selectionTypeKey(item.type))}</strong>
                       <span className="detail-selection-meta">
                         {timingKey ? <span>{t(timingKey)}</span> : null}
-                        <span>{t(selectionSalienceKey(item.salience))}</span>
+                        {tentativeInterview ? <span>{t("sel.tentative")}</span> : <span>{t(selectionSalienceKey(item.salience))}</span>}
                         {item.inferred ? <em>{t(item.inferred === "stale" ? "sel.stale" : "sel.inferred")}</em> : null}
                       </span>
+                      {item.type === "interview" && (item.before || item.after || item.date || item.format) ? (
+                        <div className="detail-selection-structured">
+                          {item.before ? (
+                            <div className="structured-row">
+                              <em>{t("sel.structured.before")}</em>
+                              <span>{translateSelectionText(item.before, lang)}</span>
+                            </div>
+                          ) : null}
+                          {item.after ? (
+                            <div className="structured-row">
+                              <em>{t("sel.structured.after")}</em>
+                              <span>{translateSelectionText(item.after, lang)}</span>
+                            </div>
+                          ) : null}
+                          {item.date ? (
+                            <div className="structured-row">
+                              <em>{t("sel.structured.date")}</em>
+                              <span>{translateSelectionText(item.date, lang)}</span>
+                            </div>
+                          ) : null}
+                          {item.format ? (
+                            <div className="structured-row">
+                              <em>{t("sel.structured.format")}</em>
+                              <span>{translateSelectionText(item.format, lang)}</span>
+                            </div>
+                          ) : null}
+                        </div>
+                      ) : item.when ? (
+                        <span className="detail-selection-source">
+                          <span>{t("detail.selection.source")}</span>
+                          <q>{translateSelectionText(item.when, lang)}</q>
+                        </span>
+                      ) : null}
                       {item.note ? <span className="detail-selection-note muted">{t(item.note)}</span> : null}
                     </li>
                   );
@@ -510,9 +569,9 @@ function ProgrammeExtraInfoCard({ programme }: { programme: Programme }) {
 
   return (
     <section className="extra-info-card formula-card">
-      <div className="extra-info-eyebrow">
+      <div className="detail-card-eyebrow">
         <span>{t("detail.moreInfo")}</span>
-        <b className="extra-info-tally">{t("detail.sections", { n: sections.length })}</b>
+        <b className="tally-badge extra-info-tally">{t("detail.sections", { n: sections.length })}</b>
       </div>
 
       <hr className="weight-divider" />
@@ -712,10 +771,10 @@ function OffersBlock({ programme }: { programme: Programme }) {
 
   return (
     <section className="offers-card formula-card">
-      <div className="offers-card-eyebrow">
+      <div className="detail-card-eyebrow">
         <span>{t("detail.bandAOffers", { year: latestYear })}</span>
         {latestRate !== null ? (
-          <b className="offers-tally">{t("detail.rate", { rate: latestRate.toFixed(1) })}</b>
+          <b className="tally-badge offers-tally">{t("detail.rate", { rate: latestRate.toFixed(1) })}</b>
         ) : null}
       </div>
       <p className="formula-text">
@@ -808,9 +867,9 @@ function EligibilityBlock({
       className={"eligibility-card formula-card" + (eligible ? " all-passed" : " has-unmet")}
       data-all-passed={eligible ? "true" : "false"}
     >
-      <div className="eligibility-card-eyebrow">
+      <div className="detail-card-eyebrow">
         <span>{t("detail.eligibility")}</span>
-        <b className={"eligibility-block-tally " + (eligible ? "good" : "bad")}>
+        <b className={"tally-badge eligibility-block-tally " + (eligible ? "good" : "bad")}>
           {eligible
             ? t("detail.passTally", { n: details.length, total: details.length })
             : t("detail.unmetTally", { failed: failed.length, total: details.length })}

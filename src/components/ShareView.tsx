@@ -8,6 +8,8 @@ import { institutionLabel } from "../lib/institutions";
 import { bandLabelKey } from "../lib/results";
 import { useLang, pickName } from "../lib/i18n";
 import type { Profile, ProgrammeResult } from "../types/jupas";
+import "./ShareView.css";
+
 
 type Props = {
   // Audience variant chosen via one of the two step-3 share buttons.
@@ -25,7 +27,15 @@ type Props = {
   // Rename the active profile (pen next to the big name). Absent for received
   // shares (someone else's plan – not editable).
   onRename?: (name: string) => void;
+  // Header profile-switcher chip callbacks (same chip as the calculator). All
+  // four are required for AppHeader to render the chip; absent for received
+  // shares so the chip stays hidden there.
+  onProfileAdd?: (name: string) => void;
+  onProfileRenameById?: (id: string, name: string) => void;
+  onProfileDelete?: (id: string) => void;
+  onResetAll?: () => void;
   // "Edit Profile" top-bar pill → grade selection of the current profile.
+  // Superseded by the chip when the chip is shown (owned shares).
   onEditProfile?: () => void;
   // Optional soft-exit callback. When provided, "Edit this profile"
   // flips the parent app's shareViewMode without a page reload.
@@ -58,7 +68,7 @@ type Props = {
 };
 
 
-export function ShareView({ mode: _mode = "advisor", profileName, results, profiles, activeProfileId, onProfileChange, onRename, onEditProfile, onExitShareMode, exiting, isReceivedShare, onSaveAsProfile, onBuildAdvisorUrl, onViewAnalysis, theme, onThemeChange }: Props) {
+export function ShareView({ mode: _mode = "advisor", profileName, results, profiles, activeProfileId, onProfileChange, onRename, onProfileAdd, onProfileRenameById, onProfileDelete, onResetAll, onEditProfile, onExitShareMode, exiting, isReceivedShare, onSaveAsProfile, onBuildAdvisorUrl, onViewAnalysis, theme, onThemeChange }: Props) {
   const { t, lang } = useLang();
   const resultsNonNull = results.filter((r): r is ProgrammeResult => r !== null);
 
@@ -594,7 +604,18 @@ export function ShareView({ mode: _mode = "advisor", profileName, results, profi
 
   return (
     <main className={`app-shell layout-mobile share-view${exiting ? " is-exiting" : ""}`}>
-      <AppHeader theme={theme} onThemeChange={onThemeChange} onEditProfile={onEditProfile} />
+      <AppHeader
+        theme={theme}
+        onThemeChange={onThemeChange}
+        profiles={profiles}
+        activeProfileId={activeProfileId}
+        onProfileSelect={onProfileChange}
+        onProfileAdd={onProfileAdd}
+        onProfileRename={onProfileRenameById}
+        onProfileDelete={onProfileDelete}
+        onResetAll={onResetAll}
+        onEditProfile={onEditProfile}
+      />
 
       <section className="panel share-panel" aria-label={t("share.panelAria")}>
         <div className="panel-heading share-panel-heading">

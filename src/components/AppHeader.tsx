@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import type { Profile } from "../types/jupas";
 import { useLang } from "../lib/i18n";
 import { ProfileChip } from "./ProfileSwitcher";
+import "./AppHeader.css";
+
 
 type Theme = "light" | "dark";
 
@@ -27,11 +29,10 @@ type Props = {
   onProfileRename?: (id: string, name: string) => void;
   onProfileDelete?: (id: string) => void;
   onResetAll?: () => void;
-  // When true (the About page), the Language + theme toggles render directly in
-  // the bar instead of collapsing behind the gear, and the redundant About icon
-  // is hidden (you're already on it). There's room here since the About header
-  // carries no profile pill.
-  inlineSettings?: boolean;
+  // When true (the About page), the redundant About (ⓘ) link is hidden — you're
+  // already on it. The settings gear tray still renders, so the bar's chrome
+  // stays identical to every other page.
+  hideAboutLink?: boolean;
 };
 
 export function AppHeader({
@@ -47,7 +48,7 @@ export function AppHeader({
   onProfileRename,
   onProfileDelete,
   onResetAll,
-  inlineSettings = false,
+  hideAboutLink = false,
 }: Props) {
   const canToggleTheme = theme !== undefined && onThemeChange !== undefined;
   const isDark = theme === "dark";
@@ -73,8 +74,8 @@ export function AppHeader({
     onProfileRename &&
     onProfileDelete;
 
-  // Language + theme controls — rendered inline (About page) or tucked inside
-  // the settings popover (everywhere else).
+  // Language + theme controls — always tucked inside the settings popover so
+  // the gear tray (and the bar's chrome) is identical on every page.
   const langButton = (
     <button
       type="button"
@@ -118,7 +119,7 @@ export function AppHeader({
     <header className="app-topbar">
       <div className="app-topbar-left">
         {onBack ? (
-          <button type="button" className="topbar-back" onClick={onBack} aria-label={t("common.back")} title={t("common.back")}>
+          <button type="button" className="topbar-icon topbar-back" onClick={onBack} aria-label={t("common.back")} title={t("common.back")}>
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <line x1="19" y1="12" x2="5" y2="12" />
               <polyline points="12 19 5 12 12 5" />
@@ -157,54 +158,51 @@ export function AppHeader({
           />
         ) : null}
 
-        {onEditProfile ? (
+        {onEditProfile && !showProfileChip ? (
           <button type="button" className="topbar-edit-profile" onClick={onEditProfile}>
             {t("common.editProfile")}
           </button>
         ) : null}
 
-        {inlineSettings ? (
-          <>
-            {langButton}
-            {themeButton}
-          </>
-        ) : (
-          <>
-            <a
-              className="topbar-icon"
-              href="#about"
-              aria-label={t("common.about")}
-              title={t("common.about")}
-            >
-              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-                <circle cx="12" cy="12" r="9.5" stroke="currentColor" strokeWidth="1.6" fill="none" />
-                <circle cx="12" cy="7.5" r="1.2" fill="currentColor" />
-                <path d="M12 11v6.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-              </svg>
-            </a>
+        {!hideAboutLink ? (
+          <a
+            className="topbar-icon"
+            href="#about"
+            aria-label={t("common.about")}
+            title={t("common.about")}
+            onClick={(event) => {
+              event.preventDefault();
+              window.dispatchEvent(new Event("jupas:open-about"));
+            }}
+          >
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+              <circle cx="12" cy="12" r="9.5" stroke="currentColor" strokeWidth="1.6" fill="none" />
+              <circle cx="12" cy="7.5" r="1.2" fill="currentColor" />
+              <path d="M12 11v6.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+            </svg>
+          </a>
+        ) : null}
 
-            <div className="topbar-settings">
-              <button
-                type="button"
-                className="topbar-icon settings-icon"
-                aria-label={t("common.settings")}
-                aria-haspopup="menu"
-                aria-expanded={settingsOpen}
-                onClick={(event) => { event.stopPropagation(); setSettingsOpen((v) => !v); }}
-              >
-                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="currentColor">
-                  <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32a.49.49 0 0 0-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" />
-                </svg>
-              </button>
-              {settingsOpen ? (
-                <div className="settings-popover" role="menu" onClick={(event) => event.stopPropagation()}>
-                  {langButton}
-                  {themeButton}
-                </div>
-              ) : null}
+        <div className="topbar-settings">
+          <button
+            type="button"
+            className="topbar-icon settings-icon"
+            aria-label={t("common.settings")}
+            aria-haspopup="menu"
+            aria-expanded={settingsOpen}
+            onClick={(event) => { event.stopPropagation(); setSettingsOpen((v) => !v); }}
+          >
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="currentColor">
+              <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32a.49.49 0 0 0-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" />
+            </svg>
+          </button>
+          {settingsOpen ? (
+            <div className="settings-popover" role="menu" onClick={(event) => event.stopPropagation()}>
+              {langButton}
+              {themeButton}
             </div>
-          </>
-        )}
+          ) : null}
+        </div>
       </nav>
     </header>
   );

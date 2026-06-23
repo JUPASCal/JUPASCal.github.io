@@ -1,0 +1,125 @@
+/* MobileWelcome styles */
+
+
+
+/* First-run mobile landing (MobileWelcome). Rendered as a full-screen
+   overlay ON TOP of the live app so "Get started" cross-fades to reveal
+   it (brand stays anchored) instead of hard-cutting. Shown only to
+   first-time visitors; reuses the app's tokens + brand/CTA classes so it
+   reads as the same product, not a bolt-on. */
+.mobile-welcome {
+  position: fixed;
+  inset: 0;
+  z-index: 300; /* above app chrome + modals (max in-app z-index is 200) */
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-5) var(--space-5) var(--space-7);
+  /* Warm accent glow at the top for depth, over the app background. Tokens are
+     theme-aware, so this adapts to light/dark automatically. */
+  background:
+    radial-gradient(125% 65% at 50% -12%, color-mix(in srgb, var(--accent) 13%, transparent), transparent 62%),
+    var(--bg);
+  color: var(--ink);
+  /* Exit slides the whole landing up and off – as it clears, Step 1
+     (mounted underneath) is revealed from the bottom up, so the hand-off
+     reads like scrolling up to the next section rather than a fade. */
+  transition: transform 460ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+.mobile-welcome.is-exiting {
+  transform: translateY(-100%);
+  pointer-events: none;
+}
+
+
+.welcome-logo {
+  width: 46px;
+  height: 46px;
+  flex: 0 0 auto;
+}
+
+
+/* One content group (hero + product peek + CTA), vertically centred in the
+   space below the topbar so the CTA stays tied to the content. */
+.welcome-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-5);
+  width: 100%;
+  max-width: 30rem;
+  margin: 0 auto;
+}
+
+
+.welcome-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: calc(-1 * var(--space-3));
+  /* Centered to match the centered brand above — the whole hero reads as one
+     balanced, intentional block rather than a logo floating over left-aligned text. */
+  text-align: center;
+}
+
+
+.welcome-peek-label {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+
+.welcome-peek-prog {
+  font-weight: 700;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+.mobile-welcome.is-en .welcome-peek-label {
+  font-size: 0.62rem;
+  letter-spacing: 0.045em;
+}
+
+
+.mobile-welcome.is-en .welcome-peek-prog {
+  font-size: 0.82rem;
+}
+
+
+.mobile-welcome.is-en .welcome-peek-note {
+  font-size: 0.62rem;
+}
+
+
+.mobile-welcome.is-en .welcome-peek-tag {
+  font-size: 0.64rem;
+  padding-inline: 8px;
+}
+
+
+.mobile-welcome.is-en .welcome-gauge-score {
+  font-size: 0.76rem;
+}
+
+
+.welcome-cta {
+  width: 100%;
+  min-height: 52px;
+  font-size: 1rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobile-welcome {
+      transition: none;
+    }
+}

@@ -1,35 +1,34 @@
+import { useEffect } from "react";
 import { useLang } from "../lib/i18n";
 import { useTheme } from "../lib/theme";
 import { AppHeader } from "./AppHeader";
+import "./AboutPage.css";
 
-// Leave the #about route and return to the calculator without a full reload:
-// drop the fragment, then nudge App's hashchange listener so it re-renders
-// the home route. Keeps in-memory calculator state warm.
-function goHome() {
-  window.history.replaceState(
-    window.history.state,
-    "",
-    window.location.pathname + window.location.search,
-  );
-  window.dispatchEvent(new Event("hashchange"));
-}
 
-export function AboutPage() {
+type Props = {
+  onClose: () => void;
+};
+
+export function AboutPage({ onClose }: Props) {
   const { t } = useLang();
   const [theme, setTheme] = useTheme();
 
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [onClose]);
+
   return (
-    // Shares .app-shell.layout-mobile with the calculator/share views so it
-    // inherits the mobile scroll container (html/body are overflow:hidden on
-    // mobile — without this the page can't scroll). .about-view just narrows
-    // the readable column.
-    <main className="app-shell layout-mobile about-view">
-      <AppHeader theme={theme} onThemeChange={setTheme} onBack={goHome} onBrandClick={goHome} inlineSettings />
+    <main className="app-shell layout-mobile about-view about-cover" role="dialog" aria-modal="true" aria-labelledby="about-title">
+      <AppHeader theme={theme} onThemeChange={setTheme} onBack={onClose} onBrandClick={onClose} hideAboutLink />
 
       <article className="about-doc">
         <header className="about-hero">
           <p className="eyebrow">{t("about.eyebrow")}</p>
-          <h1 className="about-title">
+          <h1 className="about-title" id="about-title">
             JUPASCal <span className="about-title-year">2026</span>
           </h1>
           <p className="about-lede">{t("about.lede")}</p>

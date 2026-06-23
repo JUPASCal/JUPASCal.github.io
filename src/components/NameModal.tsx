@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { MAX_PROFILE_NAME } from "../lib/hashState";
 import { useLang } from "../lib/i18n";
+import "./NameModal.css";
+
 
 // Shared in-app modal for naming a profile — used by every profile flow (New,
 // Rename in the chip/bar, Rename on the share/analysis pages, and "Save as my

@@ -58,7 +58,15 @@ type Props = Omit<AnalysisBodyProps, "onEdit" | "variant"> & {
   // prop so App can route both share buttons through one prop shape.
   mode?: "advisor" | "social";
   onExitShareMode?: () => void;
+  // Header profile-switcher chip callbacks (same chip as the calculator). All
+  // four are required for AppHeader to render the chip; absent for received
+  // shares so the chip stays hidden there.
+  onProfileAdd?: (name: string) => void;
+  onProfileRenameById?: (id: string, name: string) => void;
+  onProfileDelete?: (id: string) => void;
+  onResetAll?: () => void;
   // "Edit Profile" top-bar pill → grade selection of the current profile.
+  // Superseded by the chip when the chip is shown (owned shares).
   onEditProfile?: () => void;
   // When true, play the slide-out exit (mirror of the entrance) before
   // the parent unmounts this view.
@@ -87,6 +95,10 @@ export function AnalysisView({
   activeProfileId,
   onProfileChange,
   onRename,
+  onProfileAdd,
+  onProfileRenameById,
+  onProfileDelete,
+  onResetAll,
   onExitShareMode,
   onEditProfile,
   exiting,
@@ -116,7 +128,18 @@ export function AnalysisView({
 
   return (
     <main className={`app-shell layout-mobile share-view analysis-view${exiting ? " is-exiting" : ""}`}>
-      <AppHeader theme={theme} onThemeChange={onThemeChange} onEditProfile={onEditProfile} />
+      <AppHeader
+        theme={theme}
+        onThemeChange={onThemeChange}
+        profiles={profiles}
+        activeProfileId={activeProfileId}
+        onProfileSelect={onProfileChange}
+        onProfileAdd={onProfileAdd}
+        onProfileRename={onProfileRenameById}
+        onProfileDelete={onProfileDelete}
+        onResetAll={onResetAll}
+        onEditProfile={onEditProfile}
+      />
 
       {/* Same stepper bar as Steps 1-3 (Compare stays active) so Analysis
           reads as an in-flow continuation, not a separate page. Tapping a

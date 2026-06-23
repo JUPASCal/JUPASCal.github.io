@@ -7,6 +7,8 @@ import { GradeTitleSummary } from "./GradeInput";
 import { ScoreScale } from "./ScoreScale";
 import { SlotMovePicker } from "./SlotMovePicker";
 import type { OfferStatistic, ProgrammeResult, StudentGrades } from "../types/jupas";
+import "./MobileComparison.css";
+
 
 // JUPAS allows up to 20 programme choices (A1–A3, B4–B6, C7–C10, D11–D15,
 // E16–E20). slotLabel() lives in lib/slots so every surface agrees.
@@ -58,12 +60,27 @@ export function MobileComparison({ results, grades, onOpenDetail, onAddMore, onR
   useEffect(() => {
     const sentinel = sentinelRef.current;
     if (!sentinel) return;
+    const updateStuck = () => {
+      setIsStuck(sentinel.getBoundingClientRect().top <= 45);
+    };
     const observer = new IntersectionObserver(
       ([entry]) => setIsStuck(!entry.isIntersecting),
       { threshold: 0 },
     );
     observer.observe(sentinel);
-    return () => observer.disconnect();
+    updateStuck();
+    const updateSoon = () => window.requestAnimationFrame(updateStuck);
+    document.addEventListener("visibilitychange", updateSoon);
+    window.addEventListener("pageshow", updateSoon);
+    window.addEventListener("focus", updateSoon);
+    window.addEventListener("scroll", updateSoon, true);
+    return () => {
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", updateSoon);
+      window.removeEventListener("pageshow", updateSoon);
+      window.removeEventListener("focus", updateSoon);
+      window.removeEventListener("scroll", updateSoon, true);
+    };
   }, []);
 
   // Info popover state – the "ⓘ" button at top-right of the heading

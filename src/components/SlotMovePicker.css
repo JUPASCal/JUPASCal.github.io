@@ -1,0 +1,537 @@
+/* SlotMovePicker styles */
+
+
+
+/* Drag handle – the only place a horizontal drag reorders rather than
+   scrolls the bar. Padding widens the touch target around the dots. */
+.preference-grip-handle {
+  display: inline-flex;
+  align-items: center;
+  /* Wider grab zone (esp. to the right) + slightly larger dots so the
+     handle is easier to land a finger on. Negative right margin keeps the
+     visible gap to the label tight despite the extra padding. */
+  padding: 2px 10px 2px 2px;
+  margin-right: -5px;
+  touch-action: none;
+  cursor: grab;
+}
+
+
+.preference-text.dragging .preference-grip-handle {
+  cursor: grabbing;
+}
+
+
+.preference-grip {
+  flex: 0 0 auto;
+  width: 9px;
+  height: 13px;
+  fill: var(--muted);
+  opacity: 0.7;
+}
+
+
+.preference-text.active .preference-grip {
+  fill: var(--accent);
+  opacity: 0.9;
+}
+
+
+.pref-remove-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: transparent;
+}
+
+
+.pref-remove-pop {
+  position: fixed;
+  z-index: 91;
+  /* Default: floats above the pill. .is-below flips it under when the
+     pill sits too near the top of the viewport to fit the popover above. */
+  transform: translate(-50%, calc(-100% - 10px));
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 5px 5px 5px 12px;
+  border-radius: 12px;
+  background: var(--surface-strong);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  white-space: nowrap;
+  /* Opacity-only fade so it never fights the positional transform above. */
+  animation: pref-remove-pop-in 120ms ease;
+}
+
+
+.pref-remove-pop.is-below {
+  transform: translate(-50%, 10px);
+}
+
+
+/* Arrow tying the popover to the pill – points down (default) or up (below). */
+.pref-remove-pop::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -5px;
+  width: 9px;
+  height: 9px;
+  transform: translateX(-50%) rotate(45deg);
+  background: var(--surface-strong);
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+
+.pref-remove-pop.is-below::after {
+  bottom: auto;
+  top: -5px;
+  border-right: 0;
+  border-bottom: 0;
+  border-left: 1px solid var(--line);
+  border-top: 1px solid var(--line);
+}
+
+
+.pref-remove-code {
+  font-weight: 800;
+  font-size: 0.78rem;
+  letter-spacing: -0.01em;
+  color: var(--muted);
+}
+
+
+.pref-remove-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 11px;
+  border-radius: 8px;
+  border: 0;
+  background: color-mix(in srgb, var(--bad) 14%, transparent);
+  color: var(--bad);
+  font-weight: 800;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+
+.pref-remove-btn:hover {
+  background: color-mix(in srgb, var(--bad) 22%, transparent);
+}
+
+
+@keyframes pref-remove-pop-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+
+/* ── Slot "move to position" picker (Step 3 tap-a-slot + the reorganize sheet) ── */
+.slot-move-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 96;
+  background: transparent;
+}
+
+
+.slot-move-pop {
+  position: fixed;
+  z-index: 97;
+  /* top/left set inline; centre horizontally on the anchor. */
+  transform: translateX(-50%);
+  width: min(280px, 92vw);
+  padding: var(--space-3);
+  border-radius: 14px;
+  background: var(--surface-strong);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  animation: pref-remove-pop-in 120ms ease;
+}
+
+
+.slot-move-title {
+  margin: 0 0 var(--space-2);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+
+.slot-move-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  /* Long lists (up to 20 slots) scroll inside the popover. */
+  max-height: 40vh;
+  overflow-y: auto;
+}
+
+
+.slot-move-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 0;
+  border-radius: 9px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 0.8rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition: border-color 120ms ease, background 120ms ease, color 120ms ease;
+}
+
+
+.slot-move-chip:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--accent) 50%, var(--line));
+  color: var(--accent);
+  outline: none;
+}
+
+
+.slot-move-chip:focus-visible:not(:disabled) {
+  border-color: color-mix(in srgb, var(--accent) 50%, var(--line));
+  color: var(--accent);
+  outline: none;
+}
+
+
+.slot-move-chip.is-current {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  cursor: default;
+}
+
+
+:root[data-theme="dark"] .slot-move-chip.is-current {
+  color: var(--bg);
+}
+
+
+/* "Remove this pick" — the delete action at the bottom of the slot popup. */
+.slot-move-remove {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  width: 100%;
+  margin-top: 10px;
+  padding: 9px 0;
+  border-radius: 10px;
+  border: 1px solid var(--soft-bad);
+  background: var(--soft-bad);
+  color: var(--bad);
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background 120ms ease, border-color 120ms ease;
+}
+
+
+.slot-move-remove:hover {
+  border-color: var(--bad);
+  outline: none;
+}
+
+
+.slot-move-remove:focus-visible {
+  border-color: var(--bad);
+  outline: none;
+}
+
+
+/* ── Reorganize sheet (Step 2: the expanded "selected" plane) ── */
+.reorg-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 95;
+}
+
+
+.reorg-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(20, 14, 10, 0.5);
+  animation: reorg-fade 160ms ease;
+}
+
+
+.reorg-sheet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  max-height: 82vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  border-top: 1px solid var(--line);
+  box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.3);
+  padding: var(--space-4) var(--space-4) calc(var(--space-4) + env(safe-area-inset-bottom, 0px));
+  animation: reorg-slide-up 240ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+
+.reorg-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+
+.reorg-title {
+  margin: 0;
+  font-size: 1.02rem;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+
+.reorg-hint {
+  margin: 2px 0 0;
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+
+.reorg-done {
+  flex: 0 0 auto;
+  padding: 7px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+
+:root[data-theme="dark"] .reorg-done {
+  color: var(--bg);
+}
+
+
+.reorg-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+
+.reorg-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface-strong);
+  /* Vertical drag-handle pans don't scroll the sheet (handle is touch-action:
+     none); the card body still scrolls the list. */
+  will-change: transform;
+}
+
+
+.reorg-card.is-empty {
+  opacity: 0.6;
+}
+
+
+.reorg-card.is-dragging {
+  position: relative;
+  z-index: 3;
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.22);
+}
+
+
+.reorg-grip {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  align-self: stretch;
+  color: var(--muted);
+  cursor: grab;
+  touch-action: none;
+}
+
+
+.reorg-grip:active {
+  cursor: grabbing;
+}
+
+
+.reorg-grip svg circle {
+  fill: currentColor;
+}
+
+
+.reorg-slot {
+  flex: 0 0 auto;
+  min-width: 40px;
+  padding: 7px 9px;
+  border-radius: 9px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 0.8rem;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition: border-color 120ms ease, color 120ms ease;
+}
+
+
+.reorg-slot:hover {
+  border-color: color-mix(in srgb, var(--accent) 50%, var(--line));
+  color: var(--accent);
+  outline: none;
+}
+
+
+.reorg-slot:focus-visible {
+  border-color: color-mix(in srgb, var(--accent) 50%, var(--line));
+  color: var(--accent);
+  outline: none;
+}
+
+
+.reorg-slot.is-empty {
+  cursor: default;
+  color: var(--muted);
+}
+
+
+.reorg-card-body {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+
+.reorg-card-body strong {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+
+.reorg-card-body small {
+  font-size: 0.72rem;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+.reorg-empty-label {
+  flex: 1 1 auto;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+
+.reorg-remove {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 120ms ease, border-color 120ms ease;
+}
+
+
+.reorg-remove:hover {
+  color: var(--bad);
+  border-color: color-mix(in srgb, var(--bad) 45%, var(--line));
+  outline: none;
+}
+
+
+.reorg-remove:focus-visible {
+  color: var(--bad);
+  border-color: color-mix(in srgb, var(--bad) 45%, var(--line));
+  outline: none;
+}
+
+
+@keyframes reorg-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+
+@keyframes reorg-slide-up {
+  from { transform: translateY(100%); }
+  to { transform: none; }
+}
+
+
+.preference-remove-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+
+.preference-remove-row button {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface-strong);
+  color: var(--muted);
+  padding: 4px 8px;
+  font-size: 0.72rem;
+  font-weight: 850;
+}
+
+
+.preference-remove-row button:hover {
+  border-color: var(--accent-2);
+  color: var(--accent-2);
+}
+
+@media (max-width: 920px) {
+
+
+    .preference-remove-row {
+      display: none;
+    }
+}
+

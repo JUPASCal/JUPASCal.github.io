@@ -1,5 +1,7 @@
 import { useRef, useState } from "react";
 import { useLang } from "../lib/i18n";
+import "./MobileWelcome.css";
+
 
 type Theme = "light" | "dark";
 
@@ -8,6 +10,8 @@ type Props = {
   onThemeChange: (theme: Theme) => void;
   // Dismiss the landing and drop the user into the calculator (Step 1).
   onStart: () => void;
+  // Dismiss the landing and open the About page.
+  onAbout: () => void;
   // When true, the landing plays its fade/slide-out. The parent unmounts
   // it after the transition. Rendered as an overlay over the live app so
   // the hand-off is a cross-fade (brand stays put) rather than a hard cut.
@@ -18,7 +22,7 @@ type Props = {
 // first-time visitors (see shouldShowWelcome in App.tsx). Leads with a
 // swipeable showcase of the product (in the app's own visual language) so the
 // value is shown, not just described, then dissolves to reveal the app.
-export function MobileWelcome({ theme, onThemeChange, onStart, exiting = false }: Props) {
+export function MobileWelcome({ theme, onThemeChange, onStart, onAbout, exiting = false }: Props) {
   const { t, lang, setLang } = useLang();
   const isDark = theme === "dark";
   const trackRef = useRef<HTMLDivElement>(null);
@@ -38,7 +42,7 @@ export function MobileWelcome({ theme, onThemeChange, onStart, exiting = false }
   }
 
   return (
-    <main className={`mobile-welcome${exiting ? " is-exiting" : ""}`}>
+    <main className={`mobile-welcome${lang === "en" ? " is-en" : ""}${exiting ? " is-exiting" : ""}`}>
       <header className="welcome-topbar">
         <div className="welcome-topbar-controls">
           <button
@@ -90,9 +94,19 @@ export function MobileWelcome({ theme, onThemeChange, onStart, exiting = false }
         <div className="welcome-hero">
           <p className="eyebrow">{t("welcome.eyebrow")}</p>
           <h1 className="welcome-headline">
-            {t("welcome.headline.pre")}
-            <span className="welcome-accent">{t("welcome.headline.accent")}</span>
-            {t("welcome.headline.post")}
+            {lang === "zh" ? (
+              <>
+                <span>一次過比較各大院校</span>
+                <br />
+                <span className="welcome-accent">所有課程收生分數</span>
+              </>
+            ) : (
+              <>
+                {t("welcome.headline.pre")}
+                <span className="welcome-accent">{t("welcome.headline.accent")}</span>
+                {t("welcome.headline.post")}
+              </>
+            )}
           </h1>
           <p className="welcome-sub">{t("welcome.sub")}</p>
         </div>
@@ -121,7 +135,7 @@ export function MobileWelcome({ theme, onThemeChange, onStart, exiting = false }
             <div className="welcome-slide">
               <div className="welcome-peek">
                 <div className="welcome-peek-head">
-                  <span className="welcome-peek-label">JS6963 · HKU</span>
+                  <span className="welcome-peek-label">JS4862 · CUHK · {t("welcome.slide2.programme")}</span>
                   <span className="welcome-peek-note">{t("welcome.slide2.note")}</span>
                 </div>
                 <div className="welcome-gauge">
@@ -176,7 +190,15 @@ export function MobileWelcome({ theme, onThemeChange, onStart, exiting = false }
             </svg>
           </button>
           <p className="welcome-footnote">
-            {t("welcome.footnote.pre")}<a href="#about">{t("welcome.footnote.how")}</a>
+            {t("welcome.footnote.pre")}<a
+              href="#about"
+              onClick={(event) => {
+                event.preventDefault();
+                onAbout();
+              }}
+            >
+              {t("welcome.footnote.how")}
+            </a>
           </p>
         </div>
       </div>

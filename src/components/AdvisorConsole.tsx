@@ -41,6 +41,7 @@ type Props = {
   onReorder: (fromIndex: number, toIndex: number) => void;
   onSwap: (a: number, b: number) => void;
   onRemove: (code: string) => void;
+  onClearAll: () => void;
   onSetSlotCode: (slotIndex: number, code: string) => void;
   shareButtons?: ReactNode;
 
@@ -76,6 +77,7 @@ export function AdvisorConsole({
   onReorder,
   onSwap,
   onRemove,
+  onClearAll,
   onSetSlotCode,
   shareButtons,
   allResults,
@@ -126,6 +128,7 @@ export function AdvisorConsole({
           onReorder={onReorder}
           onSwap={onSwap}
           onRemove={onRemove}
+          onClearAll={onClearAll}
           onSetSlotCode={onSetSlotCode}
           onBrowse={() => setMainView("browse")}
           enableQuickAdd

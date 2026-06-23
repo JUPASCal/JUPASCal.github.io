@@ -23,21 +23,19 @@ const buildDate = new Date().toISOString().slice(0, 10); // YYYY-MM-DD (build ti
 const unifiedData = JSON.parse(readFileSync(new URL("./data/processed/JUPAS_2026_Unified_Data.json", import.meta.url), "utf-8"));
 const programmeCount = Array.isArray(unifiedData) ? unifiedData.length : 0;
 
+const runtimeDataFiles = new Set([
+  "/data/processed/JUPAS_2026_Unified_Data.json",
+  "/data/processed/JUPAS_2026_Unified_Data.version",
+  "/data/processed/programme_details_2026.json",
+]);
+
 function serveDataMiddleware() {
   return async (req: any, res: any, next: any) => {
-    // Only serve the RUNTIME dataset (data/processed/*: the unified JSON +
-    // its .version sidecar, fetched by the data worker). Must NOT swallow
-    // /data/raw/* — `src/lib/subjects.ts` imports data/raw/subjects.canonical.json
-    // as a MODULE; now that the app lives at the repo root that resolves to an
-    // in-root `/data/raw/...` URL, and intercepting it here returns raw JSON
-    // (application/json) where Vite needs to serve a transformed JS module,
-    // which breaks the whole module graph → blank app in dev.
-    if (!req.url?.startsWith("/data/processed/")) return next();
+    // Only serve files fetched at runtime. Other JSON files under /data are
+    // imported by TS modules, so Vite must transform them into JS modules.
+    const [urlPath, query] = (req.url ?? "").split("?");
+    if (!runtimeDataFiles.has(urlPath)) return next();
     try {
-      // Strip the query string — the data worker appends a
-      // `?v=<version>` cache-buster that isn't part of the
-      // file path.
-      const [urlPath, query] = req.url.split("?");
       const filePath = resolve(projectDir, urlPath.slice(1));
       const content = await readFile(filePath);
       const isJson = urlPath.endsWith(".json");

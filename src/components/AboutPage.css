@@ -1,0 +1,393 @@
+/* AboutPage styles */
+
+
+
+.about-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  padding: var(--space-4);
+  background: rgba(17, 16, 14, 0.42);
+  backdrop-filter: blur(6px);
+}
+
+
+.about-panel {
+  width: min(560px, 100%);
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  padding: var(--space-5);
+  background: var(--surface-strong);
+  box-shadow: var(--shadow);
+}
+
+
+.about-panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-3);
+}
+
+
+.about-panel h2 {
+  margin: 0;
+  font-size: 2rem;
+  letter-spacing: -0.04em;
+}
+
+
+.about-panel p {
+  margin: 0 0 var(--space-4);
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+
+.about-note-grid {
+  display: grid;
+  gap: var(--space-3);
+}
+
+
+.about-note-grid article {
+  display: grid;
+  gap: 4px;
+  padding: var(--space-3);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+}
+
+
+.about-note-grid strong {
+  color: var(--ink);
+}
+
+
+.about-note-grid span {
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+
+/* ── About Page ─────────────────────────────────────── */
+
+/* ── About page ─────────────────────────────────────────
+   Shares .app-shell.layout-mobile (scroll container + page padding) with the
+   calculator/share views. .about-view just narrows the column; .about-doc is
+   the centred readable measure. */
+.about-view {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  background: var(--bg);
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+
+.about-doc {
+  width: min(640px, 100%);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding-top: var(--space-2);
+  animation: about-doc-in 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+
+@keyframes about-doc-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+
+.about-hero {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-bottom: var(--space-1);
+}
+
+
+.about-hero .eyebrow {
+  margin: 0;
+}
+
+
+.about-title {
+  font-family: "Gelasio", Georgia, "Times New Roman", "Source Serif Pro", ui-serif, serif;
+  font-size: clamp(1.9rem, 6vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.04;
+  margin: 0;
+  color: var(--ink);
+}
+
+
+.about-title-year {
+  color: var(--accent);
+  margin-left: 0.18em;
+}
+
+
+.about-lede {
+  margin: var(--space-1) 0 0;
+  color: var(--muted);
+  font-size: 1.02rem;
+  line-height: 1.55;
+}
+
+
+/* Quick facts strip — three equal cards (10 institutions · 419 programmes ·
+   2025 baselines) in the welcome-stat visual language. */
+.about-facts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-2);
+}
+
+
+.about-facts li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: var(--space-3) var(--space-2);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface-strong);
+  text-align: center;
+}
+
+
+.about-facts strong {
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: var(--accent);
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+
+.about-facts span {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.01em;
+}
+
+
+/* Section cards — icon + text, on the app's panel surface. */
+.about-card {
+  display: flex;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface-mix);
+  box-shadow: var(--shadow);
+}
+
+
+.about-card-icon {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  background: var(--soft-neutral);
+  color: var(--accent);
+}
+
+
+.about-card-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+
+.about-card-text h2 {
+  margin: 0;
+  font-size: 1.02rem;
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+
+.about-card-text p {
+  margin: 0;
+  color: var(--ink);
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+
+.about-source-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-1);
+}
+
+
+.about-source-btn {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--surface-strong);
+  color: var(--accent);
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-decoration: none;
+  transition: border-color 140ms ease, background 140ms ease, transform 120ms ease;
+}
+
+
+.about-source-btn:hover {
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface-strong));
+  outline: none;
+}
+
+
+.about-source-btn:focus-visible {
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface-strong));
+  outline: none;
+}
+
+
+.about-source-btn:active {
+  transform: translateY(1px);
+}
+
+
+/* GitHub = the quieter "good to have" option next to the primary Google Form
+   button: muted text, no accent tint. */
+.about-source-btn.is-secondary {
+  color: var(--muted);
+}
+
+
+.about-source-btn.is-secondary:hover {
+  border-color: var(--line);
+  background: color-mix(in srgb, var(--ink) 5%, var(--surface-strong));
+  color: var(--ink);
+}
+
+
+.about-source-btn.is-secondary:focus-visible {
+  border-color: var(--line);
+  background: color-mix(in srgb, var(--ink) 5%, var(--surface-strong));
+  color: var(--ink);
+}
+
+
+.about-version {
+  margin-top: var(--space-2);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--line);
+  font-size: 0.78rem;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+
+/* Social links pinned to the footer's right edge. */
+.about-social {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+
+.about-social a {
+  display: inline-flex;
+  color: var(--muted);
+  transition: color 160ms ease, transform 160ms ease;
+}
+
+
+.about-social a:hover {
+  color: var(--ink);
+  transform: translateY(-1px);
+  outline: none;
+}
+
+
+.about-social a:focus-visible {
+  color: var(--ink);
+  transform: translateY(-1px);
+  outline: none;
+}
+
+
+.about-version code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.82rem;
+  color: var(--ink);
+  background: var(--row-bg);
+  padding: 1px 6px;
+  border-radius: 5px;
+  border: 1px solid var(--line);
+}
+
+@media (min-width: 921px) {
+  .about-view {
+      max-width: none;
+    }
+}
+
+
+@media (max-width: 920px) {
+
+
+    /* These pages have no stepper-bar, so the topbar itself is the sticky
+       top chrome – the same role `.stepper-bar` plays in the calculator,
+       so the header stays put while the plan scrolls. The mobile
+       `.app-topbar` rule already gives it a solid `--bg` fill and
+       full-bleed side margins; we add the stick + a 3px bottom border so
+       it reads as a divider and masks content scrolling beneath it. */
+    .about-view > .app-topbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      padding-bottom: var(--space-2);
+      border-bottom: 3px solid var(--line);
+    }
+}
+
+
+@media print {
+
+
+    .about-backdrop {
+      display: none !important;
+    }
+}

@@ -358,3 +358,382 @@ main.analysis-view > .app-topbar {
 .analysis-grades .grade-title-summary {
   margin-top: 0;
 }
+
+
+/* ── Extracted from styles.css ─── */
+
+/* AnalysisView styles */
+
+
+
+.strategy-summary {
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+
+.strategy-summary .strategy-heading h2 {
+  font-size: 1rem;
+  margin: 2px 0 0;
+}
+
+
+.strategy-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+
+.strategy-cell {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: var(--surface-strong);
+}
+
+
+.strategy-label {
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+
+
+.strategy-value {
+  font-size: 0.88rem;
+  color: var(--ink);
+  line-height: 1.35;
+}
+
+
+.strategy-cell.tone-good {
+  border-color: #bbf7d0;
+  background: #f0fdf4;
+}
+
+
+:root[data-theme="dark"] .strategy-cell.tone-good {
+  border-color: #14532d;
+  background: rgba(34, 197, 94, 0.10);
+}
+
+
+.strategy-cell.tone-warn {
+  border-color: #fed7aa;
+  background: #fff7ed;
+}
+
+
+:root[data-theme="dark"] .strategy-cell.tone-warn {
+  border-color: #7c2d12;
+  background: rgba(249, 115, 22, 0.10);
+}
+
+
+.strategy-footnote {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+
+/* ── Analysis (portfolio strategy read) ───────────────────────────────
+   Its own page, routed from the Step-3 "Analysis" button. Reuses the
+   share-view shell + heading chrome; everything below is analysis-only.
+   Tone language matches the rest of the app: good=green, warn=amber,
+   critical=red, info=ink-blue. */
+.analysis-view {
+  max-width: 760px;
+}
+
+
+.analysis-verdict {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface-strong);
+}
+
+
+.analysis-verdict-icon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+  border-radius: 12px;
+  color: #fff;
+}
+
+
+.analysis-verdict-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+
+.analysis-verdict-text strong {
+  font-size: 1.1rem;
+  letter-spacing: -0.01em;
+}
+
+
+.analysis-verdict-text span {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+
+.analysis-verdict.tone-good {
+  border-color: color-mix(in srgb, var(--good) 40%, var(--line));
+  background: var(--soft-good);
+}
+
+
+.analysis-verdict.tone-warning {
+  border-color: color-mix(in srgb, var(--warn) 45%, var(--line));
+  background: var(--soft-warn);
+}
+
+
+.analysis-verdict.tone-critical {
+  border-color: color-mix(in srgb, var(--bad) 45%, var(--line));
+  background: var(--soft-bad);
+}
+
+
+.analysis-verdict.tone-good .analysis-verdict-icon { background: var(--good); }
+
+.analysis-verdict.tone-warning .analysis-verdict-icon { background: var(--warn); }
+
+.analysis-verdict.tone-critical .analysis-verdict-icon { background: var(--bad); }
+
+.analysis-verdict.tone-info .analysis-verdict-icon { background: var(--accent-2); }
+
+
+.analysis-snapshot {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface-strong);
+  padding: var(--space-4);
+}
+
+
+.analysis-snapshot-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+
+.analysis-snapshot-head .eyebrow { margin: 0; }
+
+.analysis-snapshot-head .muted { font-size: 0.78rem; }
+
+
+.analysis-bars {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+
+.analysis-snapshot-foot {
+  margin: var(--space-3) 0 0;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+
+.analysis-finding-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+
+.analysis-finding {
+  display: flex;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border: 1px solid var(--line);
+  border-left-width: 3px;
+  border-radius: 14px;
+  background: var(--surface);
+}
+
+
+.analysis-finding-mark {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 auto;
+  border-radius: 8px;
+  color: #fff;
+}
+
+
+.analysis-finding-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+
+.analysis-finding-body strong {
+  font-size: 0.95rem;
+  letter-spacing: -0.01em;
+}
+
+
+.analysis-finding-body p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.86rem;
+  line-height: 1.5;
+}
+
+
+.analysis-finding-slots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 2px;
+}
+
+
+.analysis-slot-chip {
+  font-family: inherit;
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: var(--surface-strong);
+  border: 1px solid var(--line);
+  color: var(--muted);
+}
+
+/* Slot label (A1) is the reference the finding text uses → make it prominent;
+   the JUPAS code stays muted as the lookup target. */
+.analysis-slot-chip b { color: var(--ink); font-weight: 800; }
+
+
+/* Clickable chip (carries a JUPAS code → opens that programme's detail). */
+.analysis-slot-chip.is-link {
+  cursor: pointer;
+  transition: color 140ms ease, border-color 140ms ease, background 140ms ease;
+}
+
+
+.analysis-slot-chip.is-link:hover {
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface-strong));
+  outline: none;
+}
+
+
+.analysis-slot-chip.is-link:focus-visible {
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface-strong));
+  outline: none;
+}
+
+
+.analysis-finding.tone-critical { border-left-color: var(--bad); }
+
+.analysis-finding.tone-warning { border-left-color: var(--warn); }
+
+.analysis-finding.tone-info { border-left-color: var(--accent-2); }
+
+.analysis-finding.tone-good { border-left-color: var(--good); }
+
+.analysis-finding.tone-critical .analysis-finding-mark { background: var(--bad); }
+
+.analysis-finding.tone-warning .analysis-finding-mark { background: var(--warn); }
+
+.analysis-finding.tone-info .analysis-finding-mark { background: var(--accent-2); }
+
+.analysis-finding.tone-good .analysis-finding-mark { background: var(--good); }
+
+
+.analysis-detail-cta {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 2px var(--space-3);
+  width: 100%;
+  text-align: left;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface-strong);
+  color: var(--ink);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+
+.analysis-detail-cta:hover {
+  border-color: var(--accent);
+  background: var(--hover);
+}
+
+
+.analysis-detail-cta span {
+  grid-column: 1;
+  font-weight: 800;
+}
+
+
+.analysis-detail-cta small {
+  grid-column: 1;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+
+.analysis-detail-cta svg {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  color: var(--accent);
+}
+
+@media (max-width: 920px) {
+  .analysis-view {
+      display: block;
+    }
+
+
+    .analysis-view > * + * {
+      margin-top: var(--space-4);
+    }
+}
+

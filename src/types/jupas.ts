@@ -82,6 +82,10 @@ export type ProgrammeRequirement = {
   type: string; // interview | portfolio | audition | physical-test | practical-test | written-test | aptitude-test
   timing?: "pre-results" | "post-results" | "both" | string | null;
   when?: string; // human-readable timing detail ("Before results: Mid-June · After results: Late-July")
+  before?: string | null;
+  after?: string | null;
+  date?: string | null;
+  format?: string | null;
   salience?: "required" | "weighty" | "optional" | string; // provided by source (HKUST); else derived in selection.ts
   scored?: boolean; // HKUST: interview folded into the admission score
 };

@@ -5,6 +5,8 @@ import { getSlotRisk, riskMeta, riskLabelKey } from "../lib/analysis";
 import { useLang, pickName, type Lang, type Translate } from "../lib/i18n";
 import { SlotMovePicker } from "./SlotMovePicker";
 import type { Programme, ProgrammeResult } from "../types/jupas";
+import "./PreferencePlanner.css";
+
 
 // Minimum slot rows always shown (A1–A3) so the band-A structure reads even
 // before the user adds anything. Beyond that the list grows with the picks —
@@ -33,6 +35,7 @@ type Props = {
   // Console: the "add" affordance routes to the Browse tab (one canonical
   // search) instead of opening a separate in-rail search overlay.
   onBrowse?: () => void;
+  onClearAll?: () => void;
   enableQuickAdd?: boolean;
   programmes?: Programme[];
   shareSlot?: ReactNode;
@@ -52,6 +55,7 @@ export function PreferencePlanner({
   onSwap,
   onRemove,
   onBrowse,
+  onClearAll,
   enableQuickAdd = false,
   programmes,
   shareSlot,
@@ -152,6 +156,11 @@ export function PreferencePlanner({
           {t("planner.title")}
           {filledCount > 0 ? <span className="planner-count">{filledCount}</span> : null}
         </h2>
+        {!readOnly && filledCount > 0 && onClearAll ? (
+          <button type="button" className="planner-clear-all" onClick={onClearAll}>
+            {t("planner.clearAll")}
+          </button>
+        ) : null}
         {filledCount === 0 ? (
           <p className="planner-subtitle">{t("planner.subtitleEmpty")}</p>
         ) : null}
@@ -265,4 +274,3 @@ export function PreferencePlanner({
     </section>
   );
 }
-

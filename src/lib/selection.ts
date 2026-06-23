@@ -14,6 +14,10 @@
 // To correct a programme: add/edit its entry in CURATED below (highest priority).
 
 import type { Programme } from "../types/jupas";
+import type { Lang } from "./i18n";
+import INTERVIEW_TRANSLATIONS_JSON from "../../data/processed/interview_translations.json";
+
+const INTERVIEW_TRANSLATIONS = INTERVIEW_TRANSLATIONS_JSON as Record<string, string>;
 
 export type SelectionType =
   | "interview"
@@ -46,6 +50,12 @@ export type SelectionItem = {
   salience: SelectionSalience;
   source: SelectionSource;
   timing?: SelectionTiming;
+  when?: string;
+  before?: string;
+  after?: string;
+  date?: string;
+  format?: string;
+  scored?: boolean;
   // When set, the UI hedges this item rather than stating it as confirmed:
   //   "type"  – inferred from the programme name/discipline (heuristic guess)
   //   "stale" – from an official source we believe is out of date (e.g. an
@@ -108,16 +118,10 @@ const OFFICIAL_FULL_INSTITUTIONS = new Set(["CityUHK", "PolyU", "HKBU"]);
 // last-cycle dates (e.g. "26 June 2025"). Remove once they refresh + we re-scrape.
 const STALE_OFFICIAL_INSTITUTIONS = new Set(["LingnanU"]);
 
-// Confirmed hard interview gates → salience "required" regardless of timing
-// (medicine / dentistry). Everything else is graded from timing.
-const REQUIRED_INTERVIEW = new Set(["JS6456", "JS6626", "JS4501", "JS4502", "JS6107"]);
-
-// Salience policy for a scraped interview: explicit source value wins (HKUST),
-// else medicine/dentistry = required, else pre-results = optional ("good to
-// have") and post-results / both = weighty (a real ranking factor).
-function interviewSalience(code: string, timing: SelectionTiming | undefined, given?: string): SelectionSalience {
+// Salience policy for a scraped interview: explicit source value wins (HKUST);
+// otherwise use only official timing, not discipline-based judgement.
+function interviewSalience(timing: SelectionTiming | undefined, given?: string): SelectionSalience {
   if (given === "required" || given === "weighty" || given === "optional") return given;
-  if (REQUIRED_INTERVIEW.has(code)) return "required";
   return timing === "pre-results" ? "optional" : "weighty";
 }
 
@@ -133,9 +137,15 @@ function officialItems(p: Programme): SelectionItem[] {
     const timing = (r.timing as SelectionTiming) || undefined;
     const salience: SelectionSalience =
       type === "interview"
-        ? interviewSalience(p.jupas_code, timing, r.salience)
+        ? interviewSalience(timing, r.salience)
         : ((r.salience as SelectionSalience) || "required");
     const item: SelectionItem = { type, salience, source: "official", timing };
+    if (r.when) item.when = r.when;
+    if (r.before) item.before = r.before;
+    if (r.after) item.after = r.after;
+    if (r.date) item.date = r.date;
+    if (r.format) item.format = r.format;
+    if (r.scored) item.scored = true;
     if (stale) item.inferred = "stale";
     return item;
   });
@@ -274,6 +284,53 @@ export function hasSelection(p: Programme): boolean {
   return getSelection(p).items.length > 0;
 }
 
+// ── Interview timing (surfacing helper) ───────────────────────────────────────
+// Timing is the official signal behind the Browse filter, list flag, and
+// analysis call-out. Vague entries such as "When necessary" remain visible in
+// Detail, but are treated as tentative and are not labelled/called out.
+const interviewCache = new WeakMap<Programme, SelectionItem | null>();
+function programmeInterview(p: Programme): SelectionItem | null {
+  let iv = interviewCache.get(p);
+  if (iv === undefined) {
+    iv = getSelection(p).items.find((i) => i.type === "interview") ?? null;
+    interviewCache.set(p, iv);
+  }
+  return iv;
+}
+
+// Raw timing of the programme's interview (pre-results / post-results / both), or
+// null when there's no interview or its timing is unknown. Drives the
+// timing-accurate analysis labels and the "before results" filter.
+export function interviewTiming(p: Programme): SelectionTiming | null {
+  return programmeInterview(p)?.timing ?? null;
+}
+
+export function interviewSourceText(p: Programme): string | null {
+  return programmeInterview(p)?.when ?? null;
+}
+
+export function isTentativeInterview(p: Programme): boolean {
+  const iv = programmeInterview(p);
+  if (!iv) return false;
+  const when = (iv.when || "").toLowerCase();
+  return /\bwhen necessary\b|\bif necessary\b|\bif required\b|\bwhere necessary\b/.test(when);
+}
+
+export function hasDisplayInterview(p: Programme): boolean {
+  const iv = programmeInterview(p);
+  return !!iv && !!iv.timing && !isTentativeInterview(p);
+}
+
+export function hasPostReleaseInterview(p: Programme): boolean {
+  if (isTentativeInterview(p)) return false;
+  const timing = interviewTiming(p);
+  return timing === "post-results" || timing === "both";
+}
+
+export function hasPreReleaseOnlyInterview(p: Programme): boolean {
+  return !isTentativeInterview(p) && interviewTiming(p) === "pre-results";
+}
+
 // ── i18n key helpers (shared by DetailPanel + analysis so labels stay in sync) ──
 export function selectionTypeKey(type: SelectionType): string {
   return {
@@ -302,4 +359,31 @@ export function selectionSalienceKey(salience: SelectionSalience): string {
     weighty: "sel.salience.weighty",
     optional: "sel.salience.optional",
   }[salience];
+}
+
+
+export function translateSelectionText(text: string | null | undefined, lang: Lang): string {
+  if (!text) return "";
+  if (lang !== "zh") return text;
+  const trimmed = text.trim();
+  const key = trimmed.toLowerCase().replace(/\s+/g, " ").replace(/–/g, "-");
+  if (INTERVIEW_TRANSLATIONS[key]) {
+    return INTERVIEW_TRANSLATIONS[key];
+  }
+  
+  if (trimmed.includes("Before results:") || trimmed.includes("After results:")) {
+    return trimmed.split(" · ").map(part => {
+      if (part.startsWith("Before results: ")) {
+        const val = part.substring("Before results: ".length);
+        return `放榜前：${translateSelectionText(val, lang)}`;
+      }
+      if (part.startsWith("After results: ")) {
+        const val = part.substring("After results: ".length);
+        return `放榜後：${translateSelectionText(val, lang)}`;
+      }
+      return translateSelectionText(part, lang);
+    }).join(" · ");
+  }
+
+  return trimmed;
 }

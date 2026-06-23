@@ -1,4 +1,6 @@
 import { useLang } from "../lib/i18n";
+import "./AdvisorEmptyState.css";
+
 
 export function AdvisorEmptyState() {
   const { t } = useLang();

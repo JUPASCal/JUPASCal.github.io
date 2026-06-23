@@ -1,0 +1,1151 @@
+/* MobileComparison styles */
+
+
+
+/* ---------- mobile comparison list (step 3) ----------
+   Wrapped in a single `.panel` whose heading reuses .panel-heading /
+   .step-title-content / .eyebrow / h2 – same building blocks as step
+   1 (GradeInput) and step 2 (ResultsView). Individual pick rows are
+   flat inside the panel (no own shadow / border / radius), separated
+   by thin dividers. A band-coloured left stripe per row preserves
+   the at-a-glance status cue. */
+/* Mobile heading typography mirrors Step 2's `.filters-topline` –
+   smaller eyebrow + h2 so the heading sits compactly at top-left
+   rather than dominating the panel. */
+.mc-panel .panel-heading {
+  justify-content: flex-start;
+}
+
+
+.mc-panel .panel-heading .step-title-content h2 {
+  font-size: 1.05rem;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+}
+
+
+.mc-panel .panel-heading .step-title-content .eyebrow {
+  margin-bottom: 2px;
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+}
+
+
+/* Small "ⓘ" button pinned to the top-right of the Step-3 heading.
+   Toggles a one-line popover with the "Tap any card…" hint –
+   replaces the always-visible subtitle so the heading stays
+   compact while keeping the hint discoverable. */
+.mc-info-button {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-4);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+
+
+.mc-info-button:hover {
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  color: var(--accent);
+}
+
+
+.mc-info-button:focus-visible {
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  color: var(--accent);
+}
+
+
+.mc-info-button[aria-expanded="true"] {
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  color: var(--accent);
+}
+
+
+/* Matches the .profile-more-dropdown surface tokens (border-radius
+   12px, --shadow, --surface-strong, --line border) so it reads as
+   part of the same family of floating menus already in the app. */
+/* Rich info panel (was a one-line tooltip). Shares the content classes
+   (.step2-info-title / -lede / -list / -ic) with the Step 2 popover; only
+   the positioning is Step-3-specific (anchored under the heading's ⓘ). */
+.mc-info-popover {
+  position: absolute;
+  top: calc(var(--space-3) + 24px + 4px);
+  right: var(--space-3);
+  z-index: 60;
+  width: min(300px, calc(100vw - 48px));
+  padding: var(--space-4);
+  background: var(--surface-strong);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow:
+    0 2px 6px rgba(29, 42, 47, 0.08),
+    0 12px 28px rgba(29, 42, 47, 0.14);
+  text-align: left;
+  color: var(--ink);
+  animation: step2-info-pop-in 130ms ease;
+}
+
+
+/* ── Mobile pane slide animation ─────────────────────────────────
+   One animation system covers both Step 1↔2↔3 step changes AND the
+   in-Step-3 compare↔detail swap. Same direction variants and the
+   same timing/easing so they read as one cohesive gesture across
+   the whole flow.
+
+   NOTE: end keyframe resolves to `transform: none` (not
+   `translateX(0)`) – any non-`none` transform on an ancestor
+   creates a new containing block for `position: sticky` /
+   `position: fixed` descendants (the panel-heading inside
+   MobileComparison, the .detail-edge-tap buttons inside
+   DetailPanel), which would pin them to the pane instead of the
+   viewport. Clearing transform at 100% restores normal behaviour
+   once the animation finishes. For the same reason we don't set
+   `will-change: transform` – the will-change hint would itself
+   create a containing block even when transform is `none`, which
+   would silently break the edge-tap buttons' viewport-fixed
+   positioning. Modern browsers auto-promote animated transforms
+   to the GPU without the hint. */
+.mobile-step3-pane {
+  animation: pane-slide-in 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+
+/* Suppress the inner-pane animation on initial Step 3 entry – the
+   step-level slide already covers that mount; double-firing would
+   look like a bouncy/jittery second slide. */
+.mobile-step3-pane.vt-no-anim {
+  animation: none;
+}
+
+
+.mobile-step3-pane.vt-forward {
+  --slide-from: 28px;
+}
+
+
+.mobile-step3-pane.vt-backward {
+  --slide-from: -28px;
+}
+
+
+@keyframes pane-slide-in {
+  0% {
+    opacity: 0;
+    transform: translate3d(var(--slide-from, 28px), 0, 0);
+  }
+  99% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+
+.mc-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  list-style: none;
+  padding: 0;
+  /* Top margin gives breathing room under the sticky heading;
+     side/bottom inset comes from the panel's own padding. */
+  margin: var(--space-3) 0 0;
+}
+
+/* THE iOS card-overflow fix. Each <li> is a flex item of this column. iOS Safari
+   wrongly applies the automatic minimum size (min-width:auto → min-content) to a
+   column flex item's CROSS axis, so a card with a long unbreakable name couldn't
+   shrink below that name's width and blew past the viewport (name overflowed with
+   no ellipsis, scale/stats ran off-screen). Spec-correct browsers don't (Android
+   was fine). Pinning min-width:0 overrides the buggy floor so the card tracks the
+   panel width and the name truncates. The <li> only has conditional drag classes,
+   so target it by element. */
+.mc-list > li {
+  min-width: 0;
+}
+
+
+.mc-row {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  padding: 10px 10px 10px 16px;
+  /* Each row is its own small card – band-coloured left stripe via
+     ::before continues to cue status at a glance, separation now
+     comes from the card's own border + radius instead of the parent
+     panel's flat top dividers. overflow: hidden clips the stripe
+     to the card's rounded corners so its top/bottom edges follow
+     the card curve instead of jutting out as sharp squares. */
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--surface-strong);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease;
+}
+
+/* The filled card is a <div role="button"> (see MobileComparison.tsx), NOT a
+   real <button>: iOS Safari doesn't give a <button>'s descendants a proper
+   containing-block width, so `width: 100%` resolved to the name's content width
+   and long names never truncated (the card clipped them with no "…"), the scale
+   collapsed, and the pill couldn't push right. A div lays out normally, so the
+   card just uses the base `.mc-row` flex column. */
+.mc-row-filled {
+  min-width: 0;
+}
+
+
+.mc-row-filled::before {
+  /* Band-coloured left stripe – sits against the card edge as a
+     per-row status cue. No border-radius needed: the parent's
+     overflow: hidden clips the stripe to the card's rounded
+     corners, so the stripe ends naturally follow the curve. */
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--line);
+}
+
+
+.mc-row-filled.band-above-uq::before { background: var(--good); }
+
+
+.mc-row-filled.band-above-median::before { background: var(--good); }
+
+.mc-row-filled.band-above-lq::before     { background: var(--warn); }
+
+.mc-row-filled.band-below-lq::before     { background: var(--bad); }
+
+.mc-row-filled.band-no-score::before     { background: var(--muted); }
+
+
+/* Level-2 band tinting – card background picks up a soft band
+   tint and the border deepens with the band colour so a "below
+   LQ" pick reads as alarming at-a-glance without the strip alone
+   doing all the work. Healthy cards stay neutral. */
+.mc-row-filled.band-above-uq {
+  background: color-mix(in srgb, var(--good) 8%, var(--surface-strong));
+  border-color: color-mix(in srgb, var(--good) 28%, var(--line));
+}
+
+
+/* Level-2 band tinting – card background picks up a soft band
+   tint and the border deepens with the band colour so a "below
+   LQ" pick reads as alarming at-a-glance without the strip alone
+   doing all the work. Healthy cards stay neutral. */
+.mc-row-filled.band-above-median {
+  background: color-mix(in srgb, var(--good) 8%, var(--surface-strong));
+  border-color: color-mix(in srgb, var(--good) 28%, var(--line));
+}
+
+.mc-row-filled.band-above-lq {
+  background: color-mix(in srgb, var(--warn) 8%, var(--surface-strong));
+  border-color: color-mix(in srgb, var(--warn) 28%, var(--line));
+}
+
+.mc-row-filled.band-below-lq {
+  background: color-mix(in srgb, var(--bad) 9%, var(--surface-strong));
+  border-color: color-mix(in srgb, var(--bad) 32%, var(--line));
+}
+
+
+/* Dark mode: bump band tint strength so the cards still read as
+   coloured against a dark surface. 8/28% mixes that work in light
+   mode (cream base, saturated band colours) look almost neutral
+   on the dark surface with pastel band colours, so we lift the
+   bg mix to ~18% and the border to ~55% for clearer signal. */
+:root[data-theme="dark"] .mc-row-filled.band-above-uq {
+  background: color-mix(in srgb, var(--good) 16%, var(--surface-strong));
+  border-color: color-mix(in srgb, var(--good) 50%, var(--line));
+}
+
+
+/* Dark mode: bump band tint strength so the cards still read as
+   coloured against a dark surface. 8/28% mixes that work in light
+   mode (cream base, saturated band colours) look almost neutral
+   on the dark surface with pastel band colours, so we lift the
+   bg mix to ~18% and the border to ~55% for clearer signal. */
+:root[data-theme="dark"] .mc-row-filled.band-above-median {
+  background: color-mix(in srgb, var(--good) 16%, var(--surface-strong));
+  border-color: color-mix(in srgb, var(--good) 50%, var(--line));
+}
+
+:root[data-theme="dark"] .mc-row-filled.band-above-lq {
+  background: color-mix(in srgb, var(--warn) 16%, var(--surface-strong));
+  border-color: color-mix(in srgb, var(--warn) 50%, var(--line));
+}
+
+:root[data-theme="dark"] .mc-row-filled.band-below-lq {
+  background: color-mix(in srgb, var(--bad) 18%, var(--surface-strong));
+  border-color: color-mix(in srgb, var(--bad) 55%, var(--line));
+}
+
+
+/* Ineligible programmes get a full red treatment that overrides the
+   band tint above – score-vs-benchmark is moot if the student can't
+   apply at all, so the band signal would be misleading. These rules
+   sit AFTER the band rules so same-specificity ordering wins. */
+.mc-row-filled.is-ineligible {
+  background: color-mix(in srgb, var(--bad) 10%, var(--surface-strong));
+  border-color: color-mix(in srgb, var(--bad) 45%, var(--line));
+}
+
+.mc-row-filled.is-ineligible::before {
+  background: var(--bad);
+}
+
+
+:root[data-theme="dark"] .mc-row-filled.is-ineligible {
+  background: color-mix(in srgb, var(--bad) 18%, var(--surface-strong));
+  border-color: color-mix(in srgb, var(--bad) 60%, var(--line));
+}
+
+
+/* Inline warning banner inside an ineligible row – sits between the
+   header and the bench bar so the user sees the verdict before the
+   numbers. Bold red text + warning glyph; full row width. */
+.mc-warning {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--bad) 14%, var(--surface-strong));
+  border: 1px solid color-mix(in srgb, var(--bad) 38%, var(--line));
+  color: var(--bad);
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+
+.mc-warning svg {
+  flex: 0 0 14px;
+  margin-top: 1px;
+}
+
+
+:root[data-theme="dark"] .mc-warning {
+  background: color-mix(in srgb, var(--bad) 20%, var(--surface-strong));
+  border-color: color-mix(in srgb, var(--bad) 55%, var(--line));
+}
+
+
+.mc-row-filled:hover {
+  border-color: color-mix(in srgb, var(--accent) 35%, var(--line));
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+
+.mc-row-filled:focus-visible {
+  border-color: color-mix(in srgb, var(--accent) 35%, var(--line));
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+
+.mc-row-filled:active {
+  transform: scale(0.995);
+}
+
+
+.mc-row-empty {
+  /* Now a <div> containing two child buttons: .mc-empty-add (the
+     main add-a-programme tap target) + optional .mc-empty-remove
+     (the × that splices out the slot). Cursor/hover live on the
+     inner buttons, not the wrapper, so the dead space between them
+     isn't an interactive blob. */
+  padding: 0;
+  background: color-mix(in srgb, var(--surface) 40%, transparent);
+  border-style: dashed;
+  box-shadow: none;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 0;
+  cursor: default;
+  transition: background-color 120ms ease, border-color 120ms ease;
+}
+
+
+.mc-row-empty:has(.mc-empty-add:hover) {
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface-strong));
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--line));
+}
+
+
+.mc-row-empty:has(.mc-empty-add:focus-visible) {
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface-strong));
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--line));
+}
+
+
+/* Main "Add a programme" tap target – fills the row minus the ×
+   button's slot on the right. Inherits the same flex/gap layout
+   the old single-button row had so the slot label / hint / + glyph
+   line up exactly as before. */
+.mc-empty-add {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 10px 10px 16px;
+  border: none;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+}
+
+
+.mc-empty-label {
+  font-size: 0.86rem;
+  color: var(--muted);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+
+/* Plus glyph at the far right of the add target – affordance cue
+   that the area is tappable to add a programme. */
+.mc-empty-plus {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 14%, var(--surface-strong));
+  color: var(--accent);
+  font-size: 1rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+
+/* × button to splice out an interior empty slot. Sits to the right
+   of the add target, visually muted so it doesn't compete with the
+   primary "+" affordance, but enlarges slightly on hover/focus. */
+.mc-empty-remove {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  align-self: stretch;
+  margin-right: 4px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+
+
+.mc-empty-remove:hover {
+  background: color-mix(in srgb, var(--bad) 14%, transparent);
+  color: var(--bad);
+}
+
+
+.mc-empty-remove:focus-visible {
+  background: color-mix(in srgb, var(--bad) 14%, transparent);
+  color: var(--bad);
+}
+
+
+.mc-slot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  min-width: 34px;
+  height: 22px;
+  padding: 0 6px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--accent) 14%, var(--surface));
+  color: var(--accent);
+  font-size: 0.74rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+
+/* Slot pill on filled cards doubles as the drag handle for
+   reordering. touch-action: none stops the browser from
+   interpreting the gesture as a vertical scroll, so dragging
+   actually moves the card. */
+.mc-slot-handle {
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  /* Slight border + tonal background lift so the chip reads as a
+     pressable affordance rather than a passive label. */
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+  transition: background-color 120ms ease, border-color 120ms ease;
+}
+
+
+.mc-slot-handle:hover {
+  background: color-mix(in srgb, var(--accent) 22%, var(--surface));
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+}
+
+
+.mc-slot-handle:active {
+  background: color-mix(in srgb, var(--accent) 22%, var(--surface));
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+}
+
+
+.mc-slot-handle:active {
+  cursor: grabbing;
+}
+
+
+/* 6-dot grip icon – the visual cue that the chip is draggable. */
+.mc-slot-grip {
+  width: 7px;
+  height: 11px;
+  fill: currentColor;
+  opacity: 0.55;
+  flex-shrink: 0;
+}
+
+
+.mc-slot-handle:hover .mc-slot-grip {
+  opacity: 0.85;
+}
+
+
+.mc-slot-handle:active .mc-slot-grip {
+  opacity: 0.85;
+}
+
+
+.mc-slot-text {
+  line-height: 1;
+}
+
+
+/* Dragging card: lifted z-index, no transition (follows finger
+   directly), beefier shadow as a "picked up" cue. */
+.mc-li-dragging {
+  position: relative;
+  z-index: 5;
+  filter: drop-shadow(0 6px 16px rgba(29, 42, 47, 0.18));
+  transition: none !important;
+}
+
+
+/* Neighbouring cards animate into their new slots while the user
+   drags. Excludes the dragged card so it stays glued to the
+   finger. */
+.mc-li-shifting {
+  transition: transform 180ms cubic-bezier(0.2, 0, 0.2, 1);
+}
+
+
+.mc-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+  min-width: 0;
+  margin-bottom: -2px;
+}
+
+
+/* Eligibility chip – reuses the shared `.status pass/fail` token
+   used by Step 2's results table so the visual language is the same
+   across the app. Pushed right with margin-left:auto so it reads as
+   the row's status flag. */
+.status.mc-elig {
+  margin-left: auto;
+  padding: 2px 8px;
+  font-size: 0.68rem;
+}
+
+
+.mc-code {
+  font-size: 0.95rem;
+  font-weight: 900;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+  flex-shrink: 0;
+}
+
+
+.mc-inst {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+
+/* Name + zh stack – keep both on a single line each so vertical
+   footprint stays predictable. */
+/* Block (not flex): a nowrap text node inside a flex column isn't constrained to
+   the parent width on iOS Safari, so text-overflow:ellipsis never fires and the
+   name hard-overflows the card. Block-level truncation (display:block children
+   filling the block's width) is the reliable cross-browser pattern. */
+.mc-name {
+  display: block;
+  /* Explicit width so the block <em> truly fills it and ellipses its own text.
+     Without it iOS leaves the name at content width → the card's overflow:hidden
+     hard-clips it with no "…". */
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  line-height: 1.2;
+  margin-top: -2px;
+}
+
+
+.mc-name em {
+  display: block;
+  max-width: 100%;
+  font-style: normal;
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+.mc-name small {
+  display: block;
+  max-width: 100%;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+/* The wrap reserves vertical space above the bar for the floating
+   score bubble (~24px + arrow) and below for the tick labels (~24px tall). */
+.mc-track-wrap {
+  position: relative;
+  margin: 30px 14px 24px;
+}
+
+
+/* Holds the bubble + bar and provides the positioning context for the
+   absolutely-positioned score bubble (left:%).
+   NO `container-type` here: on iOS/WebKit a containment element zeroes the
+   containing-block width used to resolve its abspos descendants' `left:%`, so
+   the score bubble piled onto the left edge even with an explicit width (the
+   in-flow ticks/marker, which live in the non-container `.mc-track`, were fine —
+   that's why only the bubble stayed broken). It only powered the bubble-arrow's
+   `cqw` nudge, a minor edge-only polish we drop in favour of robustness. */
+.mc-track-inner {
+  position: relative;
+  width: 100%;
+}
+
+
+/* No-benchmark rows skip the bar + ticks but still surface the
+   user's calculated score. The bubble centres itself with neither
+   bar to anchor to nor a band colour. */
+.mc-track-wrap.mc-track-empty {
+  margin: var(--space-2) 14px var(--space-2);
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.mc-track-wrap.mc-track-empty .mc-score-bubble {
+  position: static;
+  transform: none;
+}
+
+
+/* Coloured score bubble that sits on the scale at the user's value.
+   Position is set inline via `left: X%`; transform centres it
+   horizontally and pulls it above the bar. A small arrow ::after
+   visually anchors the bubble to the marker dot beneath. */
+/* Score bubble is just the number now – band info is communicated
+   by the bubble's colour, the marker dot, and the row's left
+   stripe. Smaller, square-ish pill that doesn't read as a long
+   ribbon. */
+.mc-score-bubble {
+  /* --bubble-bg / --bubble-fg are set per band below. The arrow
+     uses --bubble-bg so its fill always matches the bubble's. */
+  --bubble-bg: var(--surface-strong);
+  --bubble-fg: var(--muted);
+  position: absolute;
+  bottom: 15px;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* Asymmetric padding to counter the font's intrinsic top-heavy
+     metrics – at 900-weight the digit glyph sits significantly
+     above the line-box centre. Stack top padding higher than
+     bottom so the digit drops to its visual centre. line-height: 1
+     keeps the box tight. */
+  padding: 5px 8px 2px;
+  border-radius: 8px;
+  border: 1.5px solid var(--bubble-bg);
+  background: var(--bubble-bg);
+  color: var(--bubble-fg);
+  font-size: 0.85rem;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  white-space: nowrap;
+  z-index: 3;
+}
+
+.mc-panel .mc-score-bubble {
+  bottom: 13px;
+}
+
+
+/* Bubble pointer — a STANDALONE element (not the bubble's ::after) pinned to the
+   marker's x via inline `left: userPct%`, so it always points at the dot, even at
+   the scale edges where the bubble itself is clamped inward. (Replaces the old
+   ::after + `cqw` shift, which needed container-type — removed for the iOS fix.)
+   The clamp gap is small enough that the arrow's base stays under the bubble.
+   Colour matches the bubble's band fill. */
+.mc-bubble-arrow {
+  position: absolute;
+  bottom: 10px;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid var(--surface-strong);
+  z-index: 3;
+}
+
+.mc-bubble-arrow.band-above-uq { border-top-color: var(--good); }
+
+.mc-bubble-arrow.band-above-median { border-top-color: var(--good); }
+
+.mc-bubble-arrow.band-above-lq      { border-top-color: var(--warn); }
+
+.mc-bubble-arrow.band-below-lq      { border-top-color: var(--bad); }
+
+.mc-bubble-arrow.band-no-score      { display: none; }
+
+
+/* Tiny caption used only by the no-benchmark variant – sits under
+   the static score pill in place of the bar. */
+.mc-no-data-caption {
+  margin-left: 8px;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+
+/* Three-tone palette per the design brief: above UQ + above median
+   share green (you've cleared the bar), above LQ is yellow
+   (borderline), below LQ is red (under). Filled (solid-bg + white
+   text) variant for Level-2 emphasis – the score reads as a
+   "stamp" rather than an outline. */
+.mc-score-bubble.band-above-uq {
+  --bubble-bg: var(--good);
+  --bubble-fg: var(--surface-strong);
+}
+
+
+/* Three-tone palette per the design brief: above UQ + above median
+   share green (you've cleared the bar), above LQ is yellow
+   (borderline), below LQ is red (under). Filled (solid-bg + white
+   text) variant for Level-2 emphasis – the score reads as a
+   "stamp" rather than an outline. */
+.mc-score-bubble.band-above-median {
+  --bubble-bg: var(--good);
+  --bubble-fg: var(--surface-strong);
+}
+
+.mc-score-bubble.band-above-lq {
+  --bubble-bg: var(--warn);
+  --bubble-fg: var(--surface-strong);
+}
+
+.mc-score-bubble.band-below-lq {
+  --bubble-bg: var(--bad);
+  --bubble-fg: var(--surface-strong);
+}
+
+.mc-score-bubble.band-no-score {
+  /* No-benchmark variant stays outline-style – solid grey stamp
+     would read as broken. The arrow is hidden via is-static rule
+     above since there's no bar to point to. */
+  --bubble-bg: var(--surface-strong);
+  --bubble-fg: var(--muted);
+  border-color: var(--muted);
+}
+
+.mc-score-bubble.is-static {
+  /* No-benchmark variant stays outline-style – solid grey stamp
+     would read as broken. The arrow is hidden via is-static rule
+     above since there's no bar to point to. */
+  --bubble-bg: var(--surface-strong);
+  --bubble-fg: var(--muted);
+  border-color: var(--muted);
+}
+
+
+.mc-track {
+  position: relative;
+  /* Offset parent for the ticks/marker (left:%). Pin width so a collapsed
+     container ancestor on iOS can never pile them onto a single point. */
+  width: 100%;
+  height: 5px;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--line) 80%, transparent);
+}
+
+
+/* Dark mode: --line is a deep brown that nearly blends into the
+   card surface, so the bar and ticks become invisible. Switch the
+   base shading to derive from --ink (light beige in dark mode) for
+   a visible scale + tick line. Same idea for the marker halo – the
+   2px border was --surface-strong (dark in dark mode) which made
+   the band-coloured dot blur into the bar. */
+:root[data-theme="dark"] .mc-track {
+  background: color-mix(in srgb, var(--ink) 45%, transparent);
+}
+
+
+:root[data-theme="dark"] .mc-tick {
+  background: color-mix(in srgb, var(--ink) 80%, transparent);
+}
+
+
+:root[data-theme="dark"] .mc-marker {
+  border-color: var(--ink);
+}
+
+
+.mc-track.no-score {
+  background: transparent;
+  border: 1px dashed var(--line);
+}
+
+
+.mc-track-no-data {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+
+.mc-tick {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  width: 1.5px;
+  background: color-mix(in srgb, var(--ink) 35%, transparent);
+  transform: translateX(-50%);
+}
+
+
+/* Inline tick label: "LQ 21" on one line. Baseline-aligned with
+   matched font-sizes so the value digit reads on the same visual
+   line as the position label – center-aligned was offsetting the
+   bolder digit upward relative to the cap-height of "LQ" because
+   their line-boxes don't share a common centre. */
+.mc-tick-label {
+  position: absolute;
+  top: 9px;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 3px;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  line-height: 1;
+}
+
+
+.mc-tick-label em {
+  font-style: normal;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+
+.mc-tick-label b {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+
+/* Separator used when a merged tick has distinct values for each
+   label – "LQ 34.8 · MED 35". Slightly more breathing room than
+   the default flex gap. */
+.mc-tick-sep {
+  margin: 0 2px;
+  color: var(--muted);
+  font-weight: 800;
+}
+
+
+.mc-marker {
+  position: absolute;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--surface-strong);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+
+.mc-marker.band-above-uq { background: var(--good); }
+
+
+.mc-marker.band-above-median { background: var(--good); }
+
+.mc-marker.band-above-lq      { background: var(--warn); }
+
+.mc-marker.band-below-lq      { background: var(--bad); }
+
+.mc-marker.band-no-score      { display: none; }
+
+
+/* Ineligible override for the score scale — the band colour (green/amber) is
+   misleading when the student can't apply at all, so force the red "not
+   eligible" tone on the bubble, its pointer, and the marker dot. Placed AFTER
+   all the band-* rules so equal-specificity ordering wins. Mirrors the Compare
+   row's `.mc-row-filled.is-ineligible` treatment. */
+.mc-score-bubble.is-ineligible {
+  --bubble-bg: var(--bad);
+  --bubble-fg: var(--surface-strong);
+  border-color: var(--bad);
+}
+
+.mc-bubble-arrow.is-ineligible { border-top-color: var(--bad); }
+
+.mc-marker.is-ineligible { background: var(--bad); }
+
+
+/* Mini-table: places / Band A applicants / applicants per place.
+   The score, band, and eligibility moved into the scale + header,
+   so this is now the only structured stats block per row. */
+.mc-stats {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  background: color-mix(in srgb, var(--surface) 65%, transparent);
+  border: 1px solid color-mix(in srgb, var(--line) 80%, transparent);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+
+.mc-stat {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 4px 5px;
+  text-align: center;
+  border-right: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
+  min-width: 0;
+}
+
+
+.mc-stat:last-child {
+  border-right: none;
+}
+
+
+.mc-stat-label {
+  font-size: 0.5rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--muted);
+  line-height: 1.1;
+  margin-bottom: 2px;
+  text-align: center;
+}
+
+
+.mc-stat-value {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+
+/* The Step-3 score scale (.mc-track-wrap) lives inside a narrower, more compact
+   card here than in the Compare step. Shrink the score bubble + tick labels and
+   trim the margins so each section is tight — while keeping just enough top room
+   that the (smaller) bubble clears the programme name above it instead of
+   overlapping it. */
+.recap-bar .mc-track-wrap {
+  margin: 23px 4px 16px;
+}
+
+
+.recap-bar .mc-score-bubble {
+  bottom: 9px;
+  padding: 2px 6px 1px;
+  font-size: 0.72rem;
+  border-width: 1px;
+}
+
+
+/* The pointer is now a standalone `.mc-bubble-arrow` (not the bubble's ::after,
+   which was dropped in the iOS container-query fix). Its default sits at
+   bottom:10px — above the compact recap bubble's bottom:9px — so it overlapped
+   the pill. Pin it just UNDER the smaller bubble (top edge at the bubble's 9px
+   bottom) and shrink it to match. */
+.recap-bar .mc-bubble-arrow {
+  bottom: 5px;
+  border-left-width: 4px;
+  border-right-width: 4px;
+  border-top-width: 4px;
+}
+
+
+/* Sit the LQ/MED/UQ labels clear below the 12px score-marker dot so that when
+   the user's score lands on a tick, the dot doesn't cover the label text. */
+.recap-bar .mc-tick-label {
+  top: 11px;
+}
+
+
+.recap-bar .mc-tick-label em {
+  font-size: 0.62rem;
+}
+
+
+.recap-bar .mc-tick-label b {
+  font-size: 0.62rem;
+}
+
+
+/* Shorten the tick marks so the vertical line sits on the track instead of
+   reaching down into the LQ/MED/UQ labels below it. */
+.recap-bar .mc-tick {
+  top: -2px;
+  bottom: 0;
+  /* Even width so translateX(-50%) is a whole pixel — keeps the ticks an even
+     thickness in the PNG export instead of some rasterizing thicker than others. */
+  width: 2px;
+}
+
+
+/* Inline (Step-3) analysis: the pane is a plain block with no gap, so the
+   disclaimer card sat flush against the panel above it (looked like one box).
+   Add the same separation the page variant gets from `.share-view`'s gap. */
+.mobile-step3-pane .share-disclaimer {
+  margin-top: var(--space-4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobile-step3-pane {
+      animation: none;
+    }
+}
+
+
+@media (max-width: 920px) {
+
+
+    .mc-panel .panel-heading {
+      position: sticky;
+      top: 45px;
+      z-index: 26;
+      /* Match the panel body (--surface-mix) so the sticky heading reads as one
+         continuous surface with the content below it. The .is-stuck box-shadow
+         provides separation from the page when scrolled. */
+      background: var(--surface-mix);
+      border: 0;
+      border-bottom: 1px solid var(--line);
+      border-radius: 20px 20px 0 0;
+      box-shadow: none;
+      transition: box-shadow 200ms ease;
+      margin: 0;
+      padding: var(--space-3) 0 var(--space-2);
+    }
+
+    .stepper-panel .mc-panel .panel-heading {
+      margin: calc(-1 * var(--space-4)) calc(-1 * var(--space-4)) 0;
+      padding: var(--space-3) var(--space-4) var(--space-2);
+    }
+
+
+
+    .mc-panel .panel-heading.is-stuck {
+      border-radius: 0;
+      box-shadow: 0 8px 18px rgba(29, 42, 47, 0.08);
+    }
+
+
+    .mc-panel .panel-heading {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: end;
+      gap: var(--space-3);
+    }
+}

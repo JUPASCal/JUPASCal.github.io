@@ -1,0 +1,1431 @@
+/* ShareView styles */
+
+
+
+/* Shared step-card header: consistent h2 size across all three panels.
+   Serif display family for headlines (editorial palette feel) – body
+   text stays sans-serif via the inherited font-family on :root. */
+.share-panel-heading .step-title-content h2 {
+  font-family: "Iowan Old Style", "Source Serif Pro", "Charter", Georgia, "Times New Roman", serif;
+  font-size: 1.36rem;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+}
+
+
+.share-button {
+  padding: var(--space-2) var(--space-3);
+  font-size: 0.8rem;
+  min-height: 36px;
+}
+
+
+.share-button.copied {
+  border-color: var(--good);
+  color: var(--good);
+}
+
+
+.share-view {
+  max-width: 1120px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  /* Smooth entrance when arriving from Step 3 (tap Analysis / Share).
+     The view is a full top-level swap, so we animate it IN (the Step-3
+     pane unmounts instantly underneath). Same easing as the stepper
+     slides so it reads as one motion language. `both` holds the start
+     frame to avoid a first-paint flash. */
+  animation: share-view-in 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+
+@keyframes share-view-in {
+  from {
+    opacity: 0;
+    transform: translateX(28px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+
+/* Exit (Back) — mirror of the entrance: slide out to the right + fade,
+   so it reverses the way it came in. Higher specificity than the base
+   .share-view rule, so it overrides the entrance animation. */
+.share-view.is-exiting {
+  animation: share-view-out 280ms cubic-bezier(0.4, 0, 1, 1) both;
+}
+
+
+@keyframes share-view-out {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translateX(28px);
+  }
+}
+
+
+
+.share-profile-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-top: calc(16px - var(--space-6));
+  background: linear-gradient(135deg, #ffffff, var(--surface));
+}
+
+
+.share-profile-card > div {
+  display: grid;
+  gap: 3px;
+}
+
+
+.share-profile-card strong {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+
+.share-profile-card span {
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 750;
+}
+
+
+.share-section {
+  display: grid;
+  gap: var(--space-4);
+}
+
+
+.share-section-heading {
+  display: grid;
+  gap: var(--space-1);
+}
+
+
+.share-section-heading h1 {
+  margin: 0;
+  font-size: clamp(1.5rem, 3vw, 2.3rem);
+  letter-spacing: -0.04em;
+}
+
+
+.recap-card {
+  width: min(416px, calc(100vw - 34px));
+  max-width: 100%;
+  flex: 0 0 auto;
+  align-self: center;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: var(--space-2);
+  margin: 0 auto;
+  padding: var(--space-4);
+  border-radius: 24px;
+  /* Neutral warm border (was a reddish accent mix that clashed with the green
+     grade colours). */
+  border: 1px solid var(--line);
+  /* Warm beige base (--recap-base) rather than the near-white --surface-strong,
+     so the card reads warm/earthy and sits well with the green/amber/red grades.
+     --recap-base defaults to --surface (used in dark); the light-mode rule below
+     swaps it for a yellow/light-brown tint. The white programme cards then pop as
+     raised panels on top. Plain (no pattern). */
+  background: var(--recap-base, var(--surface));
+}
+
+
+/* Light mode only (scoped to the share card so the app's global theme is
+   untouched): nudge the card base off the peachy --surface toward a
+   yellow/light-brown tan, and soften the near-black --ink text to a warm dark
+   grey. Both cascade to the card's descendants via the custom properties — the
+   programme-card text, tick values, and dot texture all pick them up. */
+:root:not([data-theme="dark"]) .recap-card {
+  --recap-base: color-mix(in srgb, var(--surface) 38%, white);
+}
+
+
+.recap-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+
+.recap-card-top b {
+  color: var(--ink);
+}
+
+
+.recap-footnote {
+  margin: 0;
+  color: var(--muted);
+}
+
+
+.recap-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+
+.recap-bar {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 9px 12px 9px 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface-strong);
+  overflow: hidden;
+}
+
+
+.recap-bar::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--line);
+}
+
+
+/* Band tone drives the left stripe, a diagonal wash, and the border so each
+   card reads its band at a glance — mirroring the Step-3 score-context card.
+   above-UQ + above-median share green, above-LQ amber, below-LQ red. */
+.recap-bar.filled { --band-tone: var(--accent); }
+
+.recap-bar.filled.band-above-uq { --band-tone: var(--good); }
+
+.recap-bar.filled.band-above-median { --band-tone: var(--good); }
+
+.recap-bar.filled.band-above-lq      { --band-tone: var(--warn); }
+
+.recap-bar.filled.band-below-lq      { --band-tone: var(--bad); }
+
+.recap-bar.filled.band-no-score      { --band-tone: var(--muted); }
+
+/* Ineligible overrides the band tint with red — the benchmark colour is moot
+   when the student can't apply. Drives the card wash, border, stripe, the band
+   chip + slot badge (all read --band-tone). After the band rules so it wins. */
+.recap-bar.filled.is-ineligible      { --band-tone: var(--bad); }
+
+
+.recap-bar.filled {
+  /* Plain band wash (no pattern): a faint band-tinted surface so each card
+     reads its green/amber/red band at a glance, with a band-toned border. */
+  background: color-mix(in srgb, var(--band-tone) 7%, var(--surface-strong));
+  border-color: color-mix(in srgb, var(--band-tone) 42%, var(--line));
+}
+
+
+.recap-bar.filled::before { background: var(--band-tone); }
+
+
+/* Solid band-coloured chip + slot badge (replacing the orange accent slot,
+   which clashed with the amber/red grade colours). */
+.recap-bar.filled .band {
+  background: var(--band-tone);
+  color: var(--surface-strong);
+  border-color: transparent;
+}
+
+
+.recap-bar.filled .recap-bar-slot {
+  background: var(--band-tone);
+  color: var(--surface-strong);
+}
+
+
+.recap-bar-slot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 22px;
+  padding: 0;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  flex: 0 0 auto;
+  box-sizing: border-box;
+}
+
+
+.recap-bar-headline {
+  display: grid;
+  grid-template-columns: 34px max-content minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: var(--space-2);
+  row-gap: 4px;
+  min-width: 0;
+}
+
+
+.recap-bar-headline > b.band {
+  justify-self: end;
+  align-self: center;
+}
+
+
+.recap-bar-headline > .recap-bar-name {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+
+
+.recap-bar-headline strong {
+  color: var(--ink);
+  font-size: 0.95rem;
+  font-weight: 900;
+  letter-spacing: 0.01em;
+  flex: 0 0 auto;
+}
+
+
+.recap-bar-inst {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  flex: 0 0 auto;
+}
+
+
+.recap-bar-name {
+  font-style: normal;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.25;
+  margin-top: 2px;
+}
+
+
+.recap-bar-name-en {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+.recap-bar-name-zh {
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+.recap-bar b.band {
+  font-size: 0.72rem;
+}
+
+.recap-card .recap-bar .mc-track-wrap {
+  margin-top: 30px;
+}
+
+.recap-card .recap-bar .mc-score-bubble {
+  bottom: 13px;
+}
+
+.recap-bar .mc-bubble-arrow {
+  position: absolute;
+  bottom: 8px;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid var(--surface-strong);
+  z-index: 4;
+}
+
+.recap-bar .mc-bubble-arrow.band-above-uq,
+.recap-bar .mc-bubble-arrow.band-above-median {
+  border-top-color: var(--good);
+}
+
+.recap-bar .mc-bubble-arrow.band-above-lq {
+  border-top-color: var(--warn);
+}
+
+.recap-bar .mc-bubble-arrow.band-below-lq,
+.recap-bar .mc-bubble-arrow.is-ineligible {
+  border-top-color: var(--bad);
+}
+
+.recap-bar .mc-bubble-arrow.band-no-score {
+  display: none;
+}
+
+
+
+.recap-footnote {
+  font-size: 0.62rem;
+  line-height: 1.3;
+  letter-spacing: 0.02em;
+  text-align: center;
+}
+
+
+.recap-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  align-self: center;
+  /* Pull up toward the card: counteract the share-panel-body's --space-5 row
+     gap down to 16px (24px gap − 8px) so the toggle sits just under the card. */
+  margin-top: calc(-1 * var(--space-2));
+  padding: 6px 14px 6px 8px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface-strong);
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  user-select: none;
+}
+
+
+.recap-toggle:has(input:checked) {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface-strong));
+}
+
+
+.recap-toggle input {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 26px;
+  height: 14px;
+  min-height: 0;
+  padding: 0;
+  border: none;
+  margin: 0;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--muted) 30%, var(--surface));
+  background-color: color-mix(in srgb, var(--muted) 30%, var(--surface));
+  cursor: pointer;
+  display: inline-block;
+  flex: 0 0 auto;
+  position: relative;
+  transition: background 160ms ease;
+}
+
+
+.recap-toggle input::after {
+  content: "";
+  position: absolute;
+  top: 1.5px;
+  left: 1.5px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: transform 160ms ease;
+}
+
+
+.recap-toggle input:checked {
+  background: var(--accent);
+  background-color: var(--accent);
+}
+
+
+.recap-toggle input:checked::after {
+  transform: translateX(12px);
+}
+
+
+
+/* ─── Share page revamp ─────────────────────────────────────── */
+
+/* Share page now uses the same `.panel` + `.panel-heading`
+   structure as Steps 1/2/3 – single hero panel wraps the heading
+   (eyebrow + name + stats + actions), the recap card, the share
+   action row, and the plan table. Spacing inside matches the
+   calculator pages so the share page reads as part of the same
+   product. */
+.share-panel-heading {
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+
+.share-panel-heading .step-title-content h2 {
+  margin: 0;
+  font-size: clamp(1.6rem, 2.4vw, 2.1rem);
+  letter-spacing: -0.02em;
+}
+
+
+/* Big profile name + inline rename pen (share + analysis pages). */
+.profile-name-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+
+.profile-name-edit {
+  flex: 0 0 auto;
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+
+
+.profile-name-edit:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--hover);
+  outline: none;
+}
+
+
+.profile-name-edit:focus-visible {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--hover);
+  outline: none;
+}
+
+
+/* Profile-switch chevron: a transparent native <select> sits over the chevron
+   icon button, so the browser's own popup (never clipped by the panel's
+   overflow:hidden) handles the list and we get keyboard support for free. */
+.profile-switch {
+  position: relative;
+  display: inline-flex;
+}
+
+
+.profile-switch-select {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  opacity: 0;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+
+.profile-switch:focus-within .profile-name-edit {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--hover);
+}
+
+
+.profile-switch:hover .profile-name-edit {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--hover);
+}
+
+
+.share-panel-stats {
+  margin: var(--space-1) 0 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+
+.share-panel-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  /* Always one row — if the buttons exceed the width they scroll horizontally
+     rather than wrapping to a second line. */
+  flex-wrap: nowrap;
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+
+.share-panel-actions::-webkit-scrollbar {
+  display: none;
+}
+
+
+.share-panel-actions .share-action {
+  flex: 0 0 auto;
+}
+
+
+.share-panel-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  margin-top: var(--space-5);
+}
+
+
+.share-profile-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+
+.share-profile-switch > span {
+  position: absolute;
+  top: -8px;
+  left: 12px;
+  padding: 0 4px;
+  background: var(--bg);
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  pointer-events: none;
+}
+
+
+.share-profile-switch select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding: 9px 32px 9px 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M1 1l4 4 4-4' fill='none' stroke='%23999' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/></svg>")
+    no-repeat right 12px center / 10px 6px,
+    var(--surface-strong);
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 0.86rem;
+  cursor: pointer;
+  min-width: 140px;
+  max-width: 220px;
+}
+
+
+.share-profile-switch select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+
+.share-profile-switch select:hover {
+  outline: none;
+  border-color: var(--accent);
+}
+
+
+.share-disclaimer {
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface-strong);
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+
+.analysis-bar {
+  display: grid;
+  grid-template-columns: 116px 1fr 28px;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+
+.analysis-bar-label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+
+
+.analysis-bar-label em {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 0.68rem;
+  color: var(--muted);
+}
+
+
+.analysis-bar-track {
+  height: 10px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+
+
+.analysis-bar-fill {
+  display: block;
+  height: 100%;
+  min-width: 0;
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+
+.analysis-bar-count {
+  font-weight: 800;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+
+.analysis-bar.tone-good .analysis-bar-fill { background: var(--good); }
+
+.analysis-bar.tone-warn .analysis-bar-fill { background: var(--warn); }
+
+.analysis-bar.tone-bad .analysis-bar-fill { background: var(--bad); }
+
+
+.share-recap-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+
+.share-plan-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+
+.share-section-bar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+
+.share-section-bar h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+
+
+.share-download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+
+.share-download-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+
+/* Share-action button row – sits right under the recap card. */
+.share-action-row {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 8px;
+  justify-content: center;
+  /* 16px below the toggle (24px panel row gap − 8px). */
+  margin-top: calc(-1 * var(--space-2));
+}
+
+
+.share-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--surface-strong);
+  color: var(--ink);
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color 140ms ease, color 140ms ease, background 140ms ease, transform 100ms ease;
+}
+
+
+.share-action svg {
+  width: 15px;
+  height: 15px;
+  flex: 0 0 auto;
+  display: block;
+}
+
+
+.share-action.icon-only {
+  width: 42px;
+  min-height: 42px;
+  padding: 0;
+  border-radius: 50%;
+  flex: 0 0 auto;
+}
+
+
+.share-action.icon-only svg {
+  width: 20px;
+  height: 20px;
+}
+
+
+.share-action.icon-only.whatsapp svg {
+  width: 25px;
+  height: 25px;
+}
+
+
+.share-action.icon-only.threads svg {
+  width: 25px;
+  height: 25px;
+}
+
+
+.share-action.icon-only.instagram svg {
+  width: 25px;
+  height: 25px;
+}
+
+
+.share-action-row {
+  gap: 7px;
+}
+
+
+.share-action:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+
+.share-action:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+
+.share-action:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+
+.share-action.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--bg);
+}
+
+
+.share-action.primary:hover:not(:disabled) {
+  filter: brightness(0.95);
+  color: var(--bg);
+}
+
+
+.share-action.whatsapp:hover:not(:disabled) { color: #25d366; border-color: #25d366; }
+
+.share-action.threads:hover:not(:disabled)  { color: var(--ink); border-color: var(--ink); }
+
+.share-action.instagram:hover:not(:disabled) {
+  color: #e1306c;
+  border-color: #e1306c;
+}
+
+
+:root[data-theme="dark"] .share-action.primary {
+  color: #15120f;
+}
+
+
+/* Plan table */
+.plan-table {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--surface-strong);
+}
+
+
+.plan-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) 72px 110px 64px 24px;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 12px 14px 12px 18px;
+  border-top: 1px solid var(--line);
+  cursor: pointer;
+  user-select: none;
+  font-size: 0.86rem;
+  transition: background 120ms ease;
+}
+
+
+.plan-row:first-child {
+  border-top: none;
+}
+
+
+.plan-row:hover {
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
+}
+
+
+.plan-row-header {
+  cursor: default;
+  background: color-mix(in srgb, var(--surface) 60%, transparent);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 800;
+  color: var(--muted);
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+
+.plan-row-header:hover {
+  background: color-mix(in srgb, var(--surface) 60%, transparent);
+}
+
+
+.plan-row::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--line);
+}
+
+
+.plan-row-header::before {
+  display: none;
+}
+
+
+.plan-row-filled.band-above-uq::before { background: var(--good); }
+
+.plan-row-filled.band-above-median::before { background: var(--accent); }
+
+.plan-row-filled.band-above-lq::before { background: var(--warn); }
+
+.plan-row-filled.band-below-lq::before { background: var(--bad); }
+
+.plan-row-filled.band-no-score::before { background: var(--muted); }
+
+
+.plan-row-empty {
+  cursor: default;
+  opacity: 0.65;
+}
+
+
+.plan-row-empty:hover {
+  background: transparent;
+}
+
+
+.plan-row-empty-label {
+  font-style: italic;
+  color: var(--muted);
+  grid-column: 2 / -1;
+}
+
+
+.plan-row-slot {
+  font-weight: 950;
+  font-size: 0.88rem;
+  color: var(--ink);
+  letter-spacing: 0.02em;
+}
+
+
+.plan-row-header .plan-row-slot {
+  color: var(--muted);
+}
+
+
+.plan-row-name {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 1px;
+}
+
+
+.plan-row-name strong {
+  font-weight: 900;
+  font-size: 0.92rem;
+  color: var(--ink);
+}
+
+
+.plan-row-name em {
+  font-style: normal;
+  color: var(--ink);
+  font-size: 0.82rem;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+.plan-row-name small {
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+
+.plan-row-score {
+  font-weight: 900;
+  font-size: 1rem;
+  color: var(--ink);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+
+.plan-row-band {
+  font-size: 0.74rem !important;
+  justify-self: end;
+}
+
+
+.plan-row-elig {
+  text-align: center;
+  font-weight: 900;
+  font-size: 1rem;
+}
+
+
+.plan-row-elig.pass { color: var(--good); }
+
+.plan-row-elig.fail { color: var(--bad); }
+
+
+.plan-row-chevron-col {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  transition: transform 180ms ease;
+}
+
+
+.plan-row.open .plan-row-chevron-col {
+  transform: rotate(180deg);
+  color: var(--accent);
+}
+
+
+.plan-row-expanded {
+  list-style: none;
+  border-top: 1px solid var(--line);
+  background: color-mix(in srgb, var(--surface) 50%, transparent);
+}
+
+
+.plan-row-expanded-inner {
+  padding: var(--space-3) var(--space-4) var(--space-4) calc(var(--space-4) + 4px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+
+.plan-detail-section h3 {
+  margin: 0 0 6px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+
+
+.plan-benchmarks {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 6px;
+}
+
+
+.plan-benchmark {
+  display: grid;
+  grid-template-columns: minmax(60px, auto) 1fr;
+  grid-template-rows: auto auto;
+  align-items: baseline;
+  gap: 2px var(--space-2);
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface-strong);
+}
+
+
+.plan-benchmark span {
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+
+.plan-benchmark strong {
+  font-size: 1rem;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
+
+.plan-benchmark b {
+  grid-column: 1 / -1;
+  font-weight: 800;
+  font-size: 0.82rem;
+  font-variant-numeric: tabular-nums;
+}
+
+
+.plan-benchmark em {
+  grid-column: 1 / -1;
+  font-style: normal;
+  font-size: 0.74rem;
+  color: var(--muted);
+}
+
+
+.plan-benchmark.positive b { color: var(--good); }
+
+.plan-benchmark.negative b { color: var(--bad); }
+
+
+.plan-failed-reqs {
+  margin: 0;
+  padding: 0 0 0 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.84rem;
+  line-height: 1.45;
+  color: var(--ink);
+}
+
+
+.plan-failed-reqs b {
+  font-weight: 900;
+  color: var(--bad);
+}
+
+
+/* "Share with a teacher or advisor" — a distinct card under the social
+   buttons that hands off a link to the detailed analysis dashboard. */
+/* "View analysis" — sits directly under the social-share icon row as a
+   full-width secondary action (mirrors the share-action pill style). */
+.share-view-analysis {
+  width: 100%;
+  gap: 8px;
+  margin-top: calc(-1 * var(--space-2));
+}
+
+
+.share-advisor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  text-align: center;
+  margin-top: var(--space-4);
+  padding: var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface-strong);
+}
+
+
+.share-advisor-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+
+.share-advisor-text strong {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+
+.share-advisor-text span {
+  font-size: 0.8rem;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+
+/* Accent-tinted variant of the .share-action pill, so it reads as the section's
+   primary call to action. */
+.share-advisor-btn.share-action {
+  gap: 8px;
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--line));
+  background: color-mix(in srgb, var(--accent) 7%, var(--surface-strong));
+}
+
+
+.share-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-5) 0 0;
+  border-top: 1px solid var(--line);
+}
+
+
+.share-toast {
+  position: fixed;
+  left: 50%;
+  top: calc(env(safe-area-inset-top, 0px) + 16px);
+  transform: translateX(-50%);
+  z-index: 200;
+  padding: 12px 20px;
+  border-radius: 18px;
+  background: var(--ink);
+  color: var(--surface-strong);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 1.35;
+  text-align: center;
+  white-space: normal;
+  max-width: min(420px, calc(100vw - 32px));
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.24);
+  animation: share-toast-in 200ms ease-out;
+}
+
+
+.share-toast-success { background: var(--good); color: #fff; }
+
+.share-toast-error { background: var(--bad); color: #fff; }
+
+.share-toast-info { background: var(--ink); color: var(--surface-strong); }
+
+
+:root[data-theme="dark"] .share-toast-info { color: var(--bg); }
+
+
+@keyframes share-toast-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -10px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+
+.share-footer p {
+  margin: 0;
+  font-size: 0.88rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .share-view {
+      animation: none;
+    }
+  .share-view.is-exiting {
+      animation: none;
+    }
+}
+
+
+@media (min-width: 921px) {
+  .share-view {
+      max-width: none;
+    }
+}
+
+
+@media (max-width: 920px) {
+  .share-view {
+      display: block;
+    }
+
+
+    .share-view > * + * {
+      margin-top: var(--space-4);
+    }
+  .share-view {
+      height: 100dvh;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+}
+
+
+@media (max-width: 720px) {
+
+    .share-section-bar {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .share-section-bar .share-download-btn {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .plan-row {
+      grid-template-columns: 38px minmax(0, 1fr) 56px 24px;
+      column-gap: var(--space-2);
+      row-gap: 4px;
+    }
+
+    .plan-row-header {
+      grid-template-columns: 38px minmax(0, 1fr) 56px 24px;
+      column-gap: var(--space-2);
+      row-gap: 4px;
+    }
+
+    .plan-row-header {
+      display: none;
+    }
+
+    .plan-row-band {
+      grid-column: 2 / 3;
+      justify-self: start;
+      text-align: left;
+      font-size: 0.7rem !important;
+    }
+
+    .plan-row-elig {
+      grid-column: 2 / 3;
+      justify-self: start;
+      text-align: left;
+      font-size: 0.7rem !important;
+    }
+
+    .plan-row-band {
+      grid-row: 2;
+    }
+
+    .plan-row-elig {
+      grid-row: 2;
+      margin-left: auto;
+    }
+
+    .plan-row-score {
+      grid-row: 1;
+      grid-column: 3 / 4;
+      text-align: right;
+    }
+
+    .plan-row-chevron-col {
+      grid-row: 1 / span 2;
+      grid-column: 4;
+    }
+
+    .share-footer {
+      flex-direction: column;
+    }
+}
+
+
+@media (max-width: 560px) {
+  .share-profile-card {
+      align-items: stretch;
+      flex-direction: column;
+    }
+
+
+    .recap-card {
+      border-radius: 22px;
+    }
+
+
+    .share-profile-card .ghost-button {
+      width: 100%;
+    }
+}
+
+
+@media print {
+
+
+    .share-button {
+      display: none !important;
+    }
+}

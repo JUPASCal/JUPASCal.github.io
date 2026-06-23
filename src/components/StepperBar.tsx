@@ -1,5 +1,7 @@
 import { Fragment } from "react";
 import { useLang } from "../lib/i18n";
+import "./StepperBar.css";
+
 
 // The 1·2·3 progress bar used by the mobile calculator flow (and the
 // Analysis view, so it reads as a natural in-flow "Step 4"). Extracted from

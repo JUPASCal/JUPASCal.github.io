@@ -1973,6 +1973,14 @@ def unify_data():
             _when = _interview_when(_rec)
             if _when:
                 _iv["when"] = _when
+            if _rec.get("before"):
+                _iv["before"] = _rec["before"].strip()
+            if _rec.get("after"):
+                _iv["after"] = _rec["after"].strip()
+            if _rec.get("date"):
+                _iv["date"] = _rec["date"].strip()
+            if _rec.get("format"):
+                _iv["format"] = _rec["format"].strip()
             if _rec.get("salience"):
                 _iv["salience"] = _rec["salience"]
             if _rec.get("scored"):
