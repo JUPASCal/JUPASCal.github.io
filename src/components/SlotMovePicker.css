@@ -211,13 +211,8 @@
 .slot-move-chip.is-current {
   background: var(--accent);
   border-color: var(--accent);
-  color: #fff;
+  color: var(--accent-contrast);
   cursor: default;
-}
-
-
-:root[data-theme="dark"] .slot-move-chip.is-current {
-  color: var(--bg);
 }
 
 
@@ -318,15 +313,10 @@
   border-radius: 999px;
   border: 1px solid var(--accent);
   background: var(--accent);
-  color: #fff;
+  color: var(--accent-contrast);
   font-size: 0.85rem;
   font-weight: 800;
   cursor: pointer;
-}
-
-
-:root[data-theme="dark"] .reorg-done {
-  color: var(--bg);
 }
 
 
@@ -534,4 +524,3 @@
       display: none;
     }
 }
-

@@ -143,13 +143,8 @@
 
 .stepper-step.active .stepper-badge {
   background: var(--accent);
-  color: var(--surface);
+  color: var(--accent-contrast);
   box-shadow: 0 1px 4px color-mix(in srgb, var(--accent) 30%, transparent);
-}
-
-
-:root[data-theme="dark"] .stepper-step.active .stepper-badge {
-  color: #15120f;
 }
 
 
@@ -356,7 +351,7 @@
   border: 1px solid color-mix(in srgb, var(--accent) 86%, black);
   background:
     linear-gradient(180deg, color-mix(in srgb, var(--accent) 92%, white), var(--accent));
-  color: #ffffff;
+  color: var(--accent-contrast);
   font-weight: 900;
   font-size: 0.92rem;
   white-space: nowrap;
@@ -377,11 +372,6 @@
 .stepper-next-btn:disabled {
   opacity: 0.38;
   cursor: not-allowed;
-}
-
-
-:root[data-theme="dark"] .stepper-next-btn {
-  color: #15120f;
 }
 
 

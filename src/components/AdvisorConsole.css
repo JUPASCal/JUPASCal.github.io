@@ -783,7 +783,7 @@ html:has(.advisor-console) body {
 
 .console-tab.is-active .console-tab-badge {
   background: var(--accent);
-  color: #fff;
+  color: var(--accent-contrast);
 }
 
 /* Share buttons live on the tabs row, pushed to the right edge. Compact so the
@@ -902,7 +902,7 @@ html:has(.advisor-console) body {
   height: 24px;
   padding: 5px;
   border-radius: 999px;
-  color: #fff;
+  color: var(--accent-contrast);
   background: var(--accent);
   transition: transform 0.18s ease;
   flex: 0 0 auto;
@@ -1110,13 +1110,13 @@ html:has(.advisor-console) body {
 }
 .suggest-swap {
   background: var(--accent);
-  color: #fff;
+  color: var(--accent-contrast);
   border-color: var(--accent);
 }
 .suggest-add:hover,
 .suggest-add:focus-visible {
   background: var(--accent);
-  color: #fff;
+  color: var(--accent-contrast);
   border-color: var(--accent);
   outline: none;
 }
@@ -1491,7 +1491,7 @@ html:has(.advisor-console) body {
 }
 .console-browse .delta-toggle button.active {
   background: var(--accent);
-  color: #fff;
+  color: var(--accent-contrast);
 }
 
 /* Collapse the filter panel when closed (Step-2 behaviour): only the search
@@ -1732,13 +1732,12 @@ html:has(.advisor-console) body {
 }
 
 /* The resting-state rule above (0,3,0) outranks the base `.pick-button.picked`
-   (0,2,0), so without this it would also paint the PICKED box with the light
-   surface — leaving the light-coloured tick invisible on it. Restore the accent
-   fill + a white tick for the checked state. */
+   (0,2,0), so without this it would also paint the picked box with the light
+   surface and hide the tick. Restore the accent fill and theme contrast. */
 .console-browse .results-table .pick-button.picked {
   background: var(--accent);
   border-color: var(--accent);
-  color: #fff;
+  color: var(--accent-contrast);
 }
 
 .console-browse .results-table .programme-cell-text strong {

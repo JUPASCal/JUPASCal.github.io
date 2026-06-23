@@ -16,9 +16,40 @@
 }
 
 
+.planner-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+
 .preference-planner-panel .planner-heading h2 {
   font-size: 1.05rem;
   margin: 2px 0 4px;
+}
+
+
+.planner-clear-all {
+  border: 1px solid color-mix(in srgb, var(--accent) 42%, var(--line));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  color: var(--accent);
+  padding: 4px 10px;
+  font: inherit;
+  font-size: 0.74rem;
+  font-weight: 850;
+  line-height: 1;
+  cursor: pointer;
+}
+
+
+.planner-clear-all:hover,
+.planner-clear-all:focus-visible {
+  background: var(--accent);
+  color: var(--accent-contrast);
+  outline: none;
 }
 
 
@@ -696,4 +727,3 @@
       font-size: 0.62rem;
     }
 }
-

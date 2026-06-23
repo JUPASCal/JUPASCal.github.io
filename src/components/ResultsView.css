@@ -179,7 +179,7 @@
   height: 20px;
   border-radius: 999px;
   background: var(--accent);
-  color: var(--surface-strong);
+  color: var(--accent-contrast);
   padding: 0 7px;
   font-size: 0.68rem;
   font-weight: 950;
@@ -193,11 +193,6 @@
    a "suggested safer option", distinct from the accent plan-slot badges. */
 .selected-slot-badge.is-preview {
   background: var(--good);
-}
-
-
-:root[data-theme="dark"] .selected-slot-badge {
-  color: #15120f;
 }
 
 
@@ -226,7 +221,7 @@
 .pick-button.picked {
   border-color: var(--accent);
   background: var(--accent);
-  color: var(--bg);
+  color: var(--accent-contrast);
 }
 
 

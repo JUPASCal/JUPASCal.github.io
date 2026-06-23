@@ -868,7 +868,7 @@
 .share-action.primary {
   background: var(--accent);
   border-color: var(--accent);
-  color: var(--bg);
+  color: var(--accent-contrast);
 }
 
 

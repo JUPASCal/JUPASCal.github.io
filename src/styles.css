@@ -26,6 +26,7 @@
   --muted: #786257;
   --line: #dccabd;
   --accent: #c2452e;
+  --accent-contrast: #ffffff;
   --accent-2: #1b3a6b;
   --good: #2a6a4a;
   --bad: #9c3527;
@@ -67,6 +68,7 @@
   --muted: #a59d90;
   --line: #3a352d;
   --accent: #d2a86f;
+  --accent-contrast: #15120f;
   --accent-2: #9fb0a3;
   --good: #95c18f;
   --bad: #dc8c7d;
@@ -1313,6 +1315,31 @@ select {
 }
 
 
+.interview-flag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  max-width: 100%;
+  min-height: 20px;
+  padding: 3px 7px;
+  border-radius: 999px;
+  background: var(--soft-neutral);
+  color: var(--muted);
+  font-size: 0.66rem;
+  font-weight: 900;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+
+.interview-flag.is-compact {
+  min-height: 18px;
+  padding: 2px 6px;
+  font-size: 0.62rem;
+}
+
+
 .selection-tray {
   display: none;
 }
@@ -2128,7 +2155,7 @@ select {
       .done-button {
         border: 1px solid var(--accent);
         background: var(--accent);
-        color: var(--bg);
+        color: var(--accent-contrast);
       }
 
 
@@ -2190,7 +2217,7 @@ select {
         border: 1px solid var(--accent);
         border-radius: 999px;
         background: var(--accent);
-        color: var(--bg);
+        color: var(--accent-contrast);
         padding-inline: var(--space-3);
         font-size: 0.78rem;
         font-weight: 950;
