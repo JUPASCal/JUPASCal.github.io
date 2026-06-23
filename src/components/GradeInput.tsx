@@ -1,5 +1,6 @@
 import { memo, useEffect, useRef, useState } from "react";
-import { CAT_A_SUBJECTS, CAT_C_GRADES, CAT_C_SUBJECTS, CORE_SUBJECTS, CSD_GRADES, DSE_GRADES, M12_SUBJECT } from "../lib/subjects";
+import { CAT_A_SUBJECTS, CAT_C_SUBJECTS, CORE_SUBJECTS, CSD_GRADES, DSE_GRADES, M12_SUBJECT } from "../lib/subjects";
+import { categoryCLevelOptions } from "../lib/categoryC";
 import { localizedShortSubject, localizedSubject, localizedSubjectChip } from "../lib/subjectsI18n";
 import { useLang, type Lang } from "../lib/i18n";
 import { MOBILE_MEDIA_QUERY } from "../lib/useMediaQuery";
@@ -169,13 +170,14 @@ export const GradeInput = memo(({ grades, onChange, onReset, readOnly = false, h
               <option value="">{t("grade.catCLang")}</option>
               {CAT_C_SUBJECTS.map((subject) => <option key={subject} value={subject}>{localizedShortSubject(subject, lang)}</option>)}
             </select>
-            <GradeButtons
-              value={grades["cat-c:subject"] ? grades[grades["cat-c:subject"]] || "" : ""}
-              grades={CAT_C_GRADES.filter(Boolean)}
-              disabled={readOnly || !grades["cat-c:subject"]}
-              compact
-              onChange={(grade) => setElective("cat-c", grades["cat-c:subject"], grade)}
-            />
+              <GradeButtons
+                value={grades["cat-c:subject"] ? grades[grades["cat-c:subject"]] || "" : ""}
+                grades={categoryCLevelOptions(grades["cat-c:subject"] || "")}
+                disabled={readOnly || !grades["cat-c:subject"]}
+                compact
+                fit
+                onChange={(grade) => setElective("cat-c", grades["cat-c:subject"], grade)}
+              />
           </div>
         </div>
         {readOnly ? null : (
@@ -198,16 +200,18 @@ const GradeButtons = memo(({
   grades,
   disabled = false,
   compact = false,
+  fit = false,
   onChange,
 }: {
   value: string;
   grades: string[];
   disabled?: boolean;
   compact?: boolean;
+  fit?: boolean;
   onChange: (grade: string) => void;
 }) => {
   return (
-    <div className={compact ? "grade-buttons compact" : "grade-buttons"} role="radiogroup">
+    <div className={`${compact ? "grade-buttons compact" : "grade-buttons"}${fit ? " is-fit" : ""}`} role="radiogroup">
       {grades.map((grade) => (
         <button
           key={grade}

@@ -9,6 +9,7 @@ import type {
   RequirementPool,
   StudentGrades,
 } from "../types/jupas";
+import { categoryCBasePoints, categoryCCanSatisfyElective, isCategoryCSubject } from "./categoryC";
 import { canonicalSubject, SUBJECT_EXPANSIONS } from "./subjects";
 
 // HKUST's max attainable base points (a 5** subject — see its score-conversion
@@ -69,7 +70,9 @@ export function calculateScore(studentGrades: StudentGrades, programme: Programm
 
   for (const [subject, grade] of Object.entries(studentGrades)) {
     if (!grade || grade === "U") continue;
-    const basePoints = convTable[grade] ?? catCTable[grade] ?? 0;
+    const basePoints = isCategoryCSubject(subject)
+      ? categoryCBasePoints(programme, subject, grade, catCTable) ?? 0
+      : convTable[grade] ?? 0;
     let multiplier = weights[subject] || 1;
     if (subject === "Mathematics Extended Part (Module 1 or 2)") {
       multiplier = weights["Mathematics Extended Part (Module 1)"] || weights["Mathematics Extended Part (Module 2)"] || 1;
@@ -382,7 +385,9 @@ function electiveCanTake(pool: RequirementPool, subject: string, grade: string, 
   if (!isMatch && pool.note?.includes("Category A") && (subject.includes("Module 1") || subject.includes("Module 2"))) {
     isMatch = true;
   }
-  return isMatch && compareGrades(grade, pool.grade, programme);
+  if (!isMatch) return false;
+  if (!categoryCCanSatisfyElective(programme, subject, grade, pool)) return false;
+  return compareGrades(grade, pool.grade, programme, subject);
 }
 
 // Max bipartite matching of the student's spare subjects to the elective
@@ -438,13 +443,14 @@ function matchElectives(
   return perPool;
 }
 
-function compareGrades(student: string | undefined, required: string | undefined, programme: Programme) {
+function compareGrades(student: string | undefined, required: string | undefined, programme: Programme, subject?: string) {
   if (!required) return true;
   if (!student) return false;
   const convTable = programme.score_conversion_table.category_a || {};
   const catCTable = programme.score_conversion_table.category_c || {};
   const val = (grade: string) => {
     const normalized = String(grade).toUpperCase();
+    if (subject && isCategoryCSubject(subject)) return categoryCBasePoints(programme, subject, normalized, catCTable) ?? 0;
     if (convTable[normalized] !== undefined) return convTable[normalized];
     if (catCTable[normalized] !== undefined) return catCTable[normalized];
     if (normalized === "A" || normalized === "ATTAINED") return 2;

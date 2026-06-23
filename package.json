@@ -18,6 +18,7 @@
     "audit": "node scripts/audit_eligibility.mjs",
     "audit:analysis": "node scripts/analysis_scenarios.mjs",
     "audit:analysis:cases": "node scripts/analysis_cases.mjs",
+    "audit:category-c": "~/miniconda3/envs/jupascal/bin/python scripts/utils/test_category_c_policies.py",
     "audit:suggestions": "node scripts/suggestions_audit.mjs",
     "audit:selection": "node scripts/selection_audit.mjs"
   },

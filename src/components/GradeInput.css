@@ -236,6 +236,20 @@
 }
 
 
+.grade-buttons.compact.is-fit {
+  gap: 4px;
+}
+
+
+.grade-buttons.compact.is-fit .grade-chip {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 0 3px;
+  font-size: 0.66rem;
+  letter-spacing: 0;
+}
+
+
 .grade-chip {
   flex: 1 1 0;
   min-width: 0;

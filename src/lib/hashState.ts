@@ -1,10 +1,11 @@
 import type { StudentGrades } from "../types/jupas";
+import { isCategoryCGrade, normalizeCategoryCGrade } from "./categoryC";
 import { CAT_A_SUBJECTS, CAT_C_SUBJECTS, CORE_SUBJECTS, M12_SUBJECT } from "./subjects";
 import { trimTrailingNulls } from "./arrays";
 
 const MAX_HASH_LENGTH = 4096;
 const MAX_SUBJECT_LENGTH = 180;
-const MAX_GRADE_LENGTH = 8;
+const MAX_GRADE_LENGTH = 40;
 const MAX_PICKED_PROGRAMMES = 20;
 const VALID_GRADES = new Set(["5**", "5*", "5", "4", "3", "2", "1", "A", "B", "C", "D", "E", "U"]);
 // Every JUPAS code is "JS" + 4 chars from [0-9A-Z] — standard programmes are
@@ -55,6 +56,7 @@ for (let i = 0; i < CODE_CHARSET.length; i++) CODE_CHAR_TO_ID[CODE_CHARSET[i]] =
 
 // Extensible-tail TLV tags. APPEND-ONLY — never renumber or reuse.
 const TAG_NAME = 1;
+const TAG_EXT_GRADES = 2;
 const SUBJECT_ID_LIST: readonly string[] = [
   "Chinese Language",
   "English Language",
@@ -128,7 +130,10 @@ export const MAX_PROFILE_NAME = 15;
 function sanitizeGrade(grade: unknown): string | undefined {
   if (typeof grade !== "string" || grade.length > MAX_GRADE_LENGTH) return undefined;
   const upper = grade.trim().toUpperCase();
-  return VALID_GRADES.has(upper) ? upper : undefined;
+  if (VALID_GRADES.has(upper)) return upper;
+  const catC = normalizeCategoryCGrade(grade);
+  if (catC && isCategoryCGrade(catC)) return catC;
+  return undefined;
 }
 
 function sanitizeSubject(subject: unknown): string | undefined {
@@ -251,11 +256,17 @@ function encodeBinary(state: HashState): string {
   // Subjects with grades. Skip slot-mapping entries (elective-N:subject /
   // cat-c:subject) – they're recoverable on read.
   const subjects: Array<[number, number]> = [];
+  const extendedGrades: Array<[number, string]> = [];
   for (const [subject, grade] of Object.entries(state.grades)) {
     if (subject.includes(":subject")) continue;
     const sid = SUBJECT_TO_ID[subject];
     const gid = GRADE_TO_ID[grade];
-    if (sid === undefined || gid === undefined) continue;
+    if (sid === undefined) continue;
+    if (gid === undefined) {
+      const sanitized = sanitizeGrade(grade);
+      if (sanitized) extendedGrades.push([sid, sanitized]);
+      continue;
+    }
     subjects.push([sid, gid]);
   }
   // 5 bits = max 31 entries; SUBJECT_ID_LIST has 36 so cap at 31. In practice
@@ -293,6 +304,8 @@ function encodeBinary(state: HashState): string {
     const bytes = new TextEncoder().encode(nameRaw).slice(0, MAX_PROFILE_NAME_BYTES);
     writeTLV(w, TAG_NAME, bytes);
   }
+  const extBytes = encodeExtendedGrades(extendedGrades);
+  if (extBytes.length > 0) writeTLV(w, TAG_EXT_GRADES, extBytes);
 
   return BINARY_PREFIX + bytesToBase64Url(w.finish());
 }
@@ -349,6 +362,7 @@ function decodeBinary(payload: string): HashState | null {
     // simply runs out of bytes (read(8) → 0 → tag 0 → stop).
     r.align();
     let name: string | undefined;
+    const extRawGrades: Record<string, unknown> = {};
     while (r.bytesLeft() >= 2) {
       const tag = r.read(8);
       if (tag === 0) break; // padding / end of tail
@@ -363,9 +377,13 @@ function decodeBinary(payload: string): HashState | null {
         } catch {
           // garbage bytes – ignore, leave name undefined
         }
+      } else if (tag === TAG_EXT_GRADES) {
+        Object.assign(extRawGrades, decodeExtendedGrades(buf));
       }
       // Unknown tags: payload already consumed, loop continues.
     }
+    Object.assign(grades, sanitizeGrades(extRawGrades));
+    reassignElectiveSlots(grades);
 
     if (Object.keys(grades).length === 0 && pickedCodes.length === 0) return null;
     return { grades, pickedCodes, sharing, showScores, name, mode };
@@ -373,6 +391,34 @@ function decodeBinary(payload: string): HashState | null {
     console.error("Failed to decode binary hash", e);
     return null;
   }
+}
+
+function encodeExtendedGrades(items: Array<[number, string]>): Uint8Array {
+  if (items.length === 0) return new Uint8Array();
+  const bytes: number[] = [];
+  const encoder = new TextEncoder();
+  for (const [sid, grade] of items) {
+    const gradeBytes = encoder.encode(grade).slice(0, MAX_GRADE_LENGTH);
+    if (bytes.length + 2 + gradeBytes.length > 255) break;
+    bytes.push(sid & 0xFF, gradeBytes.length & 0xFF, ...gradeBytes);
+  }
+  return new Uint8Array(bytes);
+}
+
+function decodeExtendedGrades(bytes: Uint8Array): Record<string, string> {
+  const out: Record<string, string> = {};
+  const decoder = new TextDecoder();
+  let i = 0;
+  while (i + 2 <= bytes.length) {
+    const sid = bytes[i++];
+    const len = bytes[i++];
+    if (i + len > bytes.length) break;
+    const subject = SUBJECT_ID_LIST[sid];
+    const grade = decoder.decode(bytes.slice(i, i + len));
+    i += len;
+    if (subject && grade) out[subject] = grade;
+  }
+  return out;
 }
 
 // Reassign elective-1..4 / cat-c slot subjects from the order non-core

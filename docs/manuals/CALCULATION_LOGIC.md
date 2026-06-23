@@ -16,7 +16,7 @@ For reference, the two scales in use are:
 | **8.5 Scale** | HKU, HKUST, CityUHK, PolyU, CUHK (most programmes) | 8.5 | 7.0 | 5.5 | 4.0 | 3.0 | 2.0 | 1.0 |
 | **7 Scale** | LingnanU, EdUHK, HKBU, HKMU, SSSDP, CUHK Medicine (JS4501/JS4502) | 7.0 | 6.0 | 5.0 | 4.0 | 3.0 | 2.0 | 1.0 |
 
-*   **Other Language (Cat C):** A=5, B=4, C=3, D=2, E=1 (standard); CUHK Medicine uses A=7, B=6, C=5, D=4, E=3.
+*   **Other Language (Cat C):** converted through the subject-aware policy layer in `src/lib/categoryC.ts`, with a mirrored Python reference in `scripts/utils/calculation_engine.py`. The UI accepts exact reported levels (`N1`, `C2`, `Grade 6`, `A++`, etc.) and still accepts old broad A-E profile/share values for backward compatibility. Details are documented in `docs/manuals/CATEGORY_C_LANGUAGE_RULES.md`.
 *   **CSD:** Attained → 0 points (excluded from Best-N pool entirely).
 *   **ApL:** Attained with Distinction → 4, Attained → 3 (only counted if explicitly listed in `subject_weights_2025`).
 

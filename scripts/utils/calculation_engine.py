@@ -1,6 +1,242 @@
 import json
 import re
 
+CAT_C_SUBJECTS = {
+    "French: Advanced Diploma of French Language Studies / Diploma of French Language Studies",
+    "German: Goethe-Certificate",
+    "Japanese: Japanese-Language Proficiency Test",
+    "Korean: Test of Proficiency in Korean II",
+    "Spanish: Diploma of Spanish as a Foreign Language",
+    "Urdu: Urdu (International)",
+}
+
+POLICIES = {
+    "CityUHK": {
+        "japanese": {"A": 7, "B": 5.5, "C": 4},
+        "korean": {"A": 7, "B": 5.5, "C": 4, "D": 3},
+        "french": {"A": 7, "B": 5.5, "C": 4, "D": 3, "E": 3},
+        "german": {"A": 7, "B": 5.5, "C": 4, "D": 3, "E": 3},
+        "spanish": {"A": 7, "B": 5.5, "C": 4, "D": 3, "E": 3},
+        "urdu": {"A": 7, "B": 5.5, "C": 4, "D": 3, "E": 3},
+    },
+    "HKBU": {
+        "japanese": {"A": 7, "B": 5.5, "C": 4},
+        "korean": {"A": 7, "B": 5.5, "C": 5.5, "D": 4},
+        "french": {"A": 7, "B": 5.5, "C": 4},
+        "german": {"A": 7, "B": 5.5, "C": 4},
+        "spanish": {"A": 7, "B": 5.5, "C": 4},
+        "urdu": {"A": 7, "B": 5.5, "C": 4, "D": 2.5, "E": 1},
+    },
+    "PolyU": {
+        "japanese": {"A": 8.5, "B": 5.5, "C": 3},
+        "korean": {"A": 8.5, "B": 7, "C": 4, "D": 3},
+        "french": {"A": 8.5, "B": 7, "C": 5.5, "D": 4, "E": 3},
+        "german": {"A": 8.5, "B": 7, "C": 5.5, "D": 4, "E": 3},
+        "spanish": {"A": 8.5, "B": 7, "C": 5.5, "D": 4, "E": 3},
+    },
+    "CUHK": {
+        "japanese": {"A": 7, "B": 5.5, "C": 4},
+        "korean": {"A": 7, "B": 5.5, "C": 4, "D": 3},
+        "french": {"A": 7, "B": 5.5, "C": 4, "D": 3, "E": 3},
+        "german": {"A": 7, "B": 5.5, "C": 4, "D": 3, "E": 3},
+        "spanish": {"A": 7, "B": 5.5, "C": 4, "D": 3, "E": 3},
+        "urdu": {"A": 7, "B": 5.5, "C": 4, "D": 3, "E": 3},
+    },
+    "HKUST": {
+        "japanese": {"A": 8.5, "B": 5.5, "C": 3},
+        "korean": {"A": 8.5, "B": 5.5, "C": 4, "D": 3},
+        "french": {"A": 8.5, "B": 7, "C": 5.5, "D": 4, "E": 3},
+        "german": {"A": 8.5, "B": 7, "C": 5.5, "D": 4, "E": 3},
+        "spanish": {"A": 8.5, "B": 7, "C": 5.5, "D": 4, "E": 3},
+        "urdu": {"A": 8.5, "B": 7, "C": 5.5, "D": 4, "E": 3},
+    },
+    "HKU": {
+        "japanese": {"A": 8.5, "B": 7, "C": 4},
+        "korean": {"A": 8.5, "B": 7, "C": 5.5, "D": 4},
+        "french": {"A": 8.5, "B": 7, "C": 5.5, "D": 4},
+        "german": {"A": 8.5, "B": 7, "C": 5.5, "D": 4},
+        "spanish": {"A": 8.5, "B": 7, "C": 5.5, "D": 4},
+        "urdu": {"A": 8.5, "B": 7, "C": 5.5, "D": 4, "E": 3},
+    },
+    "LingnanU": {
+        "japanese": {"A": 7, "B": 5, "C": 4},
+        "korean": {"A": 7, "B": 6, "C": 5, "D": 4},
+        "french": {"A": 7, "B": 6, "C": 5, "D": 4},
+        "german": {"A": 7, "B": 6, "C": 5, "D": 4},
+        "spanish": {"A": 7, "B": 6, "C": 5, "D": 4},
+        "urdu": {"A": 7, "B": 6, "C": 5, "D": 4},
+    },
+    "EdUHK": {
+        "japanese": {"A": 7, "B": 5, "C": 4},
+        "korean": {"A": 7, "B": 6, "C": 5, "D": 4},
+        "french": {"A": 7, "B": 6, "C": 5, "D": 4, "E": 3},
+        "german": {"A": 7, "B": 6, "C": 5, "D": 4, "E": 3},
+        "spanish": {"A": 7, "B": 6, "C": 5, "D": 4, "E": 3},
+        "urdu": {"A": 7, "B": 6, "C": 5, "D": 4, "E": 3},
+    },
+}
+
+HKMU_STYLE = {
+    "japanese": {"A": 7, "B": 5, "C": 4},
+    "korean": {"A": 7, "B": 6, "C": 5, "D": 4},
+    "french": {"A": 7, "B": 6, "C": 5, "D": 4, "E": 3},
+    "german": {"A": 7, "B": 6, "C": 5, "D": 4, "E": 3},
+    "spanish": {"A": 7, "B": 6, "C": 5, "D": 4, "E": 3},
+    "urdu": {"A": 7, "B": 6, "C": 5, "D": 4, "E": 3},
+}
+
+SHUE_YAN_LEVEL_2_POLICY = {
+    "japanese": {"A": 2, "B": 2},
+    "korean": {"A": 2, "B": 2, "C": 2},
+    "french": {"A": 2, "B": 2, "C": 2},
+    "german": {"A": 2, "B": 2, "C": 2},
+    "spanish": {"A": 2, "B": 2, "C": 2},
+    "urdu": {"A": 2, "B": 2, "C": 2, "D": 2},
+}
+
+SSSDP_SCORE_POLICIES = {
+    "JSSU": HKMU_STYLE,
+    "JSSA": HKMU_STYLE,
+    "JSSV": HKMU_STYLE,
+    "JSST": HKMU_STYLE,
+}
+
+EXACT_POLICIES = {
+    "CityUHK": {
+        "japanese": {"N1": 7, "N2": 5.5, "N3": 4},
+        "korean": {"GRADE 6": 7, "GRADE 5": 5.5, "GRADE 4": 4, "GRADE 3": 3},
+        "french": {"C2": 7, "C1": 5.5, "B2": 4, "B1": 3, "A2": 3},
+        "german": {"C2": 7, "C1": 5.5, "B2": 4, "B1": 3, "A2": 3},
+        "spanish": {"C2": 7, "C1": 5.5, "B2": 4, "B1": 3, "A2": 3},
+        "urdu": {"A++": 7, "A+": 7, "A": 7, "B++": 5.5, "B+": 5.5, "B": 4, "C": 4, "D": 3, "E": 3},
+    },
+    "HKBU": {
+        "japanese": {"N1": 7, "N2": 5.5, "N3": 4},
+        "korean": {"GRADE 6": 7, "GRADE 5": 5.5, "GRADE 4": 5.5, "GRADE 3": 4},
+        "french": {"C2": 7, "C1": 7, "B2": 5.5, "B1": 5.5, "A2": 4},
+        "german": {"C2": 7, "C1": 7, "B2": 5.5, "B1": 5.5, "A2": 4},
+        "spanish": {"C2": 7, "C1": 7, "B2": 5.5, "B1": 5.5, "A2": 4},
+        "urdu": {"A++": 7, "A+": 7, "A": 7, "B++": 5.5, "B+": 4, "B": 4, "C": 2.5, "D": 2.5, "E": 1},
+    },
+    "PolyU": {
+        "japanese": {"N1": 8.5, "N2": 5.5, "N3": 3},
+        "korean": {"GRADE 6": 8.5, "GRADE 5": 7, "GRADE 4": 4, "GRADE 3": 3},
+        "french": {"C2": 8.5, "C1": 7, "B2": 5.5, "B1": 4, "A2": 3},
+        "german": {"C2": 8.5, "C1": 7, "B2": 5.5, "B1": 4, "A2": 3},
+        "spanish": {"C2": 8.5, "C1": 7, "B2": 5.5, "B1": 4, "A2": 3},
+    },
+    "CUHK": {
+        "japanese": {"N1": 7, "N2": 5.5, "N3": 4},
+        "korean": {"GRADE 6": 7, "GRADE 5": 5.5, "GRADE 4": 4, "GRADE 3": 3},
+        "french": {"C2": 7, "C1": 5.5, "B2": 4, "B1": 3, "A2": 3},
+        "german": {"C2": 7, "C1": 5.5, "B2": 4, "B1": 3, "A2": 3},
+        "spanish": {"C2": 7, "C1": 5.5, "B2": 4, "B1": 3, "A2": 3},
+        "urdu": {"A++": 7, "A+": 7, "A": 7, "B++": 5.5, "B+": 5.5, "B": 5.5, "C": 4, "D": 3, "E": 3},
+    },
+    "HKUST": {
+        "japanese": {"N1": 8.5, "N2": 5.5, "N3": 3},
+        "korean": {"GRADE 6": 8.5, "GRADE 5": 5.5, "GRADE 4": 4, "GRADE 3": 3},
+        "french": {"C2": 8.5, "C1": 7, "B2": 5.5, "B1": 4, "A2": 3},
+        "german": {"C2": 8.5, "C1": 7, "B2": 5.5, "B1": 4, "A2": 3},
+        "spanish": {"C2": 8.5, "C1": 7, "B2": 5.5, "B1": 4, "A2": 3},
+        "urdu": {"A++": 8.5, "A+": 7, "A": 7, "B++": 5.5, "B+": 4, "B": 3, "C": 3, "D": 2, "E": 1},
+    },
+    "HKU": {
+        "japanese": {"N1": 8.5, "N2": 7, "N3": 4},
+        "korean": {"GRADE 6": 8.5, "GRADE 5": 7, "GRADE 4": 5.5, "GRADE 3": 4},
+        "french": {"C2": 8.5, "C1": 8.5, "B2": 7, "B1": 5.5, "A2": 4},
+        "german": {"C2": 8.5, "C1": 8.5, "B2": 7, "B1": 5.5, "A2": 4},
+        "spanish": {"C2": 8.5, "C1": 8.5, "B2": 7, "B1": 5.5, "A2": 4},
+        "urdu": {"A++": 8.5, "A+": 8.5, "A": 8.5, "B++": 7, "B+": 5.5, "B": 4, "C": 3, "D": 2, "E": 1},
+    },
+    "LingnanU": {
+        "japanese": {"N1": 7, "N2": 5, "N3": 4},
+        "korean": {"GRADE 6": 7, "GRADE 5": 6, "GRADE 4": 5, "GRADE 3": 4},
+        "french": {"C2": 7, "C1": 7, "B2": 6, "B1": 5, "A2": 4},
+        "german": {"C2": 7, "C1": 7, "B2": 6, "B1": 5, "A2": 4},
+        "spanish": {"C2": 7, "C1": 7, "B2": 6, "B1": 5, "A2": 4},
+        "urdu": {"A++": 7, "A+": 7, "A": 7, "B++": 6, "B+": 5, "B": 4},
+    },
+    "EdUHK": {
+        "japanese": {"N1": 7, "N2": 5, "N3": 4},
+        "korean": {"GRADE 6": 7, "GRADE 5": 6, "GRADE 4": 5, "GRADE 3": 4},
+        "french": {"C2": 7, "C1": 6, "B2": 5, "B1": 4, "A2": 3},
+        "german": {"C2": 7, "C1": 6, "B2": 5, "B1": 4, "A2": 3},
+        "spanish": {"C2": 7, "C1": 6, "B2": 5, "B1": 4, "A2": 3},
+        "urdu": {"A++": 7, "A+": 7, "A": 7, "B++": 6, "B+": 5, "B": 5, "C": 4, "D": 3, "E": 2},
+    },
+    "HKMU": {
+        "japanese": {"N1": 7, "N2": 5, "N3": 4},
+        "korean": {"GRADE 6": 7, "GRADE 5": 6, "GRADE 4": 5, "GRADE 3": 4},
+        "french": {"C2": 7, "C1": 6, "B2": 5, "B1": 4, "A2": 3},
+        "german": {"C2": 7, "C1": 6, "B2": 5, "B1": 4, "A2": 3},
+        "spanish": {"C2": 7, "C1": 6, "B2": 5, "B1": 4, "A2": 3},
+        "urdu": {"A++": 7, "A+": 7, "A": 7, "B++": 6, "B+": 5, "B": 5, "C": 4, "D": 3, "E": 2},
+    },
+}
+
+def is_category_c_subject(subject):
+    return subject in CAT_C_SUBJECTS
+
+def category_c_language(subject):
+    if subject.startswith("French:"): return "french"
+    if subject.startswith("German:"): return "german"
+    if subject.startswith("Spanish:"): return "spanish"
+    if subject.startswith("Japanese:"): return "japanese"
+    if subject.startswith("Korean:"): return "korean"
+    if subject.startswith("Urdu:"): return "urdu"
+    return None
+
+def score_policy_for(programme):
+    institution = programme.get("institution")
+    code = programme.get("jupas_code", "")
+    if institution == "HKMU":
+        return HKMU_STYLE
+    if institution != "SSSDP":
+        return POLICIES.get(institution)
+    if code.startswith("JSSY"):
+        return SHUE_YAN_LEVEL_2_POLICY
+    for prefix, policy in SSSDP_SCORE_POLICIES.items():
+        if code.startswith(prefix):
+            return policy
+    return None
+
+def exact_score_policy_for(programme):
+    institution = programme.get("institution")
+    code = programme.get("jupas_code", "")
+    if institution != "SSSDP":
+        return EXACT_POLICIES.get(institution)
+    if code.startswith("JSSY"):
+        return {
+            "japanese": {"N1": 2, "N2": 2},
+            "korean": {"GRADE 6": 2, "GRADE 5": 2, "GRADE 4": 2},
+            "french": {"C2": 2, "C1": 2, "B2": 2},
+            "german": {"C2": 2, "C1": 2, "B2": 2},
+            "spanish": {"C2": 2, "C1": 2, "B2": 2},
+            "urdu": {"A++": 2, "A+": 2, "A": 2, "B++": 2, "B+": 2, "B": 2, "C": 2},
+        }
+    for prefix in ("JSSU", "JSSA", "JSSV", "JSST"):
+        if code.startswith(prefix):
+            return EXACT_POLICIES["HKMU"]
+    return None
+
+def category_c_base_points(programme, subject, grade, fallback_table):
+    if not is_category_c_subject(subject):
+        return None
+    language = category_c_language(subject)
+    normalized = str(grade or "").strip().upper()
+    if not language or not normalized or normalized == "U":
+        return 0
+    exact_policy = exact_score_policy_for(programme)
+    exact_language_policy = exact_policy.get(language) if exact_policy else None
+    if exact_language_policy is not None and normalized in exact_language_policy:
+        return exact_language_policy.get(normalized, 0)
+    policy = score_policy_for(programme)
+    language_policy = policy.get(language) if policy else None
+    if language_policy is not None:
+        return language_policy.get(normalized, 0)
+    return fallback_table.get(normalized, 0)
+
 def calculate_programme_score(student_grades, programme, year="2025"):
     """
     Calculates the score for a specific programme and returns a detailed breakdown.
@@ -17,7 +253,10 @@ def calculate_programme_score(student_grades, programme, year="2025"):
     
     # 1. Process Flat Weights
     for subj, grade in student_grades.items():
-        base_points = conv_table.get(str(grade).strip(), cat_c_table.get(str(grade).strip(), 0))
+        if is_category_c_subject(subj):
+            base_points = category_c_base_points(programme, subj, grade, cat_c_table) or 0
+        else:
+            base_points = conv_table.get(str(grade).strip(), 0)
         weight = weights.get(subj, 1.0)
         
         subject_scores.append({

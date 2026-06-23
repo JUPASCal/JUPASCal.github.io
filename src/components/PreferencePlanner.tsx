@@ -155,13 +155,31 @@ export function PreferencePlanner({
 
   return (
     <section className={`panel preference-planner-panel${isExpanded ? " is-expanded" : " is-collapsed"}`} aria-label={t("planner.ariaPanel")}>
-      <div className="planner-heading">
-        <button type="button" className="planner-heading-button" onClick={onExpand}>
+      <div
+        className={`planner-heading${onExpand ? " is-clickable" : ""}`}
+        role={onExpand ? "button" : undefined}
+        tabIndex={onExpand ? 0 : undefined}
+        onClick={onExpand}
+        onKeyDown={onExpand ? (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            onExpand();
+          }
+        } : undefined}
+      >
+        <span className="planner-heading-button">
           {t("planner.title")}
           {filledCount > 0 ? <span className="planner-count">{filledCount}</span> : null}
-        </button>
+        </span>
         {isExpanded && !readOnly && filledCount > 0 && onClearAll ? (
-          <button type="button" className="planner-clear-all" onClick={onClearAll}>
+          <button
+            type="button"
+            className="planner-clear-all"
+            onClick={(event) => {
+              event.stopPropagation();
+              onClearAll();
+            }}
+          >
             {t("planner.clearAll")}
           </button>
         ) : null}
