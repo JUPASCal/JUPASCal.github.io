@@ -92,6 +92,7 @@ export function AdvisorConsole({
   // "analyze" is the hero. "browse" is the demoted programme list. "detail"
   // is a transient drill-in (returns to analyze).
   const [mainView, setMainView] = useState<"analyze" | "browse" | "detail">("analyze");
+  const [gradeCollapsed, setGradeCollapsed] = useState(false);
 
   function openDetail(code: string) {
     onOpenDetail(code);
@@ -118,7 +119,15 @@ export function AdvisorConsole({
         </div>
 
         <div className="desktop-grade-column">
-          <GradeInput grades={grades} onChange={onGradesChange} onReset={onGradesReset} readOnly={readOnly} headerToggles />
+          <GradeInput
+            grades={grades}
+            onChange={onGradesChange}
+            onReset={onGradesReset}
+            readOnly={readOnly}
+            headerToggles
+            collapsed={gradeCollapsed}
+            onCollapsedChange={setGradeCollapsed}
+          />
         </div>
 
         <PreferencePlanner
@@ -134,6 +143,8 @@ export function AdvisorConsole({
           enableQuickAdd
           programmes={programmes}
           readOnly={readOnly}
+          isExpanded={gradeCollapsed}
+          onExpand={() => setGradeCollapsed(true)}
         />
       </aside>
 

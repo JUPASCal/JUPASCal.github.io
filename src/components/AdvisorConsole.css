@@ -437,7 +437,7 @@ html:has(.advisor-console) body {
 /* Match the app's section-label style (the muted uppercase ".eyebrow" used by
    "YOUR CHANCES" / "BAND A") so the planner header reads consistently instead
    of as a lone mismatched serif h2. */
-.console-rail .preference-planner-panel .planner-heading h2 {
+.console-rail .preference-planner-panel .planner-heading-button {
   display: flex;
   align-items: center;
   gap: 6px;

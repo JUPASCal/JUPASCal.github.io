@@ -18,15 +18,24 @@ type Props = {
   // Console only: tapping anywhere on the header (title + summary pills), not
   // just the Done/Edit button, toggles the collapse. Off for the mobile stepper.
   headerToggles?: boolean;
+  collapsed?: boolean;
+  onCollapsedChange?: (collapsed: boolean) => void;
 };
 
 const ELECTIVE_SLOTS = ["elective-1", "elective-2", "elective-3", "elective-4"];
 
-export const GradeInput = memo(({ grades, onChange, onReset, readOnly = false, headerToggles = false }: Props) => {
+export const GradeInput = memo(({ grades, onChange, onReset, readOnly = false, headerToggles = false, collapsed: controlledCollapsed, onCollapsedChange }: Props) => {
   const { t, lang } = useLang();
-  const [collapsed, setCollapsed] = useState(false);
+  const [internalCollapsed, setInternalCollapsed] = useState(false);
+  const collapsed = controlledCollapsed ?? internalCollapsed;
   const [isStuck, setIsStuck] = useState(false);
   const sentinelRef = useRef<HTMLDivElement>(null);
+
+  function setCollapsed(next: boolean | ((current: boolean) => boolean)) {
+    const value = typeof next === "function" ? next(collapsed) : next;
+    if (controlledCollapsed === undefined) setInternalCollapsed(value);
+    onCollapsedChange?.(value);
+  }
 
   useEffect(() => {
     const sentinel = sentinelRef.current;

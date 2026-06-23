@@ -42,6 +42,8 @@ type Props = {
   // View mode (received share): hides reorder arrows, remove buttons and the
   // add button; empty slots render as a plain "–".
   readOnly?: boolean;
+  isExpanded?: boolean;
+  onExpand?: () => void;
 };
 
 // Compact, console-friendly preference list. Each pick is a two-line card that
@@ -60,6 +62,8 @@ export function PreferencePlanner({
   programmes,
   shareSlot,
   readOnly = false,
+  isExpanded = true,
+  onExpand,
 }: Props) {
   const { t, lang } = useLang();
   const filledCount = results.filter((r): r is ProgrammeResult => r !== null).length;
@@ -150,13 +154,13 @@ export function PreferencePlanner({
   }
 
   return (
-    <section className="panel preference-planner-panel" aria-label={t("planner.ariaPanel")}>
+    <section className={`panel preference-planner-panel${isExpanded ? " is-expanded" : " is-collapsed"}`} aria-label={t("planner.ariaPanel")}>
       <div className="planner-heading">
-        <h2>
+        <button type="button" className="planner-heading-button" onClick={onExpand}>
           {t("planner.title")}
           {filledCount > 0 ? <span className="planner-count">{filledCount}</span> : null}
-        </h2>
-        {!readOnly && filledCount > 0 && onClearAll ? (
+        </button>
+        {isExpanded && !readOnly && filledCount > 0 && onClearAll ? (
           <button type="button" className="planner-clear-all" onClick={onClearAll}>
             {t("planner.clearAll")}
           </button>
