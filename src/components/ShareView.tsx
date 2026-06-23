@@ -111,7 +111,8 @@ export function ShareView({ mode: _mode = "advisor", profileName, results, profi
     // rectangle. The frame colour follows the page background (theme-aware).
     // pixelRatio 3 keeps it crisp when shared large (~1470px wide).
     const PAD = 44;
-    const bg = getComputedStyle(document.body).backgroundColor || "#ffffff";
+    const isDark = document.documentElement.dataset.theme === "dark";
+    const bg = isDark ? "#080807" : "#f7f2ec";
     // The captured node (`frame`) must NOT carry the offscreen positioning:
     // html-to-image keeps the cloned root's `position`/`left`, so a fixed
     // `left:-99999px` frame would render its content off its own canvas → a
@@ -122,6 +123,7 @@ export function ShareView({ mode: _mode = "advisor", profileName, results, profi
     const frame = document.createElement("div");
     frame.style.cssText = `display:inline-block;padding:${PAD}px;background:${bg};`;
     const clone = node.cloneNode(true) as HTMLElement;
+    clone.classList.add("is-exporting");
     clone.style.margin = "0";
     clone.style.width = `${cardW}px`;
     frame.appendChild(clone);
@@ -575,7 +577,8 @@ export function ShareView({ mode: _mode = "advisor", profileName, results, profi
   // call navigator.share() immediately (within the tap's activation window) and
   // the OS share portal actually opens on Android/Samsung. Keyed on the visible
   // content (picks + name + score toggle); rendered after a short settle delay.
-  const planKey = [0, 1, 2].map((i) => results[i]?.programme.jupas_code ?? "·").join(",") + "|" + profileName + "|" + (showScores ? "s" : "n");
+  const activeTheme = theme || (typeof document !== "undefined" && document.documentElement.dataset.theme === "dark" ? "dark" : "light");
+  const planKey = [0, 1, 2].map((i) => results[i]?.programme.jupas_code ?? "·").join(",") + "|" + profileName + "|" + (showScores ? "s" : "n") + "|" + activeTheme + "|" + lang;
   useEffect(() => {
     let cancelled = false;
     sharePngRef.current = null;
