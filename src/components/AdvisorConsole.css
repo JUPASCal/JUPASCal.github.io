@@ -531,10 +531,11 @@ html:has(.advisor-console) body {
   align-items: center;
   justify-content: center;
   gap: 3px;
-  min-width: 22px;
-  height: 100%;
-  padding: 0 5px;
-  border-radius: 6px;
+  align-self: center;
+  min-width: 34px;
+  height: 26px;
+  padding: 0 8px;
+  border-radius: 999px;
   background: var(--surface);
   border: 1px solid var(--line);
   font-weight: 800;
@@ -555,6 +556,12 @@ html:has(.advisor-console) body {
   background: var(--active);
   border-color: color-mix(in srgb, var(--accent) 35%, var(--line));
   color: var(--accent);
+}
+
+.plan-item.is-active .plan-slot {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-contrast);
 }
 
 .plan-grip {
