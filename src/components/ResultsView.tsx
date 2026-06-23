@@ -330,7 +330,7 @@ function QuotaBadge({ quota, compact = false, label = true }: { quota?: number |
 // At-a-glance marker for officially listed interviews. Vague "when necessary"
 // entries are kept in Detail only.
 function InterviewFlag({ programme, compact = false }: { programme: Programme; compact?: boolean }) {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   if (!hasDisplayInterview(programme)) return null;
   const timing = interviewTiming(programme);
   const title = timing === "both"
@@ -348,9 +348,21 @@ function InterviewFlag({ programme, compact = false }: { programme: Programme; c
     compact ? "is-compact" : "",
     `is-${timing}`,
   ].filter(Boolean).join(" ");
+  const englishParts = timing === "both"
+    ? ["Pre/post-results", "interview"]
+    : timing === "post-results"
+      ? ["Post-results", "interview"]
+      : ["Pre-results", "interview"];
   return (
     <span className={className} title={title} aria-label={title} data-timing={timing}>
-      <span>{label}</span>
+      {lang === "en" ? (
+        <span className="interview-flag-copy" aria-hidden="true">
+          <span className="interview-flag-line">{englishParts[0]}</span>
+          <span className="interview-flag-line">{englishParts[1]}</span>
+        </span>
+      ) : (
+        <span>{label}</span>
+      )}
     </span>
   );
 }
