@@ -780,7 +780,7 @@ export const STRINGS = {
   "verdict.weak.sub.one": { en: "{problems} is riskier than {solid}.", zh: "{problems} 較 {solid} 進取。" },
   "verdict.weak.sub.many": { en: "{problems} are riskier than {solid}.", zh: "{problems} 較 {solid} 進取。" },
   "verdict.aspirational.head": { en: "Ambitious A1, solid backups", zh: "A1 進取，後備穩妥" },
-  "verdict.aspirational.sub": { en: "{dream} is a reach on score, but {backups} keep your Band A realistic – keeping {dream} as your top choice is a sound plan.", zh: "{dream} 以分數計屬進取之選，但 {backups} 已令你的 Band A 仍有可行選擇 – 把 {dream} 保留為首選是穩健的安排。" },
+  "verdict.aspirational.sub": { en: "{dream} is a reach on score, but {backups} are relatively safe, so it is still worth a shot.", zh: "{dream} 以分數計屬進取之選，但 {backups} 尚算穩妥，故此仍可一試。" },
   "verdict.noData.head": { en: "Band A can't be estimated yet", zh: "Band A 暫時無法估算" },
   "verdict.noData.sub": { en: "Your Band A picks have no 2025 data to compare against – they may be new programmes. Check their requirements and intake directly before relying on them.", zh: "你的 Band A 志願暫無 2025 年數據可供比較，它們可能是新開辦的課程。作準前請自行查核其入學要求及收生情況。" },
   "verdict.thin.head": { en: "Band A needs more realistic options", zh: "Band A 需要更多可行選擇" },
