@@ -150,6 +150,16 @@
 }
 
 
+/* A quiet, factual one-liner under the lede — stated plainly, not as a banner. */
+.about-free {
+  margin: var(--space-2) 0 0;
+  color: var(--muted);
+  font-size: 0.86rem;
+  line-height: 1.5;
+  opacity: 0.85;
+}
+
+
 /* Quick facts strip — three equal cards (10 institutions · 419 programmes ·
    2025 baselines) in the welcome-stat visual language. */
 .about-facts {

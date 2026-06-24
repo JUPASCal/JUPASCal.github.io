@@ -32,6 +32,7 @@ export function AboutPage({ onClose }: Props) {
             JUPASCal <span className="about-title-year">2026</span>
           </h1>
           <p className="about-lede">{t("about.lede")}</p>
+          <p className="about-free">{t("about.free")}</p>
         </header>
 
         <ul className="about-facts">

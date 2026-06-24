@@ -70,13 +70,14 @@ export const STRINGS = {
   "welcome.slide3.cap": { en: "Every JUPAS programme, in one place", zh: "集中查看所有JUPAS 課程" },
   "welcome.gotoSlide": { en: "Go to slide {n}", zh: "前往第 {n} 張" },
   "welcome.getStarted": { en: "Get started", zh: "開始使用" },
-  "welcome.footnote.pre": { en: "Unofficial · reference only · ", zh: "非官方 · 僅供參考 · " },
+  "welcome.footnote.pre": { en: "Free · open-source · unofficial · reference only · ", zh: "免費 · 開放原始碼 · 非官方 · 僅供參考 · " },
   "welcome.footnote.how": { en: "How it works ↗︎", zh: "運作原理 ↗︎" },
 
   // – About page –
   "about.eyebrow": { en: "About", zh: "關於" },
   "about.title": { en: "JUPASCal", zh: "JUPASCal" },
   "about.lede": { en: "An unofficial JUPAS admissions score calculator for comparing programmes and historical score benchmarks across Hong Kong universities.", zh: "非官方 JUPAS 收生計分器，可比較香港各大學課程及其往年收生分數基準。" },
+  "about.free": { en: "JUPASCal is completely free and open-source. No account is needed, and there is no paid version.", zh: "JUPASCal 完全免費開源，毋須開設帳戶，亦沒有收費版本。" },
   "about.facts.institutions": { en: "institutions", zh: "所院校" },
   "about.facts.programmes": { en: "programmes", zh: "個課程" },
   "about.facts.baselines": { en: "score baselines", zh: "收生分數基準" },
