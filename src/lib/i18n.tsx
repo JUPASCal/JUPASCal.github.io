@@ -20,11 +20,13 @@ export type StringKey = keyof typeof STRINGS;
 const TABLE = STRINGS as Record<string, Entry>;
 
 export function loadLang(): Lang {
-  if (typeof localStorage === "undefined") return "en";
+  // Default to Chinese for the HK DSE audience; only honour an explicit "en"
+  // choice the user previously made (anything else / unset falls back to zh).
+  if (typeof localStorage === "undefined") return "zh";
   try {
-    return localStorage.getItem(LANG_KEY) === "zh" ? "zh" : "en";
+    return localStorage.getItem(LANG_KEY) === "en" ? "en" : "zh";
   } catch {
-    return "en";
+    return "zh";
   }
 }
 
