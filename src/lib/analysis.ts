@@ -761,7 +761,7 @@ export function analyzePortfolio(rawPicks: (ProgrammeResult | null)[], t: Transl
     verdict = {
       tone: "good",
       headline: t("verdict.aspirational.head"),
-      sub: t("verdict.aspirational.sub", {
+      sub: t(aLaterSolid.length === 1 ? "verdict.aspirational.sub.one" : "verdict.aspirational.sub.many", {
         dream: listSlots([slotRef(aWeak[0].p)], lang),
         backups: listSlots(aLaterSolid.map((x) => slotRef(x.p)), lang),
       }),
