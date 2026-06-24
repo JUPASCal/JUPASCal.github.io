@@ -101,9 +101,13 @@ const STOPWORDS = new Set([
 ]);
 
 function contentWords(name: string): string[] {
-  // Drop the trailing "(Features: …)" / "(Majors: …)" parentheticals CityUHK
-  // uses, then tokenise to lowercase words ≥3 chars minus stopwords.
-  const base = name.replace(/\([^)]*\)/g, " ").toLowerCase();
+  // Drop the trailing "(Features: …)" / "(Majors: …)" parentheticals — written
+  // with ROUND parens (CityUHK) or SQUARE brackets (e.g. HKU "[Majors: …]") —
+  // before tokenising. Without stripping "[…]", a programme inherits the
+  // discipline words of every major/feature it lists (e.g. "BSc Physics
+  // [Features: …Medical Physics…]" leaked "medical"), causing cross-field
+  // matches. Then tokenise to lowercase words ≥3 chars minus stopwords.
+  const base = name.replace(/\([^)]*\)/g, " ").replace(/\[[^\]]*\]/g, " ").toLowerCase();
   return base
     .replace(/[^a-z\s]/g, " ")
     .split(/\s+/)
@@ -114,7 +118,18 @@ function disciplineKeywords(name: string): Set<string> {
   return new Set(contentWords(name).filter((w) => DISCIPLINE_WORDS.has(w)));
 }
 
-// Similarity between the risky pick and a candidate. 0 = unrelated.
+// Umbrella / degree-type words that are too broad to signal a shared field on
+// their own: every "Bachelor of SCIENCE in X" shares "science", every BBA shares
+// "management", etc. Sharing one of these counts as only a HALF signal, so a
+// single broad word never reaches the match threshold (1) — a specific field
+// word, a shared faculty, or two signals is required. (Previously any single
+// shared discipline word triggered a match, which paired unrelated programmes
+// like Physics ↔ Physiotherapy purely on "science".)
+const BROAD_WORDS = new Set([
+  "science", "sciences", "arts", "humanities", "management", "technology", "information",
+]);
+
+// Similarity between the risky pick and a candidate. Suggested only at score ≥ 1.
 function similarityScore(pick: ProgrammeResult, cand: ProgrammeResult): { score: number; sharedFaculty: boolean } {
   const pf = normFaculty(pick.programme.faculty);
   const cf = normFaculty(cand.programme.faculty);
@@ -122,13 +137,14 @@ function similarityScore(pick: ProgrammeResult, cand: ProgrammeResult): { score:
 
   const pk = disciplineKeywords(pick.programme.name_en);
   const ck = disciplineKeywords(cand.programme.name_en);
-  let sharedDiscipline = 0;
-  for (const w of pk) if (ck.has(w)) sharedDiscipline++;
+  let strong = 0, broad = 0;
+  for (const w of pk) if (ck.has(w)) (BROAD_WORDS.has(w) ? broad++ : strong++);
 
-  let score = (sharedFaculty ? 2 : 0) + sharedDiscipline;
+  // Faculty = 2, each specific field word = 1, each broad word = 0.5.
+  let score = (sharedFaculty ? 2 : 0) + strong + 0.5 * broad;
 
-  // Fallback: no discipline-word or faculty hit, but ≥2 shared content words.
-  if (score === 0) {
+  // Below threshold → fall back to ≥2 shared content words (≥4 chars).
+  if (score < 1) {
     const pc = new Set(contentWords(pick.programme.name_en).filter((w) => w.length >= 4));
     const cc = contentWords(cand.programme.name_en).filter((w) => w.length >= 4);
     let shared = 0;
@@ -196,7 +212,7 @@ export function suggestAlternatives(
     let best: { slot: string; index: number; code: string; score: number; sharedFaculty: boolean; risky: boolean } | null = null;
     for (const r of backableA) {
       const { score, sharedFaculty } = similarityScore(r.result, cand);
-      if (score <= 0) continue;
+      if (score < 1) continue; // a single broad word (0.5) isn't enough — needs a real signal
       // A safety should not be HARDER than the pick it backs up.
       if (r.median != null && candMedian != null && candMedian > r.median) continue;
       if (!best || score > best.score) {
