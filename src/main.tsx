@@ -7,6 +7,29 @@ import "./styles.css";
 // iPhones/Androids). Auto-generated; wrapped in @supports so modern browsers
 // skip it entirely. Imported after styles.css so it follows the source it backs.
 import "./legacy-color-fallbacks.css";
+// Margin fallbacks for flex `gap` (unsupported on Safari < 14.1) + static
+// fallbacks for clamp(). The flex-gap rules are gated by `.no-flex-gap`, set
+// below only when the browser lacks flex gap.
+import "./legacy-layout-fallbacks.css";
+
+// No reliable CSS @supports test exists for FLEX gap (grid-gap is older, so
+// `@supports (gap:1px)` is a false positive), so feature-detect at runtime and
+// tag <html>. Runs before render to avoid a layout flash; failures are swallowed
+// so the modern path is never affected.
+(function detectFlexGap() {
+  try {
+    const probe = document.createElement("div");
+    probe.style.cssText = "display:flex;flex-direction:column;row-gap:1px;position:absolute;visibility:hidden";
+    probe.appendChild(document.createElement("div"));
+    probe.appendChild(document.createElement("div"));
+    document.body.appendChild(probe);
+    const supported = probe.scrollHeight === 1;
+    probe.remove();
+    if (!supported) document.documentElement.classList.add("no-flex-gap");
+  } catch {
+    /* leave the modern (gap) path untouched */
+  }
+})();
 
 function renderBootError(error: unknown) {
   const root = document.getElementById("root");
