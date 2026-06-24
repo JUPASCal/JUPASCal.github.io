@@ -229,9 +229,11 @@ export const STRINGS = {
   "results.col.band": { en: "Band", zh: "Band" },
   // Table-only headers for the benchmark columns (cells show the raw score on
   // top + the diff below). Mobile chips keep the bare common.lq/median/uq.
-  "results.col.lqDiff": { en: "LQ Diff", zh: "LQ差距" },
-  "results.col.medianDiff": { en: "Median Diff", zh: "中位數差距" },
-  "results.col.uqDiff": { en: "UQ Diff", zh: "UQ差距" },
+  // The newline forces a clean two-line header (benchmark on top, 差距/Diff
+  // below) via white-space:pre-line, so the columns can stay narrow.
+  "results.col.lqDiff": { en: "LQ\nDiff", zh: "LQ\n差距" },
+  "results.col.medianDiff": { en: "Median\nDiff", zh: "中位數\n差距" },
+  "results.col.uqDiff": { en: "UQ\nDiff", zh: "UQ\n差距" },
   "results.yourScore": { en: "Your score", zh: "你的分數" },
   "results.eligible": { en: "Eligible", zh: "符合資格" },
   "results.checkReq": { en: "Not Eligible", zh: "未符合要求" },

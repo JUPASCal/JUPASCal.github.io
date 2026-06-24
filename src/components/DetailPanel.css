@@ -106,7 +106,10 @@
 
 
 .detail-panel .detail-header.is-stuck {
+  padding-top: var(--space-3);
   padding-bottom: var(--space-3);
+  box-shadow: 0 8px 18px rgba(29, 42, 47, 0.08);
+  border-bottom-color: var(--line);
 }
 
 
@@ -131,7 +134,22 @@
 
 
 .detail-panel .detail-header.is-stuck .detail-badges {
-  display: none;
+  display: flex;
+  gap: 6px;
+  margin-top: var(--space-2);
+}
+
+
+.detail-panel .detail-header .detail-badges .status,
+.detail-panel .detail-header .detail-badges .band {
+  transition: font-size 160ms ease, padding 160ms ease;
+}
+
+
+.detail-panel .detail-header.is-stuck .detail-badges .status,
+.detail-panel .detail-header.is-stuck .detail-badges .band {
+  padding: 2px 6px;
+  font-size: 0.64rem;
 }
 
 
@@ -146,9 +164,24 @@
 
 
 .detail-panel .detail-header {
-  margin: calc(-1 * var(--space-5)) calc(-1 * var(--space-5)) 0;
+  position: sticky;
+  /* Pin flush to the panel's inner top edge. The scroll container (.panel) has
+     padding: var(--space-5), so a plain top:0 would pin the header one space-5
+     below the visual top and let scrolling content bleed through that strip.
+     The negative inset cancels the panel's padding-top (and mirrors the header's
+     own negative top margin) so the header sits flush against the top edge. */
+  top: calc(-1 * var(--space-5));
+  z-index: 26;
+  /* Bleed to the panel's side edges only. A negative TOP margin would pull the
+     header up over the .detail-picker that sits above it (clipping the "A1 1/5"
+     control); flush-to-top when stuck is handled by the negative `top` inset. */
+  margin: 0 calc(-1 * var(--space-5)) 0;
   padding: var(--space-4) var(--space-5) var(--space-3);
   border-bottom: 1px solid var(--line);
+  background: var(--surface-mix);
+  border-radius: 20px 20px 0 0;
+  box-shadow: none;
+  transition: box-shadow 200ms ease, border-color 200ms ease, padding 180ms ease;
 }
 
 
@@ -194,6 +227,7 @@
   font-size: clamp(1.15rem, 1.6vw, 1.35rem);
   line-height: 1.15;
   letter-spacing: -0.01em;
+  transition: font-size 180ms ease;
 }
 
 
@@ -253,6 +287,12 @@
   flex-wrap: wrap;
   gap: var(--space-2);
   margin-top: var(--space-3);
+  transition: margin-top 160ms ease;
+}
+
+
+.detail-panel .detail-header .detail-header-text .eyebrow {
+  transition: font-size 180ms ease;
 }
 
 
@@ -1930,6 +1970,57 @@
 
 .detail-selection-meta em { font-style: italic; opacity: 0.7; }
 
+.detail-selection-source,
+.detail-selection-structured {
+  flex: 0 0 100%;
+  min-width: 0;
+  margin-top: 0.05rem;
+  color: var(--muted);
+  font-size: 0.74rem;
+  line-height: 1.4;
+}
+
+.detail-selection-source {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.25rem 0.5rem;
+}
+
+.detail-selection-source > span,
+.structured-row em {
+  color: color-mix(in srgb, var(--muted) 82%, var(--ink));
+  font-style: normal;
+  font-weight: 850;
+}
+
+.detail-selection-source q {
+  min-width: 0;
+  color: var(--muted);
+  quotes: none;
+}
+
+.detail-selection-source q::before,
+.detail-selection-source q::after {
+  content: "";
+}
+
+.detail-selection-structured {
+  display: grid;
+  gap: 0.22rem;
+}
+
+.structured-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 0.5rem;
+}
+
+.structured-row span {
+  min-width: 0;
+  color: var(--ink);
+}
+
 .detail-selection-note { flex-basis: 100%; font-size: 0.8rem; line-height: 1.45; opacity: 0.85; }
 
 @media (max-width: 920px) {
@@ -2329,6 +2420,54 @@
       position: static;
       max-height: calc(100vh - 128px);
     }
+
+
+    .desktop-detail-column {
+      position: relative;
+    }
+
+
+    /* Desktop page-turn arrows: same affordance as the mobile edge taps, but
+       anchored to the (non-scrolling) detail column so they stay vertically
+       centred while the panel scrolls beneath. The panel is position:static, so
+       these absolute children resolve against .desktop-detail-column and the
+       panel's overflow doesn't clip them (their containing block is an ancestor
+       of the scroll box). */
+    .desktop-detail-column .detail-edge-tap {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 28;
+      width: 38px;
+      height: 60px;
+      padding: 0;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: color-mix(in srgb, var(--surface) 90%, transparent);
+      color: var(--muted);
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      transition: color 140ms ease, border-color 140ms ease, background 140ms ease;
+    }
+
+
+    .desktop-detail-column .detail-edge-tap:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+
+    .desktop-detail-column .detail-edge-tap-prev { left: 6px; }
+    .desktop-detail-column .detail-edge-tap-next { right: 6px; }
+
+
+    .desktop-detail-column .detail-edge-tap svg {
+      width: 13px;
+      height: 21px;
+    }
 }
 
 
@@ -2433,4 +2572,3 @@
       page-break-inside: avoid;
     }
 }
-

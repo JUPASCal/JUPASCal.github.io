@@ -180,6 +180,15 @@ html:has(.advisor-console) body {
   margin: 0;
 }
 
+/* Match the share / analysis pages' profile name: the serif display family.
+   Those pages render ProfileNameRow inside .step-title-content (which is
+   serif); the rail doesn't, so it would otherwise fall back to the sans body
+   font. Applies to both Chinese and English (CJK falls back identically). */
+.console-rail-profile .profile-name-row h2 {
+  font-family: var(--font-serif);
+  letter-spacing: -0.02em;
+}
+
 .console-save-btn {
   align-self: flex-start;
 }
@@ -1711,7 +1720,7 @@ html:has(.advisor-console) body {
 .console-browse .results-table th:nth-child(7),  /* Median */
 .console-browse .results-table td:nth-child(7),
 .console-browse .results-table th:nth-child(8),  /* UQ */
-.console-browse .results-table td:nth-child(8) { width: 82px; }
+.console-browse .results-table td:nth-child(8) { width: 56px; }
 
 /* Flat rows — no resting tint / zebra striping. Row separation comes from the
    base td border-bottom; hover + picked stay as interaction feedback. */
@@ -1764,12 +1773,28 @@ html:has(.advisor-console) body {
 }
 
 .console-browse .results-table .interview-flag {
+  /* Mirror the adjacent eligibility status pill EXACTLY (same min-height,
+     padding, font-size and line-height) so the two render identically and the
+     flex `align-items:center` on the badges row centres them the same way. A
+     tighter line-height shifted the CJK label off the line-box centre, which is
+     why it looked lower than "符合資格". Sizes to content — no fixed min-width. */
+  min-height: 17px;
+  padding: 2px 6px;
+  font-size: 0.68rem;
+  line-height: 1.05;
+  letter-spacing: 0;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+/* Only the English label stacks onto two lines ("Pre-results" / "interview"),
+   so give that variant the taller fixed box it needs. Targeted structurally
+   (the two-line copy exists only in English) rather than by document language. */
+.console-browse .results-table .interview-flag:has(.interview-flag-copy) {
   min-width: 58px;
   min-height: 23px;
-  padding: 2px 6px;
   font-size: 0.56rem;
   line-height: 1.05;
-  white-space: nowrap;
 }
 
 .console-browse .results-table .interview-flag-copy {
@@ -1838,11 +1863,13 @@ html:has(.advisor-console) body {
      centres it in the column. */
   display: inline-flex;
 }
-/* Status pill ("Not Eligible") likewise. */
+/* Status pill ("Not Eligible") likewise. Keep it on one line: when the
+   Programme column gets tight, the pill should wrap to a new line as a whole
+   unit (or the name truncates), not squash its own text onto two lines. */
 .console-browse .results-table .status {
   font-size: 0.68rem;
   line-height: 1.05;
-  white-space: normal;
+  white-space: nowrap;
   /* Compact centred pill (not a full-width block), like the band pill. */
   display: inline-flex;
 }
@@ -1884,6 +1911,19 @@ html:has(.advisor-console) body {
   flex: 0 0 auto;
   overflow: visible;
 }
+/* Keep the active arrow from displacing the centred label (the no-shift
+   behaviour the narrow Score column already had by accident): pull the arrow
+   out of the flex flow and pin it just right of the label. The button then
+   shrink-wraps to the label alone, stays centred in the column, and only the
+   arrow is added beside it — spilling into the cell padding on narrow columns,
+   exactly like Score. */
+.console-browse .results-table th:not(:first-child) .sort-header.active > span {
+  position: absolute;
+  left: 100%;
+  margin-left: 3px;
+  top: 50%;
+  transform: translateY(-50%);
+}
 /* Centre the header label in the column. The narrow columns (Score 54px,
    School 64px) can't fit a centred label AND a persistent sort arrow without the
    two overlapping, so the resting "↕" indicator is hidden — the arrow only shows
@@ -1892,19 +1932,24 @@ html:has(.advisor-console) body {
 .console-browse .results-table th:not(:first-child) .sort-header {
   width: 100%;
   justify-content: center;
+  /* Anchor for the absolutely-positioned active arrow above. */
+  position: relative;
 }
 .console-browse .results-table th:not(:first-child) .sort-header:not(.active) > span {
   display: none;
 }
 
-/* The benchmark headers ("Median Diff" etc.) are two words in a 72px column —
-   let them wrap to two lines instead of truncating ("MEDIAN DI…"). */
+/* The benchmark headers ("中位數差距" / "Median Diff") carry an explicit newline
+   in their label, so pre-line breaks them into two centred rows (benchmark on
+   top, 差距/Diff below). This lets the columns stay narrow without the label
+   truncating or wrapping mid-word. */
 .console-browse .results-table th:nth-child(n+6),
 .console-browse .results-table th:nth-child(n+6) .sort-header,
 .console-browse .results-table th:nth-child(n+6) .sort-header > :first-child {
-  white-space: normal;
+  white-space: pre-line;
   overflow: visible;
   text-overflow: clip;
+  text-align: center;
 }
 
 /* ── Narrow iPad-landscape (~1024–1140px): tighten the rail a touch ─────── */

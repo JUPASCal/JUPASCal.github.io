@@ -45,6 +45,10 @@
   --space-8: 64px;
   --space-9: 96px;
 
+  /* Serif display family for headline / profile-name text (editorial feel);
+     body text stays sans via the font-family below. */
+  --font-serif: "Iowan Old Style", "Source Serif Pro", "Charter", Georgia, "Times New Roman", serif;
+
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
@@ -984,7 +988,7 @@ button {
    Serif display family for headlines (editorial palette feel) – body
    text stays sans-serif via the inherited font-family on :root. */
 .step-title-content h2 {
-  font-family: "Iowan Old Style", "Source Serif Pro", "Charter", Georgia, "Times New Roman", serif;
+  font-family: var(--font-serif);
   font-size: 1.36rem;
   line-height: 1.1;
   letter-spacing: -0.015em;

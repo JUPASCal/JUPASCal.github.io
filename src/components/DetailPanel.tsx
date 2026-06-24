@@ -569,7 +569,7 @@ function ProgrammeExtraInfoCard({ programme }: { programme: Programme }) {
 
   return (
     <section className="extra-info-card formula-card">
-      <div className="detail-card-eyebrow">
+      <div className="extra-info-eyebrow">
         <span>{t("detail.moreInfo")}</span>
         <b className="tally-badge extra-info-tally">{t("detail.sections", { n: sections.length })}</b>
       </div>
@@ -771,7 +771,7 @@ function OffersBlock({ programme }: { programme: Programme }) {
 
   return (
     <section className="offers-card formula-card">
-      <div className="detail-card-eyebrow">
+      <div className="offers-card-eyebrow">
         <span>{t("detail.bandAOffers", { year: latestYear })}</span>
         {latestRate !== null ? (
           <b className="tally-badge offers-tally">{t("detail.rate", { rate: latestRate.toFixed(1) })}</b>
@@ -867,7 +867,7 @@ function EligibilityBlock({
       className={"eligibility-card formula-card" + (eligible ? " all-passed" : " has-unmet")}
       data-all-passed={eligible ? "true" : "false"}
     >
-      <div className="detail-card-eyebrow">
+      <div className="eligibility-card-eyebrow">
         <span>{t("detail.eligibility")}</span>
         <b className={"tally-badge eligibility-block-tally " + (eligible ? "good" : "bad")}>
           {eligible
