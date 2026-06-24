@@ -3,6 +3,10 @@ import { createRoot } from "react-dom/client";
 import { preloadHashState } from "./lib/hashState";
 import { LangProvider } from "./lib/i18n";
 import "./styles.css";
+// Solid-colour fallbacks for browsers without color-mix() (Safari < 16.2 — old
+// iPhones/Androids). Auto-generated; wrapped in @supports so modern browsers
+// skip it entirely. Imported after styles.css so it follows the source it backs.
+import "./legacy-color-fallbacks.css";
 
 function renderBootError(error: unknown) {
   const root = document.getElementById("root");
