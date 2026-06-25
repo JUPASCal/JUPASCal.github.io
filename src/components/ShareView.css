@@ -186,6 +186,9 @@
   text-align: right;
   text-overflow: ellipsis;
   white-space: nowrap;
+  /* overflow:hidden (for the ellipsis) also clips vertically, so the tight 1.05
+     row line-height cropped the tops of CJK glyphs. Give the glyphs headroom. */
+  line-height: 1.3;
   color: var(--ink);
   letter-spacing: 0;
 }
