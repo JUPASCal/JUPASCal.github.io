@@ -279,6 +279,29 @@ def main():
         if not scored:
             add("REVIEW", p, "new_programme", "no 2025 benchmark — new-for-2026 programme, scoring can't be cross-checked")
 
+        # ── year_changes: structure + noise guard ──
+        # The year-over-year diff must only ever cite canonical DSE subjects; a
+        # Category-C subject in a WEIGHTING change means cross-year naming noise
+        # leaked past the trusted-subject filter (the bug class this guards).
+        yc = p.get("year_changes")
+        if yc is not None:
+            items = yc.get("items") if isinstance(yc, dict) else None
+            if not isinstance(yc, dict) or not isinstance(items, list) or not items:
+                add("ERROR", p, "year_changes_malformed", f"year_changes present but malformed: {yc!r}")
+            else:
+                for it in items:
+                    if not isinstance(it, dict) or "type" not in it:
+                        add("ERROR", p, "year_changes_malformed", f"bad change item: {it!r}")
+                        continue
+                    subj = it.get("subject")
+                    if it["type"] in ("weighting", "compulsory_added", "compulsory_removed"):
+                        if subj not in CANONICAL_SUBJECTS:
+                            add("ERROR", p, "year_changes_subject", f"{it['type']} cites non-canonical subject {subj!r}")
+                        elif it["type"] == "weighting" and subj in set(_REG["category_c"]):
+                            add("ERROR", p, "year_changes_noise", f"weighting change on Category-C subject {subj!r} (cross-year naming noise)")
+                kinds = [k for k, on in (("weighting", yc.get("weighting_changed")), ("formula", yc.get("formula_changed"))) if on]
+                add("REVIEW", p, "year_changes", f"{'+'.join(kinds) or 'none'} change ({len(items)} item(s))")
+
     # ── report ──
     by_sev = defaultdict(list)
     for f in findings:

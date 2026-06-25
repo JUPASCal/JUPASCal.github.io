@@ -90,6 +90,24 @@ export type ProgrammeRequirement = {
   scored?: boolean; // HKUST: interview folded into the admission score
 };
 
+// One 2025→2026 scoring change. Discriminated on `type`:
+//  - weighting:           a DSE subject's multiplier changed (from/to are ×N)
+//  - pool:                a best-of weighting pool changed shape (rare; generic)
+//  - formula_count:       Best N → Best M (from_id/to_id are "best5" etc.)
+//  - compulsory_added/removed: a core became / stopped being force-included
+export type YearChangeItem =
+  | { type: "weighting"; subject: string; from: number; to: number }
+  | { type: "pool" }
+  | { type: "formula_count"; from_id: string; to_id: string }
+  | { type: "compulsory_added"; subject: string }
+  | { type: "compulsory_removed"; subject: string };
+
+export type YearChanges = {
+  weighting_changed: boolean;
+  formula_changed: boolean;
+  items: YearChangeItem[];
+};
+
 export type Programme = {
   jupas_code: string;
   name_en: string;
@@ -104,6 +122,10 @@ export type Programme = {
   subject_weights_2026?: Record<string, number>;
   best_of_weights_2025?: BestOfPool[];
   best_of_weights_2026?: BestOfPool[];
+  // Noise-filtered 2025→2026 scoring changes (unify computes this; present only
+  // when a real weighting/formula change exists). Drives the DetailPanel pills
+  // + "what changed" panel.
+  year_changes?: YearChanges | null;
   min_requirements_2026: MinRequirements;
   calculation_constraints?: Constraint[];
   score_conversion_table: ScoreConversionTable;

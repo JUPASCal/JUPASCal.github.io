@@ -7,7 +7,7 @@ import { useLang, pickName, type Lang, type Translate } from "../lib/i18n";
 import { localizedShortSubject } from "../lib/subjectsI18n";
 import { getSelection, selectionTypeKey, selectionTimingKey, selectionSalienceKey, translateSelectionText } from "../lib/selection";
 import { loadProgrammeDetails, type DescBlock, type ProgrammeDetail } from "../lib/programmeDetails";
-import type { CandidateScore, EligibilityDetail, OfferStatistic, Programme, ProgrammeResult } from "../types/jupas";
+import type { CandidateScore, EligibilityDetail, OfferStatistic, Programme, ProgrammeResult, YearChanges } from "../types/jupas";
 import "./DetailPanel.css";
 
 
@@ -293,6 +293,8 @@ export function DetailPanel({ results, activeCode, reviewRequest, onActiveCodeCh
               <span className="status neutral">{t("detail.quota", { n: programme.quota })}</span>
             ) : null}
             {programme.scores_2025?.score_type === "estimated" ? <span className="status warn">{t("detail.estimatedBenchmark")}</span> : null}
+            {programme.year_changes?.weighting_changed ? <span className="status change">{t("detail.pill.weightingChanged")}</span> : null}
+            {programme.year_changes?.formula_changed ? <span className="status change">{t("detail.pill.formulaChanged")}</span> : null}
           </div>
         </div>
 
@@ -465,6 +467,7 @@ export function DetailPanel({ results, activeCode, reviewRequest, onActiveCodeCh
         <hr className="grade-section-divider" />
 
         <section>
+          {programme.year_changes ? <YearChangesPanel yc={programme.year_changes} t={t} lang={lang} /> : null}
           <div className="formula-year-grid">
             {isNewProgramme(result) ? null : (
               <FormulaBlock
@@ -942,6 +945,56 @@ function isNewProgramme(result: ProgrammeResult): boolean {
 // JUPAS choice labels (A1–A3, B4–B6, C7–C10, D11–D15, E16–E20).
 function prioritySlot(index: number) {
   return slotLabel(index);
+}
+
+// "What changed for 2026" callout. Renders the noise-filtered year_changes diff
+// computed in the data pipeline as plain-language lines. Weighting changes are
+// grouped by transition (e.g. "13 subjects: ×5 → ×7") so broad rescales stay
+// readable; small groups list the subjects.
+function YearChangesPanel({ yc, t, lang }: { yc: YearChanges; t: Translate; lang: Lang }) {
+  const lines: string[] = [];
+
+  for (const it of yc.items) {
+    if (it.type === "formula_count") {
+      lines.push(t("detail.changes.formulaCount", { from: t(`detail.formulaId.${it.from_id}`), to: t(`detail.formulaId.${it.to_id}`) }));
+    } else if (it.type === "compulsory_added") {
+      lines.push(t("detail.changes.compulsoryAdded", { subject: localizedShortSubject(it.subject, lang) }));
+    } else if (it.type === "compulsory_removed") {
+      lines.push(t("detail.changes.compulsoryRemoved", { subject: localizedShortSubject(it.subject, lang) }));
+    }
+  }
+
+  // Group weighting items by (from → to) transition.
+  const groups = new Map<string, { from: number; to: number; subjects: string[] }>();
+  for (const it of yc.items) {
+    if (it.type !== "weighting") continue;
+    const key = `${it.from}->${it.to}`;
+    const g = groups.get(key) ?? { from: it.from, to: it.to, subjects: [] };
+    g.subjects.push(localizedShortSubject(it.subject, lang));
+    groups.set(key, g);
+  }
+  for (const g of groups.values()) {
+    lines.push(
+      g.subjects.length <= 3
+        ? t("detail.changes.weighting", { subjects: g.subjects.join(", "), from: g.from, to: g.to })
+        : t("detail.changes.weightingMany", { n: g.subjects.length, from: g.from, to: g.to })
+    );
+  }
+
+  if (yc.items.some((it) => it.type === "pool")) lines.push(t("detail.changes.pool"));
+  if (!lines.length) return null;
+
+  return (
+    <div className="year-changes-card">
+      <span className="year-changes-title">{t("detail.changes.title")}</span>
+      <ul className="year-changes-list">
+        {lines.map((line, i) => (
+          <li key={i}>{line}</li>
+        ))}
+      </ul>
+      <small className="year-changes-note">{t("detail.changes.note")}</small>
+    </div>
+  );
 }
 
 function FormulaBlock({

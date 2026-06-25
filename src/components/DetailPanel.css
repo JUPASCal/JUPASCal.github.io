@@ -1831,6 +1831,54 @@
   gap: var(--space-3);
 }
 
+/* Year-over-year change pill (header) — accent-toned to read as "updated". */
+.status.change {
+  background: var(--soft-neutral);
+  color: var(--accent);
+}
+
+/* "What changed for 2026" callout above the 2025/2026 formula grid. */
+.year-changes-card {
+  margin-bottom: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  border-radius: 14px;
+  background: var(--surface-strong);
+}
+
+.year-changes-title {
+  display: block;
+  margin-bottom: var(--space-2);
+  color: var(--accent);
+  font-size: 0.8rem;
+  font-weight: 950;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.year-changes-list {
+  margin: 0;
+  padding-left: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.year-changes-list li {
+  color: var(--ink);
+  font-size: 0.84rem;
+  line-height: 1.35;
+}
+
+.year-changes-note {
+  display: block;
+  margin-top: var(--space-2);
+  color: var(--muted);
+  font-size: 0.74rem;
+  line-height: 1.35;
+}
+
 
 .formula-card {
   display: grid;

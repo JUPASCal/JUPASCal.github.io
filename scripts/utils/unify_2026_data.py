@@ -550,6 +550,90 @@ def extract_logic_from_formula(formula_text, institution=None):
 
     return {"compulsory": compulsory, "best_n": best_n, "bonus": bonus, "best_of": best_of, "compulsory_pools": compulsory_pools}
 
+# ── Year-over-year change detection ──────────────────────────────────────────
+# The 2025 and 2026 scoring fields are extracted from DIFFERENT raw strings per
+# institution, so a naive diff is dominated by noise (mostly Category-C language
+# subjects renamed between feeds, e.g. "French #" vs "French: Advanced Diploma …").
+# We diff only the NORMALIZED structured fields and only over subjects we can
+# match one-to-one across years.
+
+# Canonical DSE subjects we trust to compare across years. Category C (languages)
+# and tokens are EXCLUDED — their names differ wildly between the 2025/2026 feeds.
+TRUSTED_DIFF_SUBJECTS = set(
+    SUBJECTS_REGISTRY["core"]
+    + SUBJECTS_REGISTRY["category_a"]
+    + [_ME["combined"], _ME["module_1"], _ME["module_2"]]
+)
+
+# Institutions whose per-year FORMULA TEXT is the authoritative source of
+# compulsory cores, so a 2025-vs-2026 text diff reflects a real rule change.
+# HKUST (formula_steps) and CityU (calc_mode) derive cores from structured
+# fields, not text — a text diff there would be a false positive.
+_COMPULSORY_TEXT_INSTITUTIONS = {"CUHK", "HKU", "EdUHK", "LingnanU", "PolyU"}
+
+def _has_2025_history(obj):
+    """True when the programme has any 2025 admission benchmark — i.e. it existed
+    in 2025 and is year-comparable. New-for-2026 / auto-included programmes have
+    all-null scores and are not 'changes'."""
+    s = obj.get("scores_2025") or {}
+    return any(s.get(k) is not None for k in ("median", "lq", "uq", "mean", "expected_score"))
+
+def compute_year_changes(obj):
+    """Noise-filtered structured diff of 2025 vs 2026 scoring. Returns
+    {weighting_changed, formula_changed, items:[…]} or None when the programme
+    isn't year-comparable or nothing meaningful changed."""
+    if not _has_2025_history(obj):
+        return None
+
+    w25 = obj.get("subject_weights_2025") or {}
+    w26 = obj.get("subject_weights_2026") or {}
+    items = []
+
+    # 1) Weighting: effective weight (absent ⇒ ×1) of a trusted DSE subject differs.
+    #    Catches both value changes (×5→×7) and added/removed weighting (×1→×1.5).
+    for subj in sorted(TRUSTED_DIFF_SUBJECTS):
+        v25 = float(w25.get(subj, 1.0))
+        v26 = float(w26.get(subj, 1.0))
+        if v25 != v26:
+            items.append({"type": "weighting", "subject": subj, "from": v25, "to": v26})
+
+    # 1b) Best-of pool structural change (canonical subject-set, count, weight).
+    def _pool_key(pools):
+        return sorted(
+            (tuple(sorted(p.get("subjects", []))), p.get("count"), p.get("weight"))
+            for p in (pools or [])
+        )
+    if _pool_key(obj.get("best_of_weights_2025")) != _pool_key(obj.get("best_of_weights_2026")):
+        items.append({"type": "pool"})
+
+    weighting_changed = any(it["type"] in ("weighting", "pool") for it in items)
+
+    # 2) Formula count change (Best N → Best M).
+    fid25, fid26 = obj.get("formula_2025_id"), obj.get("formula_2026_id")
+    real_ids = {"best4", "best5", "best6", "best7"}
+    if fid25 in real_ids and fid26 in real_ids and fid25 != fid26:
+        items.append({"type": "formula_count", "from_id": fid25, "to_id": fid26})
+
+    # 3) Compulsory-inclusion change — text-authoritative institutions only.
+    if obj.get("institution") in _COMPULSORY_TEXT_INSTITUTIONS:
+        f25 = str(obj.get("formula_2025") or "").strip()
+        f26 = str(obj.get("formula_2026") or "").strip()
+        if f25 not in ("", "-", "–") and f26 not in ("", "-", "–"):
+            c25 = set(extract_logic_from_formula(obj.get("formula_2025"), obj.get("institution"))["compulsory"])
+            c26 = set(extract_logic_from_formula(obj.get("formula_2026"), obj.get("institution"))["compulsory"])
+            for subj in sorted(c26 - c25):
+                items.append({"type": "compulsory_added", "subject": subj})
+            for subj in sorted(c25 - c26):
+                items.append({"type": "compulsory_removed", "subject": subj})
+
+    formula_changed = any(
+        it["type"] in ("formula_count", "compulsory_added", "compulsory_removed") for it in items
+    )
+
+    if not items:
+        return None
+    return {"weighting_changed": weighting_changed, "formula_changed": formula_changed, "items": items}
+
 def map_formula_id(formula_text):
     """Standardize formula descriptions into machine-readable IDs."""
     if not formula_text: return "unknown"
@@ -2036,6 +2120,18 @@ def unify_data():
                 # keep first-seen on collision (weights verified equal)
                 _new.setdefault(_ck, _v)
             _obj[f"subject_weights_{_yr}"] = _new
+
+    # 4b-ii. Year-over-year change detection. Runs AFTER weight canonicalization so
+    # the diff is over canonical subject keys. Attaches a compact `year_changes`
+    # summary only when a real (noise-filtered) weighting/formula change exists;
+    # surfaced as header pills + a "what changed" panel in the DetailPanel.
+    _yc_count = 0
+    for _obj in unified_map.values():
+        yc = compute_year_changes(_obj)
+        if yc:
+            _obj["year_changes"] = yc
+            _yc_count += 1
+    print(f"Year-over-year changes flagged: {_yc_count} programme(s)")
 
     # 4c. Merge non-academic admission requirements (interview arrangements)
     # scraped per-institution into each programme as an `interview` object.
