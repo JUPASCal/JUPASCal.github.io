@@ -103,6 +103,7 @@ export const STRINGS = {
   },
   "about.source.github": { en: "View on GitHub ↗︎", zh: "前往 GitHub ↗︎" },
   "about.source.form": { en: "Report via Google Form ↗︎", zh: "透過 Google 表單回報 ↗︎" },
+  "about.source.changelog": { en: "Changelog ↗︎", zh: "更新紀錄 ↗︎" },
   "about.more.h": { en: "Data sources", zh: "數據來源" },
   "about.more.p": { en: "Programme weightings, entry requirements and admission scores are compiled from each institution's own published admissions materials and the official JUPAS site, then cross-checked against them. The figures are reference estimates and may lag the latest official updates.", zh: "課程的科目比重、入學要求及收生分數，均整理自各院校官方公佈的收生資料及 JUPAS 官方網站，並經逐一核對。所有數字僅屬參考估算，未必反映最新的官方更新。" },
   "about.version": { en: "Version", zh: "版本" },

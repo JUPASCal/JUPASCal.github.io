@@ -130,6 +130,14 @@ export function AboutPage({ onClose }: Props) {
               >
                 {t("about.source.github")}
               </a>
+              <a
+                className="about-source-btn is-secondary"
+                href="https://github.com/JUPASCal/JUPASCal.github.io/releases"
+                target="_blank"
+                rel="noreferrer"
+              >
+                {t("about.source.changelog")}
+              </a>
             </div>
           </div>
         </section>
