@@ -241,8 +241,89 @@ def parse_cuhk_weights(weight_text):
     for m in re.finditer(r'A([A-Z0-9]+)\s*:\s*([\d\.]+)', remainder):
         subj = normalize_subject(m.group(1))
         flat_weights[subj] = float(m.group(2))
-        
+
     return flat_weights, best_of_weights
+
+# Subjects we can map unambiguously from CUHK's PDF-requirements prose. Kept to
+# the cores on purpose: any other phrasing is skipped rather than guessed.
+_CUHK_PDF_SUBJECTS = {
+    "chinese": "Chinese Language",
+    "english": "English Language",
+    "mathematics": "Mathematics (Compulsory Part)",
+}
+
+def parse_cuhk_pdf_weights(weight_text):
+    """Fallback parser for CUHK's 2026 PDF-requirements prose weight, e.g.
+    '• Chinese (x 1.5) | • English (x 1.5)'. Returns {subject: multiplier} for
+    the simple '• <Subject> (x N)' parts only. Deliberately skips best-of phrases
+    ('the best one/two subjects of …'), inclusion constraints ('must be included')
+    and formula text ('Best 5 subjects'): those are NOT subject multipliers and
+    must not be misread as weights. Used only when the coded API weight is empty."""
+    if not weight_text or weight_text.strip() in ("--", ""):
+        return {}
+    weights = {}
+    for part in weight_text.split("|"):
+        p = part.strip().lstrip("•").strip()
+        low = p.lower()
+        if any(tok in low for tok in ("best", "must", "include", " of ", "subjects", "remark")):
+            continue
+        m = re.match(r"^(.+?)\s*\(\s*x\s*([\d.]+)\s*\)\s*$", p)
+        if not m:
+            continue
+        subj = _CUHK_PDF_SUBJECTS.get(m.group(1).strip().lower())
+        if subj:
+            weights[subj] = float(m.group(2))
+    return weights
+
+def parse_cityu_weights(sw_json):
+    """Parse CityU's `subject_weights` JSON array honouring positional slots.
+
+    Most CityU programmes weight every subject the same regardless of slot
+    (`position: ["all"]`) and collapse to a plain {subject: weight} map. A few
+    (JS1050/1051/1052/1053) distinguish the *best/required* elective from the
+    rest via `elect_position1` / `elect_position2`: e.g. the best of
+    Biology/Chemistry/Physics counts ×2.5 (1st elective), a further elective only
+    ×1.5 (2nd elective). The old flattening let the later (lower) `elect_position2`
+    entry overwrite the higher `elect_position1` one, silently under-weighting the
+    best science elective.
+
+    Returns (flat_weights, best_of_pools):
+      - `flat_weights`: base multiplier for each subject. For a subject that has
+        both a position1 and a position2/all weight, the lower (non-position1)
+        weight is the base — the higher one is granted to only one subject via a pool.
+      - `best_of_pools`: one `{count: 1, subjects: [...], weight: w}` per distinct
+        position1 weight, so exactly one qualifying elective is up-weighted to it.
+    """
+    try:
+        arr = json.loads(sw_json) if isinstance(sw_json, str) else sw_json
+    except Exception:
+        return {}, []
+    if not isinstance(arr, list):
+        return {}, []
+
+    flat = {}
+    pos1 = {}  # subject -> weight when occupying the privileged 1st-elective slot
+    for item in arr:
+        try:
+            subj = normalize_subject(item['subject'])
+            w = float(item['weight'])
+        except (KeyError, TypeError, ValueError):
+            continue
+        positions = item.get('position') or ['all']
+        if 'elect_position1' in positions:
+            pos1[subj] = max(pos1.get(subj, 0.0), w)
+        else:  # 'all' or 'elect_position2' → base/general weight
+            flat[subj] = max(flat.get(subj, 0.0), w)
+
+    best_of = []
+    if pos1:
+        by_weight = {}
+        for subj, w in pos1.items():
+            by_weight.setdefault(w, []).append(subj)
+            flat.setdefault(subj, 1.0)  # ensure a base weight exists for the rest of the pool
+        for w, subjs in sorted(by_weight.items(), reverse=True):
+            best_of.append({"count": 1, "subjects": sorted(subjs), "weight": w})
+    return flat, best_of
 
 def parse_hkust_weights(other_subjects_text):
     """
@@ -1060,16 +1141,19 @@ def unify_data():
                 obj["formula_2026"] = entry.get('calc_mode_text') or entry.get('score_formula')
                 
                 sw2026 = entry.get('subject_weights', {})
-                if isinstance(sw2026, str):
-                    try:
-                        w_list = json.loads(sw2026)
-                        obj["subject_weights_2026"] = {normalize_subject(i['subject']): float(i['weight']) for i in w_list}
-                    except: pass
+                if isinstance(sw2026, (str, list)):
+                    # positional array form (JSON string or list) → honour the
+                    # 1st/2nd-elective slots (best science elective ×2.5 etc.)
+                    flat26, best26 = parse_cityu_weights(sw2026)
+                    obj["subject_weights_2026"] = flat26
+                    obj["best_of_weights_2026"] = best26
                 else:
                     obj["subject_weights_2026"] = {normalize_subject(k): float(v) for k, v in sw2026.items()}
-                
-                # CityU 2025 weights are effectively identical to 2026
+
+                # CityU 2025 weights are effectively identical to 2026 (the per-year
+                # source strings confirm the same positional 1st/2nd-elective split).
                 obj["subject_weights_2025"] = obj["subject_weights_2026"].copy()
+                obj["best_of_weights_2025"] = [dict(p) for p in obj["best_of_weights_2026"]]
                 
                 # Regex extraction of compulsory subjects embedded in "Best 5 (includes ...)" strings
                 sf = str(entry.get('score_formula', ''))
@@ -1175,7 +1259,19 @@ def unify_data():
                 
                 obj["subject_weights_2025_raw"] = req25.get('weight')
                 obj["subject_weights_2026_raw"] = entry.get('weight_remarks')
-                
+
+                # Fallback: the coded API weight is empty for some programmes, but
+                # CUHK's 2026 PDF requirements still list a weighting (e.g. JS4100
+                # "• Chinese (x 1.5) | • English (x 1.5)"). Populate the 2026
+                # weighting from it. Per the Year Labeling Rule this is a 2026-only
+                # change, so we DON'T touch the 2025 weights — the 2025-logic score
+                # must stay comparable to the 2025 admission benchmarks.
+                if not obj["subject_weights_2026"] and not obj["best_of_weights_2026"]:
+                    pdf_w = parse_cuhk_pdf_weights(req26.get('weight'))
+                    if pdf_w:
+                        obj["subject_weights_2026"] = pdf_w
+                        obj["subject_weights_2026_raw"] = req26.get('weight')
+
                 # CUHK Manual Overrides for Special Logic (e.g. JS4725)
                 if code == "JS4725":
                     # Logic: Best 2 of English, Biology or Chemistry (x 1.5)
