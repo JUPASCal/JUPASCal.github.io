@@ -82,7 +82,7 @@ Score conversion:
 | Korean | Grade 6 | Grade 5 | Grade 4 | Grade 3 |
 | Urdu | A++, A+, A | B++, B+, B | C | D, E |
 
-Programme-level exceptions called out by user: `JS4550`, `JS4601`, `JS4648`, `JS4719`. These should be verified directly before implementation because they may override general elective/scoring handling.
+Programme-level exceptions called out by user: `JS4550`, `JS4601`, `JS4648`, `JS4719`. **Verified + implemented:** the JUPAS 2026 requirements footnote these programmes' electives as "(a) Category A subjects only", so Category C Other Languages do **not** satisfy an elective for them (both their elective slots are Category A — one a specific science list, the other restricted by the footnote). Enforced in `src/lib/categoryC.ts` via `CAT_A_ONLY_ELECTIVE_PROGRAMMES`. (Score-side: whether Cat C is also barred from these programmes' best-N is a separate open item.)
 
 ### HKUST
 
@@ -265,9 +265,14 @@ Accepted Other Languages thresholds:
 
 This is an elective eligibility rule, not a full conversion table.
 
+## Known edge cases / open items (investigated 2026-06-24)
+
+- **HKU electives — degenerate Cat C case.** Every HKU programme reads "any 1 subject (excluding applied learning, other language)" for the first elective plus "other language subjects will be used as unspecified elective subject" for the second. So at most ONE Other Language counts as an elective. The calculator handles all realistic inputs (Cat C fills an "Any"/unspecified pool; specific pools exclude it). The only un-enforced case is a student whose electives are **two Cat C languages with zero Category A** — they'd wrongly pass an HKU two-"Any" programme. No realistic applicant; closing it would need a "≤1 Cat C per electives" cap in `matchElectives`. Left as a documented limitation.
+- **CUHK "Category A only" programmes — scoring side.** `JS4550/4601/4648/4719` reject Cat C for *eligibility* (`CAT_A_ONLY_ELECTIVE_PROGRAMMES`). Cat C still contributes to their best-N *score*, which is consistent with CUHK's general rule ("pass results of an Other Language subject can be used in the admission score calculation"); the "(a) Category A only" footnote restricts the elective requirement, not the score. Left as-is unless a source says otherwise.
+
 ## Suggested Implementation Plan
 
 1. Verify the broad A-E mappings against original source PDFs/pages before publication if possible.
-2. Add programme-level policies for any confirmed CUHK exceptions (`JS4550`, `JS4601`, `JS4648`, `JS4719`) if their rules differ from the general CUHK table.
+2. ~~Add programme-level policies for any confirmed CUHK exceptions (`JS4550`, `JS4601`, `JS4648`, `JS4719`)~~ **Done** — these four are "Category A subjects only", so Cat C is rejected as an elective (`CAT_A_ONLY_ELECTIVE_PROGRAMMES` in `categoryC.ts`).
 3. Run a data audit to find programmes whose notes already mention Category C eligibility, especially SSSDP programmes.
 4. Before implementing ApL, reuse the extended-grade TLV path rather than adding more 4-bit grade IDs.

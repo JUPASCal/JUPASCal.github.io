@@ -168,6 +168,15 @@ export function categoryCBasePoints(
   return fallbackTable[normalized] ?? 0;
 }
 
+// CUHK programmes whose elective requirement is footnoted "(a) Category A
+// subjects only" in the JUPAS 2026 requirements: JS4550 Biomedical Sciences,
+// JS4601 Science, JS4648 Earth & Environmental Sciences, JS4719 Risk Management
+// Science. Both their elective slots are then Category A (one a specific science
+// list, the "any" one restricted by the footnote), so Category C Other Languages
+// cannot satisfy an elective for these — this overrides CUHK's general "Other
+// Language can be used" rule. See docs/manuals/CATEGORY_C_LANGUAGE_RULES.md.
+const CAT_A_ONLY_ELECTIVE_PROGRAMMES = new Set(["JS4550", "JS4601", "JS4648", "JS4719"]);
+
 export function categoryCCanSatisfyElective(
   programme: Programme,
   subject: string,
@@ -175,6 +184,7 @@ export function categoryCCanSatisfyElective(
   pool: RequirementPool,
 ): boolean {
   if (!isCategoryCSubject(subject)) return true;
+  if (CAT_A_ONLY_ELECTIVE_PROGRAMMES.has(programme.jupas_code)) return false;
   const note = pool.note?.toLowerCase() || "";
   if (note.includes("except") && (note.includes("other language") || note.includes("category c"))) return false;
 
