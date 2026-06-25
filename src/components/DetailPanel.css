@@ -1831,6 +1831,15 @@
   gap: var(--space-3);
 }
 
+/* Institution's exact wording, shown muted under the generated formula text. */
+.formula-official {
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-style: normal;
+  line-height: 1.3;
+  opacity: 0.85;
+}
+
 /* Year-over-year change pill (header) — accent-toned to read as "updated". */
 .status.change {
   background: var(--soft-neutral);

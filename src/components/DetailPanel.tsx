@@ -5,6 +5,7 @@ import { bandLabelKey, formatDelta, formatPercent } from "../lib/results";
 import { slotLabel } from "../lib/slots";
 import { useLang, pickName, type Lang, type Translate } from "../lib/i18n";
 import { localizedShortSubject } from "../lib/subjectsI18n";
+import { describeFormula } from "../lib/formulaText";
 import { getSelection, selectionTypeKey, selectionTimingKey, selectionSalienceKey, translateSelectionText } from "../lib/selection";
 import { loadProgrammeDetails, type DescBlock, type ProgrammeDetail } from "../lib/programmeDetails";
 import type { CandidateScore, EligibilityDetail, OfferStatistic, Programme, ProgrammeResult, YearChanges } from "../types/jupas";
@@ -155,6 +156,10 @@ export function DetailPanel({ results, activeCode, reviewRequest, onActiveCodeCh
 
   const { programme, calculation, eligibility } = result;
   const selection = getSelection(programme);
+  // Standardized, bilingual formula descriptions (generated from the structured
+  // model; raw wording kept as a muted "Official:" line — see describeFormula).
+  const formula2025 = describeFormula(programme, "2025", lang, t);
+  const formula2026 = describeFormula(programme, "2026", lang, t);
 
   function moveActive(direction: 1 | -1) {
     if (resultsNonNull.length <= 1 || activeIndex < 0) return;
@@ -364,7 +369,7 @@ export function DetailPanel({ results, activeCode, reviewRequest, onActiveCodeCh
             {auditOpen ? (
               <AuditRows
                 candidates={calculation.allCandidates}
-                formula={programme.formula_2025 || programme.formula_2026 || null}
+                formula={formula2025.text || formula2026.text || null}
                 t={t}
                 lang={lang}
               />
@@ -473,7 +478,8 @@ export function DetailPanel({ results, activeCode, reviewRequest, onActiveCodeCh
               <FormulaBlock
                 label={t("detail.formula2025Label")}
                 note={t("detail.formula2025Note")}
-                formula={programme.formula_2025}
+                formula={formula2025.text}
+                rawFormula={formula2025.showOfficial ? formula2025.raw : null}
                 weights={programme.subject_weights_2025 || {}}
                 pools={programme.best_of_weights_2025 || []}
                 t={t}
@@ -483,7 +489,8 @@ export function DetailPanel({ results, activeCode, reviewRequest, onActiveCodeCh
             <FormulaBlock
               label={t("detail.formula2026Label")}
               note={t("detail.formula2026Note")}
-              formula={programme.formula_2026}
+              formula={formula2026.text}
+              rawFormula={formula2026.showOfficial ? formula2026.raw : null}
               weights={programme.subject_weights_2026 || {}}
               pools={programme.best_of_weights_2026 || []}
               t={t}
@@ -1001,6 +1008,7 @@ function FormulaBlock({
   label,
   note,
   formula,
+  rawFormula,
   weights,
   pools,
   t,
@@ -1009,6 +1017,7 @@ function FormulaBlock({
   label: string;
   note: string;
   formula?: string | null;
+  rawFormula?: string | null;
   weights: Record<string, number>;
   pools: Array<{ count: number; subjects: string[]; weight: number }>;
   t: Translate;
@@ -1021,6 +1030,7 @@ function FormulaBlock({
     <div className="formula-card">
       <span>{label}</span>
       <p className="formula-text">{formula || t("detail.formulaNA")}</p>
+      {rawFormula ? <small className="formula-official">{t("detail.formulaGen.official", { raw: rawFormula })}</small> : null}
       <small>{note}</small>
       {hasWeights ? (
         <>
