@@ -1196,6 +1196,26 @@ def unify_data():
                             "description": f"Formula includes: {', '.join(subjs)}"
                         })
 
+                # CityU "3 Core + 2 Elective" mode (calc_mode 'best3plus2'): the
+                # three DSE cores (Chinese, English, Mathematics) are compulsory
+                # plus the best 2 electives. Unlike the 'best5 (includes …)' mode,
+                # this phrasing carries no "(includes …)" clause, so the cores must
+                # be forced from the mode itself — otherwise weak-core applicants
+                # are over-scored (their cores wrongly drop out of the Best-N).
+                # Matches the project's documented 3C+2X definition (see
+                # docs/manuals/JUPAS_2026_INSTRUCTIONS.md and EXCEL_LOGIC.md).
+                if entry.get('calc_mode') == 'best3plus2':
+                    cores = ["Chinese Language", "English Language", "Mathematics (Compulsory Part)"]
+                    existing_comp = next((c for c in obj["calculation_constraints"] if c.get("type") == "compulsory_subjects"), None)
+                    if existing_comp:
+                        existing_comp["subjects"] = sorted(set(existing_comp["subjects"] + cores))
+                    else:
+                        obj["calculation_constraints"].append({
+                            "type": "compulsory_subjects",
+                            "subjects": cores,
+                            "description": "3 Core + 2 Elective: Chinese, English and Mathematics are compulsory"
+                        })
+
                 # Detect Math + M1/M2 mutual exclusivity
                 if entry.get('maths_calc_as_one') == 1 or "only one subject will be included" in sf:
                     obj["calculation_constraints"].append({
@@ -1831,16 +1851,22 @@ def unify_data():
             obj["formula_2025_id"] = _formula_id(logic_25["best_n"])
             obj["formula_2026_id"] = _formula_id(logic_26["best_n"])
             
-            # Merge extracted compulsory subjects into constraints
-            if logic_25["compulsory"]:
+            # Merge extracted compulsory subjects into constraints.
+            # Prefer the 2025 formula (per the Year Labeling Rule the score uses
+            # 2025 logic), but fall back to the 2026 formula's compulsory cores
+            # when the 2025 formula is absent — i.e. a programme new for 2026 with
+            # no 2025 history (e.g. HKU JS6200, formula_2025 '–'). Otherwise its
+            # cores would never be forced into the Best-N selection.
+            merged_compulsory = logic_25["compulsory"] or logic_26["compulsory"]
+            if merged_compulsory:
                 existing_comp = next((c for c in obj["calculation_constraints"] if c["type"] == "compulsory_subjects"), None)
                 if existing_comp:
-                    existing_comp["subjects"] = sorted(set(existing_comp["subjects"] + logic_25["compulsory"]))
+                    existing_comp["subjects"] = sorted(set(existing_comp["subjects"] + merged_compulsory))
                 else:
                     obj["calculation_constraints"].append({
                         "type": "compulsory_subjects",
-                        "subjects": logic_25["compulsory"],
-                        "description": f"Formula requires: {', '.join(logic_25['compulsory'])}"
+                        "subjects": merged_compulsory,
+                        "description": f"Formula requires: {', '.join(merged_compulsory)}"
                     })
             
             # Merge extracted dynamic pools (CUHK style)
