@@ -817,13 +817,13 @@ export const STRINGS = {
 } satisfies Record<string, Entry>;
 
 export const SUBJECTS = {
-  "Chinese Language": { zh: "中國語文", chip: "中文"  },
-  "English Language": { zh: "英國語文", chip: "英文"  },
-  "Mathematics (Compulsory Part)": { zh: "數學（必修部分）", chip: "數學" },
-  "Citizenship and Social Development": { zh: "公民與社會發展", chip: "公社" },
-  "Mathematics Extended Part (Module 1 or 2)": { zh: "數學延伸部分（單元一或二）", chip: "M1/2" },
-  "Mathematics Extended Part (Module 1)": { zh: "數學延伸部分（單元一）" , chip: "M1" },
-  "Mathematics Extended Part (Module 2)": { zh: "數學延伸部分（單元二）" , chip: "M2" },
+  "Chinese Language": { zh: "中國語文", shortZh: "中文", chip: "中文"  },
+  "English Language": { zh: "英國語文", shortZh: "英文", chip: "英文"  },
+  "Mathematics (Compulsory Part)": { zh: "數學（必修部分）", shortZh: "數學", chip: "數學" },
+  "Citizenship and Social Development": { zh: "公民與社會發展", shortZh: "公社", chip: "公社" },
+  "Mathematics Extended Part (Module 1 or 2)": { zh: "數學延伸部分（單元一或二）", shortZh: "M1/M2", chip: "M1/2" },
+  "Mathematics Extended Part (Module 1)": { zh: "數學延伸部分（單元一）" , shortZh: "M1", chip: "M1" },
+  "Mathematics Extended Part (Module 2)": { zh: "數學延伸部分（單元二）" , shortZh: "M2", chip: "M2" },
   "Biology": { zh: "生物", chip: "生物" },
   "Chemistry": { zh: "化學", chip: "化學" },
   "Physics": { zh: "物理", chip: "物理" },
@@ -839,6 +839,7 @@ export const SUBJECTS = {
   "Chinese Literature": { zh: "中國文學", chip: "文學" },
   "Literature in English": { zh: "英語文學", chip: "英Lit" },
   "Technology and Living (Food Science and Technology)": { zh: "科技與生活（食品科學與科技）", chip: "科生" },
+  "Technology and Living (Fashion, Clothing and Textiles)": { zh: "科技與生活（時裝、成衣及紡織）", chip: "科生時" },
   "Visual Arts": { zh: "視覺藝術", chip: "視藝" },
   "Music": { zh: "音樂", chip: "音樂" },
   "Physical Education": { zh: "體育", chip: "體育" },
@@ -853,4 +854,4 @@ export const SUBJECTS = {
   "Korean: Test of Proficiency in Korean II": { zh: "韓文" },
   "Spanish: Diploma of Spanish as a Foreign Language": { zh: "西班牙文" },
   "Urdu: Urdu (International)": { zh: "烏爾都文" },
-} satisfies Record<string, { zh: string; chip?: string }>;
+} satisfies Record<string, { zh: string; shortZh?: string; chip?: string }>;

@@ -1228,8 +1228,14 @@ def unify_data():
             # 3. School-Specific Mapping & Constraint Detection
             
             if school_key == "CityU":
-                obj["formula_2025"] = entry.get('subject_weights_2025', {}).get('subjects_included') or entry.get('score_formula')
-                obj["formula_2026"] = entry.get('calc_mode_text') or entry.get('score_formula')
+                # `score_formula` is the precise statement ("Best 5 Subjects (includes
+                # English Language, Mathematics)") — prefer it over `calc_mode_text`
+                # ("Best 5 Subjects"), which drops the compulsory-cores clause and
+                # otherwise contradicts the structured display (e.g. JS1000). CityU
+                # formulas are stable year-over-year, so use it for both years.
+                _city_sf = entry.get('score_formula')
+                obj["formula_2025"] = _city_sf or entry.get('subject_weights_2025', {}).get('subjects_included') or entry.get('calc_mode_text')
+                obj["formula_2026"] = _city_sf or entry.get('calc_mode_text')
                 
                 sw2026 = entry.get('subject_weights', {})
                 if isinstance(sw2026, (str, list)):
@@ -1549,14 +1555,31 @@ def unify_data():
                 # HKUST calculator). Falls back to old scraper data if JS extract is missing.
                 js = hkust_js_data.get(code, {})
 
-                formula_text_2025 = entry.get('formula_text_2025')
-                formula_text_2026 = js.get('otherSubjects_text') or entry.get('otherSubjects', '')
-                obj["formula_2025"] = formula_text_2025 or formula_text_2026
-                # `formula_text_2026` is only ever the "other subjects" fragment
-                # (missing the English/Math prefix). HKUST formulas are stable
-                # across cycles, so show the full 2025 text for 2026 too when
-                # available — otherwise the 2026 display is an incomplete fragment.
-                obj["formula_2026"] = formula_text_2025 or formula_text_2026
+                # Reconstruct the FULL formula from the authoritative JS-extract
+                # rather than the old scraper's fields. The scraper's
+                # `formula_text_2025` is either a bare fragment ("Best 3 other
+                # subjects", missing the English/Math prefix) or a stale two-option
+                # string (e.g. JS5812) that no longer matches the real model. The
+                # JS-extract gives the required cores (+ weights) via `formula_steps`
+                # and the rest via `otherSubjects_text`.
+                _hk_short = {"English Language": "English", "Mathematics (Compulsory Part)": "Math",
+                             "Mathematics Compulsory Part": "Math", "Chinese Language": "Chinese"}
+                _core_parts = []
+                for _s in js.get('formula_steps', []):
+                    if isinstance(_s, dict) and _s.get('type') == 'required' and _s.get('subject'):
+                        _subj = _hk_short.get(_s['subject'], normalize_subject(_s['subject']))
+                        _w = _s.get('weight', 1) or 1
+                        _core_parts.append(f"{_subj} x {_w:g}" if _w != 1 else _subj)
+                # Clean footnote markers + drop the trailing legend ("Weighting: …",
+                # "Category C …"); keep the better-of "… OR …" body intact.
+                _others = js.get('otherSubjects_text') or entry.get('otherSubjects', '') or ''
+                _others = re.sub(r'[▲#^~*]', '', _others)
+                _others = re.split(r'\bWeighting\s*:|\bCategory\s+C\b', _others)[0].strip().strip(',+ ').strip()
+                _parts = _core_parts + ([_others] if _others else [])
+                _hk_formula = " + ".join(_parts) if _parts else (entry.get('formula_text_2025') or '')
+                # HKUST formulas are stable across cycles.
+                obj["formula_2025"] = _hk_formula
+                obj["formula_2026"] = _hk_formula
 
                 # Subject weights: use structured JS data, normalizing keys to canonical names.
                 js_weights = js.get('subject_weights_2026', {})
@@ -2117,7 +2140,32 @@ def unify_data():
             _new = {}
             for _k, _v in _w.items():
                 _ck = canon_elective_subject(_k)
-                # keep first-seen on collision (weights verified equal)
+                if _ck in CANONICAL_SUBJECTS or _ck in SUBJECT_TOKENS:
+                    _new.setdefault(_ck, _v)
+                    continue
+                _low = _ck.strip().lower()
+                # Bare "Combined Science" weight → apply to each specific combo so it
+                # matches whichever combo the student actually took.
+                if _low == "combined science":
+                    for _combo in SUBJECT_EXPANSIONS.get("Combined Science", []):
+                        _new.setdefault(_combo, _v)
+                    continue
+                # Catch-all multiplier ("Other Subjects") can't be a subject key — drop.
+                if _low in ("other subjects", "other elective subjects"):
+                    continue
+                # Formula fragment that names a best-of choice ("the best one subject of
+                # A or B", "A or B", "A / B") → route to a best_of_weights pool, but
+                # ONLY when every part canonicalises (else leave the key untouched).
+                _frag = re.sub(r'(?i)^the best (?:one|two|three|\d+) subjects? of\s+', '', _ck).strip()
+                # Split on " or " / spaced " / " only — an UNspaced "/" is inside a
+                # subject name (e.g. "BAFS (Accounting/ Business Management)").
+                _parts = [canon_elective_subject(p.strip()) for p in re.split(r'\s+or\s+|\s+/\s+', _frag) if p.strip()]
+                if _parts and all(p in CANONICAL_SUBJECTS for p in _parts):
+                    _bo = _obj.setdefault(f"best_of_weights_{_yr}", [])
+                    if not any(sorted(p.get("subjects", [])) == sorted(_parts) and p.get("weight") == float(_v) for p in _bo):
+                        _bo.append({"count": 1, "subjects": _parts, "weight": float(_v)})
+                    continue
+                # ApL / genuinely unmodeled subject — leave as-is (backlog).
                 _new.setdefault(_ck, _v)
             _obj[f"subject_weights_{_yr}"] = _new
 

@@ -6,9 +6,10 @@ import type { Lang } from "./i18n";
 import { SUBJECTS } from "./strings";
 import { canonicalSubject, shortSubjectName, subjectChipName } from "./subjects";
 
-function entry(name: string): { zh: string; chip?: string } | undefined {
-  return (SUBJECTS as Record<string, { zh: string; chip?: string }>)[name]
-    ?? (SUBJECTS as Record<string, { zh: string; chip?: string }>)[canonicalSubject(name)];
+function entry(name: string): { zh: string; shortZh?: string; chip?: string } | undefined {
+  type E = { zh: string; shortZh?: string; chip?: string };
+  return (SUBJECTS as Record<string, E>)[name]
+    ?? (SUBJECTS as Record<string, E>)[canonicalSubject(name)];
 }
 
 /** Full subject name in the active language (English when no Chinese entry). */
@@ -17,10 +18,13 @@ export function localizedSubject(name: string, lang: Lang): string {
   return entry(name)?.zh ?? name;
 }
 
-/** `shortSubjectName` but language-aware (Cat C languages, Math, etc.). */
+/** `shortSubjectName` but language-aware (Cat C languages, Math, etc.). In 中文,
+ * verbose cores use a short form (中文/英文/數學 via `shortZh`); electives fall
+ * back to their full Chinese name (生物, 健康管理與社會關懷). */
 export function localizedShortSubject(name: string, lang: Lang): string {
   if (lang !== "zh") return shortSubjectName(name);
-  return entry(name)?.zh ?? shortSubjectName(name);
+  const e = entry(name);
+  return e?.shortZh ?? e?.zh ?? shortSubjectName(name);
 }
 
 /** Compact chip label (grade-summary pills) in the active language. */

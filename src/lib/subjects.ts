@@ -29,7 +29,11 @@ export const CSD_GRADES = ["", "A", "U"];
 export const CAT_C_GRADES = ["", "A", "B", "C", "D", "E", "U"];
 
 const SUBJECT_SHORT_NAMES: Record<string, string> = {
+  "Chinese Language": "Chinese",
+  "English Language": "English",
   "Mathematics (Compulsory Part)": "Math",
+  "Technology and Living (Food Science and Technology)": "T&L (Food)",
+  "Technology and Living (Fashion, Clothing and Textiles)": "T&L (Fashion)",
   "Mathematics Extended Part (Module 1 or 2)": "M1/M2",
   "Mathematics Extended Part (Module 1)": "M1",
   "Mathematics Extended Part (Module 2)": "M2",
@@ -69,6 +73,7 @@ const SUBJECT_CHIP_NAMES: Record<string, string> = {
   "Chinese Literature": "CLit",
   "Literature in English": "ELit",
   "Technology and Living (Food Science and Technology)": "T&L",
+  "Technology and Living (Fashion, Clothing and Textiles)": "T&L(F)",
   "Visual Arts": "VA",
   "Music": "Mus",
   "Physical Education": "PE",

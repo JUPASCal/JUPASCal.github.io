@@ -302,6 +302,18 @@ def main():
                 kinds = [k for k, on in (("weighting", yc.get("weighting_changed")), ("formula", yc.get("formula_changed"))) if on]
                 add("REVIEW", p, "year_changes", f"{'+'.join(kinds) or 'none'} change ({len(items)} item(s))")
 
+        # ── non-canonical subject_weights keys ──
+        # A weight key that isn't a canonical subject / token never matches the
+        # student's canonical subject, so its weight silently doesn't apply (and it
+        # shows un-localized). After the unify canonicalization pass the remainder
+        # should be only the backlogged ApL/vocational subjects — list them so any
+        # NEW drift (a real DSE subject going non-canonical) is caught.
+        for _yr in ("2025", "2026"):
+            bad_keys = [k for k in (p.get(f"subject_weights_{_yr}") or {})
+                        if k not in CANONICAL_SUBJECTS and k not in SUBJECT_TOKENS]
+            if bad_keys:
+                add("REVIEW", p, "noncanonical_weight_key", f"{_yr}: {', '.join(sorted(bad_keys))}")
+
     # ── report ──
     by_sev = defaultdict(list)
     for f in findings:
