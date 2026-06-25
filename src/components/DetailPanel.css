@@ -609,6 +609,10 @@
   font-weight: 900;
   letter-spacing: 0.07em;
   text-transform: uppercase;
+  /* Fixed line box so the CJK label ("中位數") is the same height as the Latin
+     UQ/LQ labels — otherwise its taller default line box pushes the score + delta
+     rows down and the three cards misalign in 中文. */
+  line-height: 1.4;
 }
 
 
