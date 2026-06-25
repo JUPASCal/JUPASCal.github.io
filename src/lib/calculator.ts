@@ -9,7 +9,7 @@ import type {
   RequirementPool,
   StudentGrades,
 } from "../types/jupas";
-import { categoryCBasePoints, categoryCCanSatisfyElective, isCategoryCSubject } from "./categoryC";
+import { categoryCBasePoints, categoryCCanSatisfyElective, isCategoryCGrade, isCategoryCSubject } from "./categoryC";
 import { canonicalSubject, SUBJECT_EXPANSIONS } from "./subjects";
 
 // HKUST's max attainable base points (a 5** subject — see its score-conversion
@@ -450,10 +450,21 @@ function compareGrades(student: string | undefined, required: string | undefined
   const catCTable = programme.score_conversion_table.category_c || {};
   const val = (grade: string) => {
     const normalized = String(grade).toUpperCase();
-    if (subject && isCategoryCSubject(subject)) return categoryCBasePoints(programme, subject, normalized, catCTable) ?? 0;
+    // Only map ACTUAL Category C grades (A–E / C2 / N1 / …) through the Cat C
+    // points policy. The required side is a numeric DSE level (e.g. "3"); routing
+    // that through the Cat C function returns 0, which would let any Cat C pass
+    // satisfy even a Level-4/5 elective. Letting the numeric required fall through
+    // to the conversion table keeps both sides on the same point scale, so a Cat C
+    // grade's institution-mapped points are compared against the real level.
+    if (subject && isCategoryCSubject(subject) && isCategoryCGrade(normalized)) return categoryCBasePoints(programme, subject, normalized, catCTable) ?? 0;
+    // "Attained" (CSD) is a pass/fail requirement, not a scored grade. The
+    // scoring table maps "A"/"attained" to 0 points (correct for scoring), so it
+    // MUST resolve to a pass-value here — before the table — otherwise a required
+    // "A" reads as 0, a student "U" also reads as 0, and 0 >= 0 wrongly passes an
+    // unattained CSD as eligible.
+    if (normalized === "A" || normalized === "ATTAINED") return 2;
     if (convTable[normalized] !== undefined) return convTable[normalized];
     if (catCTable[normalized] !== undefined) return catCTable[normalized];
-    if (normalized === "A" || normalized === "ATTAINED") return 2;
     return Number.parseFloat(normalized) || 0;
   };
   return val(student) >= val(required);
