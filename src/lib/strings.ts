@@ -422,7 +422,6 @@ export const STRINGS = {
   // Generated (standardized) formula description, built from the structured model
   "detail.formulaGen.coresPlusRest": { en: "{cores} + best {remaining} of the rest", zh: "{cores}＋其餘最佳 {remaining} 科" },
   "detail.formulaGen.coresOnly": { en: "{cores}", zh: "{cores}" },
-  "detail.formulaGen.weighted": { en: "{subject} (×{w})", zh: "{subject}（×{w}）" },
   "detail.formulaGen.bestOfPool": { en: "best {count} of {subjects}", zh: "{subjects} 中最佳 {count} 科" },
   "detail.formulaGen.bonus6": { en: " + bonus for a 6th subject", zh: "＋第 6 科額外加分" },
   "detail.formulaGen.bonus7": { en: " + bonus for a 7th subject", zh: "＋第 7 科額外加分" },

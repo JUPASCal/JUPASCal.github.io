@@ -34,7 +34,6 @@ export function describeFormula(
   const raw = (year === "2025" ? programme.formula_2025 : programme.formula_2026) ?? null;
   const rawStr = (raw ?? "").trim();
   const fid = year === "2025" ? programme.formula_2025_id : programme.formula_2026_id;
-  const weights = (year === "2025" ? programme.subject_weights_2025 : programme.subject_weights_2026) ?? {};
   const constraints: Constraint[] = programme.calculation_constraints ?? [];
 
   const N = fid ? FORMULA_N[fid] : undefined;
@@ -45,15 +44,17 @@ export function describeFormula(
     return { text: rawStr || t("detail.formulaNA"), raw: null, showOfficial: false };
   }
 
-  // Named compulsory parts: fixed cores (with inline ×weight), then "best k of …" pools.
+  // Named compulsory parts: fixed cores, then "best k of …" pools. Weights are
+  // deliberately NOT shown here — the headline conveys STRUCTURE only (which
+  // subjects + how many); every subject's ×weight lives in the "Weighting details"
+  // rows below, so cores and electives are treated consistently and nothing is
+  // duplicated between the headline and the rows.
   const cores = constraints.find((c) => c.type === "compulsory_subjects")?.subjects ?? [];
   const pools = constraints.filter((c) => c.type === "compulsory_subject_pool");
 
   const parts: string[] = [];
   for (const subj of cores) {
-    const label = localizedShortSubject(subj, lang);
-    const w = weights[subj];
-    parts.push(w && w > 1 ? t("detail.formulaGen.weighted", { subject: label, w }) : label);
+    parts.push(localizedShortSubject(subj, lang));
   }
   let poolCount = 0;
   for (const pool of pools) {
