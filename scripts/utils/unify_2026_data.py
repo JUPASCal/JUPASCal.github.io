@@ -506,15 +506,22 @@ def extract_logic_from_formula(formula_text, institution=None):
             "description": f"{multiplier} x {target_idx}th Best subject included as bonus"
         })
 
-    # 3.5 Detect HKU Compulsory Cores in Formula
-    if re.search(r'\bEng(?:lish)?\b', f, re.IGNORECASE):
-        compulsory.append("English Language")
-    if re.search(r'\bMaths?\b', f, re.IGNORECASE):
-        compulsory.append("Mathematics (Compulsory Part)")
-    if re.search(r'\bM1\b|\bM2\b', f, re.IGNORECASE):
-        compulsory.append("Mathematics Extended Part (Module 1 or 2)")
-    if re.search(r'\bChin(?:ese)?\b', f, re.IGNORECASE):
-        compulsory.append("Chinese Language")
+    # 3.5 Detect HKU Compulsory Cores in Formula.
+    # NOTE: skip this text-regex heuristic for HKUST. HKUST's 2025 formula text is
+    # frequently truncated (merged-cell PDF), so the regex both MISSES real cores
+    # (Eng/Math absent from the fragment) and FALSELY grabs "M1"/"M2" when they
+    # appear only as a "Best from …/M1/M2" pool member. HKUST compulsory cores are
+    # instead derived authoritatively from the JS-extract `formula_steps`
+    # (type=='required') in the HKUST block.
+    if institution != "HKUST":
+        if re.search(r'\bEng(?:lish)?\b', f, re.IGNORECASE):
+            compulsory.append("English Language")
+        if re.search(r'\bMaths?\b', f, re.IGNORECASE):
+            compulsory.append("Mathematics (Compulsory Part)")
+        if re.search(r'\bM1\b|\bM2\b', f, re.IGNORECASE):
+            compulsory.append("Mathematics Extended Part (Module 1 or 2)")
+        if re.search(r'\bChin(?:ese)?\b', f, re.IGNORECASE):
+            compulsory.append("Chinese Language")
 
     # 4. Detect PolyU style: English & Chinese + Best 3
     if "Chinese & English Languages + Any Best 3" in f:
@@ -1493,6 +1500,26 @@ def unify_data():
 
                 # Store formula_steps as a reference field for future use
                 obj["hkust_formula_steps"] = formula_steps
+
+                # Compulsory cores: derive from the JS-extract `formula_steps`
+                # (type=='required') — the authoritative source. The HKUST formula
+                # TEXT is unreliable for this (truncated merged-cell PDF), so the
+                # generic text-regex in extract_logic_from_formula is disabled for
+                # HKUST. Every HKUST programme explicitly requires its cores
+                # (English + Math, or English + Chinese for some), then Best-N of
+                # the rest, so these must be forced into the score selection.
+                req_cores = []
+                for step in formula_steps:
+                    if isinstance(step, dict) and step.get('type') == 'required' and step.get('subject'):
+                        nc = normalize_subject(step['subject'])
+                        if nc and nc not in req_cores:
+                            req_cores.append(nc)
+                if req_cores:
+                    obj["calculation_constraints"].append({
+                        "type": "compulsory_subjects",
+                        "subjects": req_cores,
+                        "description": f"Formula requires: {', '.join(req_cores)}"
+                    })
 
                 # Constraints
                 bonus_6th = js.get('bonus_6th', {})
