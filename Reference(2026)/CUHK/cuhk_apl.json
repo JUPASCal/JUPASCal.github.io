@@ -1,182 +1,920 @@
 {
   "JS4006": {
-    "name": "Anthropology 678",
-    "apl": []
+    "name": "Anthropology",
+    "apl": [
+      "Film and Video",
+      "Radio Host and Programme Production",
+      "Mobile and Online Apps Development",
+      "Magazine Editing and Production",
+      "Internet of Everything Application",
+      "Film and Transmedia",
+      "Multimedia Storytelling"
+    ]
   },
   "JS4018": {
-    "name": "Chinese Language and Literature 726",
-    "apl": []
+    "name": "Chinese Language and Literature",
+    "apl": [
+      "Practical Translation (CHI-ENG)"
+    ]
   },
   "JS4032": {
-    "name": "716 English 723",
-    "apl": []
+    "name": "English",
+    "apl": [
+      "Introduction to Theatre Arts",
+      "English Communication",
+      "English for Service Professionals",
+      "English for Business Services",
+      "Creative English – Biz and Media",
+      "Creative English – PR and Marketing"
+    ]
   },
   "JS4044": {
-    "name": "668 Fine Arts 669",
-    "apl": []
+    "name": "Fine Arts",
+    "apl": [
+      "Jewellery Arts and Design",
+      "Innovative Product Design",
+      "Image Design",
+      "Multimedia Entertainment Studies",
+      "Commercial Comic Art",
+      "Interior and Exhibition Design",
+      "Computer Game and Animation Design",
+      "Fashion Image Design",
+      "Jewellery and Accessories Design",
+      "Display and Jewellery Design",
+      "Digital Comic Design and Production",
+      "Jewellery Design in Digital Age"
+    ]
   },
   "JS4056": {
-    "name": "719 History 726",
-    "apl": []
+    "name": "History",
+    "apl": [
+      "English Communication",
+      "Multimedia Storytelling",
+      "Practical Translation (CHI-ENG)",
+      "Applied Japanese and Japanese Culture"
+    ]
   },
   "JS4068": {
-    "name": "Japanese Studies 617",
-    "apl": []
+    "name": "Japanese Studies",
+    "apl": [
+      "Sports Coaching and Management",
+      "Foundation in Chinese Medicine",
+      "Marketing in Global Trade",
+      "Practical Accounting for SMEs",
+      "Understanding Financial Services",
+      "Taking a Chance on Dance",
+      "Film and Video",
+      "Fundamental Cosmetology",
+      "Hospitality Services in Practice",
+      "Child Development and Care",
+      "Hotel Operations",
+      "Western Cuisine",
+      "Introduction to Theatre Arts",
+      "Health Care Practice",
+      "Automotive Technology",
+      "Exercise Science and Health Fitness",
+      "Jewellery Arts and Design",
+      "Health and Beauty Keeping in TCM",
+      "Innovative Product Design",
+      "Aviation Studies",
+      "Image Design",
+      "Multimedia Entertainment Studies",
+      "Commercial Comic Art",
+      "TV Infotainment Production",
+      "Radio Host and Programme Production",
+      "Purchasing and Merchandising",
+      "Retail Management",
+      "Understanding Hong Kong Law",
+      "Events Planning and Operation",
+      "Fundamental Health Care",
+      "Building Facilities Engineering",
+      "Electronic Product Design in Action",
+      "Environmental Engineering",
+      "Medical Laboratory Science",
+      "Public Relations and Advertising",
+      "Applied Psychology",
+      "Applied Business Research",
+      "Practical Computerised Accounting",
+      "Child Care and Education",
+      "Exploring Psychology",
+      "Mobile and Online Apps Development",
+      "Interior and Exhibition Design",
+      "Computer Game and Animation Design",
+      "Introduction to Cantonese Opera",
+      "Financial Markets and Operations",
+      "Law Enforcement in Hong Kong",
+      "Food and Beverage Operations",
+      "Exercise and Fitness Coaching",
+      "Building Technology",
+      "Fashion Image Design",
+      "The Essentials of Theatre Arts",
+      "Magazine Editing and Production",
+      "New Media Communication Strategies",
+      "Entrepreneurship for SME",
+      "Marketing and Online Promotion",
+      "Electrical and Energy Engineering",
+      "Computer Forensic Technology",
+      "Accounting in Practice",
+      "Pâtisserie and Café Operations",
+      "Animal Care",
+      "Jewellery and Accessories Design",
+      "Practical Psychology",
+      "Public Relations and Communication",
+      "Data Application for Business",
+      "Internet of Everything Application",
+      "Creative Advertising",
+      "Railway Studies",
+      "Display and Jewellery Design",
+      "Film and Transmedia",
+      "Accounting for e-Business",
+      "Child Care and Development",
+      "Constructing Smart Cities",
+      "Jewellery Design in Digital Age",
+      "Digital Brand Communication",
+      "Multimedia Storytelling",
+      "AI in Business",
+      "Modern Southeast Asian Cuisine",
+      "AI and Robotics",
+      "English for Business Services",
+      "Korean Language and Culture",
+      "Practical Translation (CHI-ENG)",
+      "Digital Construction",
+      "Creative English – Biz and Media",
+      "Creative English – PR and Marketing",
+      "Introduction to Fintech",
+      "Applied Japanese and Japanese Culture",
+      "Everyday Japanese and Japanese Culture"
+    ]
   },
   "JS4100": {
-    "name": "Public Humanities 734",
-    "apl": []
+    "name": "Public Humanities",
+    "apl": [
+      "Innovation and Entrepreneurship"
+    ]
   },
   "JS4109": {
-    "name": "Religious Studies 719",
-    "apl": []
+    "name": "Religious Studies",
+    "apl": [
+      "Multimedia Storytelling"
+    ]
   },
   "JS4111": {
     "name": "Theology",
-    "apl": []
+    "apl": "ALL"
   },
   "JS4136": {
-    "name": "672 Chinese Studies 677",
-    "apl": []
+    "name": "Chinese Studies",
+    "apl": [
+      "Marketing in Global Trade",
+      "Practical Accounting for SMEs",
+      "Understanding Financial Services",
+      "Film and Video",
+      "Multimedia Entertainment Studies",
+      "Understanding Hong Kong Law",
+      "Applied Business Research",
+      "Introduction to Cantonese Opera",
+      "Financial Markets and Operations",
+      "Law Enforcement in Hong Kong",
+      "The Essentials of Theatre Arts",
+      "Entrepreneurship for SME",
+      "Marketing and Online Promotion",
+      "Accounting in Practice",
+      "Data Application for Business",
+      "Film and Transmedia",
+      "Multimedia Storytelling",
+      "AI in Business",
+      "Practical Translation (CHI-ENG)",
+      "Introduction to Fintech"
+    ]
   },
   "JS4226": {
-    "name": "Hospitality and Real Estate 668",
-    "apl": []
+    "name": "Hospitality and Real Estate",
+    "apl": [
+      "Marketing in Global Trade",
+      "Understanding Financial Services",
+      "Film and Video",
+      "Hospitality Services in Practice",
+      "Hotel Operations",
+      "Western Cuisine",
+      "Innovative Product Design",
+      "Aviation Studies",
+      "Multimedia Entertainment Studies",
+      "TV Infotainment Production",
+      "Radio Host and Programme Production",
+      "Events Planning and Operation",
+      "Public Relations and Advertising",
+      "Applied Psychology",
+      "Applied Business Research",
+      "Practical Computerised Accounting",
+      "Exploring Psychology",
+      "Mobile and Online Apps Development",
+      "Interior and Exhibition Design",
+      "Computer Game and Animation Design",
+      "Financial Markets and Operations",
+      "Food and Beverage Operations",
+      "Magazine Editing and Production",
+      "New Media Communication Strategies",
+      "Entrepreneurship for SME",
+      "Marketing and Online Promotion",
+      "Accounting in Practice",
+      "Pâtisserie and Café Operations",
+      "Practical Psychology",
+      "Public Relations and Communication",
+      "Data Application for Business",
+      "Internet of Everything Application",
+      "Creative Advertising",
+      "Railway Studies",
+      "Film and Transmedia",
+      "Accounting for e-Business",
+      "Tech Basics",
+      "Digital Comic Design and Production",
+      "PR and Multimedia Communication",
+      "Airport Passenger Terminal Operations",
+      "Digital Media and Radio Production",
+      "Food Innovation and Science",
+      "Jewellery Design in Digital Age",
+      "Digital Brand Communication",
+      "Multimedia Storytelling",
+      "AI in Business",
+      "Modern Southeast Asian Cuisine",
+      "AI and Robotics",
+      "English for Business Services",
+      "Korean Language and Culture",
+      "Practical Translation (CHI-ENG)",
+      "Digital Construction",
+      "Creative English – Biz and Media",
+      "Creative English – PR and Marketing",
+      "Introduction to Fintech",
+      "Applied Japanese and Japanese Culture",
+      "Everyday Japanese and Japanese Culture"
+    ]
   },
   "JS4238": {
-    "name": "Insurance, Financial and 664 Actuarial Analysis",
-    "apl": []
+    "name": "Insurance, Financial and Actuarial Analysis",
+    "apl": [
+      "Marketing in Global Trade",
+      "Practical Accounting for SMEs",
+      "Understanding Financial Services",
+      "Applied Business Research",
+      "Practical Computerised Accounting",
+      "Financial Markets and Operations",
+      "Accounting in Practice",
+      "Data Application for Business",
+      "Accounting for e-Business"
+    ]
   },
   "JS4240": {
-    "name": "664 Professional Accountancy 687",
-    "apl": []
+    "name": "Professional Accountancy",
+    "apl": [
+      "Practical Accounting for SMEs",
+      "Practical Computerised Accounting",
+      "Accounting in Practice",
+      "Accounting for e-Business"
+    ]
   },
   "JS4252": {
-    "name": "664 Quantitative Finance 671",
-    "apl": []
+    "name": "Quantitative Finance",
+    "apl": [
+      "Marketing in Global Trade",
+      "Practical Accounting for SMEs",
+      "Understanding Financial Services",
+      "Applied Business Research",
+      "Practical Computerised Accounting",
+      "Financial Markets and Operations",
+      "Accounting in Practice",
+      "Data Application for Business",
+      "Accounting for e-Business",
+      "Introduction to Fintech"
+    ]
   },
   "JS4276": {
-    "name": "Quantitative Finance and Risk 671 Management Science 687",
-    "apl": []
+    "name": "Quantitative Finance and Risk Management Science",
+    "apl": [
+      "Marketing in Global Trade",
+      "Practical Accounting for SMEs",
+      "Understanding Financial Services",
+      "Applied Business Research",
+      "Practical Computerised Accounting",
+      "Financial Markets and Operations",
+      "Accounting in Practice",
+      "Data Application for Business",
+      "Accounting for e-Business",
+      "AI in Business",
+      "AI and Robotics",
+      "Introduction to Fintech"
+    ]
   },
   "JS4343": {
-    "name": "BA (English Studies) and 715 BEd (English Language Education)",
-    "apl": []
+    "name": "BA (English Studies) and BEd (English Language Education)",
+    "apl": [
+      "Applied Psychology",
+      "Exploring Psychology",
+      "Practical Psychology",
+      "English Communication",
+      "English for Service Professionals",
+      "English for Business Services",
+      "Practical Translation (CHI-ENG)"
+    ]
   },
   "JS4372": {
-    "name": "665 BEd in Early Childhood Education 666",
-    "apl": []
+    "name": "BEd in Early Childhood Education",
+    "apl": [
+      "Child Development and Care",
+      "Applied Psychology",
+      "Child Care and Education",
+      "Exploring Psychology",
+      "Practical Psychology",
+      "Child Care and Development"
+    ]
   },
   "JS4386": {
-    "name": "BSc in Learning Design and 669 Technology",
-    "apl": []
+    "name": "BSc in Learning Design and Technology",
+    "apl": [
+      "Film and Video",
+      "Innovative Product Design",
+      "Computer Game and Animation Design",
+      "Gerontech and Services",
+      "Innovation and Entrepreneurship"
+    ]
   },
   "JS4408": {
-    "name": "Mechanical and 694 Automation Engineering",
-    "apl": []
+    "name": "Mechanical and Automation Engineering",
+    "apl": [
+      "Automotive Technology",
+      "Innovative Product Design",
+      "Aviation Studies",
+      "Building Facilities Engineering",
+      "Electronic Product Design in Action",
+      "Environmental Engineering",
+      "Mobile and Online Apps Development",
+      "Building Technology",
+      "Entrepreneurship for SME",
+      "Electrical and Energy Engineering",
+      "Internet of Everything Application",
+      "Railway Studies",
+      "Constructing Smart Cities",
+      "Tech Basics",
+      "English Communication",
+      "English for Service Professionals",
+      "AI and Robotics",
+      "English for Business Services",
+      "Digital Construction",
+      "Gerontech and Services",
+      "Innovation and Entrepreneurship"
+    ]
   },
   "JS4412": {
-    "name": "Computer Science and 694 Engineering 706",
-    "apl": []
+    "name": "Computer Science and Engineering",
+    "apl": [
+      "Mobile and Online Apps Development",
+      "Computer Forensic Technology",
+      "Internet of Everything Application",
+      "Tech Basics",
+      "eSports Technology",
+      "AI and Robotics"
+    ]
   },
   "JS4428": {
-    "name": "Financial Technology 681",
-    "apl": []
+    "name": "Financial Technology",
+    "apl": [
+      "Marketing in Global Trade",
+      "Practical Accounting for SMEs",
+      "Understanding Financial Services",
+      "Understanding Hong Kong Law",
+      "Applied Business Research",
+      "Practical Computerised Accounting",
+      "Mobile and Online Apps Development",
+      "Computer Game and Animation Design",
+      "Financial Markets and Operations",
+      "Law Enforcement in Hong Kong",
+      "Entrepreneurship for SME",
+      "Marketing and Online Promotion",
+      "Computer Forensic Technology",
+      "Accounting in Practice",
+      "Data Application for Business",
+      "Internet of Everything Application",
+      "Accounting for e-Business",
+      "Constructing Smart Cities",
+      "AI in Business",
+      "AI and Robotics",
+      "Digital Construction",
+      "Introduction to Fintech",
+      "Innovation and Entrepreneurship"
+    ]
   },
   "JS4434": {
-    "name": "Electronic Engineering 669",
-    "apl": []
+    "name": "Electronic Engineering",
+    "apl": [
+      "Marketing in Global Trade",
+      "Practical Accounting for SMEs",
+      "Understanding Financial Services",
+      "Automotive Technology",
+      "Aviation Studies",
+      "Purchasing and Merchandising",
+      "Retail Management",
+      "Understanding Hong Kong Law",
+      "Building Facilities Engineering",
+      "Electronic Product Design in Action",
+      "Environmental Engineering",
+      "Applied Business Research",
+      "Practical Computerised Accounting",
+      "Mobile and Online Apps Development",
+      "Computer Game and Animation Design",
+      "Building Technology",
+      "New Media Communication Strategies",
+      "Entrepreneurship for SME",
+      "Electrical and Energy Engineering",
+      "Computer Forensic Technology",
+      "Internet of Everything Application",
+      "Constructing Smart Cities",
+      "Tech Basics",
+      "eSports Technology",
+      "AI in Business",
+      "AI and Robotics",
+      "Digital Construction",
+      "Introduction to Fintech",
+      "Innovation and Entrepreneurship"
+    ]
   },
   "JS4446": {
-    "name": "Information Engineering 684",
-    "apl": []
+    "name": "Information Engineering",
+    "apl": [
+      "Electronic Product Design in Action",
+      "Mobile and Online Apps Development",
+      "Electrical and Energy Engineering",
+      "Computer Forensic Technology",
+      "Internet of Everything Application",
+      "eSports Technology",
+      "AI and Robotics"
+    ]
   },
   "JS4458": {
-    "name": "Systems Engineering and 673 Engineering Management",
-    "apl": []
+    "name": "Systems Engineering and Engineering Management",
+    "apl": [
+      "Understanding Financial Services",
+      "Hotel Operations",
+      "Aviation Studies",
+      "Purchasing and Merchandising",
+      "Retail Management",
+      "Applied Psychology",
+      "Applied Business Research",
+      "Exploring Psychology",
+      "Mobile and Online Apps Development",
+      "Computer Game and Animation Design",
+      "Financial Markets and Operations",
+      "Food and Beverage Operations",
+      "Entrepreneurship for SME",
+      "Computer Forensic Technology",
+      "Practical Psychology",
+      "Data Application for Business",
+      "Internet of Everything Application",
+      "Railway Studies",
+      "Constructing Smart Cities",
+      "AI in Business",
+      "AI and Robotics",
+      "Introduction to Fintech",
+      "Innovation and Entrepreneurship"
+    ]
   },
   "JS4460": {
-    "name": "680 Biomedical Engineering 713",
-    "apl": []
+    "name": "Biomedical Engineering",
+    "apl": [
+      "Health Care Practice",
+      "Fundamental Health Care",
+      "Medical Laboratory Science",
+      "Entrepreneurship for SME",
+      "Rehabilitation Care Practice",
+      "AI and Robotics",
+      "Gerontech and Services",
+      "Innovation and Entrepreneurship"
+    ]
   },
   "JS4462": {
-    "name": "Energy and Environmental 680 Engineering",
-    "apl": []
+    "name": "Energy and Environmental Engineering",
+    "apl": [
+      "Automotive Technology",
+      "Understanding Hong Kong Law",
+      "Building Facilities Engineering",
+      "Electronic Product Design in Action",
+      "Environmental Engineering",
+      "Mobile and Online Apps Development",
+      "Building Technology",
+      "Entrepreneurship for SME",
+      "Electrical and Energy Engineering",
+      "Internet of Everything Application",
+      "Constructing Smart Cities",
+      "AI and Robotics",
+      "Digital Construction",
+      "Gerontech and Services",
+      "Innovation and Entrepreneurship"
+    ]
   },
   "JS4470": {
-    "name": "722 Materials Science and Engineering 733",
-    "apl": []
+    "name": "Materials Science and Engineering",
+    "apl": [
+      "Environmental Engineering",
+      "Electrical and Energy Engineering",
+      "AI and Robotics",
+      "Gerontech and Services",
+      "Innovation and Entrepreneurship",
+      "Food Technology and Nutrition"
+    ]
   },
   "JS4513": {
-    "name": "618 Nursing 656",
-    "apl": []
+    "name": "Nursing",
+    "apl": [
+      "Health Care Practice",
+      "Fundamental Health Care"
+    ]
   },
   "JS4537": {
-    "name": "656 Public Health 712",
-    "apl": []
+    "name": "Public Health",
+    "apl": [
+      "Health Care Practice",
+      "Fundamental Health Care",
+      "Food Innovation and Science",
+      "Rehabilitation Care Practice"
+    ]
   },
   "JS4542": {
-    "name": "592 Chinese Medicine 631",
-    "apl": []
+    "name": "Chinese Medicine",
+    "apl": [
+      "Foundation in Chinese Medicine",
+      "Health and Beauty Keeping in TCM"
+    ]
   },
   "JS4550": {
-    "name": "Biomedical Sciences 656",
-    "apl": []
+    "name": "Biomedical Sciences",
+    "apl": [
+      "Foundation in Chinese Medicine",
+      "Marketing in Global Trade",
+      "Health Care Practice",
+      "Understanding Hong Kong Law",
+      "Fundamental Health Care",
+      "Medical Laboratory Science",
+      "Applied Business Research",
+      "Entrepreneurship for SME",
+      "Innovation and Entrepreneurship"
+    ]
   },
   "JS4601": {
-    "name": "Science 712",
-    "apl": []
+    "name": "Science",
+    "apl": [
+      "Exercise Science and Health Fitness",
+      "Medical Laboratory Science",
+      "Food Innovation and Science",
+      "AI and Robotics",
+      "Food Technology and Nutrition"
+    ]
   },
   "JS4682": {
-    "name": "Enrichment Mathematics 722",
-    "apl": []
+    "name": "Enrichment Mathematics",
+    "apl": [
+      "AI and Robotics"
+    ]
   },
   "JS4719": {
-    "name": "693 Risk Management Science 703",
-    "apl": []
+    "name": "Risk Management Science",
+    "apl": [
+      "Applied Business Research",
+      "Financial Markets and Operations",
+      "Data Application for Business",
+      "Accounting for e-Business",
+      "AI in Business",
+      "Introduction to Fintech"
+    ]
   },
   "JS4725": {
-    "name": "Biotechnology, Entrepreneurship and 660 Healthcare Management",
-    "apl": []
+    "name": "Biotechnology, Entrepreneurship and Healthcare Management",
+    "apl": [
+      "Foundation in Chinese Medicine",
+      "Marketing in Global Trade",
+      "Health Care Practice",
+      "Exercise Science and Health Fitness",
+      "Understanding Hong Kong Law",
+      "Fundamental Health Care",
+      "Medical Laboratory Science",
+      "Applied Business Research",
+      "Entrepreneurship for SME",
+      "Food Innovation and Science",
+      "AI in Business",
+      "Gerontech and Services",
+      "Innovation and Entrepreneurship"
+    ]
   },
   "JS4801": {
-    "name": "Social Science 678",
-    "apl": []
+    "name": "Social Science",
+    "apl": [
+      "Marketing in Global Trade",
+      "Practical Accounting for SMEs",
+      "Understanding Financial Services",
+      "Film and Video",
+      "Automotive Technology",
+      "Innovative Product Design",
+      "Image Design",
+      "Multimedia Entertainment Studies",
+      "TV Infotainment Production",
+      "Radio Host and Programme Production",
+      "Understanding Hong Kong Law",
+      "Building Facilities Engineering",
+      "Environmental Engineering",
+      "Public Relations and Advertising",
+      "Applied Psychology",
+      "Exploring Psychology",
+      "Interior and Exhibition Design",
+      "Computer Game and Animation Design",
+      "Law Enforcement in Hong Kong",
+      "Building Technology",
+      "Magazine Editing and Production",
+      "New Media Communication Strategies",
+      "Practical Psychology",
+      "Public Relations and Communication",
+      "Creative Advertising",
+      "Film and Transmedia",
+      "Constructing Smart Cities",
+      "PR and Multimedia Communication",
+      "English Communication",
+      "English for Service Professionals",
+      "Digital Brand Communication",
+      "Multimedia Storytelling",
+      "AI in Business",
+      "AI and Robotics",
+      "English for Business Services",
+      "Practical Translation (CHI-ENG)",
+      "Digital Construction",
+      "Creative English – Biz and Media",
+      "Creative English – PR and Marketing",
+      "Introduction to Fintech",
+      "Gerontech and Services"
+    ]
   },
   "JS4812": {
-    "name": "628 Architectural Studies 639",
-    "apl": []
+    "name": "Architectural Studies",
+    "apl": [
+      "Film and Video",
+      "Introduction to Theatre Arts",
+      "Automotive Technology",
+      "Jewellery Arts and Design",
+      "Innovative Product Design",
+      "Aviation Studies",
+      "Image Design",
+      "Multimedia Entertainment Studies",
+      "Building Facilities Engineering",
+      "Electronic Product Design in Action",
+      "Environmental Engineering",
+      "Mobile and Online Apps Development",
+      "Interior and Exhibition Design",
+      "Computer Game and Animation Design",
+      "Building Technology",
+      "Fashion Image Design",
+      "Magazine Editing and Production",
+      "New Media Communication Strategies",
+      "Computer Forensic Technology",
+      "Public Relations and Communication",
+      "Internet of Everything Application",
+      "Creative Advertising",
+      "Display and Jewellery Design",
+      "Film and Transmedia",
+      "Constructing Smart Cities",
+      "Tech Basics",
+      "Digital Comic Design and Production",
+      "PR and Multimedia Communication",
+      "Jewellery Design in Digital Age",
+      "Digital Brand Communication",
+      "Multimedia Storytelling",
+      "AI and Robotics",
+      "Digital Construction",
+      "Gerontech and Services",
+      "Innovation and Entrepreneurship"
+    ]
   },
   "JS4838": {
-    "name": "Urban Studies 631",
-    "apl": []
+    "name": "Urban Studies",
+    "apl": [
+      "Sports Coaching and Management",
+      "Foundation in Chinese Medicine",
+      "Marketing in Global Trade",
+      "Practical Accounting for SMEs",
+      "Understanding Financial Services",
+      "Taking a Chance on Dance",
+      "Film and Video",
+      "Fundamental Cosmetology",
+      "Hospitality Services in Practice",
+      "Child Development and Care",
+      "Hotel Operations",
+      "Western Cuisine",
+      "Introduction to Theatre Arts",
+      "Health Care Practice",
+      "Automotive Technology",
+      "Exercise Science and Health Fitness",
+      "Jewellery Arts and Design",
+      "Health and Beauty Keeping in TCM",
+      "Innovative Product Design",
+      "Aviation Studies",
+      "Image Design",
+      "Multimedia Entertainment Studies",
+      "Commercial Comic Art",
+      "TV Infotainment Production",
+      "Radio Host and Programme Production",
+      "Purchasing and Merchandising",
+      "Retail Management",
+      "Understanding Hong Kong Law",
+      "Events Planning and Operation",
+      "Fundamental Health Care",
+      "Building Facilities Engineering",
+      "Electronic Product Design in Action",
+      "Environmental Engineering",
+      "Medical Laboratory Science",
+      "Public Relations and Advertising",
+      "Applied Psychology",
+      "Applied Business Research",
+      "Practical Computerised Accounting",
+      "Child Care and Education",
+      "Exploring Psychology",
+      "Mobile and Online Apps Development",
+      "Interior and Exhibition Design",
+      "Computer Game and Animation Design",
+      "Introduction to Cantonese Opera",
+      "Financial Markets and Operations",
+      "Law Enforcement in Hong Kong",
+      "Food and Beverage Operations",
+      "Exercise and Fitness Coaching",
+      "Building Technology",
+      "Fashion Image Design",
+      "The Essentials of Theatre Arts",
+      "Magazine Editing and Production",
+      "New Media Communication Strategies",
+      "Entrepreneurship for SME",
+      "Marketing and Online Promotion",
+      "Electrical and Energy Engineering",
+      "Computer Forensic Technology",
+      "Accounting in Practice",
+      "Pâtisserie and Café Operations",
+      "Animal Care",
+      "Jewellery and Accessories Design",
+      "Practical Psychology",
+      "Public Relations and Communication",
+      "Data Application for Business",
+      "Internet of Everything Application",
+      "Creative Advertising",
+      "Railway Studies",
+      "Display and Jewellery Design",
+      "Film and Transmedia",
+      "Accounting for e-Business",
+      "Child Care and Development",
+      "Constructing Smart Cities",
+      "Tech Basics",
+      "Digital Comic Design and Production",
+      "PR and Multimedia Communication",
+      "Airport Passenger Terminal Operations",
+      "Popular Music Production",
+      "Digital Media and Radio Production",
+      "Food Innovation and Science",
+      "Rehabilitation Care Practice",
+      "eSports Technology",
+      "Jewellery Design in Digital Age",
+      "Digital Brand Communication",
+      "Multimedia Storytelling",
+      "AI in Business",
+      "Modern Southeast Asian Cuisine",
+      "AI and Robotics",
+      "English for Business Services",
+      "Korean Language and Culture",
+      "Practical Translation (CHI-ENG)",
+      "Digital Construction",
+      "Creative English – Biz and Media",
+      "Creative English – PR and Marketing",
+      "Introduction to Fintech",
+      "Applied Japanese and Japanese Culture",
+      "Everyday Japanese and Japanese Culture",
+      "Gerontech and Services",
+      "Innovation and Entrepreneurship",
+      "Food Technology and Nutrition"
+    ]
   },
   "JS4848": {
-    "name": "Government and 597 Public Administration",
-    "apl": []
+    "name": "Government and Public Administration",
+    "apl": [
+      "Marketing in Global Trade",
+      "Practical Accounting for SMEs",
+      "Understanding Financial Services",
+      "Understanding Hong Kong Law",
+      "Law Enforcement in Hong Kong"
+    ]
   },
   "JS4850": {
-    "name": "Journalism and Communication 708",
-    "apl": []
+    "name": "Journalism and Communication",
+    "apl": [
+      "Film and Video",
+      "Multimedia Entertainment Studies",
+      "Commercial Comic Art",
+      "TV Infotainment Production",
+      "Radio Host and Programme Production",
+      "Public Relations and Advertising",
+      "Computer Game and Animation Design",
+      "Magazine Editing and Production",
+      "New Media Communication Strategies",
+      "Public Relations and Communication",
+      "Creative Advertising",
+      "Film and Transmedia",
+      "Digital Comic Design and Production",
+      "PR and Multimedia Communication",
+      "Popular Music Production",
+      "Digital Media and Radio Production",
+      "English Communication",
+      "English for Service Professionals",
+      "Digital Brand Communication",
+      "Multimedia Storytelling",
+      "English for Business Services",
+      "Korean Language and Culture",
+      "Practical Translation (CHI-ENG)",
+      "Creative English – Biz and Media",
+      "Creative English – PR and Marketing",
+      "Applied Japanese and Japanese Culture",
+      "Everyday Japanese and Japanese Culture"
+    ]
   },
   "JS4858": {
-    "name": "Global Communication 708",
-    "apl": []
+    "name": "Global Communication",
+    "apl": [
+      "Film and Video",
+      "Multimedia Entertainment Studies",
+      "Commercial Comic Art",
+      "TV Infotainment Production",
+      "Radio Host and Programme Production",
+      "Public Relations and Advertising",
+      "Computer Game and Animation Design",
+      "Magazine Editing and Production",
+      "New Media Communication Strategies",
+      "Public Relations and Communication",
+      "Creative Advertising",
+      "Film and Transmedia",
+      "Digital Comic Design and Production",
+      "PR and Multimedia Communication",
+      "Popular Music Production",
+      "Digital Media and Radio Production",
+      "English Communication",
+      "English for Service Professionals",
+      "Digital Brand Communication",
+      "Multimedia Storytelling",
+      "English for Business Services",
+      "Korean Language and Culture",
+      "Practical Translation (CHI-ENG)",
+      "Creative English – Biz and Media",
+      "Creative English – PR and Marketing",
+      "Applied Japanese and Japanese Culture",
+      "Everyday Japanese and Japanese Culture"
+    ]
   },
   "JS4862": {
-    "name": "662 Psychology 691",
-    "apl": []
+    "name": "Psychology",
+    "apl": [
+      "Applied Psychology",
+      "Practical Psychology"
+    ]
   },
   "JS4874": {
     "name": "Social Work",
-    "apl": []
+    "apl": "ALL"
   },
   "JS4886": {
     "name": "Sociology",
-    "apl": []
+    "apl": "ALL"
   },
   "JS4893": {
-    "name": "Data Science and Policy Studies 694",
-    "apl": []
+    "name": "Data Science and Policy Studies",
+    "apl": [
+      "Health Care Practice",
+      "Exercise Science and Health Fitness",
+      "Aviation Studies",
+      "Understanding Hong Kong Law",
+      "Fundamental Health Care",
+      "Environmental Engineering",
+      "Applied Business Research",
+      "Mobile and Online Apps Development",
+      "Computer Game and Animation Design",
+      "Law Enforcement in Hong Kong",
+      "New Media Communication Strategies",
+      "Entrepreneurship for SME",
+      "Marketing and Online Promotion",
+      "Public Relations and Communication",
+      "Data Application for Business",
+      "Internet of Everything Application",
+      "Railway Studies",
+      "Constructing Smart Cities",
+      "Tech Basics",
+      "PR and Multimedia Communication",
+      "Airport Passenger Terminal Operations",
+      "Food Innovation and Science",
+      "eSports Technology",
+      "Multimedia Storytelling",
+      "AI in Business",
+      "AI and Robotics",
+      "Digital Construction",
+      "Introduction to Fintech",
+      "Gerontech and Services",
+      "Innovation and Entrepreneurship",
+      "Food Technology and Nutrition"
+    ]
   }
 }
