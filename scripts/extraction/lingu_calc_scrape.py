@@ -29,8 +29,22 @@ import json, re, time, urllib.request, urllib.parse, os, statistics, sys
 BASE = "https://banner.ln.edu.hk/PROD/"
 UA = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/120 Safari/537.36"}
 OUT = "Reference(2026)/LingU/lingu_catc_weights.json"
-JAPANESE_JLPT = "DC88"          # representative Cat-C language (uniform within a programme)
 DELAY = 0.8                     # seconds between requests
+
+# Each Cat-C "Other Language" qualification, with its TOP and BOTTOM grade (used to
+# isolate the weight via a grade swap). One probe-pair per language verifies the
+# weight is the same across languages (not just Japanese). IMPORTANT: probe the
+# CERTIFICATE ids our app's canonical Cat-C set uses (JLPT / French & Spanish
+# Diploma / Goethe / TOPIK / Urdu Intl) — NOT the DSE "<Lang> Language" subjects
+# (DC81/82/83/85/86), which are different qualifications weighted differently.
+LANGUAGES = [
+    ("DC88", "Japanese (JLPT)", "N1P", "N3P"),
+    ("DC90", "French (Diploma)", "C2P", "A2P"),
+    ("DC91", "Spanish (Diploma)", "C2P", "A2P"),
+    ("DC92", "German (Goethe)", "C2P", "A2P"),
+    ("DC89", "Korean (TOPIK)", "G6", "G3"),
+    ("DC93", "Urdu (Intl)", "A++", "C"),  # E/D are fails (don't count as an elective)
+]
 
 
 def _get(url):
@@ -55,30 +69,54 @@ def probe(grades):
     return scores
 
 
-def main():
+def measure_language(subj_id, top, bottom):
+    """Per-programme weight of one Cat-C language: vary its grade (top vs bottom)
+    holding Chi/Eng/Math + a filler elective fixed; self-calibrate (common Δ = 1.0)."""
     core = {"D020": "5", "D010": "5", "D030": "5", "D150": "5"}  # Eng, Chi, Math, Physics(filler)
-    print("Probing LingU calculator (Japanese N1P vs N3P)…")
-    hi = probe({**core, JAPANESE_JLPT: "N1P"}); time.sleep(DELAY)
-    lo = probe({**core, JAPANESE_JLPT: "N3P"})
+    hi = probe({**core, subj_id: top}); time.sleep(DELAY)
+    lo = probe({**core, subj_id: bottom})
     if not hi or set(hi) != set(lo):
-        print("ERROR: probe returned no / mismatched programmes", file=sys.stderr); sys.exit(1)
-
+        raise RuntimeError(f"{subj_id}: no / mismatched programmes")
     deltas = {c: round(hi[c] - lo.get(c, hi[c]), 3) for c in hi}
-    base_delta = statistics.mode(deltas.values())   # most common Δ == weight 1.0
+    base_delta = statistics.mode(deltas.values())
     if base_delta <= 0:
-        print("ERROR: could not calibrate base_delta", file=sys.stderr); sys.exit(1)
+        raise RuntimeError(f"{subj_id}: could not calibrate")
+    return {c: round(d / base_delta, 4) for c, d in deltas.items()}
 
-    weights = {c: round(d / base_delta, 4) for c, d in deltas.items()}
-    print(f"calibration: base(N1P)-base(N3P) = {base_delta} (the weight-1.0 Δ)\n")
-    for c in sorted(weights):
-        note = "  <-- weighted" if abs(weights[c] - 1.0) > 0.02 else ""
-        print(f"  {c}: Δ={deltas[c]:.2f}  Cat-C weight = {weights[c]:g}{note}")
+
+def main():
+    per_lang = {}
+    for sid, name, top, bot in LANGUAGES:
+        print(f"Probing {name} ({sid}: {top} vs {bot})…")
+        per_lang[name] = measure_language(sid, top, bot)
+        time.sleep(DELAY)
+
+    codes = sorted(set().union(*(set(w) for w in per_lang.values())))
+    # Per programme: are all languages in agreement? Take the consensus weight.
+    final, disagree = {}, []
+    print("\nPer-programme weight by language (✓ = all languages agree):")
+    print("  code     " + "  ".join(f"{n.split()[0][:6]:>6}" for n, *_ in [(n,) for n in per_lang]))
+    for c in codes:
+        vals = [per_lang[n].get(c) for n in per_lang]
+        uniform = max(vals) - min(vals) < 0.04
+        consensus = round(statistics.mean(vals), 3)
+        final[c] = round(consensus, 2)
+        if not uniform:
+            disagree.append((c, dict(zip(per_lang, vals))))
+        flag = "✓" if uniform else "✗ DISAGREE"
+        if abs(final[c] - 1.0) > 0.02 or not uniform:
+            print(f"  {c}  " + "  ".join(f"{v:>6.2f}" for v in vals) + f"   -> {final[c]:g}  {flag}")
 
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w", encoding="utf-8") as f:
-        json.dump(weights, f, ensure_ascii=False, indent=2, sort_keys=True)
-    nontrivial = {c: w for c, w in weights.items() if abs(w - 1.0) > 0.02}
-    print(f"\nWrote {OUT}: {len(weights)} programmes; weighted (>1.0): {nontrivial or 'none'}")
+        json.dump(final, f, ensure_ascii=False, indent=2, sort_keys=True)
+    nontrivial = {c: w for c, w in final.items() if abs(w - 1.0) > 0.02}
+    print(f"\nLanguages probed: {len(per_lang)} | programmes: {len(codes)}")
+    print(f"Uniform across languages: {'YES — every programme weights all languages the same' if not disagree else 'NO'}")
+    if disagree:
+        for c, d in disagree:
+            print(f"  DISAGREE {c}: {d}")
+    print(f"Wrote {OUT}; weighted (>1.0): {nontrivial or 'none'}")
 
 
 if __name__ == "__main__":
