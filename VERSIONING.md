@@ -27,8 +27,12 @@ that deploy uniquely identifiable, so there's no need to touch `"version"`.
 
 Bump `"version"` **only when cutting a release worth announcing**, following semver:
 
-- **Now — public beta:** stay on `0.1.0-beta.N`. Bump `N` only for a notable beta
-  milestone, not routine fixes.
+- **Now — public beta:** stay on `0.1.0-beta.N`. Bump `N` for **each release worth
+  announcing** — any *user-facing* fix or feature batch (e.g. corrected admission
+  calculations, a new view), tagged + with notes. The app is feature-complete, so
+  most releases are bug-fix/minor-feature batches — version them. *Trivial/internal*
+  pushes (cosmetic tweaks, refactors, docs, CI) stay routine: no bump, the build
+  stamp identifies the deploy.
 - **Stable launch:** set **`1.0.0`** (drop `-beta`) when you declare it stable.
 - **After 1.0.0:**
   - **PATCH** `1.0.x` — bug fixes, copy/data corrections.
