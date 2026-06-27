@@ -64,6 +64,15 @@ with open(SUBJECT_MAPPING_FILE, encoding="utf-8") as f:
 with open(SUBJECTS_CANONICAL_FILE, encoding="utf-8") as f:
     SUBJECTS_REGISTRY = json.load(f)
 
+# LingU per-programme Category C (Other Language) weights, reverse-engineered from
+# LingU's official JUPAS calculator (scripts/extraction/lingu_calc_scrape.py). The
+# PDF omits these; {jupas_code: weight}. Absent file ⇒ {} (languages default x1.0).
+try:
+    with open("Reference(2026)/LingU/lingu_catc_weights.json", encoding="utf-8") as _f:
+        LINGU_CATC_WEIGHTS = json.load(_f)
+except FileNotFoundError:
+    LINGU_CATC_WEIGHTS = {}
+
 _ME = SUBJECTS_REGISTRY["math_extended"]
 # Every legal canonical subject name (what may appear in an elective pool).
 CANONICAL_SUBJECTS = set(
@@ -1949,14 +1958,19 @@ def unify_data():
                     obj["subject_weights_2025"] = obj["subject_weights_2026"].copy()
                 obj["subject_weights_2025_raw"] = entry.get('subject_weights_2025_raw') or entry.get('subject_weights_raw')
 
-                # LingU weights every Category C (Other Language) subject at x1.25 —
-                # confirmed from LingU's own JUPAS score calculator (banner.ln.edu.hk),
-                # which their published PDF omits. setdefault so an explicit weight,
-                # if any, still wins. Applied to both years (the calculator scores on
-                # the year-specific weights).
-                for _catc in SUBJECTS_REGISTRY.get("category_c", []):
-                    obj["subject_weights_2026"].setdefault(_catc, 1.25)
-                    obj["subject_weights_2025"].setdefault(_catc, 1.25)
+                # LingU Category C (Other Language) weights — the PDF omits them, so
+                # they're reverse-engineered PER PROGRAMME from LingU's official JUPAS
+                # calculator by scripts/extraction/lingu_calc_scrape.py →
+                # lingu_catc_weights.json. They are NOT uniform: most programmes weight
+                # languages at x1.0 (no entry needed), but one that weights its whole
+                # elective pool higher (JS7123 x1.25) weights languages the same. Only
+                # add an entry when the measured weight > 1.0. setdefault so an explicit
+                # weight still wins. (Earlier we wrongly assumed a blanket x1.25.)
+                _catc_w = LINGU_CATC_WEIGHTS.get(code)
+                if _catc_w and _catc_w > 1.0:
+                    for _catc in SUBJECTS_REGISTRY.get("category_c", []):
+                        obj["subject_weights_2026"].setdefault(_catc, _catc_w)
+                        obj["subject_weights_2025"].setdefault(_catc, _catc_w)
 
                 # LingU Constraints
                 obj["calculation_constraints"].append({
