@@ -971,6 +971,40 @@ def build_generic_elective(grade, constraint=None):
         "note": constraint or ""
     }
 
+def parse_specified_elective(spec):
+    """HKUST `anotherSpecifiedSubject` → an elect1 subject pool, or None for 'Any'.
+    Format: "One of: Biology / Chemistry / Physics / ICT" (sometimes with M1/M2),
+    or "No specific subject requirements". Many HKUST programmes restrict their
+    FIRST elective to a science pool — without this the slot was left "Any" and a
+    non-science elective wrongly satisfied it (e.g. JS5260, and ~15 siblings)."""
+    if not spec:
+        return None
+    s = str(spec).strip()
+    if not s or s.lower().startswith("no specific"):
+        return None
+    m = re.match(r'one of\s*:?\s*(.+)', s, re.I)
+    body = m.group(1) if m else s
+    out = []
+    for tok in re.split(r'\s*/\s*', body):
+        tok = tok.strip()
+        if not tok:
+            continue
+        u = tok.upper().replace(".", "")
+        if u in ("M1", "MATH M1", "MATHS M1"):
+            out.append("Mathematics Extended Part (Module 1)")
+        elif u in ("M2", "MATH M2", "MATHS M2"):
+            out.append("Mathematics Extended Part (Module 2)")
+        elif u == "ICT":
+            out.append("Information and Communication Technology")
+        else:
+            out.append(normalize_subject(tok))
+    # De-dupe preserving order; drop empties.
+    seen, pool = set(), []
+    for x in out:
+        if x and x not in seen:
+            seen.add(x); pool.append(x)
+    return pool or None
+
 # ── Curated per-programme overrides — SINGLE SOURCE OF TRUTH ───────────────────
 # Hand-verified rules the per-school scrape can't express. The runtime reads the
 # emitted fields GENERICALLY (no JS-code lists hardcoded in the calculator).
@@ -992,18 +1026,13 @@ CURATED_PROGRAMME_RULES = {
         "set_weights_2025": {},
         "expect_weights_2025": {"English Language": 1.5, "Music": 1.2, "Visual Arts": 1.2},
     },
-    "JS2940": {  # HKBU — 2025 HMSC is x1.1; the x1.5 belonged to a wrapped neighbour (e.g. JS2370)
-        "verified": "2026-06 · HKBU 2025 Weighting.pdf",
-        "patch_weights_2025": {"Health Management and Social Care": 1.1},
-        "expect_weights_2025": {"Health Management and Social Care": 1.5},
-    },
-    # — Eligibility —
-    "JS5260": {  # HKUST IEDA — 2026 first elective is one of Bio/Chem/Phys/ICT; unify left it "Any"
-        "verified": "2026 · HKUST anotherSpecifiedSubject",
-        "elect1_subjects": ["Biology", "Chemistry", "Physics", "Information and Communication Technology"],
-        "elect1_note": "One of: Biology / Chemistry / Physics / ICT",
-        "expect_elect1": ["Any"],
-    },
+    # (JS2940 was previously patched HMSC→1.1 from a tester report, but the official
+    # HKBU 2025 Weighting.pdf — confirmed by word-coordinate row matching on BOTH
+    # pages — clearly assigns HMSC ×1.5 to JS2940 and HMSC ×1.1 to JS2660 (Social
+    # Work). The tester mixed up the two "Bachelor of Social…" programmes. So JS2940
+    # keeps its scraped ×1.5; no override.)
+    # (JS5260's elect1 restriction is now handled SYSTEMATICALLY for all HKUST
+    # programmes via parse_specified_elective() — no per-code patch needed.)
     # — Category C (Other Languages) policy (stable rule; was hardcoded in categoryC.ts) —
     # HKBU programmes that do NOT consider Cat C at all (eligibility + scoring):
     "JS2620": {"verified": "2026 · HKBU", "category_c_policy": "none"},
@@ -1816,6 +1845,15 @@ def unify_data():
                         "elect1": {"count": 1, "subjects": ["Any"], "grade": entry.get('req_e1', "3"), "note": ""},
                         "elect2": {"count": 1, "subjects": ["Any"], "grade": entry.get('req_e2', "3"), "note": ""}
                     }
+
+                # Apply HKUST's specified FIRST elective ("One of: Bio/Chem/Phys/…")
+                # — authoritative from `anotherSpecifiedSubject`. Without this the
+                # slot stays "Any" and a non-science elective wrongly satisfies it.
+                _hk_spec = js.get('anotherSpecifiedSubject') or entry.get('anotherSpecifiedSubject')
+                _hk_pool = parse_specified_elective(_hk_spec)
+                if _hk_pool and obj["min_requirements_2026"].get("elect1"):
+                    obj["min_requirements_2026"]["elect1"]["subjects"] = _hk_pool
+                    obj["min_requirements_2026"]["elect1"]["note"] = str(_hk_spec).strip()
 
             elif school_key == "PolyU":
                 formula_text = entry.get('calculation_mechanism')
