@@ -13,6 +13,9 @@ export const CAT_A_SUBJECTS = registry.category_a as string[];
 
 export const CAT_C_SUBJECTS = registry.category_c as string[];
 
+// Category B — Applied Learning (ApL) subjects.
+export const CAT_B_SUBJECTS = (registry as { category_b?: string[] }).category_b ?? [];
+
 // alias spelling -> canonical, and one canonical name -> its family members
 // (M1/M2, Combined Science). Used by the eligibility matcher to compare subject
 // names robustly even if a non-canonical value ever slips through.
@@ -27,6 +30,9 @@ export function canonicalSubject(name: string): string {
 export const DSE_GRADES = ["", "5**", "5*", "5", "4", "3", "2", "1", "U"];
 export const CSD_GRADES = ["", "A", "U"];
 export const CAT_C_GRADES = ["", "A", "B", "C", "D", "E", "U"];
+// Applied Learning (Cat B) result levels, best → worst. "Attained" is the bare
+// pass; the two Distinction tiers map to DSE Level 3 / 4 (see categoryB.ts).
+export const APL_GRADES = ["", "Attained with Distinction (II)", "Attained with Distinction (I)", "Attained", "U"];
 
 const SUBJECT_SHORT_NAMES: Record<string, string> = {
   "Chinese Language": "Chinese",

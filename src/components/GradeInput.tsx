@@ -1,5 +1,5 @@
 import { memo, useEffect, useRef, useState } from "react";
-import { CAT_A_SUBJECTS, CAT_C_SUBJECTS, CORE_SUBJECTS, CSD_GRADES, DSE_GRADES, M12_SUBJECT } from "../lib/subjects";
+import { APL_GRADES, CAT_A_SUBJECTS, CAT_B_SUBJECTS, CAT_C_SUBJECTS, CORE_SUBJECTS, CSD_GRADES, DSE_GRADES, M12_SUBJECT } from "../lib/subjects";
 import { categoryCLevelOptions } from "../lib/categoryC";
 import { localizedShortSubject, localizedSubject, localizedSubjectChip } from "../lib/subjectsI18n";
 import { useLang, type Lang } from "../lib/i18n";
@@ -24,6 +24,24 @@ type Props = {
 };
 
 const ELECTIVE_SLOTS = ["elective-1", "elective-2", "elective-3", "elective-4"];
+
+// ApL results are long ("Attained with Distinction (II)"); the calculator stores
+// the full value but the grade buttons show a compact tier. (II) is the higher
+// distinction (→ DSE Level 4), (I) the lower (→ Level 3), "Attained" the bare pass.
+const APL_GRADE_LABELS: Record<string, string> = {
+  "Attained with Distinction (II)": "Dist II",
+  "Attained with Distinction (I)": "Dist I",
+  "Attained": "Att",
+  "U": "U",
+};
+
+// Even tighter form for the grade-summary pill (one value cell, no wrapping room).
+const APL_SUMMARY_LABELS: Record<string, string> = {
+  "Attained with Distinction (II)": "D2",
+  "Attained with Distinction (I)": "D1",
+  "Attained": "At",
+  "U": "U",
+};
 
 export const GradeInput = memo(({ grades, onChange, onReset, readOnly = false, headerToggles = false, collapsed: controlledCollapsed, onCollapsedChange }: Props) => {
   const { t, lang } = useLang();
@@ -179,6 +197,27 @@ export const GradeInput = memo(({ grades, onChange, onReset, readOnly = false, h
                 onChange={(grade) => setElective("cat-c", grades["cat-c:subject"], grade)}
               />
           </div>
+
+          <div className="elective-row">
+            <select
+              aria-label={t("grade.catBApl")}
+              value={grades["cat-b:subject"] || ""}
+              disabled={readOnly}
+              onChange={(event) => setElective("cat-b", event.target.value, grades[grades["cat-b:subject"]] || "")}
+            >
+              <option value="">{t("grade.catBApl")}</option>
+              {CAT_B_SUBJECTS.map((subject) => <option key={subject} value={subject}>{localizedSubject(subject, lang)}</option>)}
+            </select>
+              <GradeButtons
+                value={grades["cat-b:subject"] ? grades[grades["cat-b:subject"]] || "" : ""}
+                grades={APL_GRADES.filter(Boolean)}
+                labels={APL_GRADE_LABELS}
+                disabled={readOnly || !grades["cat-b:subject"]}
+                compact
+                fit
+                onChange={(grade) => setElective("cat-b", grades["cat-b:subject"], grade)}
+              />
+          </div>
         </div>
         {readOnly ? null : (
           <div className="grade-footer-actions">
@@ -198,6 +237,7 @@ export const GradeInput = memo(({ grades, onChange, onReset, readOnly = false, h
 const GradeButtons = memo(({
   value,
   grades,
+  labels,
   disabled = false,
   compact = false,
   fit = false,
@@ -205,6 +245,9 @@ const GradeButtons = memo(({
 }: {
   value: string;
   grades: string[];
+  // Optional display override: button shows labels[grade], onChange still emits
+  // the full grade value (used for ApL's long result names).
+  labels?: Record<string, string>;
   disabled?: boolean;
   compact?: boolean;
   fit?: boolean;
@@ -222,7 +265,7 @@ const GradeButtons = memo(({
           aria-checked={value === grade}
           onClick={() => onChange(value === grade ? "" : grade)}
         >
-          {grade}
+          {labels?.[grade] ?? grade}
         </button>
       ))}
     </div>
@@ -255,6 +298,7 @@ export function GradeTitleSummary({ grades, dynamicElectives = false }: { grades
     ...(showIfPicked("elective-3") ? electiveItem(grades, "elective-3", "E3", lang) : []),
     ...(showIfPicked("elective-4") ? electiveItem(grades, "elective-4", "E4", lang) : []),
     ...(showIfPicked("cat-c") ? [{ key: "Lang", label: t("grade.sum.lang"), grade: gradeForSlot(grades, "cat-c") }] : []),
+    ...(showIfPicked("cat-b") ? [{ key: "ApL", label: t("grade.sum.apl"), grade: aplGradeLabel(gradeForSlot(grades, "cat-b")) }] : []),
   ];
 
   return (
@@ -281,4 +325,9 @@ function electiveItem(grades: StudentGrades, slot: string, placeholder: string, 
 function gradeForSlot(grades: StudentGrades, slot: string) {
   const subject = grades[`${slot}:subject`];
   return subject ? grades[subject] : undefined;
+}
+
+// Compact the long ApL result name for the summary pill (D2 / D1 / At).
+function aplGradeLabel(grade: string | undefined): string | undefined {
+  return grade ? APL_SUMMARY_LABELS[grade] ?? grade : undefined;
 }

@@ -135,6 +135,7 @@ export const STRINGS = {
   "grade.elective": { en: "Elective {n}", zh: "選修科 {n}" },
   "grade.electiveAria": { en: "Elective {n} subject", zh: "第 {n} 個選修科目" },
   "grade.catCLang": { en: "Category C language", zh: "丙類語言科目" },
+  "grade.catBApl": { en: "Applied Learning (ApL)", zh: "應用學習 (ApL)" },
   "grade.reset": { en: "Reset grades", zh: "重設成績" },
   "grade.summaryAria": { en: "Entered grades summary", zh: "已輸入的成績概覽" },
   "grade.sum.chi": { en: "Chi", zh: "中文" },
@@ -143,6 +144,7 @@ export const STRINGS = {
   "grade.sum.csd": { en: "CSD", zh: "公社" },
   "grade.sum.m12": { en: "M1/2", zh: "M1/2" },
   "grade.sum.lang": { en: "Lang", zh: "語言" },
+  "grade.sum.apl": { en: "ApL", zh: "應用" },
 
   // – Score scale / benchmark band labels –
   "band.aboveUq": { en: "Above UQ", zh: "高於 UQ" },

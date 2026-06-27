@@ -10,6 +10,7 @@ import type {
   StudentGrades,
 } from "../types/jupas";
 import { acceptsCategoryC, categoryCBasePoints, categoryCCanSatisfyElective, isCategoryCGrade, isCategoryCSubject } from "./categoryC";
+import { categoryBAccepted, categoryBBasePoints, categoryBCanSatisfyElective, isCategoryBSubject } from "./categoryB";
 import { canonicalSubject, CAT_A_SUBJECTS, SUBJECT_EXPANSIONS } from "./subjects";
 
 const CAT_A_SET = new Set(CAT_A_SUBJECTS);
@@ -50,6 +51,23 @@ function includesM12Aware(subjects: string[] = [], candidate: string) {
   return pool.some((p) => SUBJECT_EXPANSIONS[p]?.includes(cand));
 }
 
+// The programme's most common subject weight — the "standard elective" weight on
+// this programme's scale (1 for most institutions; 7 for PolyU's uniform ×7 model).
+// Used as the default multiplier for a subject not explicitly listed (ApL).
+function modalWeight(weights: Record<string, number>): number {
+  const counts = new Map<number, number>();
+  for (const w of Object.values(weights)) counts.set(w, (counts.get(w) ?? 0) + 1);
+  let best = 1;
+  let bestCount = 0;
+  for (const [w, c] of counts) {
+    if (c > bestCount) {
+      best = w;
+      bestCount = c;
+    }
+  }
+  return best;
+}
+
 export function calculateScore(studentGrades: StudentGrades, programme: Programme, year: "2025" | "2026" = "2025"): CalculationResult {
   if (!programme?.score_conversion_table) {
     return { totalScore: 0, selected: [], allCandidates: [], score_type: "actual" };
@@ -68,6 +86,17 @@ export function calculateScore(studentGrades: StudentGrades, programme: Programm
   const constraints = programme.calculation_constraints || [];
   const convTable = programme.score_conversion_table.category_a || {};
   const catCTable = programme.score_conversion_table.category_c || {};
+  // Weight for an ApL subject (never listed in the weights map): treat it as a
+  // STANDARD elective. Two weight-map shapes exist:
+  //   • DENSE (PolyU): every Cat-A subject is listed on a uniform scale (×5/7/10)
+  //     — an unlisted subject has no natural ×1 default, so ApL takes the modal
+  //     (standard-elective) weight, else it'd be ~7× under-credited and never count.
+  //   • SPARSE (CityU/LingU/HKUST): only the specially-weighted subjects are listed;
+  //     any unlisted elective defaults to ×1 — so ApL (a non-preferred elective)
+  //     is ×1 too. Using the modal of the few listed subjects would over-credit it.
+  const catACovered = CAT_A_SUBJECTS.filter((subject) => subject in weights).length;
+  const denseWeightMap = catACovered >= CAT_A_SET.size * 0.6;
+  const aplDefaultWeight = denseWeightMap ? modalWeight(weights) : 1;
   const candidates: CandidateScore[] = [];
 
   for (const [subject, grade] of Object.entries(studentGrades)) {
@@ -75,10 +104,14 @@ export function calculateScore(studentGrades: StudentGrades, programme: Programm
     // Programmes that ignore Category C (Other Languages) entirely — the
     // language never enters their score (e.g. HKBU JS2120 "不計日文").
     if (isCategoryCSubject(subject) && !acceptsCategoryC(programme)) continue;
+    // Applied Learning (Cat B): only scored when the programme considers it.
+    if (isCategoryBSubject(subject) && !categoryBAccepted(programme, subject)) continue;
     const basePoints = isCategoryCSubject(subject)
       ? categoryCBasePoints(programme, subject, grade, catCTable) ?? 0
-      : convTable[grade] ?? 0;
-    let multiplier = weights[subject] || 1;
+      : isCategoryBSubject(subject)
+        ? categoryBBasePoints(programme, subject, grade) ?? 0
+        : convTable[grade] ?? 0;
+    let multiplier = weights[subject] || (isCategoryBSubject(subject) ? aplDefaultWeight : 1);
     if (subject === "Mathematics Extended Part (Module 1 or 2)") {
       multiplier = weights["Mathematics Extended Part (Module 1)"] || weights["Mathematics Extended Part (Module 2)"] || 1;
     }
@@ -94,6 +127,13 @@ export function calculateScore(studentGrades: StudentGrades, programme: Programm
       isBonus: false,
     });
   }
+
+  // Category B (Applied Learning): at most ONE ApL subject may count toward the
+  // score — keep the highest-scoring one, exclude the rest from selection.
+  const aplCandidates = candidates
+    .filter((candidate) => isCategoryBSubject(candidate.subject))
+    .sort((a, b) => b.weightedScore - a.weightedScore);
+  for (let i = 1; i < aplCandidates.length; i++) aplCandidates[i].used = true;
 
   for (const pool of bestOfPools) {
     const poolCandidates = candidates
@@ -433,6 +473,9 @@ function electiveCanTake(pool: RequirementPool, subject: string, grade: string, 
     isMatch = true;
   }
   if (!isMatch) return false;
+  // Applied Learning (Cat B): its own acceptance + level rule (not a DSE grade, so
+  // it skips the numeric compareGrades below).
+  if (isCategoryBSubject(subject)) return categoryBCanSatisfyElective(programme, subject, grade, pool);
   if (!categoryCCanSatisfyElective(programme, subject, grade, pool)) return false;
   return compareGrades(grade, pool.grade, programme, subject);
 }

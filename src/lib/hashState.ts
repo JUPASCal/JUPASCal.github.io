@@ -1,6 +1,7 @@
 import type { StudentGrades } from "../types/jupas";
 import { isCategoryCGrade, normalizeCategoryCGrade } from "./categoryC";
-import { CAT_A_SUBJECTS, CAT_C_SUBJECTS, CORE_SUBJECTS, M12_SUBJECT } from "./subjects";
+import { canonicalCategoryBGrade, isCategoryBGrade, isCategoryBSubject } from "./categoryB";
+import { CAT_A_SUBJECTS, CAT_B_SUBJECTS, CAT_C_SUBJECTS, CORE_SUBJECTS, M12_SUBJECT } from "./subjects";
 import { trimTrailingNulls } from "./arrays";
 
 const MAX_HASH_LENGTH = 4096;
@@ -14,9 +15,10 @@ const VALID_GRADES = new Set(["5**", "5*", "5", "4", "3", "2", "1", "A", "B", "C
 // localStorage; this charset-aware pattern accepts them all and is agnostic to
 // any future code shape JUPAS might introduce within that envelope.
 export const PROGRAMME_CODE_PATTERN = /^JS[A-Z0-9]{4}$/;
-const SLOT_SUBJECT_PATTERN = /^(elective-[1-4]|cat-c):subject$/;
-const VALID_SUBJECTS = new Set([...CORE_SUBJECTS, M12_SUBJECT, ...CAT_A_SUBJECTS, ...CAT_C_SUBJECTS]);
+const SLOT_SUBJECT_PATTERN = /^(elective-[1-4]|cat-c|cat-b):subject$/;
+const VALID_SUBJECTS = new Set([...CORE_SUBJECTS, M12_SUBJECT, ...CAT_A_SUBJECTS, ...CAT_C_SUBJECTS, ...CAT_B_SUBJECTS]);
 const CAT_C_SET = new Set<string>(CAT_C_SUBJECTS);
+const CAT_B_SET = new Set<string>(CAT_B_SUBJECTS);
 
 // Single hash format: `#b=…` (bit-packed binary, base64url). The
 // reader rejects anything else. Legacy reader paths (deflate-
@@ -57,6 +59,13 @@ for (let i = 0; i < CODE_CHARSET.length; i++) CODE_CHAR_TO_ID[CODE_CHARSET[i]] =
 // Extensible-tail TLV tags. APPEND-ONLY — never renumber or reuse.
 const TAG_NAME = 1;
 const TAG_EXT_GRADES = 2;
+// Category B (Applied Learning). ApL subjects can't ride the 6-bit subject-ID
+// space (it's full at 36/64 and the ApL list grows across chunks) and ApL result
+// names aren't DSE grades, so they get their own tag: a sequence of
+// [1-byte subjLen][subj UTF-8][1-byte gradeLen][grade UTF-8] records. Subject is
+// stored as TEXT (not an index) so a shared link still decodes after the ApL
+// catalog changes — same robustness guarantee as the programme-code packing.
+const TAG_APL = 3;
 const SUBJECT_ID_LIST: readonly string[] = [
   "Chinese Language",
   "English Language",
@@ -171,6 +180,12 @@ export function sanitizeGrades(rawGrades: unknown): StudentGrades {
       if (selectedSubject) grades[subject] = selectedSubject;
       continue;
     }
+    // ApL subject → ApL result level (not a DSE grade): keep the canonical form.
+    if (subject && CAT_B_SET.has(subject)) {
+      const aplGrade = typeof rawGrade === "string" ? canonicalCategoryBGrade(rawGrade) : undefined;
+      if (aplGrade) grades[subject] = aplGrade;
+      continue;
+    }
     const grade = sanitizeGrade(rawGrade);
     if (subject && grade) grades[subject] = grade;
   }
@@ -254,11 +269,17 @@ function encodeBinary(state: HashState): string {
   w.write(BINARY_VERSION, 4);
 
   // Subjects with grades. Skip slot-mapping entries (elective-N:subject /
-  // cat-c:subject) – they're recoverable on read.
+  // cat-c:subject / cat-b:subject) – they're recoverable on read.
   const subjects: Array<[number, number]> = [];
   const extendedGrades: Array<[number, string]> = [];
+  const aplGrades: Array<[string, string]> = [];
   for (const [subject, grade] of Object.entries(state.grades)) {
     if (subject.includes(":subject")) continue;
+    // ApL: not in the 6-bit subject space and not a DSE grade — carried by TAG_APL.
+    if (isCategoryBSubject(subject)) {
+      if (isCategoryBGrade(grade)) aplGrades.push([subject, grade]);
+      continue;
+    }
     const sid = SUBJECT_TO_ID[subject];
     const gid = GRADE_TO_ID[grade];
     if (sid === undefined) continue;
@@ -306,6 +327,8 @@ function encodeBinary(state: HashState): string {
   }
   const extBytes = encodeExtendedGrades(extendedGrades);
   if (extBytes.length > 0) writeTLV(w, TAG_EXT_GRADES, extBytes);
+  const aplBytes = encodeAplGrades(aplGrades);
+  if (aplBytes.length > 0) writeTLV(w, TAG_APL, aplBytes);
 
   return BINARY_PREFIX + bytesToBase64Url(w.finish());
 }
@@ -363,6 +386,7 @@ function decodeBinary(payload: string): HashState | null {
     r.align();
     let name: string | undefined;
     const extRawGrades: Record<string, unknown> = {};
+    const aplRawGrades: Record<string, string> = {};
     while (r.bytesLeft() >= 2) {
       const tag = r.read(8);
       if (tag === 0) break; // padding / end of tail
@@ -379,10 +403,15 @@ function decodeBinary(payload: string): HashState | null {
         }
       } else if (tag === TAG_EXT_GRADES) {
         Object.assign(extRawGrades, decodeExtendedGrades(buf));
+      } else if (tag === TAG_APL) {
+        Object.assign(aplRawGrades, decodeAplGrades(buf));
       }
       // Unknown tags: payload already consumed, loop continues.
     }
     Object.assign(grades, sanitizeGrades(extRawGrades));
+    // ApL grades are pre-validated in decodeAplGrades (subject ∈ Cat-B, valid
+    // result level), so they bypass sanitizeGrades (which only knows DSE grades).
+    Object.assign(grades, aplRawGrades);
     reassignElectiveSlots(grades);
 
     if (Object.keys(grades).length === 0 && pickedCodes.length === 0) return null;
@@ -421,6 +450,42 @@ function decodeExtendedGrades(bytes: Uint8Array): Record<string, string> {
   return out;
 }
 
+// TAG_APL payload: a sequence of [subjLen][subj UTF-8][gradeLen][grade UTF-8].
+// Subject + grade both stored as text (see TAG_APL note) so it round-trips
+// independent of the ApL catalog. Capped to one TLV byte-length (255).
+function encodeAplGrades(items: Array<[string, string]>): Uint8Array {
+  if (items.length === 0) return new Uint8Array();
+  const bytes: number[] = [];
+  const encoder = new TextEncoder();
+  for (const [subject, grade] of items) {
+    const sBytes = encoder.encode(subject).slice(0, MAX_SUBJECT_LENGTH);
+    const gBytes = encoder.encode(grade).slice(0, MAX_GRADE_LENGTH);
+    if (bytes.length + 2 + sBytes.length + gBytes.length > 255) break;
+    bytes.push(sBytes.length & 0xFF, ...sBytes, gBytes.length & 0xFF, ...gBytes);
+  }
+  return new Uint8Array(bytes);
+}
+
+function decodeAplGrades(bytes: Uint8Array): Record<string, string> {
+  const out: Record<string, string> = {};
+  const decoder = new TextDecoder();
+  let i = 0;
+  while (i + 1 <= bytes.length) {
+    const sLen = bytes[i++];
+    if (i + sLen + 1 > bytes.length) break;
+    const subject = decoder.decode(bytes.slice(i, i + sLen));
+    i += sLen;
+    const gLen = bytes[i++];
+    if (i + gLen > bytes.length) break;
+    const grade = decoder.decode(bytes.slice(i, i + gLen));
+    i += gLen;
+    // Only accept a recognised ApL subject + result level (stored canonically).
+    const canonical = canonicalCategoryBGrade(grade);
+    if (CAT_B_SET.has(subject) && canonical) out[subject] = canonical;
+  }
+  return out;
+}
+
 // Reassign elective-1..4 / cat-c slot subjects from the order non-core
 // subjects appear in `grades`. Used by both binary and parseHashState
 // decode paths.
@@ -441,6 +506,10 @@ function reassignElectiveSlots(grades: StudentGrades): StudentGrades {
       if (!grades["cat-c:subject"]) grades["cat-c:subject"] = subject;
       continue;
     }
+    if (CAT_B_SET.has(subject)) {
+      if (!grades["cat-b:subject"]) grades["cat-b:subject"] = subject;
+      continue;
+    }
     if (electiveCount > 4) continue;
     const slot = `elective-${electiveCount}:subject`;
     if (!grades[slot]) {
@@ -458,6 +527,7 @@ function hasEncodableContent(state: HashState): boolean {
     if (!grade) continue;
     if (subject.includes(":subject")) continue;
     if (subject in SUBJECT_TO_ID) return true;
+    if (isCategoryBSubject(subject)) return true;
   }
   return false;
 }

@@ -2515,6 +2515,20 @@ def unify_data():
 
     apply_curated_overrides(final_unified)
 
+    # Category B (Applied Learning) acceptance. CHUNK B: the four institutions whose
+    # score CALCULATORS we probed accept ApL as a generic elective (ApL is scored
+    # via the Cat-A table at the equivalent level — Dist II→L4, Dist I→L3). PolyU's
+    # per-programme RESTRICTED ApL lists and the remaining six (table-only)
+    # institutions are a later chunk; until then they have no apl_policy (ApL not
+    # counted for them — no regression, they simply don't model ApL yet).
+    APL_GENERIC_INSTITUTIONS = {"PolyU", "HKUST", "CityUHK", "LingnanU"}
+    _apl_n = 0
+    for _p in final_unified:
+        if _p.get("institution") in APL_GENERIC_INSTITUTIONS and "apl_policy" not in _p:
+            _p["apl_policy"] = "any"
+            _apl_n += 1
+    print(f"ApL (Cat B) acceptance set to 'any' for {_apl_n} programmes (4 calculator institutions)")
+
     # 5a. Archive any programme present in the PREVIOUS build but gone now
     # (removed/restructured by JUPAS) so its data is never lost — a cumulative
     # archive (keyed by JS code, latest-known record) we can reference later.
