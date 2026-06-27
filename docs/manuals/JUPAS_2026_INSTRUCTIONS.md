@@ -102,8 +102,11 @@ The Excel-based calculator has been replaced with a static web app:
 5. [x] Compile and unify: `~/miniconda3/envs/jupascal/bin/python scripts/utils/unify_2026_data.py`
 6. [x] **Gate 1 — validate:** `~/miniconda3/envs/jupascal/bin/python scripts/utils/validate_unified.py` (must report `ERROR: 0`; eyeball the REVIEW items)
 7. [x] **Gate 2 — eligibility audit:** `npm run audit` (from the repo root; must end `PASS — 0 hard-gate failure(s)`)
-8. [x] Build web app (replaced OneDrive Excel embed)
-9. [ ] Commit and open Pull Request on GitHub
+8. [ ] **Gate 3 — curated corrections review (do every refresh):** the unify run prints `Curated overrides applied: N/N; M need review`. **M must be 0.** Any `⚠ REVIEW curated rule …` line means a hand-verified fix in `CURATED_PROGRAMME_RULES` (top of `unify_2026_data.py`) no longer matches the scrape — the scraper changed, fixed itself (override now redundant), or the programme moved. Re-verify that programme against its official source and update/remove the rule. These overrides patch scraped values, so they MUST be re-checked each cycle — the `expect_*` fields make a stale one shout instead of silently shipping wrong data.
+9. [x] Build web app (replaced OneDrive Excel embed)
+10. [ ] Commit and open Pull Request on GitHub
+
+> **Where hand-verified fixes live:** anything the per-school scrape gets wrong (a mis-read weight, a missing elective restriction, an institutional rule like "ignores Category C") goes in the one **`CURATED_PROGRAMME_RULES`** table in `unify_2026_data.py`, keyed by JS code with a `verified:` provenance note — never hand-edit `JUPAS_2026_Unified_Data.json`. The runtime reads the emitted fields (`category_c_policy`, `extra_eligibility`, the `CategoryA` elective token, corrected weights) generically, so the calculator carries no hardcoded programme lists.
 
 ### Subject vocabulary (single source of truth)
 All DSE subject names live in **`data/raw/subjects.canonical.json`** — consumed by

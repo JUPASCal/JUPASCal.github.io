@@ -45,7 +45,7 @@
     "module_1": "Mathematics Extended Part (Module 1)",
     "module_2": "Mathematics Extended Part (Module 2)"
   },
-  "tokens": ["Any", "*"],
+  "tokens": ["Any", "*", "CategoryA"],
   "aliases": {
     "ICT": "Information and Communication Technology",
     "DAT": "Design and Applied Technology",

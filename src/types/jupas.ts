@@ -129,6 +129,15 @@ export type Programme = {
   min_requirements_2026: MinRequirements;
   calculation_constraints?: Constraint[];
   score_conversion_table: ScoreConversionTable;
+  // Category C (Other Languages) policy — DATA-DRIVEN (emitted by unify's curated
+  // table) so the rule isn't a hardcoded JS-code list in the runtime:
+  //   "none"                – Cat C ignored entirely (both eligibility & scoring)
+  //   "elective_cat_a_only" – Cat C can't satisfy an elective (may still score)
+  //   undefined             – standard (Cat C per the institution's score policy)
+  category_c_policy?: "none" | "elective_cat_a_only";
+  // Extra admission gate beyond the per-subject requirements, enforced after the
+  // score is computed (e.g. CUHK MBChB-GPS JS4502: total ≥ 40 with 5** in any 4).
+  extra_eligibility?: { min_total?: number; min_top_grade_count?: number; top_grade?: string };
   max_achievable_score?: number | null;
   scores_2025: Scores2025;
   score_grades_2025?: Record<string, Record<string, string> | null>;

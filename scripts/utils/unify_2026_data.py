@@ -385,6 +385,11 @@ def get_conversion_table(institution, is_medicine=False):
         }
         # Add Category C for these schools if known (standard is A=7, B=6, C=5, D=4, E=3)
         cat_c = {"A": 7.0, "B": 6.0, "C": 5.0, "D": 4.0, "E": 3.0}
+        if is_medicine:
+            # CUHK MBChB (JS4501/4502) publish their OWN Other-Language scale, which
+            # tops out at 6 (≈ 5*), not 7 — see the programme's score-conversion table:
+            # C2/N1/Grade6/A++ = 6, then 5, 4, 3.
+            cat_c = {"A": 6.0, "B": 5.0, "C": 4.0, "D": 3.0, "E": 3.0}
     else:
         # Group A: HKU, CUHK, HKUST, PolyU, CityUHK
         table = {
@@ -934,9 +939,14 @@ def build_hku_elective_pool(desc, fallback_grade):
         "note": desc
     }
 
-def build_hkbu_elective(grade, constraint):
+def build_hkbu_elective(grade, constraint, default_cat_a=False):
+    # HKBU's first elective MUST be a Category A subject (excluding M1/M2); the
+    # second may be any Cat A (incl M1/M2) and — for most programmes — Cat B/C.
+    # `default_cat_a` emits the "CategoryA" token (the calculator resolves it to
+    # Cat A membership, which already excludes M1/M2 and Cat C) when there's no
+    # more specific scraped constraint.
     if not grade: return None
-    subjs = ["Any"]
+    subjs = ["CategoryA"] if default_cat_a else ["Any"]
     if constraint:
         # Extract subjects like "Biology or Chemistry"
         # "One elective subject must be Biology or Chemistry"
@@ -944,12 +954,12 @@ def build_hkbu_elective(grade, constraint):
         if m:
             pool = m.group(1)
             subjs = [normalize_subject(s.strip()) for s in re.split(r' or | / ', pool)]
-    
+
     return {
         "count": 1,
         "subjects": subjs,
         "grade": str(grade).strip("#"),
-        "note": constraint or ""
+        "note": constraint or ("Category A subject (excluding M1/M2)" if default_cat_a else "")
     }
 
 def build_generic_elective(grade, constraint=None):
@@ -960,6 +970,111 @@ def build_generic_elective(grade, constraint=None):
         "grade": str(grade).strip("#"),
         "note": constraint or ""
     }
+
+# ── Curated per-programme overrides — SINGLE SOURCE OF TRUTH ───────────────────
+# Hand-verified rules the per-school scrape can't express. The runtime reads the
+# emitted fields GENERICALLY (no JS-code lists hardcoded in the calculator).
+#
+# *** ANNUAL MAINTENANCE (next year's refresh) — READ THIS ***
+# Value corrections (weights/electives) patch THIS cycle's scraped data, so they
+# can go stale. Each carries `expect_*` = the (wrong) value it's correcting FROM.
+# At every regenerate, apply_curated_overrides() RE-CHECKS those expectations and
+# prints "⚠ REVIEW" for any that no longer hold — i.e. the scraper changed, the
+# programme moved, or the scrape now produces the right value (override redundant).
+# So you don't trust this table blindly: you run unify, read the curated summary,
+# and re-verify only the flagged ones. Stable RULE entries (category_c_policy,
+# extra_eligibility, CategoryA elect1) don't rot, but still re-confirm the code
+# exists. `verified` records when/against-what each was checked.
+CURATED_PROGRAMME_RULES = {
+    # — 2025 SCORING-weight corrections (source PDF row-wrap / copied from 2026) —
+    "JS2340": {  # HKBU BFA Acting — 2025 PDF row is "-" (no weighting); unify fell back to 2026 (ENG x1.5 …)
+        "verified": "2026-06 · HKBU 2025 Weighting.pdf",
+        "set_weights_2025": {},
+        "expect_weights_2025": {"English Language": 1.5, "Music": 1.2, "Visual Arts": 1.2},
+    },
+    "JS2940": {  # HKBU — 2025 HMSC is x1.1; the x1.5 belonged to a wrapped neighbour (e.g. JS2370)
+        "verified": "2026-06 · HKBU 2025 Weighting.pdf",
+        "patch_weights_2025": {"Health Management and Social Care": 1.1},
+        "expect_weights_2025": {"Health Management and Social Care": 1.5},
+    },
+    # — Eligibility —
+    "JS5260": {  # HKUST IEDA — 2026 first elective is one of Bio/Chem/Phys/ICT; unify left it "Any"
+        "verified": "2026 · HKUST anotherSpecifiedSubject",
+        "elect1_subjects": ["Biology", "Chemistry", "Physics", "Information and Communication Technology"],
+        "elect1_note": "One of: Biology / Chemistry / Physics / ICT",
+        "expect_elect1": ["Any"],
+    },
+    # — Category C (Other Languages) policy (stable rule; was hardcoded in categoryC.ts) —
+    # HKBU programmes that do NOT consider Cat C at all (eligibility + scoring):
+    "JS2620": {"verified": "2026 · HKBU", "category_c_policy": "none"},
+    "JS2110": {"verified": "2026 · HKBU", "category_c_policy": "none"},
+    "JS2120": {"verified": "2026 · HKBU", "category_c_policy": "none"},
+    "JS2410": {"verified": "2026 · HKBU", "category_c_policy": "none"},
+    "JS2420": {"verified": "2026 · HKBU", "category_c_policy": "none"},
+    # CUHK electives Category-A-only (Cat C can't satisfy an elective; otherwise still scored):
+    "JS4550": {"verified": "2026 · CUHK footnote", "category_c_policy": "elective_cat_a_only"},
+    "JS4601": {"verified": "2026 · CUHK footnote", "category_c_policy": "elective_cat_a_only"},
+    "JS4648": {"verified": "2026 · CUHK footnote", "category_c_policy": "elective_cat_a_only"},
+    "JS4719": {"verified": "2026 · CUHK footnote", "category_c_policy": "elective_cat_a_only"},
+    # — Extra admission gate (stable rule) —
+    "JS4502": {  # CUHK MBChB-GPS — total >= 40 in 6 with 5** in any 4
+        "verified": "2026 · CUHK MBChB-GPS Note 3",
+        "extra_eligibility": {"min_total": 40, "min_top_grade_count": 4, "top_grade": "5**"},
+    },
+}
+
+def apply_curated_overrides(programmes):
+    """Apply CURATED_PROGRAMME_RULES, re-checking each value correction's stated
+    expectation so stale patches surface loudly instead of silently rotting at the
+    next annual refresh. Prints a per-run summary; returns the list of review notes."""
+    by_code = {p.get("jupas_code"): p for p in programmes}
+    applied, review = 0, []
+    for code, rule in CURATED_PROGRAMME_RULES.items():
+        p = by_code.get(code)
+        if p is None:
+            review.append(f"{code}: NOT in unified set — programme removed/renamed? (rule did nothing)")
+            continue
+        # Staleness checks BEFORE patching (value corrections only).
+        if "expect_weights_2025" in rule:
+            cur = p.get("subject_weights_2025") or {}
+            exp = rule["expect_weights_2025"]
+            if "patch_weights_2025" in rule:  # compare just the patched keys
+                bad = {k: cur.get(k) for k, v in exp.items() if cur.get(k) != v}
+                if bad:
+                    review.append(f"{code}: scraped 2025 weight changed (expected {exp}, found {bad}) — re-verify before trusting the override")
+            else:  # set_weights: whole-dict expectation
+                if cur != exp:
+                    already = cur == rule.get("set_weights_2025")
+                    review.append(f"{code}: 2025 weights {'already correct (scrape fixed → override redundant)' if already else f'changed (expected {exp}, found {dict(cur)})'} — re-verify")
+        if "expect_elect1" in rule:
+            cur_e1 = ((p.get("min_requirements_2026") or {}).get("elect1") or {}).get("subjects")
+            if cur_e1 != rule["expect_elect1"]:
+                review.append(f"{code}: scraped elect1 changed (expected {rule['expect_elect1']}, found {cur_e1}) — re-verify")
+        # Apply patches.
+        if "set_weights_2025" in rule:
+            p["subject_weights_2025"] = dict(rule["set_weights_2025"])
+            p["subject_weights_2025_raw"] = "-"
+        if "patch_weights_2025" in rule:
+            w = dict(p.get("subject_weights_2025") or {})
+            for k, v in rule["patch_weights_2025"].items():
+                if k in w:
+                    w[k] = v
+            p["subject_weights_2025"] = w
+        if "elect1_subjects" in rule:
+            e1 = (p.get("min_requirements_2026") or {}).get("elect1")
+            if isinstance(e1, dict):
+                e1["subjects"] = list(rule["elect1_subjects"])
+                if rule.get("elect1_note"):
+                    e1["note"] = rule["elect1_note"]
+        if "category_c_policy" in rule:
+            p["category_c_policy"] = rule["category_c_policy"]
+        if "extra_eligibility" in rule:
+            p["extra_eligibility"] = dict(rule["extra_eligibility"])
+        applied += 1
+    print(f"Curated overrides applied: {applied}/{len(CURATED_PROGRAMME_RULES)}; {len(review)} need review")
+    for note in review:
+        print(f"  ⚠ REVIEW curated rule — {note}")
+    return review
 
 def apply_baselines(obj):
     """
@@ -1777,7 +1892,7 @@ def unify_data():
                     "eng": entry.get('min_eng'),
                     "math": entry.get('min_math'),
                     "csd": entry.get('min_csd'),
-                    "elect1": build_hkbu_elective(entry.get('min_elect1'), entry.get('elect1_constraint')),
+                    "elect1": build_hkbu_elective(entry.get('min_elect1'), entry.get('elect1_constraint'), default_cat_a=True),
                     "elect2": build_hkbu_elective(entry.get('min_elect2'), None)
                 }
 
@@ -1795,6 +1910,15 @@ def unify_data():
                 else:
                     obj["subject_weights_2025"] = obj["subject_weights_2026"].copy()
                 obj["subject_weights_2025_raw"] = entry.get('subject_weights_2025_raw') or entry.get('subject_weights_raw')
+
+                # LingU weights every Category C (Other Language) subject at x1.25 —
+                # confirmed from LingU's own JUPAS score calculator (banner.ln.edu.hk),
+                # which their published PDF omits. setdefault so an explicit weight,
+                # if any, still wins. Applied to both years (the calculator scores on
+                # the year-specific weights).
+                for _catc in SUBJECTS_REGISTRY.get("category_c", []):
+                    obj["subject_weights_2026"].setdefault(_catc, 1.25)
+                    obj["subject_weights_2025"].setdefault(_catc, 1.25)
 
                 # LingU Constraints
                 obj["calculation_constraints"].append({
@@ -2336,6 +2460,8 @@ def unify_data():
 
     # 5. Export Unified Master File — minified to shrink wire size.
     final_unified = list(unified_map.values())
+
+    apply_curated_overrides(final_unified)
 
     # 5a. Archive any programme present in the PREVIOUS build but gone now
     # (removed/restructured by JUPAS) so its data is never lost — a cumulative

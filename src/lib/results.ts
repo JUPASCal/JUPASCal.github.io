@@ -1,4 +1,4 @@
-import { calculateScore, checkEligibility } from "./calculator";
+import { applyExtraEligibility, calculateScore, checkEligibility } from "./calculator";
 import { hasPostReleaseInterview, hasPreReleaseOnlyInterview } from "./selection";
 import type { BenchmarkBand, BenchmarkComparison, BenchmarkKey, Programme, ProgrammeResult, StudentGrades } from "../types/jupas";
 
@@ -18,7 +18,12 @@ export type Filters = {
 
 export function buildProgrammeResult(programme: Programme, grades: StudentGrades): ProgrammeResult {
   const calculation = calculateScore(grades, programme, hasHistoricalScores(programme) ? "2025" : "2026");
-  const eligibility = checkEligibility(grades, programme.min_requirements_2026, programme);
+  const eligibility = applyExtraEligibility(
+    checkEligibility(grades, programme.min_requirements_2026, programme),
+    programme,
+    grades,
+    calculation.totalScore,
+  );
   const comparisons = buildComparisons(calculation.totalScore, programme);
   const band = getBenchmarkBand(calculation.totalScore, programme);
   return {

@@ -168,14 +168,20 @@ export function categoryCBasePoints(
   return fallbackTable[normalized] ?? 0;
 }
 
-// CUHK programmes whose elective requirement is footnoted "(a) Category A
-// subjects only" in the JUPAS 2026 requirements: JS4550 Biomedical Sciences,
-// JS4601 Science, JS4648 Earth & Environmental Sciences, JS4719 Risk Management
-// Science. Both their elective slots are then Category A (one a specific science
-// list, the "any" one restricted by the footnote), so Category C Other Languages
-// cannot satisfy an elective for these — this overrides CUHK's general "Other
-// Language can be used" rule. See docs/manuals/CATEGORY_C_LANGUAGE_RULES.md.
-const CAT_A_ONLY_ELECTIVE_PROGRAMMES = new Set(["JS4550", "JS4601", "JS4648", "JS4719"]);
+// Category C acceptance is DATA-DRIVEN via `programme.category_c_policy`, emitted
+// by unify's single curated table (see CURATED_PROGRAMME_RULES in
+// unify_2026_data.py) — no hardcoded JS-code list lives in the runtime anymore.
+//   "none"                – Cat C ignored entirely (eligibility + scoring); e.g.
+//                           HKBU JS2620/2110/2120/2410/2420.
+//   "elective_cat_a_only" – Cat C can't satisfy an elective (Cat-A-only electives);
+//                           e.g. CUHK JS4550/4601/4648/4719.
+// See docs/manuals/CATEGORY_C_LANGUAGE_RULES.md.
+
+// True unless the programme ignores Category C languages entirely. Used by the
+// calculator to drop Cat C subjects from the scoring candidates.
+export function acceptsCategoryC(programme: Programme): boolean {
+  return programme.category_c_policy !== "none";
+}
 
 export function categoryCCanSatisfyElective(
   programme: Programme,
@@ -184,7 +190,7 @@ export function categoryCCanSatisfyElective(
   pool: RequirementPool,
 ): boolean {
   if (!isCategoryCSubject(subject)) return true;
-  if (CAT_A_ONLY_ELECTIVE_PROGRAMMES.has(programme.jupas_code)) return false;
+  if (programme.category_c_policy === "none" || programme.category_c_policy === "elective_cat_a_only") return false;
   const note = pool.note?.toLowerCase() || "";
   if (note.includes("except") && (note.includes("other language") || note.includes("category c"))) return false;
 

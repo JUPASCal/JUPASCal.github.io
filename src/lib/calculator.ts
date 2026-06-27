@@ -9,8 +9,10 @@ import type {
   RequirementPool,
   StudentGrades,
 } from "../types/jupas";
-import { categoryCBasePoints, categoryCCanSatisfyElective, isCategoryCGrade, isCategoryCSubject } from "./categoryC";
-import { canonicalSubject, SUBJECT_EXPANSIONS } from "./subjects";
+import { acceptsCategoryC, categoryCBasePoints, categoryCCanSatisfyElective, isCategoryCGrade, isCategoryCSubject } from "./categoryC";
+import { canonicalSubject, CAT_A_SUBJECTS, SUBJECT_EXPANSIONS } from "./subjects";
+
+const CAT_A_SET = new Set(CAT_A_SUBJECTS);
 
 // HKUST's max attainable base points (a 5** subject — see its score-conversion
 // table). Only used to phrase the bonus as a "% of a full-marks subject" label.
@@ -70,6 +72,9 @@ export function calculateScore(studentGrades: StudentGrades, programme: Programm
 
   for (const [subject, grade] of Object.entries(studentGrades)) {
     if (!grade || grade === "U") continue;
+    // Programmes that ignore Category C (Other Languages) entirely — the
+    // language never enters their score (e.g. HKBU JS2120 "不計日文").
+    if (isCategoryCSubject(subject) && !acceptsCategoryC(programme)) continue;
     const basePoints = isCategoryCSubject(subject)
       ? categoryCBasePoints(programme, subject, grade, catCTable) ?? 0
       : convTable[grade] ?? 0;
@@ -152,9 +157,17 @@ export function calculateScore(studentGrades: StudentGrades, programme: Programm
     }
   }
 
+  // When a programme uses the M1/M2 half-replacement rule (CUHK medicine, Note 4),
+  // M1/M2 is NOT an elective subject — it must NOT be picked as one of the "Best N"
+  // here, so it stays unused for the half-replacement step below (where it can only
+  // upgrade the worst subject by half its value).
+  const m1m2NotElective = constraints.some((constraint) => constraint.type === "m1m2_half_replacement");
+  const isExtendedMath = (subject: string) =>
+    subject.includes("Module 1") || subject.includes("Module 2") || subject === "Mathematics Extended Part (Module 1 or 2)";
   const remainingPotentials = candidates.filter((candidate) => !candidate.used).sort((a, b) => b.weightedScore - a.weightedScore);
   for (const candidate of remainingPotentials) {
     if (selectedSubjects.length >= targetCount) break;
+    if (m1m2NotElective && isExtendedMath(candidate.subject)) continue;
     const mathConstraint = constraints.find((constraint) => constraint.type === "maths_m1m2_as_one");
     if (mathConstraint && candidate.subject.includes("Mathematics") && selectedSubjects.some((subject) => subject.subject.includes("Mathematics"))) {
       continue;
@@ -376,11 +389,45 @@ export function checkEligibility(studentGrades: StudentGrades, reqs: MinRequirem
   return { eligible, details };
 }
 
+// Extra admission gate beyond the per-subject requirements, applied AFTER the
+// score is computed (so it can test the total). Data-driven via
+// `programme.extra_eligibility` — e.g. CUHK MBChB-GPS (JS4502): total ≥ 40 with
+// 5** in any 4 subjects. Returns the eligibility result, failing it (and adding a
+// detail row) when the gate isn't met.
+export function applyExtraEligibility(
+  result: EligibilityResult,
+  programme: Programme,
+  studentGrades: StudentGrades,
+  totalScore: number,
+): EligibilityResult {
+  const rule = programme.extra_eligibility;
+  if (!rule) return result;
+  const topGrade = rule.top_grade || "5**";
+  const topCount = Object.values(studentGrades).filter((g) => g === topGrade).length;
+  const scoreOk = typeof rule.min_total !== "number" || totalScore >= rule.min_total;
+  const topOk = typeof rule.min_top_grade_count !== "number" || topCount >= rule.min_top_grade_count;
+  if (scoreOk && topOk) return result;
+  const needParts: string[] = [];
+  if (typeof rule.min_total === "number") needParts.push(`≥${rule.min_total}`);
+  if (typeof rule.min_top_grade_count === "number") needParts.push(`${rule.min_top_grade_count}× ${topGrade}`);
+  return {
+    eligible: false,
+    details: [
+      ...result.details,
+      { label: "Extra requirement", pass: false, got: `${totalScore.toFixed(1)}, ${topCount}× ${topGrade}`, need: needParts.join(" + ") },
+    ],
+  };
+}
+
 // Whether a student subject (at `grade`) can fill a slot of `pool`.
 function electiveCanTake(pool: RequirementPool, subject: string, grade: string, programme: Programme) {
   let isMatch =
     pool.subjects.includes("Any") ||
     pool.subjects.includes("*") ||
+    // "CategoryA" token: any Category A elective — by definition this EXCLUDES
+    // M1/M2 (Extended Maths, not in the Cat A list) and Cat C/B subjects. Used
+    // e.g. for HKBU's first elective ("must be Category A, excluding M1/M2").
+    (pool.subjects.includes("CategoryA") && CAT_A_SET.has(canonicalSubject(subject))) ||
     includesM12Aware(pool.subjects, subject);
   if (!isMatch && pool.note?.includes("Category A") && (subject.includes("Module 1") || subject.includes("Module 2"))) {
     isMatch = true;
