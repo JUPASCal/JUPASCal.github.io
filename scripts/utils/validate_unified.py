@@ -36,7 +36,7 @@ with open(SUBJECTS_CANONICAL_FILE, encoding="utf-8") as _f:
     _REG = json.load(_f)
 _ME = _REG["math_extended"]
 CANONICAL_SUBJECTS = set(
-    _REG["core"] + _REG["category_a"] + _REG["category_c"]
+    _REG["core"] + _REG["category_a"] + _REG["category_c"] + _REG["category_b"]
     + [_ME["combined"], _ME["module_1"], _ME["module_2"]]
 )
 SUBJECT_TOKENS = set(_REG["tokens"])
@@ -245,6 +245,14 @@ def main():
                 for subj in (pool.get("subjects") or []):
                     if not (isinstance(subj, str) and (subj in CANONICAL_SUBJECTS or subj in SUBJECT_TOKENS)):
                         add("ERROR", p, "noncanonical_subject", f"best_of_weights_{yr} subject {subj!r} is not canonical (won't be weighted)")
+        # A restricted ApL list (apl_policy) is matched the same exact-equality way —
+        # every entry must be a canonical Category B subject or it silently never
+        # matches (the student's ApL won't be accepted/scored).
+        _apl = p.get("apl_policy")
+        if isinstance(_apl, list):
+            for subj in _apl:
+                if not (isinstance(subj, str) and subj in CANONICAL_SUBJECTS):
+                    add("ERROR", p, "noncanonical_apl", f"apl_policy subject {subj!r} is not canonical (ApL silently never matches)")
 
         # ── REVIEW: weight key that SHOULD be canonical but isn't ──
         # Most non-canonical weight keys are ApL subjects the calculator doesn't

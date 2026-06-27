@@ -128,12 +128,14 @@ export function calculateScore(studentGrades: StudentGrades, programme: Programm
     });
   }
 
-  // Category B (Applied Learning): at most ONE ApL subject may count toward the
-  // score — keep the highest-scoring one, exclude the rest from selection.
+  // Category B (Applied Learning): at most apl_max ApL subjects may count toward
+  // the score (default 1; HKMU/SSSDP allow 2) — keep the highest-scoring ones,
+  // exclude the rest from selection.
+  const aplMax = programme.apl_max ?? 1;
   const aplCandidates = candidates
     .filter((candidate) => isCategoryBSubject(candidate.subject))
     .sort((a, b) => b.weightedScore - a.weightedScore);
-  for (let i = 1; i < aplCandidates.length; i++) aplCandidates[i].used = true;
+  for (let i = aplMax; i < aplCandidates.length; i++) aplCandidates[i].used = true;
 
   for (const pool of bestOfPools) {
     const poolCandidates = candidates

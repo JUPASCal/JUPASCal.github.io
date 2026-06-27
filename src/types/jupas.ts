@@ -135,12 +135,20 @@ export type Programme = {
   //   "elective_cat_a_only" – Cat C can't satisfy an elective (may still score)
   //   undefined             – standard (Cat C per the institution's score policy)
   category_c_policy?: "none" | "elective_cat_a_only";
-  // Category B (Applied Learning) acceptance for an elective slot — DATA-DRIVEN
-  // (emitted by unify): "none" (ApL not accepted), "any" (any ApL ≥ Distinction),
-  // or a list of the specific ApL subjects accepted (e.g. PolyU per-programme).
-  // ApL is always SCORED through the Cat-A table when present; this gates only
-  // whether it can satisfy an elective REQUIREMENT.
+  // Category B (Applied Learning) acceptance — DATA-DRIVEN (emitted by unify):
+  //   "none"   – ApL not counted at all (e.g. HKU: supporting info only)
+  //   "any"    – any ApL subject is accepted
+  //   string[] – only the listed ApL subjects (PolyU/CUHK per-programme lists)
+  // ApL is scored through the programme's Cat-A table at the equivalent level.
   apl_policy?: "none" | "any" | string[];
+  // Max number of ApL subjects that may count toward the score (default 1;
+  // HKMU/SSSDP allow 2).
+  apl_max?: number;
+  // Minimum ApL attainment that counts (eligibility floor + whether bare
+  // "Attained" scores): "dist1" (default) needs ≥ Attained with Distinction (I)
+  // (→ DSE L3) and bare "Attained" scores 0; "attained" accepts bare "Attained"
+  // and scores it at DSE Level 2 (HKMU).
+  apl_min_level?: "dist1" | "attained";
   // Extra admission gate beyond the per-subject requirements, enforced after the
   // score is computed (e.g. CUHK MBChB-GPS JS4502: total ≥ 40 with 5** in any 4).
   extra_eligibility?: { min_total?: number; min_top_grade_count?: number; top_grade?: string };

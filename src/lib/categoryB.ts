@@ -38,13 +38,24 @@ export function canonicalCategoryBGrade(grade: string): string | undefined {
   return APL_GRADES.find((g) => g.toUpperCase() === norm);
 }
 
+// The DSE level an ApL `grade` is worth for SCORING at this programme. Dist II→4,
+// Dist I→3 universally; bare "Attained" → 2 only where the programme credits it
+// (apl_min_level === "attained", i.e. HKMU), else not credited. null = no score.
+function categoryBScoreLevel(programme: Programme, grade: string): string | null {
+  const norm = normalizeApLGrade(grade);
+  const level = APL_LEVEL_EQUIV[norm];
+  if (level) return level;
+  if (norm === "ATTAINED" && programme.apl_min_level === "attained") return "2";
+  return null;
+}
+
 // Base points for an ApL subject at `grade` for this programme: the programme's
-// Cat-A conversion value for the equivalent DSE level (Dist II → L4, Dist I → L3),
-// or 0 for "Attained" / unknown. undefined when `subject` isn't an ApL subject.
+// Cat-A conversion value for the equivalent DSE level. undefined when `subject`
+// isn't an ApL subject.
 export function categoryBBasePoints(programme: Programme, subject: string, grade: string): number | undefined {
   if (!isCategoryBSubject(subject)) return undefined;
-  const level = APL_LEVEL_EQUIV[normalizeApLGrade(grade)];
-  if (!level) return 0; // "Attained" (null) or unknown grade → not credited
+  const level = categoryBScoreLevel(programme, grade);
+  if (!level) return 0; // not credited (bare "Attained" where unaccepted / unknown)
   return programme.score_conversion_table.category_a?.[level] ?? 0;
 }
 
@@ -67,10 +78,11 @@ export function categoryBAccepted(programme: Programme, subject: string): boolea
 // Whether an ApL subject (at `grade`) may FILL an elective slot. Data-driven via
 // `programme.apl_policy`:
 //   undefined / "none" → ApL can't satisfy an elective here
-//   "any"              → any ApL subject may (at ≥ Distinction)
-//   string[]           → only the listed ApL subjects may (e.g. PolyU per-programme)
-// ApL needs ≥ "Attained with Distinction (I)" (DSE Level 3) to count — bare
-// "Attained" never satisfies an elective requirement.
+//   "any"              → any ApL subject may
+//   string[]           → only the listed ApL subjects may (PolyU/CUHK per-programme)
+// The attainment floor follows apl_min_level: "dist1" (default) needs ≥ Attained
+// with Distinction (I) (DSE L3); "attained" (HKMU) also accepts bare "Attained"
+// (worth L2). The ApL's equivalent DSE level must then meet the pool's grade.
 export function categoryBCanSatisfyElective(
   programme: Programme,
   subject: string,
@@ -81,9 +93,8 @@ export function categoryBCanSatisfyElective(
   const policy = programme.apl_policy;
   if (!policy || policy === "none") return false;
   if (Array.isArray(policy) && !policy.includes(subject)) return false;
-  const level = APL_LEVEL_EQUIV[normalizeApLGrade(grade)];
-  if (level !== "3" && level !== "4") return false; // bare Attained / unknown → not enough
-  // The ApL's equivalent DSE level must meet the pool's required grade.
+  const level = categoryBScoreLevel(programme, grade);
+  if (!level) return false; // below the programme's floor / unknown grade
   const need = Number(pool.grade);
   return Number.isNaN(need) || Number(level) >= need;
 }
