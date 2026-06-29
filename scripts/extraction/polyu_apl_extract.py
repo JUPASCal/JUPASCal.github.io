@@ -57,9 +57,13 @@ def parse_pdf(path):
 
 
 def main():
+    # Prefer the 2025/26 SW PDF (the year we score on); fall back to the 2026/27 PDF
+    # for programmes new in 2026 that have no 2025 PDF (e.g. JS3160).
+    files25 = {os.path.basename(f).split("_")[1]: f for f in glob.glob(PDF_GLOB)}
+    files26 = {os.path.basename(f).split("_")[1]: f for f in glob.glob("Reference(2026)/PolyU/2026_JS*_SW.pdf")}
     out = {}
-    for path in sorted(glob.glob(PDF_GLOB)):
-        code = os.path.basename(path).split("_")[1]
+    for code in sorted(set(files25) | set(files26)):
+        path = files25.get(code) or files26.get(code)
         apl = parse_pdf(path)
         if apl:
             # normalise integer-valued weights to ints for a clean artifact

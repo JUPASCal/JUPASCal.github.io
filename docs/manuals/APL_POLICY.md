@@ -9,6 +9,11 @@ carries / was accessed.
 - **Researched:** 2026-06-29 (web, official sources).
 - **Re-verify annually** — institutions re-publish these PDFs each cycle; the URL
   patterns below are stable, the dates are not.
+- **Consistency gate:** `npm run audit:apl` (`scripts/apl_audit.mjs`) checks the whole
+  model after every data regen — coverage, per-institution invariants (this doc's
+  table), conversion tables, restricted-list canonical-ness, PolyU weight injection,
+  EdUHK ×1.5, HKUST bonus-only, SSSDP per-offering, plus a live calculator +
+  eligibility sweep over all programmes. Keep it green.
 - **Conversion convention:** ApL results map to DSE-level equivalents — *Attained
   with Distinction (II)* → **Level 4**, *Attained with Distinction (I)* (or pre-2018
   *"Attained with Distinction"*) → **Level 3**, bare *"Attained"* → varies (often not
@@ -170,10 +175,11 @@ policy: **225 `none`, 142 `any`, 55 restricted** (42 CUHK + 13 PolyU).
 3. **SSSDP** ✅ — min-level per offering institution: HKMU max 2 / Attained; HKSYU
    (Shue Yan) Dist (I); all others (SFU/THEi/HSUHK/TWC/UOWCHK/HKCHC) Attained = L2.
 4. **PolyU** ✅ — per-programme ApL acceptance + weight from each programme's SW PDF
-   (`scripts/extraction/polyu_apl_extract.py` → `Reference(2026)/PolyU/polyu_apl_weights.json`).
-   Only **13 of 45** programmes have a Category B section → those recognise ApL (with
-   the per-subject 5/7/10 weight injected, e.g. JS3050 Fashion Image Design = 7,
-   JS3569 design ApL = 10); the other 32 → `none`.
+   (`scripts/extraction/polyu_apl_extract.py` → `Reference(2026)/PolyU/polyu_apl_weights.json`;
+   prefers the 2025 PDF, falls back to the 2026 PDF for new programmes e.g. JS3160).
+   **14** programmes have a Category B section → those recognise ApL (with the
+   per-subject 5/7/10 weight injected, e.g. JS3050 Fashion Image Design = 7,
+   JS3569 design ApL = 10); the rest → `none`.
 5. **HKBU** ✅ — per-programme scraped from each programme's Requirements tab
    (`scripts/extraction/hkbu_apl_extract.py` → `Reference(2026)/HKBU/hkbu_apl.json`):
    13 `any` / 3 `none` (JS2410/JS2420/JS2610) / 6 specified lists (now enumerated:

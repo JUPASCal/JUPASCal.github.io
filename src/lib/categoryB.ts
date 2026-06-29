@@ -62,11 +62,6 @@ export function categoryBBasePoints(programme: Programme, subject: string, grade
   return programme.score_conversion_table.category_a?.[level] ?? 0;
 }
 
-// True unless the programme ignores ApL entirely (apl_policy === "none").
-export function acceptsCategoryB(programme: Programme): boolean {
-  return programme.apl_policy !== "none";
-}
-
 // Whether THIS ApL subject is considered by the programme (so it's scored and may
 // count toward the best-N). "any" → all ApL; a list → only the listed subjects;
 // undefined / "none" → none.
