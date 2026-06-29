@@ -91,14 +91,15 @@ Score: Dist (I)=3 / Dist (II)=4; bare Attained not counted. No extra weighting.
 - https://www.cityu.edu.hk/admo/admissions/jupas-admission
 - **Our model (beta.12):** `apl_policy="any"` for the 9 listed programmes only; the other 49 → `none`. ✅
 
-### HKBU — 2nd elective only, per-programme acceptance
+### HKBU — 2nd elective only, per-programme (scraped from each programme page)
 ApL (Dist (I)+) may fulfil the **second elective** only (the **first elective must
 be Category A**, excluding M1/M2). Acceptance is **per programme**: some accept
 Category B ✓, some only "specified subjects" (e.g. JS2620 → PE-related), some **✕
 do not accept** (e.g. JS2610, Chinese Medicine JS2410/JS2420). Dist II=4 / Dist I=3;
 bare Attained not credited. Normal weight (×1).
-- https://admissions.hkbu.edu.hk/content/ao/en/what-is-new/news/general-entrance-requirements-for-the-2026-Entry.html — "General Entrance Requirements … JUPAS Admissions (2026 Entry)", Sep 2025.
-- **Our model (beta.12):** per-programme from the GER PDF — JS2410/JS2420/JS2610 → `none`; the other 19 → `any` (2nd-elective via the CategoryA gate). The 6 "specified subjects" programmes couldn't be enumerated (PDF says only "specified"/"PE-related") → fall back to `any`. ✅ (specified-subject restriction is the residual gap)
+- https://admissions.hkbu.edu.hk/programmes.html — each programme's **Requirements tab** carries the actual Category B treatment (3 formats: a specified-subjects PDF e.g. JS2020; an on-page list e.g. JS2025; or "accepts all ApL"). Scraped by `scripts/extraction/hkbu_apl_extract.py` → `Reference(2026)/HKBU/hkbu_apl.json` (source PDFs cached under `Reference(2026)/HKBU/apl_sources/`).
+- https://admissions.hkbu.edu.hk/content/ao/en/what-is-new/news/general-entrance-requirements-for-the-2026-Entry.html — GER summary (Sep 2025).
+- **Our model (beta.14):** per-programme from the programme pages — **13 any / 3 none (JS2410/JS2420/JS2610) / 6 specified lists** (JS2020, JS2025, JS2310, JS2330, JS2370, JS2620). The programme pages corrected the GER PDF on two: **JS2340** is actually `any` (not specified) and **JS2370** is a specified list (not `any`). ✅
 
 ### LingnanU — per-programme recognition (reverse-engineered from the calculator)
 ApL "may be recognised as electives, given bonus scores, or taken as tie-breakers
@@ -173,11 +174,11 @@ policy: **225 `none`, 142 `any`, 55 restricted** (42 CUHK + 13 PolyU).
    Only **13 of 45** programmes have a Category B section → those recognise ApL (with
    the per-subject 5/7/10 weight injected, e.g. JS3050 Fashion Image Design = 7,
    JS3569 design ApL = 10); the other 32 → `none`.
-5. **HKBU** ✅ — per-programme from the GER PDF (`scripts/extraction/hkbu_apl_extract.py`
-   → `Reference(2026)/HKBU/hkbu_apl.json`): JS2410/JS2420/JS2610 → `none`; the rest
-   `any` (2nd-elective via the CategoryA gate). The 6 "specified subjects" programmes
-   couldn't be enumerated from the PDF (it only says "specified" / "PE-related"), so
-   they fall back to `any` — slightly permissive, flagged.
+5. **HKBU** ✅ — per-programme scraped from each programme's Requirements tab
+   (`scripts/extraction/hkbu_apl_extract.py` → `Reference(2026)/HKBU/hkbu_apl.json`):
+   13 `any` / 3 `none` (JS2410/JS2420/JS2610) / 6 specified lists (now enumerated:
+   JS2020, JS2025, JS2310, JS2330, JS2370, JS2620). The programme pages corrected the
+   GER PDF on JS2340 (→ any) and JS2370 (→ list). beta.12 had the 6 as `any` fallback.
 6. **LingnanU** ✅ — initially set to `none` (beta.12), then **reverse-engineered from
    LingU's JUPAS calculator (beta.13)**: per-programme recognition (17/23 recognise,
    9 "any" + 8 restricted, 6 none), Attained ≡ L3 (`l3` mode), ×1.0, max 1

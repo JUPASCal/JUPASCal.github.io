@@ -1134,17 +1134,39 @@ _APL_SURFACE.update({a: c for a, c in SUBJECT_ALIASES.items() if c in _CAT_B_SET
 _APL_SURFACE_LC = {k.lower(): v for k, v in _APL_SURFACE.items()}
 
 
-def canon_apl(name):
-    """Canonical ApL subject for a raw course name, or None if not a known ApL."""
-    if not name:
-        return None
-    s = str(name).strip()
+def _apl_lookup(s):
+    s = s.strip()
     if s in _APL_SURFACE:
         return _APL_SURFACE[s]
     if s.lower() in _APL_SURFACE_LC:
         return _APL_SURFACE_LC[s.lower()]
     c = _ALIAS_LC.get(s.lower())
     return c if c in _CAT_B_SET else None
+
+
+def canon_apl(name):
+    """Canonical ApL subject for a raw course name, or None if not a known ApL.
+    Tolerates institutional formatting: a "(former name: …)" annotation, and "/"
+    separating alternative spellings of the same course (e.g. "Film and Video
+    Studies / Film and Video")."""
+    if not name:
+        return None
+    s = str(name).strip()
+    hit = _apl_lookup(s)
+    if hit:
+        return hit
+    stripped = re.sub(r"\s*\(former name[:\s\"].*?\)\s*$", "", s, flags=re.I).strip()
+    if stripped != s:
+        hit = _apl_lookup(stripped)
+        if hit:
+            return hit
+        s = stripped
+    if "/" in s:
+        for part in s.split("/"):
+            hit = _apl_lookup(part)
+            if hit:
+                return hit
+    return None
 
 
 def _dedupe_canon_apl(names):
