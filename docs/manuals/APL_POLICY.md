@@ -23,8 +23,8 @@ carries / was accessed.
 | Institution | Counts ApL? | Accepted ApL | Max | Min result | Conversion (II / I / Attained) | Extra weighting | Mechanism |
 |---|---|---|---|---|---|---|---|
 | **HKU** | ❌ No | — | — | — | not counted | — | "additional supporting information" only |
-| **CUHK** | ✅ bonus | **Restricted**, 45 progs (3 accept all); per-programme list | n/a (shares 7th-subject bonus) | Dist (I) | not published numerically | none | extra elective for **bonus points** (up to 7th subject) |
-| **HKUST** | ✅ bonus | **Any**, but only for "Cat A,B&C" programmes (Science, HSS, some joint) | 1 | Dist (I) | 4 / 3 / 0 | none | **6th-subject bonus** (≤5%), never in Best-5 |
+| **CUHK** | ✅ elective | **Restricted**, 45 progs (3 accept all); per-programme list | 1 | Attained | 4 / 3 / **2** | none (×1) | standard extra elective |
+| **HKUST** | ✅ bonus | **11 progs** (JS5101/5102/5103/5118/5181/5411/5412/5711/5811/5812/5813) | 1 (bonus) | Dist (I) | 4 / 3 / not counted | none | **6th-subject bonus** (≤5%), never in Best-5 |
 | **PolyU** | ✅ Best-5 | **Per-programme list** with per-subject weight (published) | 1 | Dist (I) | L4 / L3 / 0 | via weight (5/7/10), not a multiplier | one relevant ApL, weighted like a Cat-A elective |
 | **CityU** | ✅ elective | **Restricted to 9 programmes** (JS1040–1044, JS1300, JS1805–1807) | 1 | Dist (I) | 4 / 3 / not counted | none | one elective, listed programmes only |
 | **HKBU** | ✅ elective | **Per-programme** (some ✓, some "specified subjects", some ✕); **2nd elective only** | 1 | Dist (I) | 4 / 3 / not counted | none | 2nd elective only; 1st must be Cat A |
@@ -56,7 +56,7 @@ published** by CUHK (its own calculator excludes Category B) — flag.
 - https://admission.cuhk.edu.hk/wp-content/uploads/2025/05/Useful-Information-for-JUPAS-Applicants-2026.pdf — "Useful Information for JUPAS Applicants (2026 Entry)", v20260512.
 - https://admission.cuhk.edu.hk/application/jupas/faq/ — JUPAS FAQ Q09.
 - Extracted to `Reference(2026)/CUHK/cuhk_apl.json` via `scripts/extraction/cuhk_apl_extract.py`.
-- **Our model:** restricted lists (42) + 3 "any"; scored via Cat-A table at L4/L3, max 1, dist1. ✅ lists correct; ⚠️ we score ApL as a normal Best-N elective rather than CUHK's "bonus point up to 7th subject" mechanism (CUHK doesn't publish the value, so this is an approximation).
+- **Our model (beta.14):** restricted lists (42) + 3 "any"; scored as a standard elective (no weighting, ×1) via the Cat-A table — **Attained = L2, Dist I = L3, Dist II = L4** (`apl_min_level: "attained"`), max 1. (CUHK publishes no point value; this conversion is per project direction.) ✅
 
 ### HKUST — 6th-subject bonus, specific programme categories only
 ApL is **NOT** an eligibility elective (HKUST electives = Category A only). Where
@@ -67,7 +67,7 @@ interdisciplinary). Min Dist (I); Dist II=4 / Dist I=3 / Attained=0.
 - https://join.hkust.edu.hk/docs/ADMISSIONS%20REQUIREMENTS%20AND%20SCORE%20FORMULAE.pdf — "Admissions Requirements and Score Formulae" (built 2025-09-24, 2026 entry).
 - https://join.hkust.edu.hk/docs/CONVERSION%20OF%20HKDSE%20LEVELS%20GRADES%20TO%20SCORES.pdf — conversion table (2025 scale).
 - https://join.hkust.edu.hk/admissions/jupas
-- **Our model (beta.12):** `apl_policy="none"` for all 33 HKUST — ApL not counted (it's never a Best-5 elective). The ≤5% 6th-subject bonus for Cat-A-B-C programmes is the only un-modelled effect (we lack HKUST's exact bonus formula). ✅
+- **Our model (beta.14):** ApL is a **6th-subject bonus** (`apl_bonus_only`) for the 11 programmes JS5101/5102/5103/5118/5181/5411/5412/5711/5811/5812/5813 — excluded from the Best-5 and from eligibility, fed only into the existing `hkust_weighted_best` bonus (D2 → +2.35% of total, D1 → +1.76%; Attained not counted). The other 22 → `none`. ✅
 
 ### PolyU — per-programme weighted list (your fashion hunch was right)
 ApL counts in the competitive score (PolyU = "Any Best 5 with subject weighting").

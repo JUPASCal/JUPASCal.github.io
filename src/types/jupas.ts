@@ -151,6 +151,10 @@ export type Programme = {
   //   "l3"                 – bare "Attained" accepted, scores DSE Level 3 (LingnanU:
   //                          its calculator scores both Attained and Dist (I) as L3)
   apl_min_level?: "dist1" | "attained" | "l3";
+  // HKUST: ApL is accepted ONLY as a 6th-subject bonus, never a Best-5 elective and
+  // never an eligibility elective. When set, ApL is excluded from the main Best-N
+  // and from elective-requirement matching, but still feeds the 6th-subject bonus.
+  apl_bonus_only?: boolean;
   // Extra admission gate beyond the per-subject requirements, enforced after the
   // score is computed (e.g. CUHK MBChB-GPS JS4502: total ≥ 40 with 5** in any 4).
   extra_eligibility?: { min_total?: number; min_top_grade_count?: number; top_grade?: string };

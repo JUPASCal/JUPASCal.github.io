@@ -93,6 +93,7 @@ export function categoryBCanSatisfyElective(
   pool: RequirementPool,
 ): boolean {
   if (!isCategoryBSubject(subject)) return true; // not an ApL subject — not our concern
+  if (programme.apl_bonus_only) return false; // HKUST: ApL is a score bonus, not an elective
   const policy = programme.apl_policy;
   if (!policy || policy === "none") return false;
   if (Array.isArray(policy) && !policy.includes(subject)) return false;

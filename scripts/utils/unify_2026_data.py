@@ -1163,6 +1163,11 @@ def _dedupe_canon_apl(names):
 CITYU_APL_PROGS = {"JS1040", "JS1041", "JS1042", "JS1043", "JS1044",
                    "JS1300", "JS1805", "JS1806", "JS1807"}
 
+# HKUST counts a Category B subject ONLY as the 6th-subject bonus (≤5%), and only
+# for these 11 programmes (per HKUST's score formulae).
+HKUST_APL_BONUS_PROGS = {"JS5101", "JS5102", "JS5103", "JS5118", "JS5181", "JS5411",
+                         "JS5412", "JS5711", "JS5812", "JS5811", "JS5813"}
+
 
 def _load_apl_ref(path, label):
     try:
@@ -1199,9 +1204,14 @@ def apply_apl_policy(programmes):
             policy = "none"  # ApL is "additional supporting information" only
 
         elif inst == "HKUST":
-            # ApL is a capped 6th-subject BONUS (≤5%, only Cat-A-B-C programmes), never
-            # a Best-5 elective; we don't model that small bonus → don't count ApL.
-            policy = "none"
+            # ApL is accepted ONLY as the 6th-subject BONUS (≤5%, Dist I=3 / Dist II=4,
+            # Attained not counted), and only for these 11 programmes — never a Best-5 or
+            # eligibility elective. The hkust_weighted_best constraint applies the bonus.
+            if code in HKUST_APL_BONUS_PROGS:
+                policy, max_n, min_lvl = "any", 1, "dist1"
+                p["apl_bonus_only"] = True
+            else:
+                policy = "none"
 
         elif inst == "LingnanU":
             # Per-programme recognised ApL from LingU's calculator; Attained ≡ L3.
@@ -1226,7 +1236,8 @@ def apply_apl_policy(programmes):
                 else:
                     subs = _dedupe_canon_apl(raw)
                     policy = subs if subs else "none"
-                max_n, min_lvl = 1, "dist1"
+                # CUHK: standard elective, no weighting; Attained=2, Dist I=3, Dist II=4.
+                max_n, min_lvl = 1, "attained"
 
         elif inst == "PolyU":
             entry = polyu_apl.get(code)

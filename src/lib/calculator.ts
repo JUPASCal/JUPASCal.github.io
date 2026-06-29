@@ -210,6 +210,9 @@ export function calculateScore(studentGrades: StudentGrades, programme: Programm
   for (const candidate of remainingPotentials) {
     if (selectedSubjects.length >= targetCount) break;
     if (m1m2NotElective && isExtendedMath(candidate.subject)) continue;
+    // HKUST: ApL never enters the Best-N — it stays unused so it can only feed the
+    // 6th-subject bonus below (hkust_weighted_best).
+    if (programme.apl_bonus_only && isCategoryBSubject(candidate.subject)) continue;
     const mathConstraint = constraints.find((constraint) => constraint.type === "maths_m1m2_as_one");
     if (mathConstraint && candidate.subject.includes("Mathematics") && selectedSubjects.some((subject) => subject.subject.includes("Mathematics"))) {
       continue;
