@@ -45,7 +45,10 @@ function categoryBScoreLevel(programme: Programme, grade: string): string | null
   const norm = normalizeApLGrade(grade);
   const level = APL_LEVEL_EQUIV[norm];
   if (level) return level;
-  if (norm === "ATTAINED" && programme.apl_min_level === "attained") return "2";
+  if (norm === "ATTAINED") {
+    if (programme.apl_min_level === "attained") return "2"; // HKMU
+    if (programme.apl_min_level === "l3") return "3"; // LingnanU (Attained ≡ L3)
+  }
   return null;
 }
 

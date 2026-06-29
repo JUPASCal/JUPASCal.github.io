@@ -28,7 +28,7 @@ carries / was accessed.
 | **PolyU** | ✅ Best-5 | **Per-programme list** with per-subject weight (published) | 1 | Dist (I) | L4 / L3 / 0 | via weight (5/7/10), not a multiplier | one relevant ApL, weighted like a Cat-A elective |
 | **CityU** | ✅ elective | **Restricted to 9 programmes** (JS1040–1044, JS1300, JS1805–1807) | 1 | Dist (I) | 4 / 3 / not counted | none | one elective, listed programmes only |
 | **HKBU** | ✅ elective | **Per-programme** (some ✓, some "specified subjects", some ✕); **2nd elective only** | 1 | Dist (I) | 4 / 3 / not counted | none | 2nd elective only; 1st must be Cat A |
-| **LingnanU** | ⚠️ discretionary | per programme, **not published / unquantified** | n/a | not published | **no published conversion** | none | "may be elective / bonus / tie-breaker" — programme discretion |
+| **LingnanU** | ✅ Best-5 | **per-programme** (17/23 recognise; calculator-derived) | 1 | Attained | L4 / L3 / **L3** | none (×1.0) | per-programme × per-subject recognition (from its calculator) |
 | **EdUHK** | ✅ Best-5 | **Any** at Distinction | 1 (HD: 2) | Dist (I) | 4 / 3 / 0 | **×1.5** on specified ApL for 13 progs | one elective; some progs boost specific ApL |
 | **HKMU** | ✅ Best-5 | **Any** | 2 | **Attained** | 4 / 3 / **2** | none (equal weight) | Best-5 across Cat A/B/C |
 | **SSSDP** | ✅ varies | per **offering institution** (see below) | 1–2 | Attained (HKSYU: Dist I) | mostly 4 / 3 / **2** | none | follows the offering institution |
@@ -100,13 +100,24 @@ bare Attained not credited. Normal weight (×1).
 - https://admissions.hkbu.edu.hk/content/ao/en/what-is-new/news/general-entrance-requirements-for-the-2026-Entry.html — "General Entrance Requirements … JUPAS Admissions (2026 Entry)", Sep 2025.
 - **Our model (beta.12):** per-programme from the GER PDF — JS2410/JS2420/JS2610 → `none`; the other 19 → `any` (2nd-elective via the CategoryA gate). The 6 "specified subjects" programmes couldn't be enumerated (PDF says only "specified"/"PE-related") → fall back to `any`. ✅ (specified-subject restriction is the residual gap)
 
-### LingnanU — discretionary, unquantified
-ApL "**may be recognised as electives, given bonus scores, or taken as tie-breakers
-by individual programmes**" — programme discretion. LingU publishes **no ApL
-conversion table, no ApL weighting, and its score calculator has no ApL input**.
-- https://www.ln.edu.hk/admissions/ug/f/upload/511/2837/Admission%20Requirements_JUPAS%20(UG%20Website).pdf — "JUPAS ADMISSIONS (2026 Entry)", © 2025, Note 2.
-- https://banner.ln.edu.hk/PROD/jp_score_calculator.p_main — calculator (no ApL selector).
-- **Our model (beta.12):** `apl_policy="none"` for all 23 LingU — no invented conversion. ✅ (revisit if LingU publishes one)
+### LingnanU — per-programme recognition (reverse-engineered from the calculator)
+ApL "may be recognised as electives, given bonus scores, or taken as tie-breakers
+by individual programmes" — programme discretion, with no list/conversion in the
+PDF. But LingU's **JUPAS score calculator DOES score Cat B**, and encodes the rule:
+- Recognition is **per-programme × per-subject** — an ApL only counts for a
+  programme that recognises that specific course. **17 of 23** programmes recognise
+  ≥1 ApL (9 recognise ~all → "any"; 8 a discipline subset, e.g. JS7133 design → 9
+  ApL; JS7225 → AI & Robotics + Computer Forensic Technology); 6 recognise none.
+- **At most 1** ApL counts (verbatim calculator rule: "If Category B and C subjects
+  are taken, at most 1 subject from each category will be counted").
+- **Conversion**: Dist II ≡ L4; Dist I ≡ L3; **bare "Attained" ≡ L3** too (calculator
+  scores Attained and Dist I identically) → modelled as `apl_min_level: "l3"`.
+- **Weight ×1.0** uniformly (even JS7123, whose Cat-A electives are ×1.25).
+- https://banner.ln.edu.hk/PROD/jp_score_calculator.p_main — the calculator; subjects
+  via `p_get_elec_subj`, grades via `p_get_elec_grade`. Extracted by
+  `scripts/extraction/lingu_apl_scrape.py` → `Reference(2026)/LingU/lingu_apl.json`.
+- https://www.ln.edu.hk/admissions/ug/f/upload/511/2837/Admission%20Requirements_JUPAS%20(UG%20Website).pdf — "JUPAS ADMISSIONS (2026 Entry)", Note 2.
+- **Our model (beta.13):** per-programme recognised-ApL list (or "any"); 6 progs → none; Attained ≡ L3. ✅
 
 ### EdUHK — any ApL; ×1.5 on specified courses (13 programmes)
 Any ApL at Distinction recognised as one elective (Bachelor's max 1, **Higher
@@ -167,8 +178,10 @@ policy: **225 `none`, 142 `any`, 55 restricted** (42 CUHK + 13 PolyU).
    `any` (2nd-elective via the CategoryA gate). The 6 "specified subjects" programmes
    couldn't be enumerated from the PDF (it only says "specified" / "PE-related"), so
    they fall back to `any` — slightly permissive, flagged.
-6. **LingnanU** ✅ — all 23 → `none` (LingU publishes no ApL conversion; avoids
-   inventing a score). Revisit if LingU later publishes one.
+6. **LingnanU** ✅ — initially set to `none` (beta.12), then **reverse-engineered from
+   LingU's JUPAS calculator (beta.13)**: per-programme recognition (17/23 recognise,
+   9 "any" + 8 restricted, 6 none), Attained ≡ L3 (`l3` mode), ×1.0, max 1
+   (`scripts/extraction/lingu_apl_scrape.py` → `Reference(2026)/LingU/lingu_apl.json`).
 7. **CUHK** — scoring approximated via the Cat-A table at the equivalent level; CUHK's
    actual "bonus point up to 7th subject" value is unpublished, so this is an
    approximation (acceptance lists are exact).

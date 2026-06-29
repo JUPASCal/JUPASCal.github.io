@@ -1184,6 +1184,10 @@ def apply_apl_policy(programmes):
     polyu_apl = _load_apl_ref("Reference(2026)/PolyU/polyu_apl_weights.json", "PolyU ApL kept generic")
     # HKBU per-programme Category-B acceptance (any / none / specified), from its GER PDF.
     hkbu_apl = _load_apl_ref("Reference(2026)/HKBU/hkbu_apl.json", "HKBU ApL kept generic")
+    # LingnanU per-programme recognised-ApL lists, reverse-engineered from LingU's
+    # JUPAS calculator (recognition is per-programme × per-subject; "_meta" holds the
+    # derived conversion — Attained ≡ L3 — and the ×1.0 weight / max-1 rule).
+    lingu_apl = _load_apl_ref("Reference(2026)/LingU/lingu_apl.json", "LingnanU ApL kept none")
 
     counts = {"any": 0, "none": 0, "restricted": 0}
     for p in programmes:
@@ -1200,7 +1204,13 @@ def apply_apl_policy(programmes):
             policy = "none"
 
         elif inst == "LingnanU":
-            policy = "none"  # LingU publishes no ApL conversion/weighting (discretionary)
+            # Per-programme recognised ApL from LingU's calculator; Attained ≡ L3.
+            # A programme recognising ~all of the 55 probeable ApL → "any".
+            subs = _dedupe_canon_apl(lingu_apl.get(code) or [])
+            if not subs:
+                policy, max_n, min_lvl = "none", 1, "dist1"
+            else:
+                policy, max_n, min_lvl = ("any" if len(subs) >= 54 else subs), 1, "l3"
 
         elif inst == "CityUHK":
             policy, max_n, min_lvl = ("any", 1, "dist1") if code in CITYU_APL_PROGS else ("none", 1, "dist1")
