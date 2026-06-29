@@ -1,0 +1,113 @@
+{
+  "JS8001": {
+    "name": "BA in Creative and Digital Arts and BEd (Music)",
+    "apl_weighted_1_5": [
+      "Popular Music Production"
+    ]
+  },
+  "JS8002": {
+    "name": "BA in Creative and Digital Arts and BEd (Visual Arts)",
+    "apl_weighted_1_5": [
+      "Interior Design",
+      "Interior and Exhibition Design"
+    ]
+  },
+  "JS8006": {
+    "name": "BSocSc in Psychology and BEd (Early Childhood Education)",
+    "apl_weighted_1_5": [
+      "Child Care and Development",
+      "Child Care and Education"
+    ]
+  },
+  "JS8007": {
+    "name": "BA in Personal Finance and BEd (Business, Accounting and Financial Studies) One of the best subjects among Category A & B:",
+    "apl_weighted_1_5": [
+      "Accounting for e-Business",
+      "AI in Business"
+    ]
+  },
+  "JS8008": {
+    "name": "BSc in Artificial Intelligence and Educational Technology and BEd (Information and",
+    "apl_weighted_1_5": [
+      "Computer Game and Animation Design",
+      "AI and Robotics",
+      "Computer Forensic Technology",
+      "Tech Basics"
+    ]
+  },
+  "JS8009": {
+    "name": "BSc in Artificial Intelligence and Educational Technology and BEd (Primary Mathematics)",
+    "apl_weighted_1_5": [
+      "AI and Robotics"
+    ]
+  },
+  "JS8013": {
+    "name": "BSocSc in Sociology and Community Studies and BEd (Primary Humanities) One of the best subjects among Category A & B:",
+    "apl_weighted_1_5": [
+      "Innovation and Entrepreneurship",
+      "Child Care and Development",
+      "Child Care and Education"
+    ]
+  },
+  "JS8685": {
+    "name": "BA in Creative and Digital Arts (Music)",
+    "apl_weighted_1_5": [
+      "Popular Music Production"
+    ]
+  },
+  "JS8686": {
+    "name": "BA in Creative and Digital Arts (Visual Arts)",
+    "apl_weighted_1_5": [
+      "Interior Design",
+      "Interior and Exhibition Design"
+    ]
+  },
+  "JS8507": {
+    "name": "HD in Early Childhood Education",
+    "apl_weighted_1_5": [
+      "Child Care and Development",
+      "Child Care and Education"
+    ]
+  },
+  "JS8687": {
+    "name": "BA in Heritage Education and Arts Management",
+    "apl_weighted_1_5": [
+      "Popular Music Production",
+      "Taking a Chance on Dance",
+      "The Essentials of Theatre Arts",
+      "Digital Brand Communication",
+      "Digital Media and Radio Production",
+      "Film and Transmedia"
+    ]
+  },
+  "JS8714": {
+    "name": "BSc in Artificial Intelligence and Educational Technology",
+    "apl_weighted_1_5": [
+      "Computer Game and Animation Design",
+      "Digital Comic Design and Production",
+      "AI in Business",
+      "Data Application for Business",
+      "Introduction to Fintech",
+      "AI and Robotics",
+      "Computer Forensic Technology",
+      "Digital Construction",
+      "eSports Technology",
+      "Tech Basics"
+    ]
+  },
+  "JS8726": {
+    "name": "BSc in Sports Science and Coaching",
+    "apl_weighted_1_5": [
+      "Applied Psychology",
+      "Exercise and Fitness Coaching",
+      "Exercise Science and Health Fitness",
+      "Food Technology and Nutrition",
+      "Medical Laboratory Science",
+      "Practical Psychology",
+      "Rehabilitation Care Practice",
+      "AI and Robotics",
+      "eSports Technology",
+      "eSports Technology and Management"
+    ]
+  }
+}

@@ -1202,6 +1202,14 @@ def apply_apl_policy(programmes):
     except FileNotFoundError:
         cuhk_apl = {}
         print("  note: Reference(2026)/CUHK/cuhk_apl.json absent — CUHK ApL from notes only")
+    # EdUHK per-programme ApL courses weighted ×1.5 in the Best-5 (from EdUHK's ApL
+    # Recognition PDF; its GER PDF only carries a "Specified ApL subject(s)" stub).
+    try:
+        with open("Reference(2026)/EdUHK/eduhk_apl_weights.json", encoding="utf-8") as _f:
+            eduhk_apl_w = json.load(_f)
+    except FileNotFoundError:
+        eduhk_apl_w = {}
+        print("  note: Reference(2026)/EdUHK/eduhk_apl_weights.json absent — EdUHK ApL ×1.5 not applied")
 
     counts = {"any": 0, "none": 0, "restricted": 0}
     for p in programmes:
@@ -1249,6 +1257,9 @@ def apply_apl_policy(programmes):
                     subs = _greedy_apl(m.group(1))
                     if subs:
                         policy = subs
+            # EdUHK Higher Diploma programmes count up to 2 ApL (Bachelor's: 1).
+            elif inst == "EdUHK" and "Higher Diploma" in (p.get("name_en") or ""):
+                max_n = 2
         else:
             continue  # institution not modelled for ApL
 
@@ -1264,6 +1275,34 @@ def apply_apl_policy(programmes):
         counts["restricted" if isinstance(policy, list) else "any"] += 1
 
     print(f"ApL (Cat B) policy: any={counts['any']} restricted={counts['restricted']} none={counts['none']}")
+
+    # EdUHK ×1.5 ApL weighting: replace the scraped "Specified ApL subject(s)"
+    # placeholder weight key (which silently never matches) with the actual
+    # canonical ApL subjects at ×1.5, in both the 2025 and 2026 weight maps.
+    _ew_n = 0
+    by_code = {p.get("jupas_code"): p for p in programmes}
+    for code, entry in eduhk_apl_w.items():
+        p = by_code.get(code)
+        if not p:
+            continue
+        subs = []
+        for nm in entry.get("apl_weighted_1_5", []):
+            c = canon_apl(nm)
+            if c and c not in subs:
+                subs.append(c)
+        if not subs:
+            continue
+        for yr in ("2025", "2026"):
+            w = p.get(f"subject_weights_{yr}")
+            if not isinstance(w, dict):
+                continue
+            for k in [k for k in w if "Specified ApL" in k]:
+                del w[k]
+            for s in subs:
+                w[s] = 1.5
+        _ew_n += 1
+    if _ew_n:
+        print(f"EdUHK ApL ×1.5 weighting applied to {_ew_n} programme(s)")
 
 
 def apply_baselines(obj):
