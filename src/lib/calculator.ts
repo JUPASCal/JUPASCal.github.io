@@ -10,7 +10,7 @@ import type {
   StudentGrades,
 } from "../types/jupas";
 import { acceptsCategoryC, categoryCBasePoints, categoryCCanSatisfyElective, isCategoryCGrade, isCategoryCSubject } from "./categoryC";
-import { categoryBAccepted, categoryBBasePoints, categoryBCanSatisfyElective, isCategoryBSubject } from "./categoryB";
+import { categoryBAccepted, categoryBAdvisory, categoryBBasePoints, categoryBCanSatisfyElective, isCategoryBSubject } from "./categoryB";
 import { canonicalSubject, CAT_A_SUBJECTS, SUBJECT_EXPANSIONS } from "./subjects";
 
 const CAT_A_SET = new Set(CAT_A_SUBJECTS);
@@ -296,12 +296,21 @@ export function calculateScore(studentGrades: StudentGrades, programme: Programm
     }
   }
 
+  // ApL the student holds that this programme recognises but doesn't quantify
+  // (CUHK advisory-only) — surfaced to the candidate as an advantage, never scored.
+  const recognizedApL = programme.apl_advisory_only
+    ? Object.entries(studentGrades)
+        .filter(([subject, grade]) => grade && grade !== "U" && categoryBAdvisory(programme, subject))
+        .map(([subject]) => subject)
+    : [];
+
   return {
     totalScore: Number(totalScore.toFixed(3)),
     formula: programme[`formula_${year}`],
     selected: selectedSubjects,
     allCandidates: candidates,
     score_type: programme.scores_2025?.score_type || "actual",
+    ...(recognizedApL.length ? { recognizedApL } : {}),
   };
 }
 

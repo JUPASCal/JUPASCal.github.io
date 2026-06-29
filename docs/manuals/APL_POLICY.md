@@ -28,7 +28,7 @@ carries / was accessed.
 | Institution | Counts ApL? | Accepted ApL | Max | Min result | Conversion (II / I / Attained) | Extra weighting | Mechanism |
 |---|---|---|---|---|---|---|---|
 | **HKU** | ❌ No | — | — | — | not counted | — | "additional supporting information" only |
-| **CUHK** | ✅ elective | **Restricted**, 45 progs (3 accept all); per-programme list | 1 | Attained | 4 / 3 / **2** | none (×1) | standard extra elective |
+| **CUHK** | ⚠️ advisory | **Restricted**, 45 progs (3 accept all); per-programme list | — | — | **not scored** | — | extra bonus subject; value unpublished → notify only |
 | **HKUST** | ✅ bonus | **11 progs** (JS5101/5102/5103/5118/5181/5411/5412/5711/5811/5812/5813) | 1 (bonus) | Dist (I) | 4 / 3 / not counted | none | **6th-subject bonus** (≤5%), never in Best-5 |
 | **PolyU** | ✅ Best-5 | **Per-programme list** with per-subject weight (published) | 1 | Dist (I) | L4 / L3 / 0 | via weight (5/7/10), not a multiplier | one relevant ApL, weighted like a Cat-A elective |
 | **CityU** | ✅ elective | **Restricted to 9 programmes** (JS1040–1044, JS1300, JS1805–1807) | 1 | Dist (I) | 4 / 3 / not counted | none | one elective, listed programmes only |
@@ -61,7 +61,7 @@ published** by CUHK (its own calculator excludes Category B) — flag.
 - https://admission.cuhk.edu.hk/wp-content/uploads/2025/05/Useful-Information-for-JUPAS-Applicants-2026.pdf — "Useful Information for JUPAS Applicants (2026 Entry)", v20260512.
 - https://admission.cuhk.edu.hk/application/jupas/faq/ — JUPAS FAQ Q09.
 - Extracted to `Reference(2026)/CUHK/cuhk_apl.json` via `scripts/extraction/cuhk_apl_extract.py`.
-- **Our model (beta.14):** restricted lists (42) + 3 "any"; scored as a standard elective (no weighting, ×1) via the Cat-A table — **Attained = L2, Dist I = L3, Dist II = L4** (`apl_min_level: "attained"`), max 1. (CUHK publishes no point value; this conversion is per project direction.) ✅
+- **Our model (beta.16):** `apl_advisory_only` — CUHK recognises ApL only as an EXTRA bonus subject whose value it doesn't publish, so it is **NOT scored and NOT an eligibility elective**. The restricted lists are kept only to tell the candidate which of their ApL the programme recognises: the calculator returns `recognizedApL`, and the DetailPanel shows an "unquantified advantage" note (never points). Superseded the beta.14 Attained=L2 scoring. ✅
 
 ### HKUST — 6th-subject bonus, specific programme categories only
 ApL is **NOT** an eligibility elective (HKUST electives = Category A only). Where
@@ -189,6 +189,7 @@ policy: **225 `none`, 142 `any`, 55 restricted** (42 CUHK + 13 PolyU).
    LingU's JUPAS calculator (beta.13)**: per-programme recognition (17/23 recognise,
    9 "any" + 8 restricted, 6 none), Attained ≡ L3 (`l3` mode), ×1.0, max 1
    (`scripts/extraction/lingu_apl_scrape.py` → `Reference(2026)/LingU/lingu_apl.json`).
-7. **CUHK** — scoring approximated via the Cat-A table at the equivalent level; CUHK's
-   actual "bonus point up to 7th subject" value is unpublished, so this is an
-   approximation (acceptance lists are exact).
+7. **CUHK** ✅ (beta.16) — ApL is `apl_advisory_only`: recognised but NOT scored and NOT
+   an eligibility elective, because CUHK treats it as an extra bonus subject whose
+   value it doesn't publish. The candidate is *notified* (DetailPanel "unquantified
+   advantage" note via `recognizedApL`) instead of being given fabricated points.

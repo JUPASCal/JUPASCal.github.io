@@ -4,7 +4,7 @@ import { institutionLabel } from "../lib/institutions";
 import { bandLabelKey, formatDelta, formatPercent } from "../lib/results";
 import { slotLabel } from "../lib/slots";
 import { useLang, pickName, type Lang, type Translate } from "../lib/i18n";
-import { localizedShortSubject } from "../lib/subjectsI18n";
+import { localizedShortSubject, localizedSubject } from "../lib/subjectsI18n";
 import { describeFormula } from "../lib/formulaText";
 import { getSelection, selectionTypeKey, selectionTimingKey, selectionSalienceKey, translateSelectionText } from "../lib/selection";
 import { loadProgrammeDetails, type DescBlock, type ProgrammeDetail } from "../lib/programmeDetails";
@@ -375,6 +375,13 @@ export function DetailPanel({ results, activeCode, reviewRequest, onActiveCodeCh
               />
             ) : null}
           </div>
+          {calculation.recognizedApL?.length ? (
+            <p className="apl-advisory-note">
+              {t("detail.aplAdvisoryPre")}
+              <b>{calculation.recognizedApL.map((s) => localizedSubject(s, lang)).join(t("common.listSep"))}</b>
+              {t("detail.aplAdvisoryPost")}
+            </p>
+          ) : null}
           {result.comparisons.length ? (
             <div className="benchmark-grid">
               {result.comparisons.map((comparison) => (

@@ -62,15 +62,28 @@ export function categoryBBasePoints(programme: Programme, subject: string, grade
   return programme.score_conversion_table.category_a?.[level] ?? 0;
 }
 
-// Whether THIS ApL subject is considered by the programme (so it's scored and may
-// count toward the best-N). "any" → all ApL; a list → only the listed subjects;
-// undefined / "none" → none.
-export function categoryBAccepted(programme: Programme, subject: string): boolean {
+// Whether THIS ApL subject is recognised by the programme at all (per apl_policy):
+// "any" → all ApL; a list → only the listed subjects; undefined / "none" → none.
+function categoryBInPolicy(programme: Programme, subject: string): boolean {
   if (!isCategoryBSubject(subject)) return false;
   const policy = programme.apl_policy;
   if (!policy || policy === "none") return false;
   if (policy === "any") return true;
   return Array.isArray(policy) && policy.includes(subject);
+}
+
+// Whether THIS ApL subject is SCORED by the programme (counts toward the best-N).
+// Advisory-only programmes (CUHK) recognise ApL but don't quantify it → not scored.
+export function categoryBAccepted(programme: Programme, subject: string): boolean {
+  if (programme.apl_advisory_only) return false;
+  return categoryBInPolicy(programme, subject);
+}
+
+// Whether THIS ApL subject is recognised as an UNQUANTIFIED advantage only — the
+// programme accepts it (apl_policy) but doesn't score it (CUHK advisory-only).
+// Drives the candidate-facing "recognised bonus" note, never points.
+export function categoryBAdvisory(programme: Programme, subject: string): boolean {
+  return Boolean(programme.apl_advisory_only) && categoryBInPolicy(programme, subject);
 }
 
 // Whether an ApL subject (at `grade`) may FILL an elective slot. Data-driven via
@@ -89,6 +102,7 @@ export function categoryBCanSatisfyElective(
 ): boolean {
   if (!isCategoryBSubject(subject)) return true; // not an ApL subject — not our concern
   if (programme.apl_bonus_only) return false; // HKUST: ApL is a score bonus, not an elective
+  if (programme.apl_advisory_only) return false; // CUHK: extra bonus subject, not an elective
   const policy = programme.apl_policy;
   if (!policy || policy === "none") return false;
   if (Array.isArray(policy) && !policy.includes(subject)) return false;

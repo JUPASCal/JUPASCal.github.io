@@ -451,6 +451,21 @@
   gap: 6px;
 }
 
+.apl-advisory-note {
+  margin: 10px 0 0;
+  padding: 8px 11px;
+  font-size: 0.76rem;
+  line-height: 1.4;
+  color: var(--muted);
+  background: var(--surface-strong);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+}
+
+.apl-advisory-note b {
+  color: var(--text);
+}
+
 
 .score-context-tap {
   display: inline-flex;

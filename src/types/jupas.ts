@@ -155,6 +155,11 @@ export type Programme = {
   // never an eligibility elective. When set, ApL is excluded from the main Best-N
   // and from elective-requirement matching, but still feeds the 6th-subject bonus.
   apl_bonus_only?: boolean;
+  // CUHK: ApL is recognised only as an EXTRA bonus subject whose value CUHK does
+  // not publish — so it is NOT scored and NOT an eligibility elective. `apl_policy`
+  // is kept solely to tell the candidate which of their ApL the programme recognises
+  // (surfaced as an "unquantified advantage" note, never as points).
+  apl_advisory_only?: boolean;
   // Extra admission gate beyond the per-subject requirements, enforced after the
   // score is computed (e.g. CUHK MBChB-GPS JS4502: total ≥ 40 with 5** in any 4).
   extra_eligibility?: { min_total?: number; min_top_grade_count?: number; top_grade?: string };
@@ -219,6 +224,9 @@ export type CalculationResult = {
   selected: CandidateScore[];
   allCandidates: CandidateScore[];
   score_type: string;
+  // ApL subjects the student holds that this programme recognises but does NOT
+  // quantify into the score (CUHK advisory-only) — surfaced as an advantage note.
+  recognizedApL?: string[];
 };
 
 export type EligibilityDetail = {

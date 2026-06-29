@@ -26,7 +26,7 @@ const kind = (pol) => (pol === undefined ? "unset" : pol === "none" ? "none" : p
 // Per-institution invariant spec (mirrors docs/manuals/APL_POLICY.md).
 const SPEC = {
   HKU: { kinds: ["none"], min: null, max: 1 },
-  CUHK: { kinds: ["none", "any", "list"], min: "attained", max: 1 },
+  CUHK: { kinds: ["none", "any", "list"], min: null, max: 1 }, // advisory-only (not scored)
   HKUST: { kinds: ["none", "any"], min: "dist1", max: 1 },
   PolyU: { kinds: ["none", "list"], min: "dist1", max: 1 },
   CityUHK: { kinds: ["none", "any"], min: "dist1", max: 1 },
@@ -100,6 +100,13 @@ for (const p of data) {
     if (inCand) flag("none-scored", `${p.jupas_code} ${p.institution}: ApL scored despite ${pol}`);
     if (Math.abs(rA.totalScore - rN.totalScore) > 1e-9) flag("none-delta", `${p.jupas_code}: score changed despite none`);
     if (aplFillsElective) flag("none-elig", `${p.jupas_code}: ApL filled an elective despite none`);
+    continue;
+  }
+  if (p.apl_advisory_only) { // CUHK: recognised (note) but NOT scored, NOT eligibility
+    if (inCand) flag("advisory-scored", `${p.jupas_code}: advisory ApL was scored`);
+    if (Math.abs(rA.totalScore - rN.totalScore) > 1e-9) flag("advisory-delta", `${p.jupas_code}: score changed despite advisory`);
+    if (aplFillsElective) flag("advisory-elig", `${p.jupas_code}: advisory ApL filled an elective`);
+    if (!(rA.recognizedApL || []).includes(apl)) flag("advisory-note", `${p.jupas_code}: recognizedApL missing ${apl}`);
     continue;
   }
   if (!inCand) { flag("accept-missing", `${p.jupas_code} ${p.institution}: accepts ${apl} but not a candidate`); continue; }

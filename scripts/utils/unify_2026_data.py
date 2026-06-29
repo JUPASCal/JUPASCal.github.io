@@ -1258,8 +1258,11 @@ def apply_apl_policy(programmes):
                 else:
                     subs = _dedupe_canon_apl(raw)
                     policy = subs if subs else "none"
-                # CUHK: standard elective, no weighting; Attained=2, Dist I=3, Dist II=4.
-                max_n, min_lvl = 1, "attained"
+                # CUHK recognises ApL only as an EXTRA bonus subject whose value it does
+                # not publish → NOT scored, NOT an eligibility elective; apl_policy is
+                # kept only to tell the candidate which ApL the programme recognises.
+                if policy != "none":
+                    p["apl_advisory_only"] = True
 
         elif inst == "PolyU":
             entry = polyu_apl.get(code)
