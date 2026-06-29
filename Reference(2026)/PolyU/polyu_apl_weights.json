@@ -1,0 +1,259 @@
+{
+  "JS3005": {
+    "apl": {
+      "AI and Robotics": 10,
+      "Electrical and Energy Engineering": 10,
+      "Internet of Everything Application": 10,
+      "Mobile and Online Apps Development": 10,
+      "Tech Basics": 10
+    }
+  },
+  "JS3008": {
+    "apl": {
+      "Environmental Engineering": 5,
+      "Exercise Science and Health Fitness": 5,
+      "Food Innovation And Science": 5,
+      "Foundation in Chinese Medicine": 5,
+      "Fundamental Health Care": 5,
+      "Health Care Practice": 5,
+      "Hotel Operations": 5,
+      "Medical Laboratory Science": 7
+    }
+  },
+  "JS3011": {
+    "apl": {
+      "Environmental Engineering": 5,
+      "Exercise Science and Health Fitness": 5,
+      "Fundamental Health Care": 5,
+      "Health Care Practice": 5,
+      "Medical Laboratory Science": 7
+    }
+  },
+  "JS3050": {
+    "apl": {
+      "Accounting for E-business": 5,
+      "Accounting in Practice": 5,
+      "AI in Business": 5,
+      "Applied Business Research": 7,
+      "Applied Japanese and Japanese Culture": 5,
+      "Applied Psychology": 5,
+      "Computer Game and Animation Design": 5,
+      "Creative Advertising": 5,
+      "Data Application for Business": 7,
+      "Digital Brand Communication": 5,
+      "Digital Comic Design And Production": 5,
+      "Display and Jewellery Design": 7,
+      "Entrepreneurship for SME": 5,
+      "Environmental Engineering": 5,
+      "Everyday Japanese and Japanese Culture": 5,
+      "Exercise and Fitness Coaching": 5,
+      "Exercise Science and Health Fitness": 5,
+      "Exploring Psychology": 5,
+      "Fashion Image Design": 7,
+      "Film and Transmedia": 5,
+      "Film and Video": 5,
+      "Fundamental Cosmetology": 5,
+      "Fundamental Health Care": 5,
+      "Health and Beauty Keeping in TCM": 5,
+      "Health Care Practice": 5,
+      "Image Design": 7,
+      "Innovative Product Design": 7,
+      "Interior and Exhibition Design": 5,
+      "Internet of Everything Application": 5,
+      "Jewellery and Accessories Design": 7,
+      "Jewellery Arts and Design": 7,
+      "Jewellery Design in Digital Age": 7,
+      "Korean Language and Culture": 5,
+      "Magazine Editing and Production": 5,
+      "Marketing and Online Promotion": 7,
+      "Marketing in Global Trade": 7,
+      "Medical Laboratory Science": 5,
+      "Mobile and Online Apps Development": 5,
+      "Multimedia Entertainment Studies": 5,
+      "Multimedia Storytelling": 5,
+      "New Media Communication Strategies": 5,
+      "PR And Multimedia Communication": 5,
+      "Practical Accounting for SMEs": 5,
+      "Practical Psychology": 5,
+      "Public Relations and Advertising": 5,
+      "Public Relations and Communication": 5,
+      "Purchasing and Merchandising": 7,
+      "Retail Management": 7,
+      "Sports Coaching and Management": 5,
+      "Tech Basics": 5,
+      "The Essentials of Theatre Arts": 5,
+      "Understanding Financial Services": 5
+    }
+  },
+  "JS3150": {
+    "apl": {
+      "AI and Robotics": 5,
+      "Computer Game and Animation Design": 5,
+      "Electrical and Energy Engineering": 5,
+      "Electronic Product Design in Action": 5,
+      "Esports Technology": 5,
+      "Exercise and Fitness Coaching": 5,
+      "Exercise Science and Health Fitness": 5,
+      "Fundamental Health Care": 5,
+      "Health Care Practice": 5,
+      "Innovative Product Design": 5,
+      "Internet of Everything Application": 5,
+      "Medical Laboratory Science": 5,
+      "Mobile and Online Apps Development": 5,
+      "Rehabilitation Care Practice": 5,
+      "Sports Coaching and Management": 5,
+      "Tech Basics": 5
+    }
+  },
+  "JS3180": {
+    "apl": {
+      "AI and Robotics": 10,
+      "AI in Business": 7,
+      "Computer Forensic Technology": 10,
+      "Constructing Smart Cities": 10,
+      "Data Application for Business": 7,
+      "Electrical and Energy Engineering": 10,
+      "Electronic Product Design in Action": 10,
+      "Internet of Everything Application": 10,
+      "Mobile and Online Apps Development": 10,
+      "Tech Basics": 10
+    }
+  },
+  "JS3236": {
+    "apl": {
+      "Accounting for E-business": 5,
+      "Accounting in Practice": 5,
+      "AI and Robotics": 5,
+      "Applied Business Research": 5,
+      "Applied Psychology": 5,
+      "Automotive Technology": 5,
+      "Aviation Studies": 5,
+      "Computer Forensic Technology": 5,
+      "Computer Game and Animation Design": 5,
+      "Creative Advertising": 5,
+      "Data Application for Business": 5,
+      "Display and Jewellery Design": 5,
+      "Electrical and Energy Engineering": 5,
+      "Entrepreneurship for SME": 5,
+      "Health Care Practice": 5,
+      "Innovative Product Design": 5,
+      "Interior and Exhibition Design": 5,
+      "Internet of Everything Application": 5,
+      "Jewellery and Accessories Design": 5,
+      "Jewellery Arts and Design": 5,
+      "Jewellery Design in Digital Age": 5,
+      "Law Enforcement in Hong Kong": 5,
+      "Marketing and Online Promotion": 5,
+      "Practical Psychology": 5,
+      "Rehabilitation Care Practice": 5,
+      "Tech Basics": 5
+    }
+  },
+  "JS3237": {
+    "apl": {
+      "Accounting in Practice": 5,
+      "AI in Business": 5,
+      "Applied Psychology": 5,
+      "Aviation Studies": 5,
+      "Data Application for Business": 5,
+      "Digital Brand Communication": 5,
+      "Entrepreneurship for SME": 5,
+      "Environmental Engineering": 5,
+      "Food and Beverage Operations": 5,
+      "Fundamental Health Care": 5,
+      "Hotel Operations": 5,
+      "Internet of Everything Application": 5,
+      "Law Enforcement in Hong Kong": 5,
+      "Marketing and Online Promotion": 5,
+      "Marketing in Global Trade": 5,
+      "Mobile and Online Apps Development": 5,
+      "New Media Communication Strategies": 5,
+      "Practical Psychology": 5,
+      "Purchasing and Merchandising": 5
+    }
+  },
+  "JS3240": {
+    "apl": {
+      "Accounting in Practice": 5,
+      "ApL (Vocational English) - English Communication": 5,
+      "ApL (Vocational English) - English for Business Services": 5,
+      "ApL (Vocational English) - English for Service Professionals": 5,
+      "Applied Psychology": 5,
+      "Child Care and Education": 5,
+      "Creative Advertising": 5,
+      "Creative English - Biz and Media": 5,
+      "Creative English – PR and Marketing": 5,
+      "Exploring Psychology": 5,
+      "Fashion Image Design": 5,
+      "Film and Video": 5,
+      "Image Design": 5,
+      "Introduction to Theatre Arts": 5,
+      "Magazine Editing and Production": 5,
+      "Marketing in Global Trade": 5,
+      "Multimedia Entertainment Studies": 5,
+      "New Media Communication Strategies": 5,
+      "Practical Psychology": 5,
+      "Practical Translation (Chi-Eng)": 5,
+      "Public Relations and Advertising": 5,
+      "Radio Host and Programme Production": 5,
+      "Western Cuisine": 5
+    }
+  },
+  "JS3255": {
+    "apl": {
+      "Exercise Science and Health Fitness": 5,
+      "Food Innovation And Science": 5,
+      "Foundation in Chinese Medicine": 5,
+      "Health Care Practice": 5,
+      "Hotel Operations": 5,
+      "Medical Laboratory Science": 5
+    }
+  },
+  "JS3290": {
+    "apl": {
+      "Fundamental Health Care": 5,
+      "Health Care Practice": 5
+    }
+  },
+  "JS3569": {
+    "apl": {
+      "Applied Business Research": 7,
+      "Applied Psychology": 5,
+      "Building Technology": 7,
+      "Commercial Comic Art": 10,
+      "Computer Game and Animation Design": 10,
+      "Creative Advertising": 10,
+      "Data Application for Business": 7,
+      "Display and Jewellery Design": 7,
+      "Electronic Product Design in Action": 7,
+      "Entrepreneurship for SME": 7,
+      "Environmental Engineering": 7,
+      "Fashion Image Design": 7,
+      "Film and Transmedia": 10,
+      "Film and Video": 10,
+      "Image Design": 10,
+      "Innovative Product Design": 10,
+      "Interior and Exhibition Design": 10,
+      "Internet of Everything Application": 10,
+      "Jewellery and Accessories Design": 5,
+      "Jewellery Arts and Design": 7,
+      "Magazine Editing and Production": 7,
+      "Marketing and Online Promotion": 10,
+      "Marketing in Global Trade": 5,
+      "Medical Laboratory Science": 5,
+      "Mobile and Online Apps Development": 10,
+      "Multimedia Entertainment Studies": 10,
+      "New Media Communication Strategies": 10,
+      "Practical Psychology": 5,
+      "Public Relations and Advertising": 10,
+      "Public Relations and Communication": 5,
+      "Radio Host and Programme Production": 5,
+      "TV Infotainment Production": 10
+    }
+  },
+  "JS3741": {
+    "apl": {
+      "AI and Robotics": 10
+    }
+  }
+}

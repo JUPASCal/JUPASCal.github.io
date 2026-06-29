@@ -1,0 +1,102 @@
+{
+  "JS2020": {
+    "name": "Bachelor of Arts (Hons) (Chinese Language and Literature / Creative and Professional Writing / English Language and Literature / Humanities / Translation)",
+    "apl": [
+      "specified subjects"
+    ]
+  },
+  "JS2025": {
+    "name": "Bachelor of Arts (Hons) in Religion, Philosophy and Ethics",
+    "apl": [
+      "specified subjects"
+    ]
+  },
+  "JS2060": {
+    "name": "Bachelor of Arts (Hons) / Bachelor of Music (Hons) (Music / Creative Industries)",
+    "apl": "any"
+  },
+  "JS2110": {
+    "name": "Bachelor of Business Administration (Hons) - Accounting Concentration",
+    "apl": "any"
+  },
+  "JS2120": {
+    "name": "Bachelor of Business Administration (Hons)",
+    "apl": "any"
+  },
+  "JS2310": {
+    "name": "Bachelor of Communication (Hons) (Journalism and Digital Media / Public Relations and Advertising)",
+    "apl": [
+      "specified subjects"
+    ]
+  },
+  "JS2330": {
+    "name": "Bachelor of Arts (Hons) in Film and Television",
+    "apl": [
+      "specified subjects"
+    ]
+  },
+  "JS2340": {
+    "name": "Bachelor of Fine Arts (Hons) in Acting for Global Screen",
+    "apl": [
+      "specified subjects"
+    ]
+  },
+  "JS2370": {
+    "name": "Bachelor of Communication (Hons) in Game Design and Animation",
+    "apl": "any"
+  },
+  "JS2410": {
+    "name": "Bachelor of Chinese Medicine and Bachelor of Science (Hons) in Biomedical Science",
+    "apl": "none"
+  },
+  "JS2420": {
+    "name": "Bachelor of Pharmacy (Hons) in Chinese Medicine",
+    "apl": "none"
+  },
+  "JS2510": {
+    "name": "Bachelor of Science (Hons)",
+    "apl": "any"
+  },
+  "JS2610": {
+    "name": "Bachelor of Arts (Hons) / Bachelor of Social Sciences (Hons) (European Studies [French/German Stream] / Geography / Global and China Studies / Government and International Studies / History / Sociology)",
+    "apl": "none"
+  },
+  "JS2620": {
+    "name": "Bachelor of Arts (Hons) in Physical Education and Recreation Management",
+    "apl": [
+      "subjects related to Physical Education"
+    ]
+  },
+  "JS2660": {
+    "name": "Bachelor of Social Work (Hons)",
+    "apl": "any"
+  },
+  "JS2810": {
+    "name": "Bachelor of Arts (Hons) in Visual Arts",
+    "apl": "any"
+  },
+  "JS2910": {
+    "name": "Bachelor of Science (Hons) in Business Computing and Data Analytics",
+    "apl": "any"
+  },
+  "JS2920": {
+    "name": "Bachelor of Arts and Science (Hons) in Arts and Technology",
+    "apl": "any"
+  },
+  "JS2930": {
+    "name": "Bachelor of Arts (Hons) in Business Administration (Global Entertainment)",
+    "apl": "any"
+  },
+  "JS2940": {
+    "name": "Bachelor of Social Sciences (Hons) / Bachelor of Science (Hons) in Innovation in Health and Social Well-Being",
+    "apl": "any"
+  },
+  "JS2950": {
+    "name": "Bachelor of Arts, Science and Technology (Hons) in Individualised Major",
+    "apl": "any"
+  },
+  "JS2960": {
+    "name": "Bachelor of Arts and Science (Hons) in Digital Futures and Humanities",
+    "apl": "any"
+  }
+}

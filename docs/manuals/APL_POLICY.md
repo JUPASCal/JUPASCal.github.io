@@ -67,7 +67,7 @@ interdisciplinary). Min Dist (I); Dist II=4 / Dist I=3 / Attained=0.
 - https://join.hkust.edu.hk/docs/ADMISSIONS%20REQUIREMENTS%20AND%20SCORE%20FORMULAE.pdf — "Admissions Requirements and Score Formulae" (built 2025-09-24, 2026 entry).
 - https://join.hkust.edu.hk/docs/CONVERSION%20OF%20HKDSE%20LEVELS%20GRADES%20TO%20SCORES.pdf — conversion table (2025 scale).
 - https://join.hkust.edu.hk/admissions/jupas
-- **Our model:** `apl_policy="any"` for **all 33** HKUST, scored in Best-N. ⚠️ **WRONG** — should be (a) restricted to the Cat-A-B-C programme set, and (b) a 6th-subject bonus, not a Best-5 elective.
+- **Our model (beta.12):** `apl_policy="none"` for all 33 HKUST — ApL not counted (it's never a Best-5 elective). The ≤5% 6th-subject bonus for Cat-A-B-C programmes is the only un-modelled effect (we lack HKUST's exact bonus formula). ✅
 
 ### PolyU — per-programme weighted list (your fashion hunch was right)
 ApL counts in the competitive score (PolyU = "Any Best 5 with subject weighting").
@@ -80,7 +80,7 @@ multiplier). One relevant ApL; min Dist (I) (Dist II=L4 / Dist I=L3 / Attained=0
   - **JS3569** (BA Scheme in Design): https://www.polyu.edu.hk/aradm/jupas/2025_JS3569_SW.pdf — design-relevant ApL = **10**; Fashion Image Design = 7.
 - https://www.polyu.edu.hk/study/ug/admissions/jupas/jupas-scheme-programme-requirements — per-programme "RELEVANT APPLIED LEARNING SUBJECTS" + links to the SW PDFs.
 - https://www.polyu.edu.hk/study/ug/admissions/jupas/jupas-admission-selection — Distinction→Level scoring.
-- **Our model:** 5 progs restricted from JUPAS notes + 41 "any"; ApL = modal weight. ⚠️ The authoritative per-programme ApL **weights** (5/7/10) are available in the SW PDFs and are NOT yet captured — fashion/design relevance is currently flattened.
+- **Our model (beta.12):** per-programme from the SW PDFs — **13 progs** recognise ApL (with the per-subject 5/7/10 weight injected into `subject_weights_2025`); the other 32 → `none`. Fashion/design relevance is preserved (Fashion Image Design=7 for JS3050; design ApL=10 for JS3569). ✅
 
 ### CityU — 9 programmes only
 ApL is **not** an elective by default. Recognised as **one elective only for 9
@@ -89,7 +89,7 @@ JS1807** ("recognize some Category B Applied Learning subjects as one elective")
 Score: Dist (I)=3 / Dist (II)=4; bare Attained not counted. No extra weighting.
 - https://www.cityu.edu.hk/admo/sites/default/files/2026-01/2026_JUPAS_AdmissionScoreFormulaAndScores.pdf — "Admission Score Formula and Admissions Scores for 2026 JUPAS" (Jan 2026; note on final page).
 - https://www.cityu.edu.hk/admo/admissions/jupas-admission
-- **Our model:** `apl_policy="any"` for **all 58** CityU. ⚠️ **WRONG** — should be restricted to those 9 programmes.
+- **Our model (beta.12):** `apl_policy="any"` for the 9 listed programmes only; the other 49 → `none`. ✅
 
 ### HKBU — 2nd elective only, per-programme acceptance
 ApL (Dist (I)+) may fulfil the **second elective** only (the **first elective must
@@ -98,7 +98,7 @@ Category B ✓, some only "specified subjects" (e.g. JS2620 → PE-related), som
 do not accept** (e.g. JS2610, Chinese Medicine JS2410/JS2420). Dist II=4 / Dist I=3;
 bare Attained not credited. Normal weight (×1).
 - https://admissions.hkbu.edu.hk/content/ao/en/what-is-new/news/general-entrance-requirements-for-the-2026-Entry.html — "General Entrance Requirements … JUPAS Admissions (2026 Entry)", Sep 2025.
-- **Our model:** `apl_policy="any"` for **all 22** HKBU (2nd-elective via the CategoryA gate). ⚠️ partially wrong — some HKBU progs don't accept ApL / restrict to specified subjects; needs the per-programme table.
+- **Our model (beta.12):** per-programme from the GER PDF — JS2410/JS2420/JS2610 → `none`; the other 19 → `any` (2nd-elective via the CategoryA gate). The 6 "specified subjects" programmes couldn't be enumerated (PDF says only "specified"/"PE-related") → fall back to `any`. ✅ (specified-subject restriction is the residual gap)
 
 ### LingnanU — discretionary, unquantified
 ApL "**may be recognised as electives, given bonus scores, or taken as tie-breakers
@@ -106,7 +106,7 @@ by individual programmes**" — programme discretion. LingU publishes **no ApL
 conversion table, no ApL weighting, and its score calculator has no ApL input**.
 - https://www.ln.edu.hk/admissions/ug/f/upload/511/2837/Admission%20Requirements_JUPAS%20(UG%20Website).pdf — "JUPAS ADMISSIONS (2026 Entry)", © 2025, Note 2.
 - https://banner.ln.edu.hk/PROD/jp_score_calculator.p_main — calculator (no ApL selector).
-- **Our model:** `apl_policy="any"` for **all 23** LingU, scored via Cat-A table. ⚠️ LingU publishes no conversion — scoring ApL is an assumption; arguably should be un-scored or eligibility-only.
+- **Our model (beta.12):** `apl_policy="none"` for all 23 LingU — no invented conversion. ✅ (revisit if LingU publishes one)
 
 ### EdUHK — any ApL; ×1.5 on specified courses (13 programmes)
 Any ApL at Distinction recognised as one elective (Bachelor's max 1, **Higher
@@ -141,16 +141,34 @@ THEi, UOWCHK).
 | UOWCHK | JSSW | yes, 1, **relevant discipline** | 1 | Attained | 4 / 3 / 2 | uowchk.edu.hk/study-at-uowchk/admission-requirements |
 | HKCHC (Chu Hai) | JSSC | yes, 1 elective | 1 | Attained | not published (assume 4/3/2) | chuhai.edu.hk/en/hkdse-students |
 
-- **Our model:** HKMU-run (notes say "up to 2") = any/2/attained ✅; other SSSDP = any/1/dist1. ⚠️ most offering institutions accept bare **Attained=2** (not dist1) — only **HKSYU** is dist1. Needs per-offering-institution min-level.
+- **Our model (beta.12):** per offering institution (parsed from "Offered by X:") — HKMU max 2/Attained; HKSYU max 1/Dist (I); all others max 1/Attained (=L2). ✅
 
 ---
 
-## Where the shipped model needs correction (priority order)
+## Corrections applied (v0.1.0-beta.12)
 
-1. **CityU** — restrict ApL to the 9 listed programmes (currently "any" for all 58). *High confidence, easy.*
-2. **HKUST** — ApL only for the Cat-A-B-C programme set, as a 6th-subject bonus, not a Best-5 elective (currently "any"/Best-5 for all 33). *Needs the programme-category list + a bonus mechanism in the calculator.*
-3. **SSSDP** — min-level per offering institution: most accept Attained=2; HKSYU = Dist (I). *Data-driven from the offering institution.*
-4. **PolyU** — capture the per-programme ApL **weights** (5/7/10) from the SW PDFs so fashion/design relevance isn't flattened. *Re-scrape of the per-programme SW PDFs (same PDFs that hold the Cat-A weights).*
-5. **HKBU** — per-programme ApL acceptance (✓ / specified subjects / ✕) from the GER PDF (currently "any" for all 22). *Needs the HKBU table.*
-6. **LingnanU** — decide: keep scoring ApL (assumption) vs treat as eligibility-only/un-scored, since LingU publishes no conversion. *Judgment call.*
-7. **CUHK** — note that scoring is a "bonus up to 7th subject" mechanism, not a normal Best-N elective (CUHK publishes no value). *Documentation / approximation note.*
+The full sweep below reconciled the data model to these official sources. Final ApL
+policy: **225 `none`, 142 `any`, 55 restricted** (42 CUHK + 13 PolyU).
+
+1. **CityU** ✅ — ApL restricted to the 9 listed programmes; the other 49 → `none`.
+2. **HKUST** ✅ — all 33 → `none`. HKUST ApL is only a capped 6th-subject bonus (≤5%,
+   Cat-A-B-C programmes), never a Best-5 elective; we don't model that small bonus,
+   so we don't count ApL (was over-crediting it as a full elective). *Un-modelled
+   bonus is the one remaining HKUST approximation.*
+3. **SSSDP** ✅ — min-level per offering institution: HKMU max 2 / Attained; HKSYU
+   (Shue Yan) Dist (I); all others (SFU/THEi/HSUHK/TWC/UOWCHK/HKCHC) Attained = L2.
+4. **PolyU** ✅ — per-programme ApL acceptance + weight from each programme's SW PDF
+   (`scripts/extraction/polyu_apl_extract.py` → `Reference(2026)/PolyU/polyu_apl_weights.json`).
+   Only **13 of 45** programmes have a Category B section → those recognise ApL (with
+   the per-subject 5/7/10 weight injected, e.g. JS3050 Fashion Image Design = 7,
+   JS3569 design ApL = 10); the other 32 → `none`.
+5. **HKBU** ✅ — per-programme from the GER PDF (`scripts/extraction/hkbu_apl_extract.py`
+   → `Reference(2026)/HKBU/hkbu_apl.json`): JS2410/JS2420/JS2610 → `none`; the rest
+   `any` (2nd-elective via the CategoryA gate). The 6 "specified subjects" programmes
+   couldn't be enumerated from the PDF (it only says "specified" / "PE-related"), so
+   they fall back to `any` — slightly permissive, flagged.
+6. **LingnanU** ✅ — all 23 → `none` (LingU publishes no ApL conversion; avoids
+   inventing a score). Revisit if LingU later publishes one.
+7. **CUHK** — scoring approximated via the Cat-A table at the equivalent level; CUHK's
+   actual "bonus point up to 7th subject" value is unpublished, so this is an
+   approximation (acceptance lists are exact).

@@ -1117,31 +1117,18 @@ def apply_curated_overrides(programmes):
 
 
 # ── Category B (Applied Learning) acceptance, per-institution ──────────────────
-# Researched from authoritative sources (jupas_requirements notes + each school's
-# admission pages). policy/max/min_level per institution; PolyU + CUHK additionally
-# carry per-programme RESTRICTED subject lists. ApL is scored through the Cat-A
-# table at the equivalent DSE level (Dist II→L4, Dist I→L3; bare "Attained"→L2 only
-# where apl_min_level == "attained", i.e. HKMU). See docs / memory for sources.
-#   policy "any" | "none" | [subjects];  max 1|2;  min "dist1"|"attained"
-APL_INSTITUTION_POLICY = {
-    "PolyU":    ("any", 1, "dist1"),    # "one relevant ApL" Dist I+; 5 progs restricted (parsed)
-    "HKUST":    ("any", 1, "dist1"),
-    "CityUHK":  ("any", 1, "dist1"),
-    "LingnanU": ("any", 1, "dist1"),
-    "HKBU":     ("any", 1, "dist1"),    # fills the 2nd elective only (elect1 = CategoryA token)
-    "EdUHK":    ("any", 1, "dist1"),    # bachelor's: 1 ApL, Dist I+
-    "HKMU":     ("any", 2, "attained"), # up to 2 ApL, bare "Attained" accepted (scores L2)
-    "HKU":      ("none", 1, "dist1"),   # ApL = "additional supporting information" only
-    # CUHK: restricted per-programme (Reference(2026)/CUHK/cuhk_apl.json); else none
-    # SSSDP: derived per programme from its notes (offering institution)
-}
+# Each institution's policy is researched from OFFICIAL sources and applied in
+# apply_apl_policy() — see docs/manuals/APL_POLICY.md for the per-institution rule
+# + authoritative source URL. ApL is scored through the Cat-A table at the
+# equivalent DSE level (Dist II→L4, Dist I→L3; bare "Attained"→L2 only where
+# apl_min_level == "attained"). Per-programme detail (PolyU weights, CUHK/HKBU
+# acceptance, EdUHK ×1.5) is loaded from Reference(2026)/<school>/*.json.
 
-# Surface forms (canonical ApL names + their registry aliases) for greedy matching,
-# longest-first so multi-word names win.
+# Surface forms (canonical ApL names + their registry aliases) for case-insensitive
+# canonicalisation of raw course names from the institutional PDFs.
 _CAT_B_SET = set(SUBJECTS_REGISTRY["category_b"])
 _APL_SURFACE = {n: n for n in _CAT_B_SET}
 _APL_SURFACE.update({a: c for a, c in SUBJECT_ALIASES.items() if c in _CAT_B_SET})
-_APL_SURFACE_SORTED = sorted(_APL_SURFACE, key=len, reverse=True)
 
 
 _APL_SURFACE_LC = {k.lower(): v for k, v in _APL_SURFACE.items()}
@@ -1160,56 +1147,43 @@ def canon_apl(name):
     return c if c in _CAT_B_SET else None
 
 
-def _greedy_apl(text):
-    """Tokenise a concatenated ApL list (PolyU notes pack names with no delimiter,
-    '/' marks alternatives) into canonical ApL subjects by longest-match. Names not
-    in the current-cohort vocabulary (older courses) are skipped."""
-    low = text.lower()
-    out, seen, pos = [], set(), 0
-    while pos < len(text):
-        if not text[pos].isalnum():
-            pos += 1
-            continue
-        hit = None
-        for name in _APL_SURFACE_SORTED:
-            nl = name.lower()
-            if low.startswith(nl, pos):
-                end = pos + len(nl)
-                if end == len(text) or not text[end].isalnum():
-                    hit = name
-                    break
-        if hit:
-            canon = _APL_SURFACE[hit]
-            if canon not in seen:
-                seen.add(canon)
-                out.append(canon)
-            pos += len(hit)
-        else:
-            pos += 1
+def _dedupe_canon_apl(names):
+    """Canonicalise a list of raw ApL names → de-duplicated canonical list
+    (older-cohort / non-vocabulary names drop out)."""
+    out = []
+    for nm in names or []:
+        c = canon_apl(nm)
+        if c and c not in out:
+            out.append(c)
     return out
 
 
-def _apl_notes(p):
-    return " \n".join((p.get("jupas_requirements") or {}).get("notes") or [])
+# CityU recognises ApL (as one elective) ONLY for these 9 programmes — per CityU's
+# official "Admission Score Formula and Admissions Scores for 2026 JUPAS" (Jan 2026).
+CITYU_APL_PROGS = {"JS1040", "JS1041", "JS1042", "JS1043", "JS1044",
+                   "JS1300", "JS1805", "JS1806", "JS1807"}
+
+
+def _load_apl_ref(path, label):
+    try:
+        with open(path, encoding="utf-8") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        print(f"  note: {path} absent — {label}")
+        return {}
 
 
 def apply_apl_policy(programmes):
-    """Emit apl_policy / apl_max / apl_min_level per programme (data-driven)."""
-    # CUHK per-programme recognised-ApL lists (verbatim course names → canonical).
-    try:
-        with open("Reference(2026)/CUHK/cuhk_apl.json", encoding="utf-8") as _f:
-            cuhk_apl = json.load(_f)
-    except FileNotFoundError:
-        cuhk_apl = {}
-        print("  note: Reference(2026)/CUHK/cuhk_apl.json absent — CUHK ApL from notes only")
-    # EdUHK per-programme ApL courses weighted ×1.5 in the Best-5 (from EdUHK's ApL
-    # Recognition PDF; its GER PDF only carries a "Specified ApL subject(s)" stub).
-    try:
-        with open("Reference(2026)/EdUHK/eduhk_apl_weights.json", encoding="utf-8") as _f:
-            eduhk_apl_w = json.load(_f)
-    except FileNotFoundError:
-        eduhk_apl_w = {}
-        print("  note: Reference(2026)/EdUHK/eduhk_apl_weights.json absent — EdUHK ApL ×1.5 not applied")
+    """Emit apl_policy / apl_max / apl_min_level per programme — researched per
+    institution from OFFICIAL sources (see docs/manuals/APL_POLICY.md)."""
+    cuhk_apl = _load_apl_ref("Reference(2026)/CUHK/cuhk_apl.json", "CUHK ApL from notes only")
+    eduhk_apl_w = _load_apl_ref("Reference(2026)/EdUHK/eduhk_apl_weights.json", "EdUHK ×1.5 not applied")
+    # PolyU per-programme ApL acceptance + weight (5/7/10), from each programme's
+    # Subject-Weighting PDF. A programme absent here has NO Category B section in its
+    # SW PDF → it does not recognise ApL.
+    polyu_apl = _load_apl_ref("Reference(2026)/PolyU/polyu_apl_weights.json", "PolyU ApL kept generic")
+    # HKBU per-programme Category-B acceptance (any / none / specified), from its GER PDF.
+    hkbu_apl = _load_apl_ref("Reference(2026)/HKBU/hkbu_apl.json", "HKBU ApL kept generic")
 
     counts = {"any": 0, "none": 0, "restricted": 0}
     for p in programmes:
@@ -1217,49 +1191,80 @@ def apply_apl_policy(programmes):
         code = p.get("jupas_code")
         policy = max_n = min_lvl = None
 
-        if inst == "CUHK":
+        if inst == "HKU":
+            policy = "none"  # ApL is "additional supporting information" only
+
+        elif inst == "HKUST":
+            # ApL is a capped 6th-subject BONUS (≤5%, only Cat-A-B-C programmes), never
+            # a Best-5 elective; we don't model that small bonus → don't count ApL.
+            policy = "none"
+
+        elif inst == "LingnanU":
+            policy = "none"  # LingU publishes no ApL conversion/weighting (discretionary)
+
+        elif inst == "CityUHK":
+            policy, max_n, min_lvl = ("any", 1, "dist1") if code in CITYU_APL_PROGS else ("none", 1, "dist1")
+
+        elif inst == "CUHK":
             entry = cuhk_apl.get(code)
             if entry is None:
-                # Fall back to the JUPAS REMARK text if the PDF list is unavailable.
-                if cuhk_apl or "Applied Learning" not in _apl_notes(p):
-                    continue  # not a recognising programme → no ApL
-                policy, max_n, min_lvl = "any", 1, "dist1"
+                policy = "none"  # not on CUHK's recognising-programme list
             else:
                 raw = entry.get("apl") if isinstance(entry, dict) else entry
                 if raw == "ALL":
                     policy = "any"
                 else:
-                    subs = []
-                    for nm in raw:
-                        c = canon_apl(nm)
-                        if c and c not in subs:
-                            subs.append(c)
-                    if not subs:
-                        continue  # only older-cohort courses → nothing a 2026 applicant has
-                    policy = subs
+                    subs = _dedupe_canon_apl(raw)
+                    policy = subs if subs else "none"
                 max_n, min_lvl = 1, "dist1"
 
-        elif inst == "SSSDP":
-            notes = _apl_notes(p)
-            if "Applied Learning" not in notes:
-                continue
-            if re.search(r"up to 2 Applied Learning", notes, re.I):
-                policy, max_n, min_lvl = "any", 2, "attained"   # HKMU-run
+        elif inst == "PolyU":
+            entry = polyu_apl.get(code)
+            wmap = {}
+            if entry:
+                for nm, wt in (entry.get("apl") or {}).items():
+                    c = canon_apl(nm)
+                    if c:
+                        wmap[c] = max(wmap.get(c, 0), wt)
+            if not wmap:
+                policy = "none"  # no Category B section in the SW PDF → ApL not recognised
             else:
+                policy, max_n, min_lvl = sorted(wmap), 1, "dist1"
+                w25 = p.get("subject_weights_2025")
+                if isinstance(w25, dict):
+                    for s, wt in wmap.items():  # ApL weighted on PolyU's own 5/7/10 scale
+                        w25[s] = wt
+
+        elif inst == "HKBU":
+            entry = hkbu_apl.get(code)
+            raw = entry.get("apl") if isinstance(entry, dict) else entry
+            if raw == "none":
+                policy = "none"
+            elif isinstance(raw, list):
+                subs = _dedupe_canon_apl(raw)
+                # specified-by-description (e.g. "PE-related") → can't canonicalise; allow any
+                policy, max_n, min_lvl = (subs or "any"), 1, "dist1"
+            else:  # "any" or no table yet → HKBU's default (2nd elective, Dist I+)
                 policy, max_n, min_lvl = "any", 1, "dist1"
 
-        elif inst in APL_INSTITUTION_POLICY:
-            policy, max_n, min_lvl = APL_INSTITUTION_POLICY[inst]
-            # PolyU: replace "any" with a restricted list where the note enumerates one.
-            if inst == "PolyU" and policy == "any":
-                m = re.search(r"Applied Learning Subjects?:\s*(.+)", _apl_notes(p))
-                if m:
-                    subs = _greedy_apl(m.group(1))
-                    if subs:
-                        policy = subs
-            # EdUHK Higher Diploma programmes count up to 2 ApL (Bachelor's: 1).
-            elif inst == "EdUHK" and "Higher Diploma" in (p.get("name_en") or ""):
-                max_n = 2
+        elif inst == "EdUHK":
+            policy, max_n, min_lvl = "any", 1, "dist1"
+            if "Higher Diploma" in (p.get("name_en") or ""):
+                max_n = 2  # HD counts up to 2 ApL; Bachelor's 1
+
+        elif inst == "HKMU":
+            policy, max_n, min_lvl = "any", 2, "attained"  # up to 2; bare Attained = L2
+
+        elif inst == "SSSDP":
+            m = re.match(r"Offered by ([^:]+):", p.get("name_en") or "")
+            off = m.group(1).strip() if m else ""
+            if off == "HKMU":
+                policy, max_n, min_lvl = "any", 2, "attained"
+            elif off == "HKSYU":
+                policy, max_n, min_lvl = "any", 1, "dist1"   # Shue Yan rejects bare "Attained"
+            else:                                            # SFU/THEi/HSUHK/TWC/UOWCHK/HKCHC
+                policy, max_n, min_lvl = "any", 1, "attained"
+
         else:
             continue  # institution not modelled for ApL
 
