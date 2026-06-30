@@ -513,7 +513,7 @@ function matchElectives(
   programme: Programme,
 ): string[][] {
   const subjects = Object.keys(studentGrades).filter(
-    (s) => !used.has(s) && !s.includes(":subject"),
+    (s) => !used.has(s) && !s.includes(":"), // exclude UI/slot keys (…:subject, m12:module)
   );
 
   // Expand each pool into `count` slots, then build slot → eligible-subject adjacency.

@@ -28,10 +28,10 @@ export type SlimResult = Omit<ProgrammeResult, "programme"> & { code: string };
 
 let loadedProgrammes: Programme[] = [];
 
-// Mirror of App.tsx's visibleGrades – strips the `<slot>:subject`
-// bookkeeping keys so only real subject→grade entries reach the calc.
+// Strips UI bookkeeping keys (`<slot>:subject`, `m12:module`) so only real
+// subject→grade entries reach the calc. Real subjects never contain a colon.
 function visibleGrades(grades: StudentGrades): StudentGrades {
-  return Object.fromEntries(Object.entries(grades).filter(([key]) => !key.includes(":subject")));
+  return Object.fromEntries(Object.entries(grades).filter(([key]) => !key.includes(":")));
 }
 
 function post(message: unknown) {

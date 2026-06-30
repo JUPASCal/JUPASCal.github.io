@@ -101,12 +101,8 @@ export const GradeInput = memo(({ grades, onChange, onReset, readOnly = false, h
     delete next[M1_SUBJECT];
     delete next[M2_SUBJECT];
     delete next[M12_SUBJECT]; // collapse any legacy combined entry to a single source
-    if (grade) {
-      next["m12:module"] = module;
-      next[module] = grade;
-    } else {
-      delete next["m12:module"];
-    }
+    next["m12:module"] = module; // persist the chosen module even before a grade
+    if (grade) next[module] = grade;
     onChange(cleanGradeState(next));
   }
 
@@ -326,17 +322,18 @@ export function GradeTitleSummary({ grades }: { grades: StudentGrades }) {
   // two electives) stay wide and the summary stays on a single row instead of
   // being padded out by empty slots most students never use.
   const showIfPicked = (slot: string) => Boolean(grades[`${slot}:subject`]);
-  // Extended-maths pill reflects the chosen module (M1 / M2); legacy combined data
-  // shows the generic M1/2 label.
+  // Extended-maths pill reflects the chosen module (M1 / M2) once a grade is
+  // entered; with no grade it stays the generic M1/2 label (the module toggle
+  // alone doesn't specialise the pill).
   const extMod = grades["m12:module"] || (grades[M2_SUBJECT] ? M2_SUBJECT : M1_SUBJECT);
-  const extHasSpecific = Boolean(grades[M1_SUBJECT] || grades[M2_SUBJECT] || grades["m12:module"]);
-  const extLabel = extHasSpecific ? (extMod === M2_SUBJECT ? "M2" : "M1") : t("grade.sum.m12");
+  const extGrade = grades[extMod] || grades[M12_SUBJECT];
+  const extLabel = extGrade ? (extMod === M2_SUBJECT ? "M2" : "M1") : t("grade.sum.m12");
   const items: Array<{ key: string; label: string; grade?: string }> = [
     { key: "Chi", label: t("grade.sum.chi"), grade: grades["Chinese Language"] },
     { key: "Eng", label: t("grade.sum.eng"), grade: grades["English Language"] },
     { key: "Math", label: t("grade.sum.math"), grade: grades["Mathematics (Compulsory Part)"] },
     { key: "CSD", label: t("grade.sum.csd"), grade: grades["Citizenship and Social Development"] },
-    { key: "M1/2", label: extLabel, grade: grades[extMod] || grades[M12_SUBJECT] },
+    { key: "M1/2", label: extLabel, grade: extGrade },
     ...electiveItem(grades, "elective-1", "E1", lang),
     ...electiveItem(grades, "elective-2", "E2", lang),
     ...(showIfPicked("elective-3") ? electiveItem(grades, "elective-3", "E3", lang) : []),
