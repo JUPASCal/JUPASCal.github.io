@@ -120,7 +120,7 @@ export const GradeInput = memo(({ grades, onChange, onReset, readOnly = false, h
             {collapsed ? t("grade.edit") : t("grade.done")}
           </button>
         </div>
-        <GradeTitleSummary grades={grades} dynamicElectives={headerToggles} />
+        <GradeTitleSummary grades={grades} />
       </div>
 
       <div className="grade-panel-body">
@@ -280,13 +280,13 @@ function cleanGradeState(grades: StudentGrades) {
   return next;
 }
 
-export function GradeTitleSummary({ grades, dynamicElectives = false }: { grades: StudentGrades; dynamicElectives?: boolean }) {
+export function GradeTitleSummary({ grades }: { grades: StudentGrades }) {
   const { t, lang } = useLang();
-  // When dynamicElectives is on (console), the 3rd/4th elective + Cat-C language
-  // pills only appear once a subject is picked for them — so the always-present
-  // pills (core + M1/2 + first two electives) stay wide instead of being
-  // squeezed by empty slots most students never use.
-  const showIfPicked = (slot: string) => !dynamicElectives || Boolean(grades[`${slot}:subject`]);
+  // The 3rd/4th elective + Cat-C language + Cat-B (ApL) pills only appear once a
+  // subject is picked for them — so the always-present pills (core + M1/2 + first
+  // two electives) stay wide and the summary stays on a single row instead of
+  // being padded out by empty slots most students never use.
+  const showIfPicked = (slot: string) => Boolean(grades[`${slot}:subject`]);
   const items: Array<{ key: string; label: string; grade?: string }> = [
     { key: "Chi", label: t("grade.sum.chi"), grade: grades["Chinese Language"] },
     { key: "Eng", label: t("grade.sum.eng"), grade: grades["English Language"] },

@@ -483,6 +483,13 @@
       grid-column: 1 / -1;
       margin-top: var(--space-2);
       max-width: 100%;
+      /* Always a single row on mobile: one equal-width column per pill, created
+         on demand. Combined with the dynamic-hide logic (empty E3/E4/language/ApL
+         pills are omitted), the common case stays comfortably wide while a fully
+         loaded profile shrinks to fit rather than wrapping to a second line. */
+      grid-template-columns: none;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(0, 1fr);
     }
 
 
