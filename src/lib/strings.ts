@@ -131,6 +131,7 @@ export const STRINGS = {
   "grade.done": { en: "Done", zh: "完成" },
   "grade.core": { en: "Core Subjects", zh: "核心科目" },
   "grade.mathExt": { en: "Mathematics Extended Part", zh: "數學延伸部分" },
+  "grade.extModule": { en: "Extended Maths module (M1 or M2)", zh: "數學延伸單元（M1 或 M2）" },
   "grade.electives": { en: "Electives", zh: "選修科目" },
   "grade.elective": { en: "Elective {n}", zh: "選修科 {n}" },
   "grade.electiveAria": { en: "Elective {n} subject", zh: "第 {n} 個選修科目" },

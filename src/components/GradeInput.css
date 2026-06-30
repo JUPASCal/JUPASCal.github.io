@@ -197,6 +197,48 @@
 }
 
 
+/* Extended-maths field: label + M1/M2 segmented toggle on one row */
+.field-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.ext-math-toggle {
+  display: inline-flex;
+  flex: none;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface-strong);
+}
+
+.ext-module {
+  min-width: 30px;
+  padding: 1px 9px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  cursor: pointer;
+}
+
+.ext-module.active {
+  border-color: var(--accent);
+  background: var(--active);
+  color: var(--accent);
+}
+
+.ext-module:disabled {
+  cursor: default;
+}
+
+
 .mobile-collapse-toggle {
   display: none;
 }

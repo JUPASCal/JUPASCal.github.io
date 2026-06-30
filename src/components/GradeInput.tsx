@@ -1,5 +1,5 @@
 import { memo, useEffect, useRef, useState } from "react";
-import { APL_GRADES, CAT_A_SUBJECTS, CAT_B_SUBJECTS, CAT_C_SUBJECTS, CORE_SUBJECTS, CSD_GRADES, DSE_GRADES, M12_SUBJECT } from "../lib/subjects";
+import { APL_GRADES, CAT_A_SUBJECTS, CAT_B_SUBJECTS, CAT_C_SUBJECTS, CORE_SUBJECTS, CSD_GRADES, DSE_GRADES, M12_SUBJECT, M1_SUBJECT, M2_SUBJECT } from "../lib/subjects";
 import { categoryCLevelOptions } from "../lib/categoryC";
 import { localizedShortSubject, localizedSubject, localizedSubjectChip } from "../lib/subjectsI18n";
 import { useLang, type Lang } from "../lib/i18n";
@@ -88,6 +88,28 @@ export const GradeInput = memo(({ grades, onChange, onReset, readOnly = false, h
     onChange(cleanGradeState(next));
   }
 
+  // Extended-maths (M1/M2) is one input with a module toggle. The grade is stored
+  // under the SPECIFIC module so the calculator applies that module's weight (some
+  // programmes weight M1 and M2 differently, e.g. CityU JS1200). `m12:module`
+  // persists the toggle even before a grade is entered; legacy data stored under
+  // the combined M12 subject is read as M1.
+  const extModule = grades["m12:module"] || (grades[M2_SUBJECT] ? M2_SUBJECT : M1_SUBJECT);
+  const extGrade = grades[extModule] || (extModule === M1_SUBJECT ? grades[M12_SUBJECT] : "") || "";
+
+  function writeExtMath(module: string, grade: string) {
+    const next = { ...grades };
+    delete next[M1_SUBJECT];
+    delete next[M2_SUBJECT];
+    delete next[M12_SUBJECT]; // collapse any legacy combined entry to a single source
+    if (grade) {
+      next["m12:module"] = module;
+      next[module] = grade;
+    } else {
+      delete next["m12:module"];
+    }
+    onChange(cleanGradeState(next));
+  }
+
   function reset() {
     onReset();
     setCollapsed(false);
@@ -138,12 +160,29 @@ export const GradeInput = memo(({ grades, onChange, onReset, readOnly = false, h
             </div>
           ))}
           <div className="field">
-            <span>{t("grade.mathExt")}</span>
+            <span className="field-head">
+              {t("grade.mathExt")}
+              <span className="ext-math-toggle" role="radiogroup" aria-label={t("grade.extModule")}>
+                {[["M1", M1_SUBJECT], ["M2", M2_SUBJECT]].map(([label, module]) => (
+                  <button
+                    key={module}
+                    type="button"
+                    role="radio"
+                    aria-checked={extModule === module}
+                    className={extModule === module ? "ext-module active" : "ext-module"}
+                    disabled={readOnly}
+                    onClick={() => writeExtMath(module, extGrade)}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </span>
+            </span>
             <GradeButtons
-              value={grades[M12_SUBJECT] || ""}
+              value={extGrade}
               grades={DSE_GRADES.filter(Boolean)}
               disabled={readOnly}
-              onChange={(grade) => setGrade(M12_SUBJECT, grade)}
+              onChange={(grade) => writeExtMath(extModule, grade)}
             />
           </div>
         </div>
@@ -287,12 +326,17 @@ export function GradeTitleSummary({ grades }: { grades: StudentGrades }) {
   // two electives) stay wide and the summary stays on a single row instead of
   // being padded out by empty slots most students never use.
   const showIfPicked = (slot: string) => Boolean(grades[`${slot}:subject`]);
+  // Extended-maths pill reflects the chosen module (M1 / M2); legacy combined data
+  // shows the generic M1/2 label.
+  const extMod = grades["m12:module"] || (grades[M2_SUBJECT] ? M2_SUBJECT : M1_SUBJECT);
+  const extHasSpecific = Boolean(grades[M1_SUBJECT] || grades[M2_SUBJECT] || grades["m12:module"]);
+  const extLabel = extHasSpecific ? (extMod === M2_SUBJECT ? "M2" : "M1") : t("grade.sum.m12");
   const items: Array<{ key: string; label: string; grade?: string }> = [
     { key: "Chi", label: t("grade.sum.chi"), grade: grades["Chinese Language"] },
     { key: "Eng", label: t("grade.sum.eng"), grade: grades["English Language"] },
     { key: "Math", label: t("grade.sum.math"), grade: grades["Mathematics (Compulsory Part)"] },
     { key: "CSD", label: t("grade.sum.csd"), grade: grades["Citizenship and Social Development"] },
-    { key: "M1/2", label: t("grade.sum.m12"), grade: grades[M12_SUBJECT] },
+    { key: "M1/2", label: extLabel, grade: grades[extMod] || grades[M12_SUBJECT] },
     ...electiveItem(grades, "elective-1", "E1", lang),
     ...electiveItem(grades, "elective-2", "E2", lang),
     ...(showIfPicked("elective-3") ? electiveItem(grades, "elective-3", "E3", lang) : []),

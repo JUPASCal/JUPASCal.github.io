@@ -8,6 +8,8 @@ import registry from "../../data/raw/subjects.canonical.json";
 export const CORE_SUBJECTS = registry.core as string[];
 
 export const M12_SUBJECT = registry.math_extended.combined as string;
+export const M1_SUBJECT = registry.math_extended.module_1 as string;
+export const M2_SUBJECT = registry.math_extended.module_2 as string;
 
 export const CAT_A_SUBJECTS = registry.category_a as string[];
 

@@ -123,9 +123,13 @@ def normalize_subject(name):
     # Handle mangled internal parentheses
     if "(" in name:
         name_upper = name.upper()
-        if "MODULE 1" in name_upper or "M1" in name_upper or "CALCULUS AND STATISTICS" in name_upper: 
+        # "Module 1 or 2" means EITHER module gets the weight — keep the combined
+        # form (must be checked BEFORE "Module 1", which is a substring of it).
+        if "MODULE 1 OR 2" in name_upper or "MODULE 1 OR MODULE 2" in name_upper or "M1 OR 2" in name_upper or "M1 OR M2" in name_upper:
+            return "Mathematics Extended Part (Module 1 or 2)"
+        if "MODULE 1" in name_upper or "M1" in name_upper or "CALCULUS AND STATISTICS" in name_upper:
             return "Mathematics Extended Part (Module 1)"
-        if "MODULE 2" in name_upper or "M2" in name_upper or "ALGEBRA AND CALCULUS" in name_upper: 
+        if "MODULE 2" in name_upper or "M2" in name_upper or "ALGEBRA AND CALCULUS" in name_upper:
             return "Mathematics Extended Part (Module 2)"
         if "COMPULSORY" in name_upper: return "Mathematics (Compulsory Part)"
         
@@ -1354,6 +1358,29 @@ def apply_apl_policy(programmes):
         _ew_n += 1
     if _ew_n:
         print(f"EdUHK ApL ×1.5 weighting applied to {_ew_n} programme(s)")
+
+
+def expand_m1m2_weights(programmes):
+    """A "Mathematics Extended Part (Module 1 or 2)" weight means EITHER module
+    earns it (HKU/EdUHK science programmes weight the combined form). Expand it to
+    BOTH Module 1 and Module 2 so the calculator scores whichever module the
+    student actually took — a more specific Module 1/Module 2 key already present
+    takes precedence (setdefault). The combined key is then dropped."""
+    M12 = "Mathematics Extended Part (Module 1 or 2)"
+    M1 = "Mathematics Extended Part (Module 1)"
+    M2 = "Mathematics Extended Part (Module 2)"
+    n = 0
+    for p in programmes:
+        for yr in ("2025", "2026"):
+            w = p.get(f"subject_weights_{yr}")
+            if not isinstance(w, dict) or M12 not in w:
+                continue
+            combined = w.pop(M12)
+            w.setdefault(M1, combined)
+            w.setdefault(M2, combined)
+            n += 1
+    if n:
+        print(f"Expanded combined M1/M2 weighting on {n} programme-year(s)")
 
 
 def apply_baselines(obj):
@@ -2758,6 +2785,8 @@ def unify_data():
     apply_curated_overrides(final_unified)
 
     apply_apl_policy(final_unified)
+
+    expand_m1m2_weights(final_unified)
 
     # 5a. Archive any programme present in the PREVIOUS build but gone now
     # (removed/restructured by JUPAS) so its data is never lost — a cumulative

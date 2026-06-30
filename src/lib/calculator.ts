@@ -101,6 +101,11 @@ export function calculateScore(studentGrades: StudentGrades, programme: Programm
 
   for (const [subject, grade] of Object.entries(studentGrades)) {
     if (!grade || grade === "U") continue;
+    // Skip non-grade UI/slot keys (`elective-N:subject`, `cat-c:subject`,
+    // `m12:module`) — their value is a subject name, not a DSE grade, so they'd
+    // otherwise become zero-point junk candidates. Real grade keys are full
+    // subject names and never contain a colon.
+    if (subject.includes(":")) continue;
     // Programmes that ignore Category C (Other Languages) entirely — the
     // language never enters their score (e.g. HKBU JS2120 "不計日文").
     if (isCategoryCSubject(subject) && !acceptsCategoryC(programme)) continue;
