@@ -48,11 +48,11 @@ export function MobileWelcome({ theme, onThemeChange, onStart, onAbout, exiting 
           <button
             type="button"
             className="topbar-icon lang-toggle"
-            aria-label={`${t("lang.label")}: ${lang === "en" ? "English" : "中文"}. ${t("lang.switchTo")}.`}
-            title={t("lang.switchTo")}
+            aria-label={`${t("lang.switchTo")}: ${lang === "en" ? "中文" : "English"}`}
+            title={`${t("lang.switchTo")}: ${lang === "en" ? "中文" : "English"}`}
             onClick={() => setLang(lang === "en" ? "zh" : "en")}
           >
-            <span className="lang-toggle-current">{lang === "en" ? "EN" : "中"}</span>
+            <span className="lang-toggle-current">{lang === "en" ? "中" : "EN"}</span>
             <svg className="lang-toggle-swap" viewBox="0 0 12 12" width="9" height="9" aria-hidden="true">
               <path d="M2 4h7l-1.6-1.6M10 8H3l1.6 1.6" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
