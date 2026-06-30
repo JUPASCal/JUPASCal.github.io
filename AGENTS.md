@@ -7,22 +7,22 @@ This document is the single source of truth for all AI agents (Gemini, Claude, e
 ## 1. Project Overview
 **JUPAS Cal** is an unofficial annual score calculator for Hong Kong DSE (Diploma of Secondary Education) applicants.
 - **Function**: Users input DSE grades → tool calculates estimated scores for **422 programmes** across 10 institutions → compares results against historical admission data.
-  - **The programme count is NOT hardcoded** - it is `__PROGRAMME_COUNT__`, a Vite `define` in `vite.config.ts` read from `data/processed/JUPAS_2026_Unified_Data.json` at build time. Do not type a literal programme count in UI copy.
-  - **New programmes are auto-included** by `scripts/utils/unify_2026_data.py` when they appear in the JUPAS listing but are missing from per-school feeds. They use baseline requirements, estimated scoring logic, null historical scores, and appear as no-2025-data programmes.
+  - **The programme count is NOT hardcoded** — it's `__PROGRAMME_COUNT__`, a Vite `define` (see `vite.config.ts`) read from `JUPAS_2026_Unified_Data.json`'s length at build time and used in `AboutPage.tsx` + `MobileWelcome.tsx`. It updates automatically when the dataset changes; never type a literal count in UI copy. (Currently 422 — was 419 before the 3 new-2026 SSSDP programmes were auto-included.)
+  - **New programmes are auto-included**: `unify_2026_data.py` adds any JUPAS-listed code missing from the per-school feeds (universal-baseline requirements + Best-5 estimate, null scores → "new programme"), so a programme on the JUPAS listing is never silently dropped. Removed programmes are archived to `Archives/removed_programmes.json`. Joint-admission shared quotas ("Combined figure for programmes JS…") are parsed into `quota_shared` {total, codes}.
 - **Goal**: Help students gauge their admission chances based on complex, institution-specific weightings.
 - **Scope**: Educational and informational purposes only.
 
 ---
 
 ## 2. Directory Structure
-- `index.html`, `src/`, `public/`, `vite.config.ts`, `package.json`: the current React + TypeScript (Vite) web app at the repo root. `npm run build` writes `dist/`.
+- `index.html`, `src/`, `public/`, `vite.config.ts`, `package.json`: the React + TypeScript (Vite) web app, **at the repo root** (formerly in `staging/`, which no longer exists). `npm run build` → `dist/` (gitignored).
 - `src/App.tsx`: top-level app orchestrator for profiles, grades, picked programmes, filters/sort state, data loading, share/hash state, desktop/mobile layout selection, and mobile navigation history.
 - `src/components/`: React UI components. Key files include `AdvisorConsole.tsx`, `DetailPanel.tsx`, `FiltersBar.tsx`, `ResultsView.tsx`, `GradeInput.tsx`, `PreferencePlanner.tsx`, `AnalysisView.tsx`, and `ShareView.tsx`.
 - `src/lib/`: calculation, filtering/sorting, selection/non-academic requirement, analysis, i18n, profile, hash, and data-loading logic.
 - `src/styles.css` plus component CSS files: current Vanilla CSS styling. Keep CSS in the existing files/patterns unless a component already owns a CSS module-style file.
-- `scripts/*.mjs`: JS audit harnesses (`npm run audit*`).
-- `.github/workflows/deploy.yml`: GitHub Pages deployment. Pushes to `main` build and deploy production.
-- `js/`, `css/`: legacy vanilla prototype, not the active deployed app.
+- `scripts/*.mjs`: JS audit harnesses (`npm run audit*`, e.g. `audit`, `audit:apl`, `audit:analysis`, `audit:selection`).
+- `.github/workflows/deploy.yml`: GitHub Actions builds the app + bundles the runtime data and **auto-deploys to GitHub Pages on every push to `main`** (no manual build/copy step). See §5 Versioning & Deployment.
+- `js/`, `css/`: **legacy** vanilla prototype — no longer referenced by `index.html` or deployed; superseded by the React app.
 - `data/processed/JUPAS_2026_Unified_Data.json`: Master unified dataset.
 - `data/raw/`: Source files (Excel, PDF, JSON), `subject_mapping.json`, and `term_glossary.json`.
 - `scripts/extraction/`: University-specific scrapers and PDF parsers.
@@ -114,10 +114,15 @@ This document is the single source of truth for all AI agents (Gemini, Claude, e
 
 ---
 
-### Versioning & Deployment
-- Read `VERSIONING.md` before changing release metadata.
-- Do not bump `package.json` `"version"` for routine pushes.
-- Pushes to `main` deploy through GitHub Actions. Runtime-fetched files must be copied in `.github/workflows/deploy.yml` or they will 404 in production.
+### Versioning — see [`VERSIONING.md`](VERSIONING.md) (authoritative)
+- **Do NOT bump the version on a routine push.** Every deploy is auto-identified by a build stamp (`__BUILD_SHA__` + `__BUILD_DATE__`, injected at build time and shown in the About footer). A normal change = just push to `main`.
+- **Bump `package.json` `"version"` (semver) ONLY when cutting a release**: pre-1.0 stay `0.1.0-beta.N`; set `1.0.0` at stable launch; then PATCH=fixes, MINOR=features (and the annual data refresh — also bump `"admissionCycle"`), MAJOR=overhauls. Tag releases (`vX.Y.Z`) + publish GitHub Release notes.
+- **`"admissionCycle"`** (`package.json`, e.g. `"2026"`) is the JUPAS entry year the data targets — a separate axis, bumped only on a data refresh, surfaced as `__ADMISSION_CYCLE__`. This applies to ALL agents — read `VERSIONING.md` before any release push.
+
+### Deployment (auto-deploy on push to `main`)
+- **`.github/workflows/deploy.yml`** builds the app, copies the runtime data files (`data/processed/JUPAS_2026_Unified_Data.json` + `.version`, `data/raw/subjects.canonical.json`) and `CNAME` into `dist/`, and publishes `dist/` to GitHub Pages. **A push to `main` is a production deploy** — there is no separate build/copy step and no committed bundle.
+- One-time GitHub setting (already configured): repo **Settings → Pages → Source = "GitHub Actions"**.
+- The app fetches its data at runtime via paths **relative** to `index.html` (`data/processed/…`), so any new runtime-fetched file MUST be added to the workflow's copy step or it will 404 in production.
 
 ---
 

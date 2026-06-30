@@ -53,6 +53,7 @@ npm run audit              # eligibility
 npm run audit:analysis     # portfolio-analysis fuzz
 npm run audit:suggestions  # safer-option suggestions
 npm run audit:selection    # non-academic requirements
+npm run audit:apl          # Applied Learning (Category B) model consistency
 ```
 
 ## Data pipeline
