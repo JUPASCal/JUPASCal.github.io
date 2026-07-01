@@ -2028,7 +2028,14 @@ select {
 
       .app-shell {
         display: block;
-        height: 100dvh;
+        /* Pin the scroll container to the viewport (position:fixed), matching the
+           About overlay (.about-view). A normal-flow height:100dvh scroller lets
+           the host in-app browser (e.g. Threads) treat a swipe-down at the top as
+           its native "pull to dismiss" and collapse the preview; a fixed-position
+           scroller intercepts the gesture itself, so scrolling back up works. The
+           About page already proved this pattern immune in Threads. */
+        position: fixed;
+        inset: 0;
         /* No top padding so the sticky stepper bar (top: 0 inside the
            scroll container) sits flush against the viewport top once
            scrolled. The 12px previously here created a visible gap
@@ -2038,9 +2045,7 @@ select {
         overflow-y: auto;
         overflow-x: hidden;
         -webkit-overflow-scrolling: touch;
-        /* Keep top/bottom overscroll inside this scroller so a swipe-down at the
-           top isn't chained to the host (e.g. Threads' in-app browser), which
-           reads it as "pull to dismiss" and collapses the preview window. */
+        /* Also keep overscroll from chaining to the host. */
         overscroll-behavior-y: contain;
       }
 
