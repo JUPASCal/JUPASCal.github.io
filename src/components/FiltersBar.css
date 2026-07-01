@@ -138,6 +138,44 @@
 }
 
 
+/* Mobile (Step 2) clear-search (×) button. Desktop enables it via .console-browse;
+   here we enable it for the mobile layout too so a long query can be wiped in one
+   tap. It sits just left of the search icon (at right var(--space-3)); the input
+   reserves room on the right for both. `.layout-mobile` outranks the global
+   `.search-clear { display: none }`. */
+.layout-mobile .search-field {
+  position: relative;
+}
+
+.layout-mobile .search-field input {
+  padding-right: calc(var(--space-6) + 26px);
+}
+
+.layout-mobile .search-clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 50%;
+  right: calc(var(--space-3) + 24px);
+  transform: translateY(-50%);
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: var(--surface-strong);
+  color: var(--muted);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.layout-mobile .search-clear:active {
+  color: var(--ink);
+  background: var(--active);
+}
+
+
 .filters-title-count {
   grid-column: 1 / -1;
   margin: var(--space-2) 0 0;
