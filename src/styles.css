@@ -2038,6 +2038,10 @@ select {
         overflow-y: auto;
         overflow-x: hidden;
         -webkit-overflow-scrolling: touch;
+        /* Keep top/bottom overscroll inside this scroller so a swipe-down at the
+           top isn't chained to the host (e.g. Threads' in-app browser), which
+           reads it as "pull to dismiss" and collapses the preview window. */
+        overscroll-behavior-y: contain;
       }
 
 
