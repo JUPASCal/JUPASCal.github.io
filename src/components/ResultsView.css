@@ -202,6 +202,21 @@
 }
 
 
+/* Enlarged selection hit-zone wrapping the tick box. On the desktop console table
+   it stretches to the row's top/bottom/left edges (negative margins eat the td
+   padding; matching paddings keep the tick box visually put) plus a right gutter,
+   so the whole left area of the row is an easy click-to-select target. */
+.pick-hitzone {
+  display: inline-flex;
+  align-items: flex-start;
+  cursor: pointer;
+}
+.console-browse .results-table .pick-hitzone {
+  align-self: stretch;
+  margin: -10px 0 -10px -12px;
+  padding: 10px 10px 10px 12px;
+}
+
 .pick-button {
   display: inline-grid;
   place-items: center;

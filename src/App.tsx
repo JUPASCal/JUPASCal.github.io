@@ -56,6 +56,19 @@ const INITIAL_HASH_STATE = readHashState();
 const HAS_HASH_STATE = INITIAL_HASH_STATE !== null;
 const IS_SHARED_VIEW = INITIAL_HASH_STATE?.sharing === true && INITIAL_HASH_STATE.pickedCodes.length > 0;
 
+// Deep link from a static per-programme SEO page (/p/JS####/ → its CTA links to
+// "/?p=JS####"). We open that programme's detail once the dataset has loaded, then
+// strip the param. Ignored for shared links and invalid/unknown codes.
+const DEEP_LINK_CODE: string | null = (() => {
+  if (IS_SHARED_VIEW || typeof window === "undefined") return null;
+  try {
+    const c = new URLSearchParams(window.location.search).get("p");
+    return c && PROGRAMME_CODE_PATTERN.test(c) ? c : null;
+  } catch {
+    return null;
+  }
+})();
+
 // Per-tab nav snapshot so a refresh lands back where you were — the step, the
 // Step-3 sub-view (compare / detail / analysis), the open programme, and the
 // scroll position — instead of resetting to Step 1 at the top. sessionStorage:
@@ -108,7 +121,7 @@ function isLocalizableDefaultProfile(profile: Profile): boolean {
 }
 
 function shouldShowWelcome(): boolean {
-  if (HAS_HASH_STATE) return false; // deep link / shared URL – go straight in
+  if (HAS_HASH_STATE || DEEP_LINK_CODE) return false; // deep link / shared URL – go straight in
   try {
     if (localStorage.getItem(WELCOME_SEEN_KEY)) return false;
     if (localStorage.getItem("jupas-staging-profiles")) return false; // returning user
@@ -253,6 +266,14 @@ function CalculatorApp() {
   // Default to % — it's the more comparable metric across programmes.
   const [deltaMode, setDeltaMode] = useState<"points" | "percent">("percent");
   const [selectedOnly, setSelectedOnly] = useState(false);
+  // Desktop Advisor Console workspace view — lifted from AdvisorConsole so the
+  // Browse list's "view mode" row-click can switch straight to the detail panel.
+  const [consoleView, setConsoleView] = useState<"analyze" | "browse" | "detail">("analyze");
+  // Where the detail drill-in was opened from, so its Back button returns there
+  // (Browse "view mode" → back to Browse; planner/analysis → back to Analysis).
+  const [consoleDetailReturn, setConsoleDetailReturn] = useState<"analyze" | "browse">("analyze");
+  // Browse row-click mode (desktop): "select" toggles the pick, "view" opens detail.
+  const [browseRowMode, setBrowseRowMode] = useState<"select" | "view">("select");
   const [sortKey, setSortKey] = useState<SortKey>("code");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
   const [activeCode, setActiveCode] = useState<string | undefined>(INITIAL_NAV.activeCode);
@@ -621,6 +642,16 @@ function CalculatorApp() {
   // main view to "detail"; it must not push history or touch the stepper).
   function selectProgramme(code: string) {
     setActiveCode(code);
+    setConsoleDetailReturn("analyze"); // planner / analysis drill-ins return to Analysis
+  }
+
+  // Desktop Browse list, "view" row-click mode: focus the programme and swap the
+  // console's main view to its detail panel (mirrors AdvisorConsole.openDetail,
+  // reachable from the opaque programmePicker node). No mobile/step side effects.
+  function openBrowseDetail(code: string) {
+    setActiveCode(code);
+    setConsoleDetailReturn("browse"); // opened from Browse → Back returns to Browse
+    setConsoleView("detail");
   }
 
   // Open / close the in-flow Analysis sub-view (the "Step 4"). Reached from
@@ -973,6 +1004,31 @@ function CalculatorApp() {
   // the main thread, so the grade buttons never block. Seeded empty
   // until the first compute lands.
   const [allResults, setAllResults] = useState<ProgrammeResult[]>(EMPTY_RESULTS);
+
+  // Deep link (/?p=JS####, from a static SEO page): open that programme's detail
+  // once its data has loaded, then strip the param so refresh/share is unaffected.
+  // Runs once; unknown codes are ignored (the effect simply never fires).
+  const deepLinkConsumed = useRef(false);
+  useEffect(() => {
+    if (!DEEP_LINK_CODE || deepLinkConsumed.current) return;
+    if (!allResults.some((r) => r.programme.jupas_code === DEEP_LINK_CODE)) return;
+    deepLinkConsumed.current = true;
+    if (isDesktop) {
+      openBrowseDetail(DEEP_LINK_CODE);
+    } else {
+      setActiveCode(DEEP_LINK_CODE);
+      setAnalysisOpen(false);
+      setMobileDetailOpen(true);
+      setStep(3);
+    }
+    try {
+      const u = new URL(window.location.href);
+      u.searchParams.delete("p");
+      window.history.replaceState(window.history.state, "", u.pathname + u.search + u.hash);
+    } catch {
+      /* ignore */
+    }
+  }, [allResults, isDesktop]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Keep a by-code lookup current for the worker→main join (the
   // worker returns slim results without the heavy programme object).
@@ -1419,6 +1475,8 @@ function CalculatorApp() {
         selectedOnly={selectedOnly}
         compactResults={compactResults}
         deltaMode={deltaMode}
+        rowMode={browseRowMode}
+        onRowModeChange={readOnly ? undefined : setBrowseRowMode}
         sortKey={sortKey}
         sortDirection={sortDirection}
         showStepEyebrow={!isDesktop}
@@ -1446,6 +1504,8 @@ function CalculatorApp() {
         compact={compactResults}
         deltaMode={deltaMode}
         readOnly={readOnly}
+        rowMode={browseRowMode}
+        onOpenDetail={openBrowseDetail}
         onFocus={(code) => setActiveCode(code)}
         onPick={pickProgramme}
         onUnpick={(code) => {
@@ -1491,7 +1551,10 @@ function CalculatorApp() {
     />
   );
 
-  const detailPanelNode = pickedCount > 0 ? (
+  // Render the panel whenever there's something to show: any pick, OR a preview
+  // (an unpicked programme opened from Browse "view mode") — otherwise clicking a
+  // programme with an empty plan drills into a blank detail panel.
+  const detailPanelNode = (pickedCount > 0 || previewResult) ? (
     <DetailPanel
       results={detailResults}
       activeCode={activeCode}
@@ -1713,6 +1776,9 @@ function CalculatorApp() {
           onAdd={pickProgramme}
           programmePicker={programmePicker}
           detailPanel={detailPanelNode}
+          view={consoleView}
+          onViewChange={setConsoleView}
+          detailReturn={consoleDetailReturn}
           readOnly={readOnly}
         />
       </main>

@@ -17,6 +17,9 @@ type Props = {
   selectedOnly: boolean;
   compactResults: boolean;
   deltaMode: "points" | "percent";
+  // Browse row-click mode (desktop console). Omit onRowModeChange to hide the toggle.
+  rowMode?: "select" | "view";
+  onRowModeChange?: (mode: "select" | "view") => void;
   sortKey: SortKey;
   sortDirection: "asc" | "desc";
   showStepEyebrow?: boolean;
@@ -34,7 +37,7 @@ type Props = {
 const bands: Array<BenchmarkBand | "all"> = ["all", "above-uq", "above-median", "above-lq", "below-lq", "no-score"];
 const sortOptions: SortKey[] = ["code", "lq", "median", "uq", "quota"];
 
-export function FiltersBar({ filters, open, institutions, total, shown, selectedCount, selectedOnly, compactResults, deltaMode, sortKey, sortDirection, showStepEyebrow = true, onFiltersChange, onOpenChange, onSelectedOnlyChange, onCompactResultsChange, onDeltaModeChange, onSortChange, onReviewSelected, onResetSelected, selectedOrder }: Props) {
+export function FiltersBar({ filters, open, institutions, total, shown, selectedCount, selectedOnly, compactResults, deltaMode, rowMode = "select", onRowModeChange, sortKey, sortDirection, showStepEyebrow = true, onFiltersChange, onOpenChange, onSelectedOnlyChange, onCompactResultsChange, onDeltaModeChange, onSortChange, onReviewSelected, onResetSelected, selectedOrder }: Props) {
   const { t } = useLang();
   const activeFilterCount = filters.institutions.length + Number(filters.eligibleOnly) + Number(filters.band !== "all") + Number(filters.interview !== "all") + Number(selectedOnly);
   const [sortOpen, setSortOpen] = useState(false);
@@ -100,6 +103,76 @@ export function FiltersBar({ filters, open, institutions, total, shown, selected
           {showStepEyebrow ? <p className="eyebrow">{t("filters.eyebrow")}</p> : null}
           <h2>{t("filters.title")}</h2>
           <p className="filters-title-count">{t("filters.count", { shown, total })}</p>
+          {/* Desktop console: a ⓘ next to the heading opens a feature tour of the
+              Browse tab (the mobile flow gets the same via .step2-info below). One
+              button per viewport, so they share the infoOpen state + popover CSS. */}
+          {!showStepEyebrow ? (
+            <span className="browse-help">
+              <button
+                type="button"
+                className="step2-info-button"
+                aria-label={t("filters.aboutStep")}
+                aria-expanded={infoOpen}
+                onClick={(event) => { event.stopPropagation(); setInfoOpen((v) => !v); }}
+              >
+                <svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true">
+                  <circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                  <circle cx="8" cy="4.6" r="0.9" fill="currentColor" />
+                  <path d="M8 7v5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                </svg>
+              </button>
+              {infoOpen ? (
+                <div className="step2-info-pop browse-help-pop" role="dialog" aria-label={t("filters.howAria")} onClick={(event) => event.stopPropagation()}>
+                  <p className="step2-info-title">{t("filters.browseHelpTitle")}</p>
+                  <p className="step2-info-lede">{t("filters.browseHelpLede")}</p>
+                  <ul className="step2-info-list">
+                    <li>
+                      <span className="step2-info-ic" aria-hidden="true">
+                        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="4.3" stroke="currentColor" strokeWidth="1.5"/><path d="M10.4 10.4 14 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
+                      </span>
+                      <span><b>{t("filters.tip.search.b")}</b>{t("filters.tip.search.t")}</span>
+                    </li>
+                    <li>
+                      <span className="step2-info-ic" aria-hidden="true">
+                        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M4 8h8M6 12h4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/></svg>
+                      </span>
+                      <span><b>{t("filters.tip.filter.b")}</b>{t("filters.tip.filter.t")}</span>
+                    </li>
+                    <li>
+                      <span className="step2-info-ic" aria-hidden="true">
+                        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M5 3v10m0 0-2.5-2.5M5 13l2.5-2.5M11 13V3m0 0L8.5 5.5M11 3l2.5 2.5" stroke="currentColor" strokeWidth="1.55" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                      </span>
+                      <span><b>{t("filters.tipD.sort.b")}</b>{t("filters.tipD.sort.t")}</span>
+                    </li>
+                    <li>
+                      <span className="step2-info-ic" aria-hidden="true">
+                        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="2" y="4" width="12" height="8" rx="2" stroke="currentColor" strokeWidth="1.4"/><circle cx="6" cy="8" r="2" fill="currentColor"/></svg>
+                      </span>
+                      <span><b>{t("filters.tipD.mode.b")}</b>{t("filters.tipD.mode.t")}</span>
+                    </li>
+                    <li>
+                      <span className="step2-info-ic" aria-hidden="true">
+                        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="2.5" y="2.5" width="11" height="11" rx="2.5" stroke="currentColor" strokeWidth="1.4"/><path d="M5 8.2 7 10.2 11 5.6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                      </span>
+                      <span><b>{t("filters.tipD.select.b")}</b>{t("filters.tipD.select.t")}</span>
+                    </li>
+                    <li>
+                      <span className="step2-info-ic" aria-hidden="true">
+                        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M4.5 4.5 11.5 11.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/><circle cx="5" cy="5" r="1.6" stroke="currentColor" strokeWidth="1.4"/><circle cx="11" cy="11" r="1.6" stroke="currentColor" strokeWidth="1.4"/></svg>
+                      </span>
+                      <span><b>{t("filters.tip.delta.b")}</b>{t("filters.tip.delta.t")}</span>
+                    </li>
+                    <li>
+                      <span className="step2-info-ic" aria-hidden="true">
+                        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M8 2 9.7 5.6 13.6 6 10.8 8.9 11.5 12.9 8 11 4.5 12.9 5.2 8.9 2.4 6 6.3 5.6Z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round"/></svg>
+                      </span>
+                      <span><b>{t("filters.tipD.badges.b")}</b>{t("filters.tipD.badges.t")}</span>
+                    </li>
+                  </ul>
+                </div>
+              ) : null}
+            </span>
+          ) : null}
         </div>
         {showStepEyebrow ? (
           <div className="step2-info">
@@ -264,6 +337,31 @@ export function FiltersBar({ filters, open, institutions, total, shown, selected
               </svg>
               <span className="sort-toggle-label">{t("filters.sort")}</span>
             </button>
+            {/* Row-click mode: "View" opens the detail panel on click, "Select"
+                (default) toggles the pick. Desktop console only (CSS), and only
+                when a handler is wired (hidden in read-only share previews). */}
+            {onRowModeChange ? (
+              <div className="rowmode-toggle" role="group" aria-label={t("filters.rowModeAria")}>
+                <button
+                  type="button"
+                  className={rowMode === "view" ? "active" : ""}
+                  aria-pressed={rowMode === "view"}
+                  title={t("filters.rowModeViewTitle")}
+                  onClick={() => onRowModeChange("view")}
+                >
+                  {t("filters.rowModeView")}
+                </button>
+                <button
+                  type="button"
+                  className={rowMode === "select" ? "active" : ""}
+                  aria-pressed={rowMode === "select"}
+                  title={t("filters.rowModeSelectTitle")}
+                  onClick={() => onRowModeChange("select")}
+                >
+                  {t("filters.rowModeSelect")}
+                </button>
+              </div>
+            ) : null}
             <div className="delta-toggle" role="group" aria-label={t("filters.deltaModeAria")}>
               <button
                 type="button"

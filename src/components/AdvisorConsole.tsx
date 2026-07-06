@@ -55,6 +55,14 @@ type Props = {
   programmePicker: ReactNode;
   detailPanel: ReactNode;
 
+  // Main workspace view, lifted to App so the Browse list's "view mode" row-click
+  // can switch straight to the detail panel (the list is an opaque node here).
+  view: "analyze" | "browse" | "detail";
+  onViewChange: (view: "analyze" | "browse" | "detail") => void;
+  // Which view the detail drill-in's Back button returns to (set by whoever opened
+  // it): "browse" for a Browse "view mode" click, "analyze" for planner/analysis.
+  detailReturn: "analyze" | "browse";
+
   readOnly?: boolean;
 };
 
@@ -86,12 +94,17 @@ export function AdvisorConsole({
   alternativesSlot,
   programmePicker,
   detailPanel,
+  view,
+  onViewChange,
+  detailReturn,
   readOnly = false,
 }: Props) {
   const { t } = useLang();
-  // "analyze" is the hero. "browse" is the demoted programme list. "detail"
-  // is a transient drill-in (returns to analyze).
-  const [mainView, setMainView] = useState<"analyze" | "browse" | "detail">("analyze");
+  // "analyze" is the hero. "browse" is the demoted programme list. "detail" is a
+  // transient drill-in (returns to analyze). State lives in App (aliased here) so
+  // the Browse list can open detail directly; the rest of the console is unchanged.
+  const mainView = view;
+  const setMainView = onViewChange;
   const [gradeCollapsed, setGradeCollapsed] = useState(false);
 
   function openDetail(code: string) {
@@ -155,16 +168,17 @@ export function AdvisorConsole({
             role="tab"
             aria-selected={mainView !== "browse"}
             className={`console-tab${mainView !== "browse" ? " is-active" : ""}${mainView === "detail" ? " is-back" : ""}`}
-            onClick={() => setMainView("analyze")}
+            onClick={() => setMainView(mainView === "detail" ? detailReturn : "analyze")}
           >
-            {/* In detail view the tab becomes "← Back to analysis"; plain
+            {/* In detail view the tab becomes a "← Back to …" button, returning to
+                wherever the drill-in was opened from (Browse vs Analysis); plain
                 "Analysis" renders without the arrow so it stays compact. */}
             {mainView === "detail" ? (
               <>
                 <svg className="console-back-arrow is-visible" width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                   <path d="M9.5 3.5 5 8l4.5 4.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-                {t("console.backToAnalysis")}
+                {detailReturn === "browse" ? t("console.backToBrowse") : t("console.backToAnalysis")}
               </>
             ) : t("console.tab.analyze")}
           </button>

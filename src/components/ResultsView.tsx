@@ -32,9 +32,13 @@ type Props = {
   onPick: (code: string) => void;
   onUnpick: (code: string) => void;
   onSortChange: (sortKey: SortKey) => void;
+  // Desktop Browse row-click mode: "select" (default) toggles the pick; "view"
+  // opens the detail panel via onOpenDetail (the tick box still toggles the pick).
+  rowMode?: "select" | "view";
+  onOpenDetail?: (code: string) => void;
 };
 
-export function ResultsView({ results, selectedCodes, activeCode, compact, deltaMode = "points", sortKey, sortDirection, readOnly = false, onFocus, onPick, onUnpick, onSortChange }: Props) {
+export function ResultsView({ results, selectedCodes, activeCode, compact, deltaMode = "points", sortKey, sortDirection, readOnly = false, onFocus, onPick, onUnpick, onSortChange, rowMode = "select", onOpenDetail }: Props) {
   const { t, lang } = useLang();
   const slotByCode = new Map(selectedCodes.map((code, index) => [code, slotLabel(index)]));
   // Render only the view that matches the current viewport instead
@@ -90,6 +94,19 @@ export function ResultsView({ results, selectedCodes, activeCode, compact, delta
     onPick(code);
   }
 
+  // What a row-body click/Enter does. "view" mode drills into the detail panel;
+  // "select" mode (default) toggles the pick + focuses. The tick box (PickButton)
+  // always toggles the pick regardless of mode.
+  function activateRow(code: string) {
+    if (readOnly) return;
+    if (rowMode === "view" && onOpenDetail) {
+      onOpenDetail(code);
+      return;
+    }
+    togglePick(code);
+    onFocus(code);
+  }
+
   function resultClassName(code: string, base = "") {
     const classes = base ? [base] : [];
     if (activeCode === code) classes.push("selected");
@@ -129,22 +146,28 @@ export function ResultsView({ results, selectedCodes, activeCode, compact, delta
                 className={resultClassName(result.programme.jupas_code)}
                 role={readOnly ? undefined : "button"}
                 tabIndex={readOnly ? -1 : 0}
-                onClick={readOnly ? undefined : () => {
-                  togglePick(result.programme.jupas_code);
-                  onFocus(result.programme.jupas_code);
-                }}
+                onClick={readOnly ? undefined : () => activateRow(result.programme.jupas_code)}
                 onKeyDown={readOnly ? undefined : (event) => {
                   if (event.key === "Enter" || event.key === " ") {
                     event.preventDefault();
-                    togglePick(result.programme.jupas_code);
-                    onFocus(result.programme.jupas_code);
+                    activateRow(result.programme.jupas_code);
                   }
                 }}
                 style={readOnly ? undefined : { cursor: "pointer" }}
               >
                 <td>
                   <span className="programme-cell-head">
-                    {readOnly ? null : <PickButton picked={selectedCodes.includes(result.programme.jupas_code)} onClick={() => togglePick(result.programme.jupas_code)} />}
+                    {readOnly ? null : (
+                      // Enlarged selection hit-zone: the whole left gutter around the
+                      // tick box toggles the pick (so "view mode" rows still open on a
+                      // body click, but the left area is an easy select target).
+                      <span
+                        className="pick-hitzone"
+                        onClick={(event) => { event.stopPropagation(); togglePick(result.programme.jupas_code); }}
+                      >
+                        <PickButton picked={selectedCodes.includes(result.programme.jupas_code)} onClick={() => togglePick(result.programme.jupas_code)} />
+                      </span>
+                    )}
                     <span className="programme-cell-text">
                       <strong>
                         {slotByCode.get(result.programme.jupas_code) ? <SlotBadge slot={slotByCode.get(result.programme.jupas_code)!} /> : null}
@@ -182,10 +205,22 @@ export function ResultsView({ results, selectedCodes, activeCode, compact, delta
             data-code={result.programme.jupas_code}
             className={resultClassName(result.programme.jupas_code, "mobile-card")}
             key={result.programme.jupas_code}
-            onClick={readOnly ? undefined : () => togglePick(result.programme.jupas_code)}
+            onClick={readOnly ? undefined : () => {
+              // Desktop compact-card Browse honours the same "view" row-click mode
+              // as the table. Gated on isDesktop so mobile card taps are unchanged.
+              if (isDesktop && rowMode === "view" && onOpenDetail) {
+                onOpenDetail(result.programme.jupas_code);
+                return;
+              }
+              togglePick(result.programme.jupas_code);
+            }}
             onKeyDown={readOnly ? undefined : (event) => {
               if (event.key === "Enter" || event.key === " ") {
                 event.preventDefault();
+                if (isDesktop && rowMode === "view" && onOpenDetail) {
+                  onOpenDetail(result.programme.jupas_code);
+                  return;
+                }
                 togglePick(result.programme.jupas_code);
               }
             }}

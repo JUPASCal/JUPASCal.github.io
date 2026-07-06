@@ -1510,6 +1510,34 @@ html:has(.advisor-console) body {
   color: var(--accent-contrast);
 }
 
+/* View / Select segmented toggle — decides what a Browse row click does (open the
+   detail panel vs. toggle the pick). Desktop-console only, same as .delta-toggle. */
+.rowmode-toggle { display: none; }
+.console-browse .rowmode-toggle {
+  display: inline-flex;
+  align-items: stretch;
+  flex: 0 0 auto;
+  height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--surface-strong);
+}
+.console-browse .rowmode-toggle button {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 850;
+  padding: 0 11px;
+  cursor: pointer;
+  transition: background 160ms ease, color 160ms ease;
+}
+.console-browse .rowmode-toggle button.active {
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+
 /* Collapse the filter panel when closed (Step-2 behaviour): only the search
    row + the Filter button stay; the institution pills + advanced filters hide.
    When the panel is closed, the gap below it also collapses. */
@@ -1584,6 +1612,20 @@ html:has(.advisor-console) body {
   content: "·";
   margin-right: var(--space-2);
   color: var(--muted);
+}
+
+/* Browse feature-tour ⓘ, inline after the heading count. Reuses .step2-info-*
+   styling; only the anchor differs — it opens below-LEFT (the button sits on the
+   left of the panel, not the top-right corner the mobile popover anchors to). */
+.console-browse .browse-help {
+  position: relative;
+  display: inline-flex;
+  align-self: center;
+  margin-inline-start: calc(-1 * var(--space-1));
+}
+.console-browse .browse-help-pop {
+  left: 0;
+  right: auto;
 }
 
 /* (3) hide the "Programme search" label text */
