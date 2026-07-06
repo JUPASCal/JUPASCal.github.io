@@ -1,0 +1,95 @@
+[
+  {
+    "name": "sci-strong",
+    "cores": { "chi": "5", "eng": "5*", "math": "5**" },
+    "m12": { "module": 1, "grade": "5*" },
+    "electives": [
+      { "en": "Physics", "zh": "物理", "grade": "5**" },
+      { "en": "Chemistry", "zh": "化學", "grade": "5*" },
+      { "en": "Biology", "zh": "生物", "grade": "5" }
+    ]
+  },
+  {
+    "name": "arts",
+    "cores": { "chi": "5*", "eng": "5", "math": "4" },
+    "m12": null,
+    "electives": [
+      { "en": "Economics", "zh": "經濟", "grade": "5" },
+      { "en": "Geography", "zh": "地理", "grade": "4" },
+      { "en": "History", "zh": "歷史", "grade": "5" },
+      { "en": "Chinese History", "zh": "中國歷史", "grade": "4" }
+    ]
+  },
+  {
+    "name": "mixed-6subj",
+    "cores": { "chi": "4", "eng": "5", "math": "5" },
+    "m12": { "module": 2, "grade": "5" },
+    "electives": [
+      { "en": "Physics", "zh": "物理", "grade": "5" },
+      { "en": "Chemistry", "zh": "化學", "grade": "4" },
+      { "en": "Economics", "zh": "經濟", "grade": "5" },
+      { "en": "Information and Communication Technology", "zh": "資訊及通訊科技", "grade": "4" }
+    ]
+  },
+  {
+    "name": "weak",
+    "cores": { "chi": "3", "eng": "3", "math": "2" },
+    "m12": null,
+    "electives": [
+      { "en": "Biology", "zh": "生物", "grade": "3" },
+      { "en": "Economics", "zh": "經濟", "grade": "2" }
+    ]
+  },
+  {
+    "name": "m2-sci",
+    "cores": { "chi": "4", "eng": "4", "math": "5*" },
+    "m12": { "module": 2, "grade": "5**" },
+    "electives": [
+      { "en": "Physics", "zh": "物理", "grade": "5*" },
+      { "en": "Chemistry", "zh": "化學", "grade": "5**" },
+      { "en": "Biology", "zh": "生物", "grade": "4" }
+    ]
+  },
+  {
+    "name": "business",
+    "cores": { "chi": "4", "eng": "5*", "math": "5" },
+    "m12": { "module": 1, "grade": "4" },
+    "electives": [
+      { "en": "Business, Accounting and Financial Studies", "zh": "企業、會計與財務概論", "grade": "5*" },
+      { "en": "Economics", "zh": "經濟", "grade": "5" },
+      { "en": "Information and Communication Technology", "zh": "資訊及通訊科技", "grade": "4" }
+    ]
+  },
+  {
+    "name": "humanities",
+    "cores": { "chi": "5**", "eng": "5", "math": "3" },
+    "m12": null,
+    "electives": [
+      { "en": "Chinese Literature", "zh": "中國文學", "grade": "5*" },
+      { "en": "Visual Arts", "zh": "視覺藝術", "grade": "5" },
+      { "en": "History", "zh": "歷史", "grade": "4" },
+      { "en": "Music", "zh": "音樂", "grade": "4" }
+    ]
+  },
+  {
+    "name": "seven-subj",
+    "cores": { "chi": "5", "eng": "5", "math": "5" },
+    "m12": { "module": 1, "grade": "5" },
+    "electives": [
+      { "en": "Physics", "zh": "物理", "grade": "5*" },
+      { "en": "Chemistry", "zh": "化學", "grade": "5" },
+      { "en": "Biology", "zh": "生物", "grade": "5" },
+      { "en": "Economics", "zh": "經濟", "grade": "4" }
+    ]
+  },
+  {
+    "name": "borderline",
+    "cores": { "chi": "3", "eng": "3", "math": "3" },
+    "m12": { "module": 2, "grade": "3" },
+    "electives": [
+      { "en": "Chemistry", "zh": "化學", "grade": "3" },
+      { "en": "Economics", "zh": "經濟", "grade": "3" },
+      { "en": "Geography", "zh": "地理", "grade": "2" }
+    ]
+  }
+]

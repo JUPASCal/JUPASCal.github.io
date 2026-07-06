@@ -1,0 +1,985 @@
+[
+ {
+  "name": "sci-strong",
+  "cores": {
+   "chi": "5",
+   "eng": "5*",
+   "math": "5**"
+  },
+  "m12": {
+   "module": 1,
+   "grade": "5*"
+  },
+  "electives": [
+   {
+    "en": "Physics",
+    "zh": "物理",
+    "grade": "5**"
+   },
+   {
+    "en": "Chemistry",
+    "zh": "化學",
+    "grade": "5*"
+   },
+   {
+    "en": "Biology",
+    "zh": "生物",
+    "grade": "5"
+   }
+  ]
+ },
+ {
+  "name": "arts",
+  "cores": {
+   "chi": "5*",
+   "eng": "5",
+   "math": "4"
+  },
+  "m12": null,
+  "electives": [
+   {
+    "en": "Economics",
+    "zh": "經濟",
+    "grade": "5"
+   },
+   {
+    "en": "Geography",
+    "zh": "地理",
+    "grade": "4"
+   },
+   {
+    "en": "History",
+    "zh": "歷史",
+    "grade": "5"
+   },
+   {
+    "en": "Chinese History",
+    "zh": "中國歷史",
+    "grade": "4"
+   }
+  ]
+ },
+ {
+  "name": "mixed-6subj",
+  "cores": {
+   "chi": "4",
+   "eng": "5",
+   "math": "5"
+  },
+  "m12": {
+   "module": 2,
+   "grade": "5"
+  },
+  "electives": [
+   {
+    "en": "Physics",
+    "zh": "物理",
+    "grade": "5"
+   },
+   {
+    "en": "Chemistry",
+    "zh": "化學",
+    "grade": "4"
+   },
+   {
+    "en": "Economics",
+    "zh": "經濟",
+    "grade": "5"
+   },
+   {
+    "en": "Information and Communication Technology",
+    "zh": "資訊及通訊科技",
+    "grade": "4"
+   }
+  ]
+ },
+ {
+  "name": "weak",
+  "cores": {
+   "chi": "3",
+   "eng": "3",
+   "math": "2"
+  },
+  "m12": null,
+  "electives": [
+   {
+    "en": "Biology",
+    "zh": "生物",
+    "grade": "3"
+   },
+   {
+    "en": "Economics",
+    "zh": "經濟",
+    "grade": "2"
+   }
+  ]
+ },
+ {
+  "name": "m2-sci",
+  "cores": {
+   "chi": "4",
+   "eng": "4",
+   "math": "5*"
+  },
+  "m12": {
+   "module": 2,
+   "grade": "5**"
+  },
+  "electives": [
+   {
+    "en": "Physics",
+    "zh": "物理",
+    "grade": "5*"
+   },
+   {
+    "en": "Chemistry",
+    "zh": "化學",
+    "grade": "5**"
+   },
+   {
+    "en": "Biology",
+    "zh": "生物",
+    "grade": "4"
+   }
+  ]
+ },
+ {
+  "name": "business",
+  "cores": {
+   "chi": "4",
+   "eng": "5*",
+   "math": "5"
+  },
+  "m12": {
+   "module": 1,
+   "grade": "4"
+  },
+  "electives": [
+   {
+    "en": "Business, Accounting and Financial Studies",
+    "zh": "企業、會計與財務概論",
+    "grade": "5*"
+   },
+   {
+    "en": "Economics",
+    "zh": "經濟",
+    "grade": "5"
+   },
+   {
+    "en": "Information and Communication Technology",
+    "zh": "資訊及通訊科技",
+    "grade": "4"
+   }
+  ]
+ },
+ {
+  "name": "humanities",
+  "cores": {
+   "chi": "5**",
+   "eng": "5",
+   "math": "3"
+  },
+  "m12": null,
+  "electives": [
+   {
+    "en": "Chinese Literature",
+    "zh": "中國文學",
+    "grade": "5*"
+   },
+   {
+    "en": "Visual Arts",
+    "zh": "視覺藝術",
+    "grade": "5"
+   },
+   {
+    "en": "History",
+    "zh": "歷史",
+    "grade": "4"
+   },
+   {
+    "en": "Music",
+    "zh": "音樂",
+    "grade": "4"
+   }
+  ]
+ },
+ {
+  "name": "seven-subj",
+  "cores": {
+   "chi": "5",
+   "eng": "5",
+   "math": "5"
+  },
+  "m12": {
+   "module": 1,
+   "grade": "5"
+  },
+  "electives": [
+   {
+    "en": "Physics",
+    "zh": "物理",
+    "grade": "5*"
+   },
+   {
+    "en": "Chemistry",
+    "zh": "化學",
+    "grade": "5"
+   },
+   {
+    "en": "Biology",
+    "zh": "生物",
+    "grade": "5"
+   },
+   {
+    "en": "Economics",
+    "zh": "經濟",
+    "grade": "4"
+   }
+  ]
+ },
+ {
+  "name": "borderline",
+  "cores": {
+   "chi": "3",
+   "eng": "3",
+   "math": "3"
+  },
+  "m12": {
+   "module": 2,
+   "grade": "3"
+  },
+  "electives": [
+   {
+    "en": "Chemistry",
+    "zh": "化學",
+    "grade": "3"
+   },
+   {
+    "en": "Economics",
+    "zh": "經濟",
+    "grade": "3"
+   },
+   {
+    "en": "Geography",
+    "zh": "地理",
+    "grade": "2"
+   }
+  ]
+ },
+ {
+  "name": "edge-5subj",
+  "cores": {
+   "chi": "4",
+   "eng": "4",
+   "math": "4"
+  },
+  "m12": null,
+  "electives": [
+   {
+    "en": "Physics",
+    "zh": "物理",
+    "grade": "4"
+   },
+   {
+    "en": "Chemistry",
+    "zh": "化學",
+    "grade": "4"
+   }
+  ]
+ },
+ {
+  "name": "edge-8top",
+  "cores": {
+   "chi": "5**",
+   "eng": "5**",
+   "math": "5**"
+  },
+  "m12": {
+   "module": 2,
+   "grade": "5**"
+  },
+  "electives": [
+   {
+    "en": "Physics",
+    "zh": "物理",
+    "grade": "5**"
+   },
+   {
+    "en": "Chemistry",
+    "zh": "化學",
+    "grade": "5**"
+   },
+   {
+    "en": "Biology",
+    "zh": "生物",
+    "grade": "5**"
+   },
+   {
+    "en": "Economics",
+    "zh": "經濟",
+    "grade": "5**"
+   }
+  ]
+ },
+ {
+  "name": "edge-all1",
+  "cores": {
+   "chi": "1",
+   "eng": "1",
+   "math": "1"
+  },
+  "m12": {
+   "module": 1,
+   "grade": "1"
+  },
+  "electives": [
+   {
+    "en": "Physics",
+    "zh": "物理",
+    "grade": "1"
+   },
+   {
+    "en": "Chemistry",
+    "zh": "化學",
+    "grade": "1"
+   },
+   {
+    "en": "Economics",
+    "zh": "經濟",
+    "grade": "1"
+   }
+  ]
+ },
+ {
+  "name": "edge-6th-L3",
+  "cores": {
+   "chi": "5",
+   "eng": "5",
+   "math": "5"
+  },
+  "m12": {
+   "module": 1,
+   "grade": "5"
+  },
+  "electives": [
+   {
+    "en": "Physics",
+    "zh": "物理",
+    "grade": "5"
+   },
+   {
+    "en": "Chemistry",
+    "zh": "化學",
+    "grade": "3"
+   }
+  ]
+ },
+ {
+  "name": "edge-6th-L2",
+  "cores": {
+   "chi": "5",
+   "eng": "5",
+   "math": "5"
+  },
+  "m12": {
+   "module": 1,
+   "grade": "5"
+  },
+  "electives": [
+   {
+    "en": "Physics",
+    "zh": "物理",
+    "grade": "5"
+   },
+   {
+    "en": "Chemistry",
+    "zh": "化學",
+    "grade": "2"
+   }
+  ]
+ },
+ {
+  "name": "edge-m2",
+  "cores": {
+   "chi": "3",
+   "eng": "4",
+   "math": "2"
+  },
+  "m12": {
+   "module": 2,
+   "grade": "5**"
+  },
+  "electives": [
+   {
+    "en": "Physics",
+    "zh": "物理",
+    "grade": "5*"
+   },
+   {
+    "en": "Chemistry",
+    "zh": "化學",
+    "grade": "5"
+   },
+   {
+    "en": "Biology",
+    "zh": "生物",
+    "grade": "4"
+   }
+  ]
+ },
+ {
+  "name": "fuzz00",
+  "cores": {
+   "chi": "4",
+   "eng": "5",
+   "math": "3"
+  },
+  "m12": {
+   "module": 1,
+   "grade": "4"
+  },
+  "electives": [
+   {
+    "en": "Visual Arts",
+    "zh": "視覺藝術",
+    "grade": "5**"
+   },
+   {
+    "en": "Chinese History",
+    "zh": "中國歷史",
+    "grade": "4"
+   }
+  ]
+ },
+ {
+  "name": "fuzz01",
+  "cores": {
+   "chi": "5*",
+   "eng": "5*",
+   "math": "4"
+  },
+  "m12": null,
+  "electives": [
+   {
+    "en": "Information and Communication Technology",
+    "zh": "資訊及通訊科技",
+    "grade": "1"
+   },
+   {
+    "en": "Physical Education",
+    "zh": "體育",
+    "grade": "3"
+   }
+  ]
+ },
+ {
+  "name": "fuzz02",
+  "cores": {
+   "chi": "4",
+   "eng": "1",
+   "math": "5**"
+  },
+  "m12": null,
+  "electives": [
+   {
+    "en": "Literature in English",
+    "zh": "英語文學",
+    "grade": "5*"
+   },
+   {
+    "en": "Geography",
+    "zh": "地理",
+    "grade": "4"
+   },
+   {
+    "en": "Music",
+    "zh": "音樂",
+    "grade": "2"
+   }
+  ]
+ },
+ {
+  "name": "fuzz03",
+  "cores": {
+   "chi": "5",
+   "eng": "3",
+   "math": "3"
+  },
+  "m12": {
+   "module": 1,
+   "grade": "3"
+  },
+  "electives": [
+   {
+    "en": "Chinese History",
+    "zh": "中國歷史",
+    "grade": "2"
+   },
+   {
+    "en": "Technology and Living (Fashion, Clothing and Textiles)",
+    "zh": "科技與生活（時裝、成衣及紡織）",
+    "grade": "4"
+   },
+   {
+    "en": "Music",
+    "zh": "音樂",
+    "grade": "1"
+   },
+   {
+    "en": "Literature in English",
+    "zh": "英語文學",
+    "grade": "4"
+   }
+  ]
+ },
+ {
+  "name": "fuzz04",
+  "cores": {
+   "chi": "5",
+   "eng": "5",
+   "math": "2"
+  },
+  "m12": {
+   "module": 2,
+   "grade": "3"
+  },
+  "electives": [
+   {
+    "en": "Technology and Living (Food Science and Technology)",
+    "zh": "科技與生活（食品科學與科技）",
+    "grade": "5*"
+   },
+   {
+    "en": "Design and Applied Technology",
+    "zh": "設計與應用科技",
+    "grade": "4"
+   },
+   {
+    "en": "Physics",
+    "zh": "物理",
+    "grade": "2"
+   }
+  ]
+ },
+ {
+  "name": "fuzz05",
+  "cores": {
+   "chi": "5",
+   "eng": "3",
+   "math": "5**"
+  },
+  "m12": null,
+  "electives": [
+   {
+    "en": "Physical Education",
+    "zh": "體育",
+    "grade": "3"
+   },
+   {
+    "en": "Health Management and Social Care",
+    "zh": "健康管理與社會關懷",
+    "grade": "3"
+   },
+   {
+    "en": "Ethics and Religious Studies",
+    "zh": "倫理與宗教",
+    "grade": "4"
+   },
+   {
+    "en": "Tourism and Hospitality Studies",
+    "zh": "旅遊與款待",
+    "grade": "2"
+   }
+  ]
+ },
+ {
+  "name": "fuzz06",
+  "cores": {
+   "chi": "1",
+   "eng": "3",
+   "math": "3"
+  },
+  "m12": {
+   "module": 2,
+   "grade": "3"
+  },
+  "electives": [
+   {
+    "en": "Technology and Living (Food Science and Technology)",
+    "zh": "科技與生活（食品科學與科技）",
+    "grade": "5**"
+   },
+   {
+    "en": "Design and Applied Technology",
+    "zh": "設計與應用科技",
+    "grade": "4"
+   },
+   {
+    "en": "Chinese Literature",
+    "zh": "中國文學",
+    "grade": "5"
+   },
+   {
+    "en": "Tourism and Hospitality Studies",
+    "zh": "旅遊與款待",
+    "grade": "5*"
+   }
+  ]
+ },
+ {
+  "name": "fuzz07",
+  "cores": {
+   "chi": "5**",
+   "eng": "2",
+   "math": "5*"
+  },
+  "m12": {
+   "module": 2,
+   "grade": "1"
+  },
+  "electives": [
+   {
+    "en": "Physics",
+    "zh": "物理",
+    "grade": "4"
+   },
+   {
+    "en": "History",
+    "zh": "歷史",
+    "grade": "4"
+   },
+   {
+    "en": "Technology and Living (Food Science and Technology)",
+    "zh": "科技與生活（食品科學與科技）",
+    "grade": "5"
+   }
+  ]
+ },
+ {
+  "name": "fuzz08",
+  "cores": {
+   "chi": "4",
+   "eng": "3",
+   "math": "2"
+  },
+  "m12": null,
+  "electives": [
+   {
+    "en": "Chinese Literature",
+    "zh": "中國文學",
+    "grade": "5"
+   },
+   {
+    "en": "Information and Communication Technology",
+    "zh": "資訊及通訊科技",
+    "grade": "5"
+   },
+   {
+    "en": "Geography",
+    "zh": "地理",
+    "grade": "5"
+   },
+   {
+    "en": "Physics",
+    "zh": "物理",
+    "grade": "3"
+   }
+  ]
+ },
+ {
+  "name": "fuzz09",
+  "cores": {
+   "chi": "3",
+   "eng": "5",
+   "math": "5**"
+  },
+  "m12": {
+   "module": 2,
+   "grade": "3"
+  },
+  "electives": [
+   {
+    "en": "Geography",
+    "zh": "地理",
+    "grade": "4"
+   },
+   {
+    "en": "Visual Arts",
+    "zh": "視覺藝術",
+    "grade": "1"
+   },
+   {
+    "en": "Chemistry",
+    "zh": "化學",
+    "grade": "1"
+   }
+  ]
+ },
+ {
+  "name": "fuzz10",
+  "cores": {
+   "chi": "2",
+   "eng": "3",
+   "math": "4"
+  },
+  "m12": {
+   "module": 2,
+   "grade": "3"
+  },
+  "electives": [
+   {
+    "en": "Chinese History",
+    "zh": "中國歷史",
+    "grade": "1"
+   },
+   {
+    "en": "Physics",
+    "zh": "物理",
+    "grade": "4"
+   }
+  ]
+ },
+ {
+  "name": "fuzz11",
+  "cores": {
+   "chi": "5*",
+   "eng": "3",
+   "math": "5*"
+  },
+  "m12": {
+   "module": 1,
+   "grade": "1"
+  },
+  "electives": [
+   {
+    "en": "Biology",
+    "zh": "生物",
+    "grade": "5"
+   },
+   {
+    "en": "Physics",
+    "zh": "物理",
+    "grade": "5"
+   },
+   {
+    "en": "Chinese History",
+    "zh": "中國歷史",
+    "grade": "4"
+   },
+   {
+    "en": "Chinese Literature",
+    "zh": "中國文學",
+    "grade": "4"
+   }
+  ]
+ },
+ {
+  "name": "fuzz12",
+  "cores": {
+   "chi": "5*",
+   "eng": "2",
+   "math": "1"
+  },
+  "m12": {
+   "module": 2,
+   "grade": "4"
+  },
+  "electives": [
+   {
+    "en": "Economics",
+    "zh": "經濟",
+    "grade": "2"
+   },
+   {
+    "en": "Health Management and Social Care",
+    "zh": "健康管理與社會關懷",
+    "grade": "3"
+   }
+  ]
+ },
+ {
+  "name": "fuzz13",
+  "cores": {
+   "chi": "2",
+   "eng": "3",
+   "math": "5"
+  },
+  "m12": null,
+  "electives": [
+   {
+    "en": "Geography",
+    "zh": "地理",
+    "grade": "2"
+   },
+   {
+    "en": "Music",
+    "zh": "音樂",
+    "grade": "4"
+   },
+   {
+    "en": "Biology",
+    "zh": "生物",
+    "grade": "3"
+   }
+  ]
+ },
+ {
+  "name": "fuzz14",
+  "cores": {
+   "chi": "5*",
+   "eng": "2",
+   "math": "3"
+  },
+  "m12": null,
+  "electives": [
+   {
+    "en": "Information and Communication Technology",
+    "zh": "資訊及通訊科技",
+    "grade": "2"
+   },
+   {
+    "en": "Music",
+    "zh": "音樂",
+    "grade": "4"
+   },
+   {
+    "en": "Ethics and Religious Studies",
+    "zh": "倫理與宗教",
+    "grade": "5"
+   }
+  ]
+ },
+ {
+  "name": "fuzz15",
+  "cores": {
+   "chi": "2",
+   "eng": "1",
+   "math": "2"
+  },
+  "m12": null,
+  "electives": [
+   {
+    "en": "Information and Communication Technology",
+    "zh": "資訊及通訊科技",
+    "grade": "3"
+   },
+   {
+    "en": "Chinese History",
+    "zh": "中國歷史",
+    "grade": "2"
+   },
+   {
+    "en": "Visual Arts",
+    "zh": "視覺藝術",
+    "grade": "1"
+   }
+  ]
+ },
+ {
+  "name": "fuzz16",
+  "cores": {
+   "chi": "2",
+   "eng": "3",
+   "math": "5"
+  },
+  "m12": null,
+  "electives": [
+   {
+    "en": "Technology and Living (Food Science and Technology)",
+    "zh": "科技與生活（食品科學與科技）",
+    "grade": "5*"
+   },
+   {
+    "en": "Tourism and Hospitality Studies",
+    "zh": "旅遊與款待",
+    "grade": "5*"
+   },
+   {
+    "en": "Ethics and Religious Studies",
+    "zh": "倫理與宗教",
+    "grade": "3"
+   }
+  ]
+ },
+ {
+  "name": "fuzz17",
+  "cores": {
+   "chi": "4",
+   "eng": "3",
+   "math": "1"
+  },
+  "m12": null,
+  "electives": [
+   {
+    "en": "Technology and Living (Fashion, Clothing and Textiles)",
+    "zh": "科技與生活（時裝、成衣及紡織）",
+    "grade": "2"
+   },
+   {
+    "en": "Tourism and Hospitality Studies",
+    "zh": "旅遊與款待",
+    "grade": "5*"
+   }
+  ]
+ },
+ {
+  "name": "fuzz18",
+  "cores": {
+   "chi": "3",
+   "eng": "1",
+   "math": "2"
+  },
+  "m12": null,
+  "electives": [
+   {
+    "en": "History",
+    "zh": "歷史",
+    "grade": "5*"
+   },
+   {
+    "en": "Literature in English",
+    "zh": "英語文學",
+    "grade": "1"
+   },
+   {
+    "en": "Health Management and Social Care",
+    "zh": "健康管理與社會關懷",
+    "grade": "2"
+   }
+  ]
+ },
+ {
+  "name": "fuzz19",
+  "cores": {
+   "chi": "4",
+   "eng": "2",
+   "math": "5*"
+  },
+  "m12": {
+   "module": 1,
+   "grade": "5**"
+  },
+  "electives": [
+   {
+    "en": "Technology and Living (Food Science and Technology)",
+    "zh": "科技與生活（食品科學與科技）",
+    "grade": "5"
+   },
+   {
+    "en": "Geography",
+    "zh": "地理",
+    "grade": "3"
+   },
+   {
+    "en": "Technology and Living (Fashion, Clothing and Textiles)",
+    "zh": "科技與生活（時裝、成衣及紡織）",
+    "grade": "5**"
+   },
+   {
+    "en": "Tourism and Hospitality Studies",
+    "zh": "旅遊與款待",
+    "grade": "2"
+   }
+  ]
+ }
+]

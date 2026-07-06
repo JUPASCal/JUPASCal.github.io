@@ -7,6 +7,9 @@ __pycache__/
 node_modules/
 dist/
 
+# Generated Excel calculator output (rebuild via scripts/excel/build_2026_excel.py)
+build/
+
 # Generated audit artifact (regenerate via scripts/utils/generate_audit_report.py)
 docs/audit_report.html
 
