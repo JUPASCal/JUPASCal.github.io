@@ -78,11 +78,21 @@ export function describeFormula(
   }
 
   // Bonus-subject suffix (7th takes precedence over 6th when both somehow present).
+  // HKUST models its extra 6th-subject bonus as `hkust_weighted_best` (a % of the
+  // max attainable weighting applied to the best remaining subject) rather than a
+  // plain bonus_6th, so surface that in the headline too — otherwise HKUST's
+  // "+ 6th-subject bonus" would be invisible in the generated formula.
   let hasBonus = false;
+  const hasHkust6th = constraints.some(
+    (c) => c.type === "hkust_weighted_best" && (c.bonus_percentage ?? 0) > 0
+  );
   if (constraints.some((c) => c.type === "bonus_7th")) {
     text += t("detail.formulaGen.bonus7");
     hasBonus = true;
-  } else if (constraints.some((c) => c.type === "bonus_6th" || c.type === "additional_bonus_6th")) {
+  } else if (
+    hasHkust6th ||
+    constraints.some((c) => c.type === "bonus_6th" || c.type === "additional_bonus_6th")
+  ) {
     text += t("detail.formulaGen.bonus6");
     hasBonus = true;
   }

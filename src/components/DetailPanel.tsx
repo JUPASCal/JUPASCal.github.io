@@ -23,6 +23,19 @@ function safeHref(url: string | null | undefined): string | undefined {
   return /^https?:\/\//i.test(trimmed) ? trimmed : undefined;
 }
 
+// HKUST's School of Engineering changed its subject weightings for 2026, so the
+// LQ/median/highest benchmarks HKUST publishes for those programmes are
+// "simulated" — 2025 admission results recalculated with the 2026 formula, which
+// is exactly what our calculator applies. Flag them so DetailPanel can explain the
+// benchmark's nature. Scoped by the existing institution + faculty data fields
+// (not a hardcoded code list) so new/renamed Engineering programmes are covered.
+function isHkustSimulatedScore(programme: Programme): boolean {
+  return programme.institution === "HKUST" && programme.faculty === "School of Engineering";
+}
+
+const HKUST_JUPAS_URL = "https://join.hkust.edu.hk/admissions/jupas";
+const CUHK_JUPAS_URL = "https://admission.cuhk.edu.hk/jupas/";
+
 type Props = {
   results: (ProgrammeResult | null)[];
   activeCode?: string;
@@ -251,7 +264,7 @@ export function DetailPanel({ results, activeCode, reviewRequest, onActiveCodeCh
         <div className={isStuck ? "detail-header is-stuck" : "detail-header"}>
           <div className="detail-header-main">
             <div className="detail-header-text">
-              <p className="eyebrow">{isSuggested(programme.jupas_code) ? (backupSlotOf(programme.jupas_code) ? t("detail.backupFor", { slot: backupSlotOf(programme.jupas_code)! }) : t("detail.suggested")) : prioritySlot(rawActiveIndex)} · {institutionLabel(programme.institution)} · {programme.jupas_code}</p>
+              <p className="eyebrow">{isSuggested(programme.jupas_code) ? (backupSlotOf(programme.jupas_code) ? t("detail.backupFor", { slot: backupSlotOf(programme.jupas_code)! }) : suggestionMode ? t("detail.suggested") : t("detail.viewing")) : prioritySlot(rawActiveIndex)} · {institutionLabel(programme.institution)} · {programme.jupas_code}</p>
               <div
                 className={"detail-name" + (nameExpanded ? " is-expanded" : "")}
                 role="button"
@@ -382,20 +395,82 @@ export function DetailPanel({ results, activeCode, reviewRequest, onActiveCodeCh
               {t("detail.aplAdvisoryPost")}
             </p>
           ) : null}
-          {result.comparisons.length ? (
-            <div className="benchmark-grid">
-              {result.comparisons.map((comparison) => (
-                <div className={comparison.delta >= 0 ? "benchmark-card positive-card" : "benchmark-card negative-card"} key={comparison.key}>
-                  <span>{t(`common.${comparison.key}`)}</span>
-                  <strong>{comparison.score}</strong>
-                  <small>
-                    <b>{formatDelta(comparison.delta)}</b>
-                    <em>{formatPercent(comparison.percent)}</em>
-                  </small>
-                </div>
-              ))}
+          {(() => {
+            // The institution's published 2025 admission scores (LQ/Median/UQ) are
+            // ALWAYS shown — they exist regardless of whether the student has entered
+            // grades. The delta vs the student's own score is overlaid only once there
+            // IS a score (i.e. a matching comparison). Only a genuinely score-less
+            // programme falls through to the "no benchmark" line.
+            const sc = programme.scores_2025 || {};
+            const refKeys: string[] = ["uq", "median", "lq", "mean"];
+            if (sc.median == null && sc.mean == null && sc.expected_score != null) refKeys.push("expected_score");
+            const cmpByKey = new Map(result.comparisons.map((c) => [c.key as string, c]));
+            const cards = refKeys
+              .map((key) => ({ key, score: (sc as Record<string, number | null | undefined>)[key] }))
+              .filter((c): c is { key: string; score: number } => c.score != null);
+            if (!cards.length) return <p className="muted">{t("detail.noBenchmark")}</p>;
+            return (
+              <div className="benchmark-grid">
+                {cards.map(({ key, score }) => {
+                  const cmp = cmpByKey.get(key);
+                  const cls = !cmp ? "benchmark-card" : cmp.delta >= 0 ? "benchmark-card positive-card" : "benchmark-card negative-card";
+                  return (
+                    <div className={cls} key={key}>
+                      <span>{t(`common.${key}`)}</span>
+                      <strong>{score}</strong>
+                      {cmp ? (
+                        <small>
+                          <b>{formatDelta(cmp.delta)}</b>
+                          <em>{formatPercent(cmp.percent)}</em>
+                        </small>
+                      ) : null}
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })()}
+          {isHkustSimulatedScore(programme) ? (
+            <div className="simulated-scores-note">
+              <p>{t("detail.hkustSim.note")}</p>
+              <p className="simulated-scores-formula">{t("detail.hkustSim.formula")}</p>
+              <a
+                className="simulated-scores-source"
+                href={HKUST_JUPAS_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {t("detail.hkustSim.source")} ↗
+              </a>
             </div>
-          ) : <p className="muted">{t("detail.noBenchmark")}</p>}
+          ) : null}
+          {programme.score_basis === "cuhk_2026_recalculated" ? (
+            <div className="simulated-scores-note">
+              <p>{t("detail.cuhkRecalc.note")}</p>
+              <a
+                className="simulated-scores-source"
+                href={CUHK_JUPAS_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {t("detail.cuhkRecalc.source")} ↗
+              </a>
+            </div>
+          ) : null}
+          {programme.score_basis === "cuhk_2026_simulated" ? (
+            <div className="simulated-scores-note">
+              <p>{t("detail.cuhkSim.note")}</p>
+              <p className="simulated-scores-formula">{t("detail.cuhkSim.method")}</p>
+              <a
+                className="simulated-scores-source"
+                href={CUHK_JUPAS_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {t("detail.cuhkRecalc.source")} ↗
+              </a>
+            </div>
+          ) : null}
           {programme.scores_2025?.score_type === "estimated" ? (
             <p className="warning">{t("detail.estimatedNotePre")}<b>{t("detail.estimatedNoteBold")}</b>{t("detail.estimatedNotePost")}</p>
           ) : null}

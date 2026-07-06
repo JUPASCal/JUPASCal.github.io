@@ -32,7 +32,10 @@ export function buildProgrammeResult(programme: Programme, grades: StudentGrades
     eligibility,
     comparisons,
     band,
-    hasScoreData: comparisons.length > 0,
+    // Whether the PROGRAMME has 2025 admission-score data — independent of whether
+    // the student has entered grades. (Was `comparisons.length > 0`, which was
+    // false with no grades, wrongly flagging real benchmarks as "no data".)
+    hasScoreData: hasHistoricalScores(programme),
   };
 }
 

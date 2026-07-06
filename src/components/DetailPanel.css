@@ -466,6 +466,43 @@
   color: var(--text);
 }
 
+/* HKUST School of Engineering "simulated 2026 scores" explanation, shown under
+   the LQ/median/highest benchmark cards. Accent-tinted callout so it reads as
+   context, not a warning. */
+.simulated-scores-note {
+  margin: 10px 0 0;
+  padding: 9px 12px;
+  font-size: 0.76rem;
+  line-height: 1.45;
+  color: var(--muted);
+  background: color-mix(in srgb, var(--accent) 7%, var(--surface-strong));
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--line));
+  border-left: 3px solid var(--accent);
+  border-radius: 9px;
+}
+
+.simulated-scores-note p {
+  margin: 0;
+}
+
+.simulated-scores-note .simulated-scores-formula {
+  margin-top: 6px;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.simulated-scores-source {
+  display: inline-block;
+  margin-top: 7px;
+  font-weight: 700;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.simulated-scores-source:hover {
+  text-decoration: underline;
+}
+
 
 .score-context-tap {
   display: inline-flex;

@@ -165,6 +165,11 @@ export type Programme = {
   extra_eligibility?: { min_total?: number; min_top_grade_count?: number; top_grade?: string };
   max_achievable_score?: number | null;
   scores_2025: Scores2025;
+  // Set when the stored benchmark is NOT a raw same-formula historical score but a
+  // recalculation of the 2025 admission results with the (changed) 2026 formula, so
+  // it stays comparable to a 2026-formula-scored student. Currently "cuhk_2026_recalculated"
+  // for the CUHK programmes that changed formula for 2026 (see DetailPanel note).
+  score_basis?: string;
   score_grades_2025?: Record<string, Record<string, string> | null>;
   offer_statistics?: OfferStatistic[];
   quota?: number | null;

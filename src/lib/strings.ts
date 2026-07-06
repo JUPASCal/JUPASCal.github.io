@@ -185,6 +185,19 @@ export const STRINGS = {
   "filters.tip.drag.t": { en: " to reorder your priorities.", zh: "即可調整優先次序。" },
   "filters.tip.remove.b": { en: "Long-press", zh: "長按" },
   "filters.tip.remove.t": { en: " a Selected chip to remove it.", zh: "已選項目即可移除。" },
+  // Desktop-console Browse help popover (the ⓘ next to the "Select programmes"
+  // heading). Covers the desktop-only controls: sort via headers, View/Select
+  // mode, the tick-box / left-of-row select target, and the row badges.
+  "filters.browseHelpTitle": { en: "Browse & compare", zh: "瀏覽與比較" },
+  "filters.browseHelpLede": { en: "See how your score sits against every programme's past admissions, then build your Band A.", zh: "查看你的分數與各課程往年收生的比較，然後建立你的 Band A。" },
+  "filters.tipD.sort.b": { en: "Sort", zh: "排序" },
+  "filters.tipD.sort.t": { en: " by clicking any column header — score, band, or the LQ / median / UQ gaps.", zh: "點擊任何欄標題即可排序：分數、Band，或 LQ／中位數／UQ 差距。" },
+  "filters.tipD.mode.b": { en: "View / Select", zh: "瀏覽／選擇" },
+  "filters.tipD.mode.t": { en: " toggle: in Select, clicking a row adds it to Band A; in View, clicking opens the programme's full details.", zh: "切換：「選擇」時點擊整行加入 Band A；「瀏覽」時點擊整行查看課程完整資料。" },
+  "filters.tipD.select.b": { en: "Tick box", zh: "剔選格" },
+  "filters.tipD.select.t": { en: " — or the left of any row — adds or removes a programme in either mode.", zh: "（或每行左側範圍）在兩種模式下都可加入或移除課程。" },
+  "filters.tipD.badges.b": { en: "Badges", zh: "課程標記" },
+  "filters.tipD.badges.t": { en: " flag ineligibility and interview timing (pre / post-results).", zh: "顯示是否符合資格及面試時間（放榜前／後）。" },
   "filters.programmeSearch": { en: "Programme search", zh: "課程搜尋" },
   "filters.searchPlaceholder": { en: "Try a name, short form or JS code – nursing · BBA · law · JS1001", zh: "輸入名稱、簡稱或 JS 編號 – 護理 · 工管 · 法律 · JS1001" },
   "filters.compact": { en: "Compact", zh: "列表顯示" },
@@ -196,6 +209,12 @@ export const STRINGS = {
   "filters.deltaPct": { en: "% Diff", zh: "百分比" },
   "filters.deltaPtsTitle": { en: "Show the difference in raw points", zh: "以分數差距顯示" },
   "filters.deltaPctTitle": { en: "Show the difference as a percentage", zh: "以百分比差距顯示" },
+  // Browse row-click mode: "view" opens the detail panel; "select" toggles the pick.
+  "filters.rowModeAria": { en: "What clicking a row does", zh: "點擊課程列的動作" },
+  "filters.rowModeView": { en: "View", zh: "瀏覽" },
+  "filters.rowModeSelect": { en: "Select", zh: "選擇" },
+  "filters.rowModeViewTitle": { en: "Click a row to open its details (tick box still selects)", zh: "點擊課程列以查看詳情（剔格仍用作選擇）" },
+  "filters.rowModeSelectTitle": { en: "Click a row to select it for your Band A", zh: "點擊課程列以加入你的 Band A" },
   "filters.clearSearch": { en: "Clear search", zh: "清除搜尋" },
   "filters.showTools": { en: "Show sort & filter tools", zh: "顯示排序與篩選工具" },
   "filters.compactToComfort": { en: "Show comfortable programme cards", zh: "切換為卡片顯示" },
@@ -319,6 +338,7 @@ export const STRINGS = {
   "console.tab.analyze": { en: "Analysis", zh: "分析" },
   "console.tab.browse": { en: "Browse", zh: "瀏覽課程" },
   "console.backToAnalysis": { en: "Back to analysis", zh: "返回分析" },
+  "console.backToBrowse": { en: "Back to browse", zh: "返回瀏覽" },
 
   // – Strategy summary (advisor) –
   "strategy.ariaPanel": { en: "Strategy summary", zh: "策略摘要" },
@@ -376,6 +396,9 @@ export const STRINGS = {
   "detail.eligible": { en: "Eligible", zh: "符合資格" },
   "detail.suggested": { en: "Suggested", zh: "建議課程" },
   "detail.backupFor": { en: "Backup for {slot}", zh: "{slot} 的後備之選" },
+  // A programme opened just to look at (Browse "view" mode) — not a plan slot or a
+  // system suggestion — so it doesn't read as "we recommend this".
+  "detail.viewing": { en: "Details", zh: "課程詳情" },
   "detail.ineligible": { en: "Ineligible", zh: "不符合資格" },
   "detail.reqNotMet": { en: "Requirements not met", zh: "未符合入學要求" },
   "detail.prevProgramme": { en: "Previous programme", zh: "上一個課程" },
@@ -402,6 +425,26 @@ export const STRINGS = {
   "detail.estimatedNoteBold": { en: "estimated", zh: "估算" },
   "detail.estimatedNotePost": { en: " from HKBU's published grade breakdowns (not actual admission scores), so treat them as approximate.", zh: "所得（並非實際收生分數），只可視作約數。" },
   "detail.lqCaveat": { en: "LQ above the median isn't a bug – this programme likely weighs more than your score (interview, portfolio, etc.).", zh: "LQ 高於中位數並非系統錯誤 – 此課程或會較重視分數以外的因素（如面試、作品集等）。" },
+  // HKUST School of Engineering benchmark note. For 2026 these departments changed
+  // their subject weightings, so HKUST published "simulated" scores – 2025 admission
+  // results recalculated with the 2026 formula – which is exactly what these
+  // LQ/median/highest figures are, and what our calculator reproduces.
+  "detail.hkustSim.note": { en: "HKUST is updating its Engineering subject weightings for 2026. These LQ, median, and highest figures are HKUST's official simulated scores — 2025 admission results recalculated with the 2026 formula — so they compare directly with your calculated score.", zh: "香港科技大學工學院於 2026 年更新各科加權。以下 LQ、中位數及最高分為科大公佈的「模擬分數」，即以 2026 年計分方法重新計算 2025 年收生成績，因此可與你的計算分數直接比較。" },
+  "detail.hkustSim.formula": { en: "2026 formula: English ×2 + Maths ×2 + best 3 weighted electives + 6th-subject bonus.", zh: "2026 計分方法：英文 ×2 ＋ 數學 ×2 ＋ 3 科按指定比重的選修科 ＋ 第 6 科獎勵分。" },
+  "detail.hkustSim.source": { en: "HKUST JUPAS admissions", zh: "香港科技大學 JUPAS 收生資訊" },
+  // CUHK programmes that changed their scoring formula for 2026. CUHK republished the
+  // 2025 admission scores recalculated with the new 2026 formula, so these benchmarks
+  // are 2026-formula-based (like the HKUST simulated scores) — and we score you with
+  // the 2026 formula to match. Driven by programme.score_basis = "cuhk_2026_recalculated".
+  "detail.cuhkRecalc.note": { en: "CUHK changed this programme's scoring formula for 2026 (new subject weightings / selection). These LQ, median, and highest figures are CUHK's 2025 admission results recalculated with the 2026 formula, and your score here uses that 2026 formula — so the two are directly comparable.", zh: "香港中文大學於 2026 年更新此課程的計分方法（新增科目加權／選科要求）。以下 LQ、中位數及最高分為科大以 2026 年計分方法重新計算的 2025 年收生成績，而你於此課程的分數亦以 2026 年計分方法計算，因此可直接比較。" },
+  "detail.cuhkRecalc.source": { en: "CUHK JUPAS admissions", zh: "香港中文大學 JUPAS 收生資訊" },
+  // CUHK programmes that gained a CORE-subject weighting for 2026 where CUHK did NOT
+  // publish a recalculated total. We estimate the benchmark by applying the 2026
+  // weighting to CUHK's published subject-grade profiles of past admitted students
+  // (electives stay ×1 — anonymised). Honest about being our estimate.
+  // Driven by programme.score_basis = "cuhk_2026_simulated".
+  "detail.cuhkSim.note": { en: "CUHK added a new subject weighting to this programme for 2026 but hasn't published recalculated admission scores — so these LQ, median, and highest figures are our own estimate, not official CUHK numbers.", zh: "香港中文大學於 2026 年為此課程新增科目加權，但未有公佈重新計算的收生分數，因此以下 LQ、中位數及最高分為我們自行估算，並非科大官方數字。" },
+  "detail.cuhkSim.method": { en: "How we compute them: CUHK publishes the exact DSE grades of the applicants admitted at the 2025 lower-quartile, median, and upper-quartile positions. We apply the 2026 weighting to their core subjects (Chinese / English / Maths) — electives stay ×1 because CUHK anonymises them — and recompute each one's Best-5 score. With no weighting this method reproduces CUHK's published 2025 scores exactly, and your score here uses the identical 2026 weighting, so the two are directly comparable. Treat them as close estimates.", zh: "計算方法：科大公佈了 2025 年在下四分位、中位及上四分位位置獲取錄學生的確實 DSE 各科成績。我們以 2026 年加權方法套用於其核心科目（中文／英文／數學）——選修科維持 ×1，因科大將其匿名——再重新計算各人的最佳 5 科分數。在不加權的情況下，此方法可完全還原科大公佈的 2025 年分數；而你於此課程的分數亦以相同的 2026 年加權方法計算，故兩者可直接比較。此為近似估算。" },
   "detail.formula2025Label": { en: "2025 comparison logic", zh: "2025 年比較邏輯" },
   "detail.formula2025Note": { en: "Used to compare your score against 2025 admission benchmarks.", zh: "用於將你的分數對照 2025 年收生基準。" },
   "detail.formula2026Label": { en: "2026 applicant reference", zh: "2026 年申請人參考" },
