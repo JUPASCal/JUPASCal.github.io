@@ -13,7 +13,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0 --port 5174 --strictPort",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && npm run build:seo",
+    "build:seo": "node scripts/seo/generate_seo_pages.mjs",
     "preview": "vite preview --host 0.0.0.0",
     "audit": "node scripts/audit_eligibility.mjs",
     "audit:analysis": "node scripts/analysis_scenarios.mjs",

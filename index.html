@@ -67,9 +67,59 @@
       }
     }
     </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is JUPASCal?",
+          "acceptedAnswer": { "@type": "Answer", "text": "JUPASCal is a free, unofficial JUPAS admission-score calculator for Hong Kong HKDSE students. You enter your DSE grades and it estimates your score under each JUPAS programme's own subject weighting, then compares it against recent admission scores." }
+        },
+        {
+          "@type": "Question",
+          "name": "How does JUPASCal calculate my JUPAS score?",
+          "acceptedAnswer": { "@type": "Answer", "text": "It applies each programme's real subject weighting and Best-5 / Best-6 formula to your DSE grades, using the 2025 scoring logic so your result is comparable to that programme's 2025 lower-quartile, median and upper-quartile admission scores. Eligibility is checked against the 2026 entrance requirements." }
+        },
+        {
+          "@type": "Question",
+          "name": "Which universities does JUPASCal cover?",
+          "acceptedAnswer": { "@type": "Answer", "text": "All ten JUPAS institutions: HKU, CUHK, HKUST, PolyU, CityUHK, HKBU, Lingnan University, EdUHK, HKMU and the SSSDP programmes." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is JUPASCal free and official?",
+          "acceptedAnswer": { "@type": "Answer", "text": "It is completely free with no sign-up, in English and 中文. It is unofficial and for reference only — always confirm details with each institution and JUPAS." }
+        }
+      ]
+    }
+    </script>
   </head>
-  <body>
-    <div id="root"></div>
+  <body style="background:#f8f0ea;margin:0">
+    <div id="root">
+      <!-- Static landing content for search engines and the no-JS / slow-load
+           fallback. React (createRoot().render in src/main.tsx) REPLACES this the
+           moment the app mounts, so users see it only briefly while JS loads.
+           Keep the copy generic — no hard-coded programme count (project UI-copy rule). -->
+      <main style="max-width:680px;margin:0 auto;padding:48px 24px;font-family:'Gelasio',Georgia,serif;color:#3a2e28;line-height:1.65">
+        <h1 style="font-size:1.9rem;margin:0 0 10px">JUPAS Calculator 2026 · JUPAS 收生計分器</h1>
+        <p style="margin:0 0 18px;color:#6b5d54">A free, unofficial JUPAS &amp; HKDSE admission-score calculator for Hong Kong university applicants.</p>
+        <p>Enter your HKDSE grades to estimate your admission score under each JUPAS programme's own subject weighting, and compare it against recent lower-quartile, median and upper-quartile admission scores across all ten institutions — HKU, CUHK, HKUST, PolyU, CityUHK, HKBU, Lingnan University, EdUHK, HKMU and the SSSDP programmes.</p>
+        <p lang="zh-Hant">輸入你的 DSE 成績，按每個 JUPAS 課程的計分比重估算分數，並對比全港十間院校往年（下四分位／中位／上四分位）的收生分數，了解各志願的排位機會。</p>
+        <ul>
+          <li>Every JUPAS degree programme across Hong Kong's 10 institutions</li>
+          <li>Each programme's real subject weighting and Best-5 / Best-6 scoring formula</li>
+          <li>Compare against 2025 lower-quartile, median and upper-quartile admission scores</li>
+          <li>Eligibility checked against 2026 entrance requirements</li>
+          <li>Free · bilingual (English / 中文) · no sign-up</li>
+        </ul>
+        <p style="color:#6b5d54">Loading the interactive calculator…</p>
+      </main>
+    </div>
+    <noscript>
+      <p style="text-align:center;padding:16px;font-family:Georgia,serif;color:#3a2e28">JUPASCal is an interactive JUPAS / DSE score calculator — please enable JavaScript to use it.</p>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

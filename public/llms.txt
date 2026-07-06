@@ -1,0 +1,21 @@
+# JUPASCal — JUPAS / HKDSE admission-score calculator
+
+> JUPASCal is a free, unofficial JUPAS (Joint University Programmes Admissions
+> System) admission-score calculator for Hong Kong HKDSE students. Enter your DSE
+> grades to estimate your score under each JUPAS programme's own subject weighting,
+> and compare it against recent (2025) lower-quartile, median and upper-quartile
+> admission scores across all ten institutions.
+
+## Key facts
+
+- Covers every JUPAS undergraduate degree programme across Hong Kong's 10 institutions: HKU, CUHK, HKUST, PolyU, CityUHK, HKBU, Lingnan University, EdUHK, HKMU, and the SSSDP programmes.
+- For each programme it provides: the real subject weighting and Best-5 / Best-6 scoring formula, 2025 admission scores (LQ / median / UQ), 2026 entrance requirements, and admission statistics (applications, offers, competition).
+- Scoring uses the latest available 2025 admission data so estimates are comparable to 2025 benchmarks; eligibility is checked against 2026 entrance requirements.
+- Free, bilingual (English / 中文), no sign-up. Unofficial and for reference only — students should confirm details with each institution and JUPAS.
+
+## Pages
+
+- [JUPAS score calculator (home)](https://jupascal.com/)
+- [All programmes — browse index](https://jupascal.com/p/)
+- Individual programme pages follow the pattern `https://jupascal.com/p/<JUPAS-CODE>/`, e.g. [JS4725](https://jupascal.com/p/JS4725/). Each has that programme's scores, weighting, requirements, statistics, and an FAQ.
+- Full URL list: [sitemap.xml](https://jupascal.com/sitemap.xml)
