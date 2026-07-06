@@ -1,0 +1,58 @@
+{
+  "_comment": "VLM-verified CUHK weight/score corrections (see docs/manuals/VLM_WEIGHT_EXTRACTION.md). CUHK's coded API `weight` feed is sometimes STALE, and a few programmes changed their 2026 scoring formula while CUHK published 2025 admission scores RECALCULATED with the new formula. Authoritative source = the 'Useful Information for JUPAS Applicants' booklets, transcribed by VLM from both the 2025 and 2026 editions. unify_2026_data.py applies these as overrides before year-changes detection. Edit this file (not the JSON) when a new cycle's VLM diff finds a correction.",
+  "_verified": "2026-07-06 from Useful-Information-for-JUPAS-Applicants-2025.pdf and -2026.pdf",
+
+  "JS4903": {
+    "_note": "Bachelor of Laws. Booklet 2026 REMOVED the English x2 weighting (now only 'English must be included'); CUHK's API still returns AENGL:2 (stale). 2025 (English x2 + Chi/Eng/Math must-include) is correct and unchanged, so scoring stays right; this only fixes the 2026 reference display.",
+    "subject_weights_2026": {}
+  },
+
+  "JS4428": {
+    "_note": "Financial Technology. Elective pool multiplier dropped x1.5 (2025) -> x1.25 (2026); the API/2025 value x1.5 leaked into 2026. Core weights (Eng/Chi x1.25, Maths x1.75, M1/M2 x1.75) unchanged.",
+    "subject_weights_2026": {
+      "English Language": 1.25,
+      "Chinese Language": 1.25,
+      "Mathematics (Compulsory Part)": 1.75,
+      "Biology": 1.25,
+      "Chemistry": 1.25,
+      "Physics": 1.25,
+      "Business, Accounting and Financial Studies": 1.25,
+      "Economics": 1.25,
+      "Information and Communication Technology": 1.25
+    }
+  },
+
+  "JS4725": {
+    "_note": "Biotechnology, Entrepreneurship and Healthcare Management. 2025 had NO weighting; 2026 introduced best-2-of-Eng/Bio/Chem x1.5 with Best-of-Bio/Chem forced in. CUHK published the 2025 admission scores RECALCULATED with the 2026 formula (programme page, footnote '(1)'), which is what we compare a 2026-formula-scored student against. best_of_weights_2025 is deliberately kept = 2026 (x1.5 pool) so the score and this recalculated benchmark share the 2026 basis (same model as HKUST simulated scores). score_basis drives the DetailPanel explanation note. Elective-weighted, so we CANNOT self-simulate (electives are anonymised in the grade profiles) — hence we use CUHK's official published recalc.",
+    "score_basis": "cuhk_2026_recalculated",
+    "scores_2025": {
+      "uq": 33.75,
+      "median": 33,
+      "lq": 32.44,
+      "expected_score": 32
+    }
+  },
+
+  "_sim_comment": "The following 3 programmes gained a CORE-subject weighting (Chinese/English) for 2026. CUHK did not publish a recalculated total, but publishes the per-subject grade profile of the UQ/median/LQ admitted students (cuhk_grades_2025.json, from the admission-score PDF). We reproduce those published 2025 scores EXACTLY, then re-apply the 2026 core weighting (electives kept at x1 — they are anonymised, so unknowable) to SIMULATE the 2026 benchmark. subject_weights_2025 is set = 2026 so the student is scored on the same 2026 basis. score_basis='cuhk_2026_simulated' (a 3-point estimate — see docs/manuals/VLM_WEIGHT_EXTRACTION.md; some LQ profiles are absent and estimated from the median uplift).",
+
+  "JS4070": {
+    "_note": "Linguistics. 2025 none -> 2026 English x1.2. Published 2025 uq/med/lq all 24.5 (degenerate). LQ profile absent -> lq estimated = median.",
+    "score_basis": "cuhk_2026_simulated",
+    "subject_weights_2025": { "English Language": 1.2 },
+    "scores_2025": { "uq": 25.6, "median": 25.3, "lq": 25.3 }
+  },
+
+  "JS4100": {
+    "_note": "Public Humanities. 2025 none -> 2026 Chinese x1.5 + English x1.5. All 3 profiles present; the strong weighting re-orders the 3 sampled students, so the recomputed scores are sorted to keep uq>=median>=lq.",
+    "score_basis": "cuhk_2026_simulated",
+    "subject_weights_2025": { "Chinese Language": 1.5, "English Language": 1.5 },
+    "scores_2025": { "uq": 30, "median": 28.5, "lq": 27.75 }
+  },
+
+  "JS4109": {
+    "_note": "Religious Studies. 2025 none -> 2026 English x1.25. LQ profile absent -> lq estimated from the median uplift.",
+    "score_basis": "cuhk_2026_simulated",
+    "subject_weights_2025": { "English Language": 1.25 },
+    "scores_2025": { "uq": 23, "median": 22.5, "lq": 22 }
+  }
+}

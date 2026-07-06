@@ -2614,6 +2614,38 @@ def unify_data():
                 _new.setdefault(_ck, _v)
             _obj[f"subject_weights_{_yr}"] = _new
 
+    # 4b-i½. VLM-verified CUHK weight/score corrections. CUHK's coded API `weight`
+    # feed is sometimes STALE relative to the official booklet (e.g. JS4903 still
+    # returns English x2 for 2026 though the booklet removed it; JS4428's elective
+    # pool dropped x1.5 -> x1.25), and a few programmes changed their scoring formula
+    # for 2026 while CUHK published 2025 admission scores RECALCULATED with the new
+    # formula (e.g. JS4725). The authoritative source is the "Useful Information for
+    # JUPAS Applicants" booklet, transcribed via the VLM workflow — NOT the PDF text
+    # parser or the API. See docs/manuals/VLM_WEIGHT_EXTRACTION.md. These per-programme
+    # overrides are applied BEFORE year_changes so the "Weighting changed" pills reflect
+    # the corrected 2026 weights.
+    _corr_path = "Reference(2026)/CUHK/cuhk_weight_corrections.json"
+    if os.path.exists(_corr_path):
+        with open(_corr_path, encoding="utf-8") as _cf:
+            _corrections = json.load(_cf)
+        _corr_applied = 0
+        for _code, _fix in _corrections.items():
+            if _code.startswith("_"):
+                continue
+            _obj = unified_map.get(_code)
+            if not _obj:
+                print(f"  WARNING: correction for {_code} but no such programme in unified data")
+                continue
+            for _k, _v in _fix.items():
+                if _k.startswith("_"):
+                    continue
+                if _k == "scores_2025" and isinstance(_v, dict):
+                    _obj.setdefault("scores_2025", {}).update(_v)
+                else:
+                    _obj[_k] = _v
+            _corr_applied += 1
+        print(f"CUHK VLM corrections applied: {_corr_applied} programme(s)")
+
     # 4b-ii. Year-over-year change detection. Runs AFTER weight canonicalization so
     # the diff is over canonical subject keys. Attaches a compact `year_changes`
     # summary only when a real (noise-filtered) weighting/formula change exists;
