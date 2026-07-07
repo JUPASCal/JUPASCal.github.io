@@ -95,16 +95,33 @@
       ]
     }
     </script>
+    <style>
+      /* Pre-load / no-JS background only. Set on <html> (NOT inline on <body>) so the
+         app's `body { background: var(--bg) }` still wins once it mounts — an inline
+         body background would override it and break dark mode. Respects the system
+         preference before JS, and the app's data-theme toggle after. */
+      body { margin: 0; }
+      html { background: #f8f0ea; }
+      #seo-fallback { color: #3a2e28; }
+      #seo-fallback .muted { color: #6b5d54; }
+      @media (prefers-color-scheme: dark) {
+        html { background: #11100e; }
+        #seo-fallback { color: #eee8dc; }
+        #seo-fallback .muted { color: #a59d90; }
+      }
+      :root[data-theme="light"] { background: #f8f0ea; }
+      :root[data-theme="dark"] { background: #11100e; }
+    </style>
   </head>
-  <body style="background:#f8f0ea;margin:0">
+  <body>
     <div id="root">
       <!-- Static landing content for search engines and the no-JS / slow-load
            fallback. React (createRoot().render in src/main.tsx) REPLACES this the
            moment the app mounts, so users see it only briefly while JS loads.
            Keep the copy generic — no hard-coded programme count (project UI-copy rule). -->
-      <main style="max-width:680px;margin:0 auto;padding:48px 24px;font-family:'Gelasio',Georgia,serif;color:#3a2e28;line-height:1.65">
+      <main id="seo-fallback" style="max-width:680px;margin:0 auto;padding:48px 24px;font-family:'Gelasio',Georgia,serif;line-height:1.65">
         <h1 style="font-size:1.9rem;margin:0 0 10px">JUPAS Calculator 2026 · JUPAS 收生計分器</h1>
-        <p style="margin:0 0 18px;color:#6b5d54">A free, unofficial JUPAS &amp; HKDSE admission-score calculator for Hong Kong university applicants.</p>
+        <p class="muted" style="margin:0 0 18px">A free, unofficial JUPAS &amp; HKDSE admission-score calculator for Hong Kong university applicants.</p>
         <p>Enter your HKDSE grades to estimate your admission score under each JUPAS programme's own subject weighting, and compare it against recent lower-quartile, median and upper-quartile admission scores across all ten institutions — HKU, CUHK, HKUST, PolyU, CityUHK, HKBU, Lingnan University, EdUHK, HKMU and the SSSDP programmes.</p>
         <p lang="zh-Hant">輸入你的 DSE 成績，按每個 JUPAS 課程的計分比重估算分數，並對比全港十間院校往年（下四分位／中位／上四分位）的收生分數，了解各志願的排位機會。</p>
         <ul>
@@ -114,7 +131,7 @@
           <li>Eligibility checked against 2026 entrance requirements</li>
           <li>Free · bilingual (English / 中文) · no sign-up</li>
         </ul>
-        <p style="color:#6b5d54">Loading the interactive calculator…</p>
+        <p class="muted">Loading the interactive calculator…</p>
       </main>
     </div>
     <noscript>
