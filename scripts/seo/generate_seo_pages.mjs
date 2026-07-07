@@ -12,12 +12,24 @@
 // relative asset paths under /p/<CODE>/. They use root-absolute links (/, /p/, /?p=).
 //
 // Wired into `npm run build` (build:seo) so it runs locally and in CI.
-import { readFileSync, writeFileSync, mkdirSync } from "fs";
+import { readFileSync, writeFileSync, mkdirSync, readdirSync } from "fs";
 
 const SITE = "https://jupascal.com";
 const OUT = "dist";
 const DATA = "data/processed/JUPAS_2026_Unified_Data.json";
 const data = JSON.parse(readFileSync(DATA, "utf8"));
+
+// Prefetch the app's hashed JS/CSS (+ the runtime data) so that when a visitor taps
+// the CTA, the calculator is already in cache and opens instantly — turning the
+// static-page → app hand-off into a single seamless step. These are low-priority
+// hints the browser fetches while idle and skips on save-data / slow connections
+// (no SEO impact — it's preloading, not a redirect). Runs after `vite build`.
+let PREFETCH = "";
+try {
+  const assets = readdirSync(`${OUT}/assets`).filter((f) => /\.(js|css)$/.test(f));
+  PREFETCH = ["/", ...assets.map((f) => `/assets/${f}`), "/data/processed/JUPAS_2026_Unified_Data.json"]
+    .map((h) => `<link rel="prefetch" href="${h}" />`).join("\n");
+} catch { PREFETCH = ""; }
 
 const INST = {
   HKU: { en: "The University of Hong Kong", zh: "香港大學" },
@@ -150,6 +162,8 @@ const SHELL_CSS = `
   .faq h3{margin-top:18px}
   .faq p{margin:2px 0 0}
   footer{margin-top:44px;border-top:1px solid var(--line);padding-top:18px;font-size:.8rem;color:var(--muted)}
+  .cta-bar{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;justify-content:center;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(10px);border-top:1px solid var(--line)}
+  .cta-bar .cta{margin:0;width:100%;max-width:440px;justify-content:center;box-shadow:none}
 `;
 
 function head(title, desc, canonical, extraLd, htmlLang = "zh-Hant") {
@@ -175,6 +189,7 @@ function head(title, desc, canonical, extraLd, htmlLang = "zh-Hant") {
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gelasio:wght@400;600;700&display=swap" />
+${PREFETCH}
 ${extraLd || ""}
 <style>${SHELL_CSS}</style>
 </head>
@@ -267,12 +282,11 @@ function programmePage(p, siblings) {
   <div class="faq"><h2>常見問題 <span class="en">FAQ</span></h2>
   ${faqs.map(([q, a]) => `<h3>${esc(q)}</h3><p>${esc(a)}</p>`).join("\n  ")}</div>
 
-  <a class="cta" href="/?p=${code}">開啟 JUPASCal 計算機 · Open the calculator →</a>
-
   ${rel ? `<h2>${esc(inst)} 其他課程 <span class="en">Other programmes</span></h2><ul>${rel}</ul>` : ""}
 
   <footer>JUPASCal 為免費、非官方的 JUPAS／DSE 收生計分工具，所有分數僅供參考，請以 ${esc(instZh(inst))} 及 JUPAS 公佈為準。計分採用最新（2025 年）收生數據，入學資格採用 2026 年要求。<br>JUPASCal is a free, unofficial JUPAS / HKDSE score calculator — estimates for reference only.</footer>
 </div>
+<div class="cta-bar"><a class="cta" href="/?p=${code}">計算我的分數 · Calculate my score →</a></div>
 </body>
 </html>`;
 }
