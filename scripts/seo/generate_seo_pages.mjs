@@ -238,7 +238,15 @@ function programmePage(p, siblings) {
     provider: { "@type": "CollegeOrUniversity", name: instEn(inst) },
   };
   const faqLd = { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faqs.map(([q, a]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })) };
-  const extraLd = `<script type="application/ld+json">${JSON.stringify(courseLd)}</script>\n<script type="application/ld+json">${JSON.stringify(faqLd)}</script>`;
+  const breadcrumbLd = {
+    "@context": "https://schema.org", "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "JUPASCal", item: `${SITE}/` },
+      { "@type": "ListItem", position: 2, name: "All programmes", item: `${SITE}/p/` },
+      { "@type": "ListItem", position: 3, name: `${nameEn} (${code})`, item: canonical },
+    ],
+  };
+  const extraLd = [courseLd, faqLd, breadcrumbLd].map((o) => `<script type="application/ld+json">${JSON.stringify(o)}</script>`).join("\n");
 
   const statCards = [];
   if (lq != null) statCards.push(`<div class="stat"><span class="k">下四分位 LQ</span><span class="v">${lq}</span></div>`);
