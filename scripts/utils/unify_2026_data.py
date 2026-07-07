@@ -1942,6 +1942,31 @@ def unify_data():
                 obj["subject_weights_2026"].update(parse_hku_formula_weights(formula_26))
                 obj["subject_weights_2025"].update(parse_hku_formula_weights(formula_25))
 
+                # HKU "best of pool" mis-flattening fix. A formula slot like
+                # "1.5 x Best Sci Subject" or "Best 2 from Bio/Chem/Phys/M1/M2" gives
+                # its weight to only the BEST N of the subject_weight pool — not every
+                # listed subject. parse_hku_weights flattened the whole pool, so a
+                # student taking several sciences got each boosted (the same
+                # over-weighting bug found for HKUST). Detect the "Best [one] … Sci
+                # Subject" / "Best N from …" restriction and convert the weighted pool
+                # into a best_of (count N), stripping it from the flat weights. Formulas
+                # that merely say "Best N Subjects" (no "Sci"/"from" pool) legitimately
+                # weight EVERY listed elective, so they're left as flat weights.
+                _sw_pool = parse_hku_weights(sw_text)
+                _bo_count = 1 if re.search(r'Best\b[^+]*Sci[^+]*Subject', str(formula_25) or '', re.IGNORECASE) else None
+                _m_from = re.search(r'Best\s+(\d+)\s+from\b', str(formula_25) or '', re.IGNORECASE)
+                if _m_from:
+                    _bo_count = int(_m_from.group(1))
+                if _bo_count and _sw_pool:
+                    _w = max(_sw_pool.values())
+                    _pool_subs = sorted(k for k, v in _sw_pool.items() if v == _w)
+                    obj["best_of_weights_2026"].append({"count": _bo_count, "subjects": _pool_subs, "weight": _w})
+                    for _k in _pool_subs:
+                        obj["subject_weights_2026"].pop(_k, None)
+                        obj["subject_weights_2025"].pop(_k, None)
+                    print(f"  [fix] HKU {code}: best-{_bo_count}-of-{len(_pool_subs)} pool ×{_w:g} "
+                          f"(was flattened onto every pool member)")
+
                 # Detect Best of pools in HKU formula
                 m_best = re.search(r'Best of (.*?) with Weighting([\d.]+)', f_text, re.IGNORECASE)
                 if m_best:
