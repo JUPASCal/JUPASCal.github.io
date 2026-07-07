@@ -1967,6 +1967,27 @@ def unify_data():
                     print(f"  [fix] HKU {code}: best-{_bo_count}-of-{len(_pool_subs)} pool ×{_w:g} "
                           f"(was flattened onto every pool member)")
 
+                # JS6858 (BSc & LLB): its subject_weight scrape is EMPTY, so the
+                # general fix above can't reach it. Model its formula "2 x Eng +
+                # 2 x Math/M1/M2 + 2 x Best Sci Subject + Best 3" from the formula +
+                # other_req (which names the science pool as Bio/Chem/Physics): the
+                # best of {Math,M1,M2} and the best of {Bio,Chem,Phys} each take ×2
+                # (best-of, not every member). Without this both ×2 boosts are
+                # missing — a perfect student scores 68 vs the ~76.5 max, under its
+                # own UQ (56). Re-check: only fires while the scrape stays empty.
+                if code == "JS6858" and not (sw_text or "").strip():
+                    obj["subject_weights_2026"].pop("Mathematics (Compulsory Part)", None)
+                    obj["subject_weights_2025"].pop("Mathematics (Compulsory Part)", None)
+                    for _pool in ({"count": 1, "weight": 2.0,
+                                   "subjects": ["Mathematics (Compulsory Part)",
+                                                "Mathematics Extended Part (Module 1)",
+                                                "Mathematics Extended Part (Module 2)"]},
+                                  {"count": 1, "weight": 2.0,
+                                   "subjects": ["Biology", "Chemistry", "Physics"]}):
+                        obj["best_of_weights_2026"].append(dict(_pool))
+                    print("  [fix] HKU JS6858: added best-of ×2 pools for Math/M1/M2 "
+                          "and Bio/Chem/Physics (empty subject_weight scrape)")
+
                 # Detect Best of pools in HKU formula
                 m_best = re.search(r'Best of (.*?) with Weighting([\d.]+)', f_text, re.IGNORECASE)
                 if m_best:
