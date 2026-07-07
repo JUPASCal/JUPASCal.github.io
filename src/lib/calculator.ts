@@ -15,6 +15,13 @@ import { canonicalSubject, CAT_A_SUBJECTS, SUBJECT_EXPANSIONS } from "./subjects
 
 const CAT_A_SET = new Set(CAT_A_SUBJECTS);
 
+// UI/slot bookkeeping keys whose value is a subject name, not a DSE grade:
+// `elective-1..4:subject`, `cat-c:subject`, `cat-b:subject`, `m12:module`. These
+// (and ONLY these) must be dropped before scoring — a broad "contains a colon"
+// skip also swallows real subjects whose names contain a colon (Category C
+// languages, Combined Science). Kept in sync with dataWorker.ts's visibleGrades().
+export const SLOT_BOOKKEEPING_KEY = /^(?:elective-[1-4]|cat-[bc]):subject$|^m12:module$/;
+
 // HKUST's max attainable base points (a 5** subject — see its score-conversion
 // table). Only used to phrase the bonus as a "% of a full-marks subject" label.
 const UST_MAX_BASE_POINTS = 8.5;
@@ -177,11 +184,13 @@ export function calculateScore(studentGrades: StudentGrades, programme: Programm
 
   for (const [subject, grade] of Object.entries(studentGrades)) {
     if (!grade || grade === "U") continue;
-    // Skip non-grade UI/slot keys (`elective-N:subject`, `cat-c:subject`,
-    // `m12:module`) — their value is a subject name, not a DSE grade, so they'd
-    // otherwise become zero-point junk candidates. Real grade keys are full
-    // subject names and never contain a colon.
-    if (subject.includes(":")) continue;
+    // Skip non-grade UI/slot POINTER keys (`elective-N:subject`, `cat-c:subject`,
+    // `cat-b:subject`, `m12:module`) — their value is a subject name, not a DSE
+    // grade. Match the specific slot patterns, NOT any colon: legitimate subject
+    // names DO contain colons (Category C languages "Japanese: …", Combined
+    // Science "…: Biology + Chemistry"), and a broad colon skip silently dropped
+    // them from scoring + eligibility.
+    if (SLOT_BOOKKEEPING_KEY.test(subject)) continue;
     // Programmes that ignore Category C (Other Languages) entirely — the
     // language never enters their score (e.g. HKBU JS2120 "不計日文").
     if (isCategoryCSubject(subject) && !acceptsCategoryC(programme)) continue;

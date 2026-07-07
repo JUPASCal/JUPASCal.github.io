@@ -1,5 +1,6 @@
 /// <reference lib="webworker" />
 import { buildProgrammeResult } from "./results";
+import { SLOT_BOOKKEEPING_KEY } from "./calculator";
 import type { Programme, ProgrammeResult, StudentGrades } from "../types/jupas";
 
 // Off-main-thread data layer for the JUPAS calculator.
@@ -28,10 +29,13 @@ export type SlimResult = Omit<ProgrammeResult, "programme"> & { code: string };
 
 let loadedProgrammes: Programme[] = [];
 
-// Strips UI bookkeeping keys (`<slot>:subject`, `m12:module`) so only real
-// subject→grade entries reach the calc. Real subjects never contain a colon.
+// Strips UI slot-pointer keys (`elective-N:subject`, `cat-c:subject`,
+// `cat-b:subject`, `m12:module`) so only real subject→grade entries reach the
+// calc. Matches the specific slot patterns, NOT any colon — Category C languages
+// ("Japanese: …") and Combined Science ("…: Biology + Chemistry") are real
+// subjects whose names contain a colon and MUST survive (see SLOT_BOOKKEEPING_KEY).
 function visibleGrades(grades: StudentGrades): StudentGrades {
-  return Object.fromEntries(Object.entries(grades).filter(([key]) => !key.includes(":")));
+  return Object.fromEntries(Object.entries(grades).filter(([key]) => !SLOT_BOOKKEEPING_KEY.test(key)));
 }
 
 function post(message: unknown) {
