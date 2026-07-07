@@ -68,6 +68,82 @@ function modalWeight(weights: Record<string, number>): number {
   return best;
 }
 
+// HKUST's engineering/science formula is a SEQUENCE of weighted slots, not a plain
+// weighted Best-N: after the required cores, each "best from pool" slot picks the
+// single best still-unused subject and applies THAT slot's per-subject weight. Pools
+// are graded — e.g. "best of {Physics ×2, ICT ×1.5, Bio·Chem ×1}" gives the winner
+// its own weight and relegates the losers to later (lower-weight) slots. This can't
+// be expressed as flat weights + best-of, so we walk `hkust_formula_steps` directly.
+type HkustFormulaStep = {
+  type: "required" | "best_from_pool" | "better_of";
+  subject?: string;
+  weight?: number;
+  subject_filter?: string[];
+  weights?: { subjects: string[]; weight: number }[];
+  eligible_categories?: string[];
+};
+
+// Collapse a formula-step subject name OR a student-grade key to one canonical form
+// so they compare equal (handles the long "(Algebra and Calculus) - Module 2" module
+// names and the "Compulsory Part" core).
+function hkNorm(name: string): string {
+  return canonicalSubject(normalizeSubjectKey(name));
+}
+
+// Score the HKUST sequential formula in place: each step consumes one candidate and
+// pushes it to `selectedSubjects` with its slot weight; the caller's `addScore`
+// accumulates the total. Leaves unused candidates for the 6th-subject bonus.
+function scoreHkustSteps(
+  steps: HkustFormulaStep[],
+  candidates: CandidateScore[],
+  selectedSubjects: CandidateScore[],
+  programme: Programme,
+  addScore: (points: number) => void,
+): void {
+  const catOk = (step: HkustFormulaStep, cand: CandidateScore): boolean => {
+    // ApL only ever feeds the 6th-subject bonus, never a scored slot.
+    if (programme.apl_bonus_only && isCategoryBSubject(cand.subject)) return false;
+    const cats = step.eligible_categories;
+    if (!cats || !cats.length) return true;
+    if (isCategoryBSubject(cand.subject)) return cats.includes("Category B");
+    if (isCategoryCSubject(cand.subject)) return cats.includes("Category C");
+    return true; // Core / Category A
+  };
+  const stepWeight = (step: HkustFormulaStep, cand: CandidateScore): number => {
+    for (const group of step.weights || []) {
+      if ((group.subjects || []).some((s) => hkNorm(s) === hkNorm(cand.subject))) return group.weight;
+    }
+    return 1; // "other subjects" default
+  };
+  const take = (cand: CandidateScore, weight: number, compulsory: boolean): void => {
+    cand.used = true;
+    cand.isCompulsory = compulsory;
+    cand.multiplier = weight;
+    cand.weightedScore = cand.basePoints * weight;
+    selectedSubjects.push(cand);
+    addScore(cand.weightedScore);
+  };
+  for (const step of steps) {
+    if (step.type === "required" && step.subject) {
+      const cand = candidates.find((c) => !c.used && hkNorm(c.subject) === hkNorm(step.subject!));
+      if (cand) take(cand, Number(step.weight ?? 1), true);
+    } else if (step.type === "best_from_pool") {
+      const filter = step.subject_filter || [];
+      let best: CandidateScore | null = null;
+      let bestWeight = 1;
+      let bestScore = -Infinity;
+      for (const cand of candidates) {
+        if (cand.used || !catOk(step, cand)) continue;
+        if (filter.length && !filter.some((s) => hkNorm(s) === hkNorm(cand.subject))) continue;
+        const weight = stepWeight(step, cand);
+        const score = cand.basePoints * weight;
+        if (score > bestScore) { bestScore = score; best = cand; bestWeight = weight; }
+      }
+      if (best) take(best, bestWeight, false);
+    }
+  }
+}
+
 export function calculateScore(studentGrades: StudentGrades, programme: Programme, year: "2025" | "2026" = "2025"): CalculationResult {
   if (!programme?.score_conversion_table) {
     return { totalScore: 0, selected: [], allCandidates: [], score_type: "actual" };
@@ -185,6 +261,19 @@ export function calculateScore(studentGrades: StudentGrades, programme: Programm
   let totalScore = 0;
   let targetCount = getTargetCount(programme, year, constraints);
 
+  // HKUST sequential formula (graded per-slot pools) — walk the recipe directly
+  // instead of the generic weighted Best-N. better-of programmes keep the generic
+  // path (their pool is a two-option "take the higher" that the recipe encodes
+  // separately). See scoreHkustSteps + hkust_formula_steps.
+  const hkustSteps = (programme as { hkust_formula_steps?: HkustFormulaStep[] }).hkust_formula_steps;
+  const usingHkustSteps = Array.isArray(hkustSteps)
+    && hkustSteps.some((step) => step.type === "best_from_pool")
+    && !hkustSteps.some((step) => step.type === "better_of");
+  if (usingHkustSteps) {
+    scoreHkustSteps(hkustSteps!, candidates, selectedSubjects, programme, (points) => { totalScore += points; });
+  }
+
+  if (!usingHkustSteps) {
   for (const candidate of candidates.filter((candidate) => candidate.isCompulsory)) {
     candidate.used = true;
     selectedSubjects.push(candidate);
@@ -226,6 +315,7 @@ export function calculateScore(studentGrades: StudentGrades, programme: Programm
     selectedSubjects.push(candidate);
     totalScore += candidate.weightedScore;
   }
+  } // end generic (non-HKUST-steps) selection
 
   let bonusCandidates = candidates.filter((candidate) => !candidate.used).sort((a, b) => b.weightedScore - a.weightedScore);
   const bonus6 = getBonusConstraint(constraints, "bonus_6th");

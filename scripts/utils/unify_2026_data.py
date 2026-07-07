@@ -1562,6 +1562,35 @@ def unify_data():
                 hkust_js_data[entry['jupas_code']] = entry
         print(f"Loaded HKUST JS extract: {len(hkust_js_data)} entries")
 
+        # Known scrape error — JS5901. Its official formula (HKUST PDF) is identical
+        # to the other engineering programmes: English×2 + Math×2 + best of
+        # {Bio/Chem/Phys ×2, ICT ×1} + best 2 other {M1/M2 ×1.5, else ×1}, giving a
+        # highest-attainable of 75.86. But its scraped `otherSubjects` text dropped
+        # the "(x 2)" ("Biology / Chemistry / Physics, ICT (x 1)"), so its
+        # formula_steps came through with the sciences at ×1 — a theoretical max of
+        # only 67.36, BELOW its own published 75.86. Tell-tale: the extract's own
+        # max_attainable_weighting (8.5) already assumes ×2, so the ×1 pool is
+        # internally inconsistent. Patch the science pool back to ×2, re-checking so
+        # a future corrected scrape surfaces the override as redundant.
+        _js5901 = hkust_js_data.get('JS5901')
+        if _js5901:
+            for _step in _js5901.get('formula_steps', []):
+                if _step.get('type') != 'best_from_pool':
+                    continue
+                if not any('Biology' in s for s in (_step.get('subject_filter') or [])):
+                    continue
+                _sci_w = [g.get('weight') for g in (_step.get('weights') or [])
+                          if any(x in ('Biology', 'Chemistry', 'Physics') for x in g.get('subjects', []))]
+                if _sci_w and max(_sci_w) <= 1.0:
+                    _step['weights'] = [
+                        {'subjects': ['Biology', 'Chemistry', 'Physics'], 'weight': 2.0},
+                        {'subjects': ['Information and Communication Technology'], 'weight': 1.0},
+                    ]
+                    print("  [fix] JS5901 science pool ×1 → ×2 (scrape dropped '(x 2)'; matches official 75.86 HA)")
+                else:
+                    print("  ⚠ REVIEW: JS5901 science pool no longer ×1 — scrape may be fixed; drop this override")
+                break
+
     # Load HKU Raw API for Min Reqs & Extra Info
     hku_req_map = {}
     hku_extra_map = {}
@@ -2047,6 +2076,31 @@ def unify_data():
                                         obj["best_of_weights_2025"].append(pool_entry.copy())
                             break
 
+                # Standard engineering formula: a RESTRICTED best_from_pool step
+                # ("Best from Bio/Chem/Phys/ICT") boosts only ONE subject — the rest
+                # count as ordinary "other subjects" (x1). The JS-extract flattened
+                # every pool member into subject_weights (e.g. Bio/Chem/Phys ALL x2),
+                # which wrongly weights every science a student takes. Convert each
+                # weight-group (>1) of a restricted pool into a best_of pool (count 1)
+                # and strip those subjects from the flat weights so only the single
+                # best one is boosted. (better-of programmes handle their own pool.)
+                if not is_better_of:
+                    for step in formula_steps:
+                        if not (isinstance(step, dict) and step.get('type') == 'best_from_pool'):
+                            continue
+                        if not step.get('subject_filter'):
+                            continue  # empty filter = "any remaining" → the flat weight is correct
+                        for wg in step.get('weights', []) or []:
+                            w = wg.get('weight', 1)
+                            subs = [normalize_subject(s) for s in (wg.get('subjects') or [])]
+                            if w and w > 1 and subs:
+                                pool_entry = {"count": 1, "subjects": subs, "weight": w}
+                                obj["best_of_weights_2025"].append(pool_entry)
+                                obj["best_of_weights_2026"].append(pool_entry.copy())
+                                for s in subs:
+                                    obj["subject_weights_2025"].pop(s, None)
+                                    obj["subject_weights_2026"].pop(s, None)
+
                 # Store formula_steps as a reference field for future use
                 obj["hkust_formula_steps"] = formula_steps
 
@@ -2078,14 +2132,20 @@ def unify_data():
                 if isinstance(bonus_cats, str):
                     bonus_cats = [c.strip() for c in bonus_cats.split(',') if c.strip()]
 
-                # max_attainable_weighting: sum of all multipliers in the optimal best-N selection.
-                # For better-of programmes: explicit weights + 1 pool slot at pool_weight + remaining at 1.0
+                # max_attainable_weighting = sum of the multipliers in the OPTIMAL
+                # best-N selection (drives the 6th-subject bonus rate). The JS-extract
+                # carries the authoritative value; prefer it. The old local sum was
+                # wrong once pooled sciences were (correctly) stripped from the flat
+                # weights — it summed every flat weight, ignoring that a restricted
+                # pool contributes only ONE slot.
                 subject_num = entry.get('subjectNum', 5)
-                explicit_weights = obj["subject_weights_2025"]
-                explicit_sum = sum(explicit_weights.values())
-                pool_slots = 1 if is_better_of else 0
-                remaining_slots = subject_num - len(explicit_weights) - pool_slots
-                max_attainable = explicit_sum + pool_slots * pool_weight + remaining_slots * 1.0
+                max_attainable = js.get('max_attainable_weighting')
+                if max_attainable is None:
+                    explicit_weights = obj["subject_weights_2025"]
+                    explicit_sum = sum(explicit_weights.values())
+                    pool_slots = 1 if is_better_of else 0
+                    remaining_slots = subject_num - len(explicit_weights) - pool_slots
+                    max_attainable = explicit_sum + pool_slots * pool_weight + remaining_slots * 1.0
 
                 obj["calculation_constraints"].append({
                     "type": "hkust_weighted_best",
