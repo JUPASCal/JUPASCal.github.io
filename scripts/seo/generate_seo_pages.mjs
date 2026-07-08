@@ -67,8 +67,22 @@ const EXTRA_CSS = `<style>
   .seo-lede{color:var(--muted);font-size:.92rem;margin:0 0 4px}
   .seo-faq p.eyebrow,.seo-faq{margin-top:0}
   .seo-faq h4{font-size:.95rem;margin:14px 0 3px}
-  .seo-faq .a{color:var(--muted);font-size:.88rem;margin:0}
-  .seo-rel a{display:inline-block;margin:0 8px 4px 0}
+  .seo-faq .a{color:var(--muted);font-size:.88rem;margin:0 0 10px;line-height:1.5}
+  .seo-faq .a .seo-en{display:block;margin-top:2px;opacity:.9}
+  /* Unlike the app (which drops the English sub-name once the header compacts),
+     a static bilingual page keeps both names visible when the header sticks. */
+  .detail-static .detail-header.is-stuck .zh-name{display:block!important}
+  /* Related-programme list: one programme per row, both names + code. */
+  .seo-rel{display:flex;flex-direction:column;gap:0}
+  .seo-rel a{display:block;margin:0;padding:7px 2px;border-top:1px solid var(--line);text-decoration:none}
+  .seo-rel a:last-child{border-bottom:1px solid var(--line)}
+  .seo-rel .rel-en{color:var(--muted);font-size:.86em;margin-left:4px}
+  .seo-rel .rel-code{color:var(--muted);font-size:.82em;margin-left:4px}
+  .offers-sentence{margin:0}.offers-sentence .seo-en,.offers-caption .seo-en{display:block;color:var(--muted)}
+  .offers-caption{margin:0}
+  /* Benchmark labels carry both languages (上四分位 UQ / 中位數 MED / 下四分位 LQ) —
+     shrink the label a touch so it stays on one line in the narrow cards. */
+  .detail-static .benchmark-card span{font-size:.62rem;letter-spacing:.01em}
   .stepper-footer .stepper-next-btn{width:100%}
 </style>`;
 
@@ -90,6 +104,10 @@ const shortUrl = (u) => String(u).replace(/^https?:\/\/(www\.)?/, "").replace(/\
 const SHORT = { "English Language": "English 英文", "Chinese Language": "Chinese 中文", "Mathematics (Compulsory Part)": "Maths 數學", "Citizenship and Social Development": "CSD 公民科", "Mathematics Extended Part (Module 1)": "M1", "Mathematics Extended Part (Module 2)": "M2" };
 const shortSubj = (s) => SHORT[s] ?? s;
 const REQ_ZH = { chi: "中文 Chinese", eng: "英文 English", math: "數學 Maths", csd: "公民科 CSD" };
+// Split a "中文 English" bilingual label back into its parts (for one-language contexts
+// like the Chinese/English FAQ answers). zhPart keeps the leading CJK run; enPart the rest.
+const zhPart = (label) => String(label).replace(/\s+[A-Za-z].*$/, "").trim();
+const enPart = (label) => { const m = String(label).match(/[A-Za-z].*$/); return m ? m[0].trim() : String(label); };
 
 function weightItems(p) {
   const out = [];
@@ -140,8 +158,12 @@ function offersCard(p) {
     const r = (a && o != null) ? (o / a * 100).toFixed(1) + "%" : "—";
     return `<div class="offers-table-row" role="row"><span role="cell" class="offers-table-year">${y}</span><span role="cell" class="offers-table-cell"><b>${a ?? "—"}</b></span><span role="cell" class="offers-table-cell"><b>${o ?? "—"}</b></span><span role="cell" class="offers-table-cell accent"><b>${r}</b></span></div>`;
   }).join("");
-  const yLabel = `${years.length} 年數據 ${years.length} yrs`;
-  return `<hr class="grade-section-divider"><section class="offers-card formula-card"><div class="offers-card-eyebrow"><span>Band A 取錄 Offers · ${latest}</span>${rate ? `<b class="tally-badge offers-tally">取錄率 Rate ${rate}</b>` : ""}</div>${la != null ? `<p class="formula-text">${la} 名 Band A 申請人中 ${lo ?? "—"} 人獲取錄 · ${lo ?? "—"} of ${la} Band A applicants got an offer</p>` : ""}<small>歷年 Band A 申請與取錄人數（${years[years.length - 1]}–${latest}）· Band A applications vs offers by year</small><hr class="weight-divider"><button type="button" class="weight-toggle" aria-expanded="false" data-collapse data-show="顯示${yLabel}" data-hide="隱藏${yLabel}">顯示${yLabel}${CHEV}</button><div class="offers-body wt-hidden"><div class="offers-table" role="table" aria-label="按年份列出的 Band A 取錄紀錄 · Band A offers by year"><div class="offers-table-head" role="row"><span role="columnheader">年份<br>Year</span><span role="columnheader">Band A 申請<br>Applicants</span><span role="columnheader">取錄<br>Offers</span><span role="columnheader">取錄率<br>Rate</span></div>${trows}</div></div></section>`;
+  const showLabel = `顯示 ${years.length} 年數據 · Show ${years.length} years`;
+  const hideLabel = `隱藏 ${years.length} 年數據 · Hide ${years.length} years`;
+  const sentence = la != null
+    ? `<p class="formula-text offers-sentence">${la} 名 Band A 申請人中 ${lo ?? "—"} 人獲取錄<span class="seo-en">${lo ?? "—"} of ${la} Band A applicants received an offer</span></p>`
+    : "";
+  return `<hr class="grade-section-divider"><section class="offers-card formula-card"><div class="offers-card-eyebrow"><span>Band A 取錄 · Offers ${latest}</span>${rate ? `<b class="tally-badge offers-tally">取錄率 · Rate ${rate}</b>` : ""}</div>${sentence}<small class="offers-caption">歷年 Band A 申請與取錄人數（${years[years.length - 1]}–${latest}）<span class="seo-en">Band A applications vs offers by year</span></small><hr class="weight-divider"><button type="button" class="weight-toggle" aria-expanded="false" data-collapse data-show="${showLabel}" data-hide="${hideLabel}">${showLabel}${CHEV}</button><div class="offers-body wt-hidden"><div class="offers-table" role="table" aria-label="按年份列出的 Band A 取錄紀錄 · Band A offers by year"><div class="offers-table-head" role="row"><span role="columnheader">年份<br>Year</span><span role="columnheader">Band A 申請<br>Applicants</span><span role="columnheader">取錄<br>Offers</span><span role="columnheader">取錄率<br>Rate</span></div>${trows}</div></div></section>`;
 }
 
 // The full "more information" card (overview blocks + study level, tuition, contacts) —
@@ -163,7 +185,7 @@ function extraInfoCard(p) {
   if (p.tuition_fee_first_year) parts.push(`<div class="extra-info-row"><em>首年學費 First-year tuition</em><span class="extra-info-value">${esc(p.tuition_fee_first_year)}</span></div>`);
   if (p.contacts_text) parts.push(`<div class="extra-info-row"><em>聯絡資料 Contact</em><span class="extra-info-value multiline">${esc(p.contacts_text)}</span></div>`);
   if (!parts.length) return "";
-  return `<hr class="grade-section-divider"><section class="extra-info-card formula-card"><div class="extra-info-eyebrow"><span>更多資料 · More information</span><b class="tally-badge extra-info-tally">${parts.length} 部分 sections</b></div><hr class="weight-divider"><button type="button" class="weight-toggle" aria-expanded="false" data-collapse data-show="顯示課程詳情 Show details" data-hide="隱藏課程詳情 Hide details">顯示課程詳情 Show details${CHEV}</button><div class="extra-info-body wt-hidden">${parts.join("")}</div></section>`;
+  return `<hr class="grade-section-divider"><section class="extra-info-card formula-card"><div class="extra-info-eyebrow"><span>更多資料 · More information</span><b class="tally-badge extra-info-tally">${parts.length} 部分 · ${parts.length} sections</b></div><hr class="weight-divider"><button type="button" class="weight-toggle" aria-expanded="false" data-collapse data-show="顯示課程詳情 · Show details" data-hide="隱藏課程詳情 · Hide details">顯示課程詳情 · Show details${CHEV}</button><div class="extra-info-body wt-hidden">${parts.join("")}</div></section>`;
 }
 
 function head(title, desc, canonical, extraLd, extraStyle) {
@@ -221,22 +243,35 @@ function programmePage(p, siblings) {
     + (med != null ? ` Its 2025 median admission score was ${med}${uq != null && lq != null ? ` (upper quartile ${uq}, lower quartile ${lq})` : ""}.` : "")
     + ` It is scored on ${formulaTxt}${witems.length ? ` with weighting: ${plainWeights}` : " with equal subject weighting"}.`
     + (os && os.apps != null ? ` In ${os.year} it received ${os.apps} applications for about ${os.quota ?? "?"} places.` : "");
+  const zhName = nameZh || nameEn, instP = instShort(inst);
   const faqs = [];
-  if (med != null) faqs.push([`${code} 2025 年收生分數是多少？ · What was the 2025 admission score for ${code}?`, `The 2025 median admission score for ${nameEn} (${code}) at ${inst} was ${med}${uq != null ? `, UQ ${uq}` : ""}${lq != null ? `, LQ ${lq}` : ""}.${note ? " " + note.en : ""}`]);
-  if (reqs.length) faqs.push([`${code} 2026 入學要求？ · Entrance requirements for ${code}?`, `${nameEn} (${code}) requires ${reqs.map(([k, v]) => k.replace(/&amp;/g, "&") + " L" + v).join("; ")}.`]);
-  faqs.push([`${code} 的分數如何計算？ · How is the ${code} score calculated?`, `${nameEn} uses ${formulaTxt}${witems.length ? `, with weightings: ${plainWeights}` : " with equal (x1) subject weighting"}.`]);
+  if (med != null) faqs.push({
+    q: `${code} 2025 年收生分數是多少？ · What was the 2025 admission score for ${code}?`,
+    aZh: `${instP}${zhName}（${code}）2025 年收生中位數為 ${med} 分${uq != null ? `，上四分位 ${uq} 分` : ""}${lq != null ? `，下四分位 ${lq} 分` : ""}。${note ? note.zh : ""}`,
+    aEn: `The 2025 median admission score for ${nameEn} (${code}) at ${inst} was ${med}${uq != null ? `, UQ ${uq}` : ""}${lq != null ? `, LQ ${lq}` : ""}.${note ? " " + note.en : ""}`,
+  });
+  if (reqs.length) faqs.push({
+    q: `${code} 2026 入學要求？ · Entrance requirements for ${code}?`,
+    aZh: `${instP}${zhName}（${code}）2026 年最低入學要求：${reqs.map(([k, v]) => `${zhPart(k)} ${v}`).join("、")}。`,
+    aEn: `${nameEn} (${code}) requires ${reqs.map(([k, v]) => enPart(k.replace(/&amp;/g, "&")) + " L" + v).join("; ")}.`,
+  });
+  faqs.push({
+    q: `${code} 的分數如何計算？ · How is the ${code} score calculated?`,
+    aZh: `${instP}${zhName}以「${formulaTxt}」計分${witems.length ? `，科目比重：${plainWeights}` : "，各科同等比重（×1）"}。`,
+    aEn: `${nameEn} uses ${formulaTxt}${witems.length ? `, with weightings: ${plainWeights}` : " with equal (x1) subject weighting"}.`,
+  });
 
   const courseLd = { "@context": "https://schema.org", "@type": "Course", name: nameEn, alternateName: nameZh || undefined, description: summary, url: canonical, inLanguage: ["zh-Hant", "en"], isAccessibleForFree: true, provider: { "@type": "CollegeOrUniversity", name: instEn(inst) } };
-  const faqLd = { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faqs.map(([q, a]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })) };
+  const faqLd = { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faqs.map(({ q, aZh, aEn }) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: aZh + " " + aEn } })) };
   const crumbLd = { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [
     { "@type": "ListItem", position: 1, name: "JUPASCal", item: `${SITE}/` }, { "@type": "ListItem", position: 2, name: "All programmes", item: `${SITE}/p/` }, { "@type": "ListItem", position: 3, name: `${nameEn} (${code})`, item: canonical },
   ] };
   const extraLd = [courseLd, faqLd, crumbLd].map((o) => `<script type="application/ld+json">${JSON.stringify(o)}</script>`).join("\n");
 
   const cards = [];
-  if (uq != null) cards.push(`<div class="benchmark-card"><span>UQ</span><strong>${uq}</strong></div>`);
-  if (med != null) cards.push(`<div class="benchmark-card"><span>中位數</span><strong>${med}</strong></div>`);
-  if (lq != null) cards.push(`<div class="benchmark-card"><span>LQ</span><strong>${lq}</strong></div>`);
+  if (uq != null) cards.push(`<div class="benchmark-card"><span>上四分位 UQ</span><strong>${uq}</strong></div>`);
+  if (med != null) cards.push(`<div class="benchmark-card"><span>中位數 MED</span><strong>${med}</strong></div>`);
+  if (lq != null) cards.push(`<div class="benchmark-card"><span>下四分位 LQ</span><strong>${lq}</strong></div>`);
 
   const badges = [];
   if (p.year_changes?.weighting_changed || p.score_basis) badges.push(`<span class="status change">2026 計分更新 · Scoring updated</span>`);
@@ -244,7 +279,7 @@ function programmePage(p, siblings) {
 
   const reqRows = reqs.map(([k, v, note2]) => `<li class="eligibility-cell"><span class="eligibility-cell-mark" aria-hidden="true">·</span><span class="eligibility-cell-subject">${k}</span><span class="eligibility-cell-have"></span><span class="eligibility-cell-need"><em>要求 Req</em><b>${v}</b></span>${note2 ? `<span class="eligibility-cell-note">${esc(note2)}</span>` : ""}</li>`).join("");
 
-  const weightCloud = witems.length ? `<hr class="weight-divider"><button type="button" class="weight-toggle" aria-expanded="false" data-collapse>比重詳情 Weightings${CHEV}</button><div class="weight-cloud wt-hidden">${witems.map(([k, v]) => `<span class="weight-item"><span>${k}</span><span>${v}</span></span>`).join("")}</div>` : "";
+  const weightCloud = witems.length ? `<hr class="weight-divider"><button type="button" class="weight-toggle" aria-expanded="false" data-collapse>比重詳情 · Weightings${CHEV}</button><div class="weight-cloud wt-hidden">${witems.map(([k, v]) => `<span class="weight-item"><span>${k}</span><span>${v}</span></span>`).join("")}</div>` : "";
 
   const offersHtml = offersCard(p);
   const descBlock = extraInfoCard(p);
@@ -271,25 +306,25 @@ function programmePage(p, siblings) {
 
     <section class="score-context">
       <div class="score-context-header" style="cursor:default">
-        <div class="score-context-line"><div class="score-context-score"><em>收生分數 Admission scores</em><strong>2025</strong></div></div>
-        <p class="score-context-note">往年取錄學生的分數分佈 · past admitted students</p>
+        <div class="score-context-line"><div class="score-context-score"><em>收生分數 · Admission scores</em><strong>2025</strong></div></div>
+        <p class="score-context-note">往年取錄學生的分數分佈 · Past admitted students</p>
       </div>
       ${cards.length ? `<div class="benchmark-grid">${cards.join("")}</div>` : `<p class="muted" style="padding:8px 4px">暫無往年收生分數（多為新課程）。No 2025 benchmark on record.</p>`}
     </section>
     ${note ? `<p class="muted benchmark-caveat">${esc(note.zh)}<br><span class="seo-en">${esc(note.en)}</span></p>` : ""}
 
-    ${reqs.length ? `<hr class="grade-section-divider"><section class="eligibility-card formula-card"><div class="eligibility-card-eyebrow"><span>入學要求 · 2026 requirements</span></div><hr class="weight-divider"><div class="eligibility-body desktop-open"><ol class="eligibility-rows">${reqRows}</ol></div></section>` : ""}
+    ${reqs.length ? `<hr class="grade-section-divider"><section class="eligibility-card formula-card"><div class="eligibility-card-eyebrow"><span>入學要求 · Entrance requirements 2026</span></div><hr class="weight-divider"><div class="eligibility-body desktop-open"><ol class="eligibility-rows">${reqRows}</ol></div></section>` : ""}
 
-    <hr class="grade-section-divider"><section><div class="formula-year-grid"><div class="formula-card"><span>計分方法 · Scoring 2026</span><p class="formula-text">${esc(formulaTxt)}</p><small>${witems.length ? "另有科目加權，詳見下方。 Some subjects are weighted — see below." : "各科同等比重（×1）。 Equal subject weighting (×1)."}</small>${weightCloud}</div></div></section>
+    <hr class="grade-section-divider"><section><div class="formula-year-grid"><div class="formula-card"><span>計分方法 · Scoring 2026</span><p class="formula-text">${esc(formulaTxt)}</p><small>${witems.length ? "另有科目加權（見下方）· Some subjects carry extra weight (see below)" : "各科同等比重（×1）· Equal subject weighting (×1)"}</small>${weightCloud}</div></div></section>
 
     ${offersHtml}
     ${descBlock}
 
-    ${links.length ? `<hr class="grade-section-divider"><section class="formula-card official-card"><span>官方頁面 · Official</span><div class="official-links">${links.join("")}</div></section>` : ""}
+    ${links.length ? `<hr class="grade-section-divider"><section class="formula-card official-card"><span>官方頁面 · Official links</span><div class="official-links">${links.join("")}</div></section>` : ""}
 
-    <hr class="grade-section-divider"><section class="seo-faq"><p class="eyebrow">常見問題 · FAQ</p>${faqs.map(([q, a]) => `<h4>${esc(q)}</h4><p class="a">${esc(a)}</p>`).join("")}</section>
+    <hr class="grade-section-divider"><section class="seo-faq"><p class="eyebrow">常見問題 · FAQ</p>${faqs.map(({ q, aZh, aEn }) => `<h4>${esc(q)}</h4><p class="a">${esc(aZh)}<span class="seo-en">${esc(aEn)}</span></p>`).join("")}</section>
 
-    ${siblings.length > 1 ? `<hr class="grade-section-divider"><p class="eyebrow">${esc(instShort(inst))}其他課程 · Other ${esc(inst)} programmes</p><p class="seo-rel">${siblings.filter((q) => q.jupas_code !== code).slice(0, 8).map((q) => `<a href="/p/${q.jupas_code}/">${esc(q.name_zh || q.name_en || q.jupas_code)} <span class="muted">(${q.jupas_code})</span></a>`).join(" ")}</p>` : ""}
+    ${siblings.length > 1 ? `<hr class="grade-section-divider"><p class="eyebrow">${esc(instShort(inst))}其他課程 · Other ${esc(inst)} programmes</p><nav class="seo-rel" aria-label="${esc(instShort(inst))}其他課程">${siblings.filter((q) => q.jupas_code !== code).slice(0, 10).map((q) => `<a href="/p/${q.jupas_code}/"><span class="rel-zh">${esc(q.name_zh || q.name_en || q.jupas_code)}</span>${q.name_zh && q.name_en ? `<span class="rel-en">${esc(q.name_en)}</span>` : ""}<span class="rel-code">${q.jupas_code}</span></a>`).join("")}</nav>` : ""}
 
     <p class="muted" style="margin-top:18px;font-size:.76rem">JUPASCal 為免費、非官方的 JUPAS／DSE 收生計分工具，分數僅供參考，請以 ${esc(instZh(inst))} 及 JUPAS 公佈為準。A free, unofficial JUPAS / HKDSE score calculator — estimates for reference only.</p>
   </aside>
@@ -303,8 +338,8 @@ ${PAGE_SCRIPT}
 function indexPage(byInst) {
   const canonical = `${SITE}/p/`;
   const sections = Object.keys(byInst).sort().map((inst) => {
-    const items = byInst[inst].slice().sort((a, b) => a.jupas_code.localeCompare(b.jupas_code)).map((p) => `<a href="/p/${p.jupas_code}/">${esc(p.name_zh || p.name_en || p.jupas_code)} <span class="muted">(${p.jupas_code})</span></a>`).join(" ");
-    return `<hr class="grade-section-divider"><p class="eyebrow">${esc(instZh(inst))} <span class="muted">${esc(inst)}</span></p><p class="seo-rel">${items}</p>`;
+    const items = byInst[inst].slice().sort((a, b) => a.jupas_code.localeCompare(b.jupas_code)).map((p) => `<a href="/p/${p.jupas_code}/"><span class="rel-zh">${esc(p.name_zh || p.name_en || p.jupas_code)}</span>${p.name_zh && p.name_en ? `<span class="rel-en">${esc(p.name_en)}</span>` : ""}<span class="rel-code">${p.jupas_code}</span></a>`).join("");
+    return `<hr class="grade-section-divider"><p class="eyebrow">${esc(instZh(inst))} · ${esc(inst)}</p><nav class="seo-rel" aria-label="${esc(instZh(inst))}">${items}</nav>`;
   }).join("");
   const extra = `<style>main.detail-static{max-width:760px}</style>`;
   return head("所有 JUPAS 課程 2026 — 收生分數及計分方法 | JUPASCal", "瀏覽全港十間院校所有 JUPAS 課程的 2025 年收生分數、計分比重及 2026 入學要求。Browse every JUPAS programme across Hong Kong's 10 institutions.", canonical, "", extra)
