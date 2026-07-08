@@ -34,14 +34,28 @@ const PREFETCH = (() => {
 
 const LOGO = `<svg class="app-brand-logo" viewBox="32 30 284 214" aria-hidden="true" focusable="false"><path fill="currentColor" d="M172,33 176,33 312,103 173,172 36,103 171,34Z"></path><path fill="currentColor" d="M90,149 172,189 182,186 257,149 257,208 241,220 216,233 200,238 180,241 158,240 137,235 113,224 90,208 90,150Z"></path><path fill="#c2922e" d="M291,198 299,198 303,204 309,223 311,240 279,241 283,215 290,199Z"></path><path fill="#c2922e" d="M293,169 303,173 306,179 305,186 298,192 292,192 286,188 284,178 285,175 292,170Z"></path><path fill="#c2922e" d="M293,123 299,126 299,162 291,164 292,124Z"></path></svg>`;
 const THEME_SCRIPT = `<script>try{document.documentElement.dataset.theme=localStorage.getItem('jupas-staging-theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');}catch(e){}</script>`;
+// Chevron used inside .weight-toggle buttons (matches the app; .open rotates it 180°).
+const CHEV = `<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><polyline points="3,5 8,11 13,5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></polyline></svg>`;
+// Tiny runtime for the static pages: wire up the collapse toggles + sticky-header shadow.
+const PAGE_SCRIPT = `<script>(function(){document.querySelectorAll('button.weight-toggle[data-collapse]').forEach(function(b){var body=b.nextElementSibling;if(!body)return;b.addEventListener('click',function(){body.classList.toggle('wt-hidden');var hid=body.classList.contains('wt-hidden');b.classList.toggle('open',!hid);b.setAttribute('aria-expanded',String(!hid));if(b.dataset.show)b.firstChild.nodeValue=hid?b.dataset.show:b.dataset.hide;});});var h=document.querySelector('.detail-static .detail-header');if(h){var f=function(){h.classList.toggle('is-stuck',h.getBoundingClientRect().top<=1);};addEventListener('scroll',f,{passive:true});f();}})();</script>`;
 const EXTRA_CSS = `<style>
   /* The app's mobile .app-shell is position:fixed (a pinned scroll container for the
      app's gesture handling). A static page wants a normal-scrolling document, so
      neutralise that and give the content comfortable top padding (the app's stepper-bar
      normally supplies it). */
-  html,body{overflow-y:auto!important;height:auto!important;position:static!important}
+  /* overflow:visible (not auto) so neither html nor body becomes a scroll container —
+     the viewport scrolls, which is what position:sticky needs to pin the header. */
+  html,body{overflow:visible!important;height:auto!important;position:static!important;overscroll-behavior-y:auto!important}
   main.app-shell.detail-static{position:static!important;height:auto!important;min-height:0!important;overflow:visible!important;width:100%;max-width:640px;margin:0 auto;padding:18px 14px 112px!important}
-  .detail-static .detail-panel,.detail-static .detail-header{position:static!important}
+  /* The app caps .detail-panel at ~100vh and scrolls inside it; a static page must let
+     the whole card grow with its content (else the rounded card ends one screen down and
+     the rest spills outside it — the "broken" look). */
+  .detail-static .detail-panel{position:static!important;overflow:visible!important;max-height:none!important}
+  /* Sticky programme header — mirrors the app: pins to the viewport top as you scroll,
+     compacts + gains a shadow via .is-stuck (toggled by the inline script). */
+  .detail-static .detail-panel .detail-header{position:sticky!important;top:0!important;z-index:26}
+  /* Collapsible bodies (offers table / more info / weight breakdown), toggled by JS. */
+  .detail-static .wt-hidden{display:none!important}
   a.stepper-next-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}
   .detail-static .detail-name h2{cursor:default}
   .seo-cta{margin:14px 0 4px}
@@ -120,7 +134,8 @@ function offersCard(p) {
     const r = (a && o != null) ? (o / a * 100).toFixed(1) + "%" : "—";
     return `<div class="offers-table-row" role="row"><span role="cell" class="offers-table-year">${y}</span><span role="cell" class="offers-table-cell"><b>${a ?? "—"}</b></span><span role="cell" class="offers-table-cell"><b>${o ?? "—"}</b></span><span role="cell" class="offers-table-cell accent"><b>${r}</b></span></div>`;
   }).join("");
-  return `<hr class="grade-section-divider"><section class="offers-card formula-card"><div class="offers-card-eyebrow"><span>Band A 取錄 · ${latest}</span>${rate ? `<b class="tally-badge offers-tally">取錄率 ${rate}</b>` : ""}</div>${la != null ? `<p class="formula-text">${la} 名 Band A 申請人中，${lo ?? "—"} 人獲取錄</p>` : ""}<small>Band A 申請人與取錄人數（${years[years.length - 1]}–${latest}）· applications vs offers by year</small><div class="offers-body"><div class="offers-table" role="table" aria-label="按年份列出的 Band A 取錄紀錄"><div class="offers-table-head" role="row"><span role="columnheader">年份</span><span role="columnheader">Band A 申請人</span><span role="columnheader">取錄人數</span><span role="columnheader">取錄率</span></div>${trows}</div></div></section>`;
+  const yLabel = `${years.length} 年數據`;
+  return `<hr class="grade-section-divider"><section class="offers-card formula-card"><div class="offers-card-eyebrow"><span>Band A 取錄 · ${latest}</span>${rate ? `<b class="tally-badge offers-tally">取錄率 ${rate}</b>` : ""}</div>${la != null ? `<p class="formula-text">${la} 名 Band A 申請人中，${lo ?? "—"} 人獲取錄</p>` : ""}<small>Band A 申請人與取錄人數（${years[years.length - 1]}–${latest}）· applications vs offers by year</small><hr class="weight-divider"><button type="button" class="weight-toggle" aria-expanded="false" data-collapse data-show="顯示${yLabel}" data-hide="隱藏${yLabel}">顯示${yLabel}${CHEV}</button><div class="offers-body wt-hidden"><div class="offers-table" role="table" aria-label="按年份列出的 Band A 取錄紀錄"><div class="offers-table-head" role="row"><span role="columnheader">年份</span><span role="columnheader">Band A 申請人</span><span role="columnheader">取錄人數</span><span role="columnheader">取錄率</span></div>${trows}</div></div></section>`;
 }
 
 // The full "more information" card (overview blocks + study level, tuition, contacts) —
@@ -142,7 +157,7 @@ function extraInfoCard(p) {
   if (p.tuition_fee_first_year) parts.push(`<div class="extra-info-row"><em>首年學費</em><span class="extra-info-value">${esc(p.tuition_fee_first_year)}</span></div>`);
   if (p.contacts_text) parts.push(`<div class="extra-info-row"><em>聯絡資料</em><span class="extra-info-value multiline">${esc(p.contacts_text)}</span></div>`);
   if (!parts.length) return "";
-  return `<hr class="grade-section-divider"><section class="extra-info-card formula-card"><div class="extra-info-eyebrow"><span>更多資料 · More information</span><b class="tally-badge extra-info-tally">${parts.length} 個部分</b></div><div class="extra-info-body">${parts.join("")}</div></section>`;
+  return `<hr class="grade-section-divider"><section class="extra-info-card formula-card"><div class="extra-info-eyebrow"><span>更多資料 · More information</span><b class="tally-badge extra-info-tally">${parts.length} 個部分</b></div><hr class="weight-divider"><button type="button" class="weight-toggle" aria-expanded="false" data-collapse data-show="顯示課程詳情" data-hide="隱藏課程詳情">顯示課程詳情${CHEV}</button><div class="extra-info-body wt-hidden">${parts.join("")}</div></section>`;
 }
 
 function head(title, desc, canonical, extraLd, extraStyle) {
@@ -177,7 +192,7 @@ ${THEME_SCRIPT}
 <body>
 <header class="app-topbar">
   <div class="app-topbar-left"><a class="app-brand" href="/" aria-label="JUPASCal 2026">${LOGO}<span class="app-brand-name">JUPASCal <span class="app-brand-year">2026</span></span></a></div>
-  <nav class="app-topbar-actions" aria-label="導覽"><a class="pill" href="/p/">所有課程 All programmes</a></nav>
+  <nav class="app-topbar-actions" aria-label="導覽"><a class="topbar-link" href="/p/">所有課程 · All</a></nav>
 </header>`;
 }
 
@@ -223,7 +238,7 @@ function programmePage(p, siblings) {
 
   const reqRows = reqs.map(([k, v, note2]) => `<li class="eligibility-cell"><span class="eligibility-cell-mark" aria-hidden="true">·</span><span class="eligibility-cell-subject">${k}</span><span class="eligibility-cell-have"></span><span class="eligibility-cell-need"><em>要求</em><b>${v}</b></span>${note2 ? `<span class="eligibility-cell-note">${esc(note2)}</span>` : ""}</li>`).join("");
 
-  const weightCloud = witems.length ? `<hr class="weight-divider"><div class="weight-cloud">${witems.map(([k, v]) => `<span class="weight-item"><span>${k}</span><span>${v}</span></span>`).join("")}</div>` : "";
+  const weightCloud = witems.length ? `<hr class="weight-divider"><button type="button" class="weight-toggle" aria-expanded="false" data-collapse>比重詳情${CHEV}</button><div class="weight-cloud wt-hidden">${witems.map(([k, v]) => `<span class="weight-item"><span>${k}</span><span>${v}</span></span>`).join("")}</div>` : "";
 
   const offersHtml = offersCard(p);
   const descBlock = extraInfoCard(p);
@@ -274,6 +289,7 @@ function programmePage(p, siblings) {
   </aside>
 </main>
 <footer class="stepper-footer"><div class="stepper-footer-right" style="flex:1;justify-content:stretch">${cta}</div></footer>
+${PAGE_SCRIPT}
 </body>
 </html>`;
 }
@@ -292,6 +308,7 @@ function indexPage(byInst) {
     <div class="seo-cta"><a class="stepper-next-btn" href="/">開啟計算機 · Open the calculator →</a></div>
     ${sections}
   </aside></main>
+${PAGE_SCRIPT}
 </body>
 </html>`;
 }
