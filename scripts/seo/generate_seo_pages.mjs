@@ -346,13 +346,22 @@ ${PAGE_SCRIPT}
 </html>`;
 }
 
+// Sort value from a JUPAS code: the numeric part after "JS" (JS1000 → 1000), so
+// institutions order by their code block (CityU JS1xxx … HKMU JS9xxx). SSSDP uses
+// letter codes (JSSA01) → NaN → Infinity, so it sorts last.
+const codeSortValue = (code) => { const n = parseInt(String(code).replace(/^JS/i, ""), 10); return Number.isNaN(n) ? Infinity : n; };
+const instCodeRank = (progs) => Math.min(...progs.map((p) => codeSortValue(p.jupas_code)));
+
 function indexPage(byInst) {
   const canonical = `${SITE}/p/`;
-  const sections = Object.keys(byInst).sort().map((inst) => {
-    const items = byInst[inst].slice().sort((a, b) => a.jupas_code.localeCompare(b.jupas_code)).map((p) => `<a href="/p/${p.jupas_code}/"><span class="rel-zh">${esc(p.name_zh || p.name_en || p.jupas_code)}</span>${p.name_zh && p.name_en ? `<span class="rel-en">${esc(p.name_en)}</span>` : ""}<span class="rel-code">${p.jupas_code}</span></a>`).join("");
-    return `<hr class="grade-section-divider"><p class="eyebrow">${esc(instZh(inst))} · ${esc(inst)}</p><nav class="seo-rel" aria-label="${esc(instZh(inst))}">${items}</nav>`;
+  const sections = Object.keys(byInst).sort((a, b) => instCodeRank(byInst[a]) - instCodeRank(byInst[b])).map((inst) => {
+    const items = byInst[inst].slice().sort((a, b) => codeSortValue(a.jupas_code) - codeSortValue(b.jupas_code) || a.jupas_code.localeCompare(b.jupas_code)).map((p) => `<a href="/p/${p.jupas_code}/"><b class="rel-code">${p.jupas_code}</b><span class="rel-zh">${esc(p.name_zh || p.name_en || p.jupas_code)}</span>${p.name_zh && p.name_en ? `<span class="rel-en">${esc(p.name_en)}</span>` : ""}</a>`).join("");
+    return `<hr class="grade-section-divider"><p class="eyebrow">${esc(instZh(inst))} · ${esc(inst)}</p><nav class="seo-rel rel-by-code" aria-label="${esc(instZh(inst))}">${items}</nav>`;
   }).join("");
-  const extra = `<style>main.detail-static{max-width:760px}</style>`;
+  const extra = `<style>main.detail-static{max-width:760px}
+    .rel-by-code a{display:flex;gap:2px 10px;align-items:baseline;flex-wrap:wrap}
+    .rel-by-code .rel-code{margin:0;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums;min-width:4.6em;flex:0 0 auto}
+    .rel-by-code .rel-zh{order:2}.rel-by-code .rel-en{order:3;margin-left:0}</style>`;
   return head("所有 JUPAS 課程 2026 — 收生分數及計分方法 | JUPASCal", "瀏覽全港十間院校所有 JUPAS 課程的 2025 年收生分數、計分比重及 2026 入學要求。Browse every JUPAS programme across Hong Kong's 10 institutions.", canonical, "", extra)
     + `<main class="app-shell layout-mobile detail-static"><aside class="panel detail-panel">
     <div class="detail-header"><div class="detail-header-main"><div class="detail-header-text"><p class="eyebrow">所有課程 · All programmes</p><div class="detail-name"><h2>所有 JUPAS 課程</h2><p class="zh-name">Every JUPAS programme (2026)</p></div></div></div></div>
