@@ -35,8 +35,14 @@ const PREFETCH = (() => {
 const LOGO = `<svg class="app-brand-logo" viewBox="32 30 284 214" aria-hidden="true" focusable="false"><path fill="currentColor" d="M172,33 176,33 312,103 173,172 36,103 171,34Z"></path><path fill="currentColor" d="M90,149 172,189 182,186 257,149 257,208 241,220 216,233 200,238 180,241 158,240 137,235 113,224 90,208 90,150Z"></path><path fill="#c2922e" d="M291,198 299,198 303,204 309,223 311,240 279,241 283,215 290,199Z"></path><path fill="#c2922e" d="M293,169 303,173 306,179 305,186 298,192 292,192 286,188 284,178 285,175 292,170Z"></path><path fill="#c2922e" d="M293,123 299,126 299,162 291,164 292,124Z"></path></svg>`;
 const THEME_SCRIPT = `<script>try{document.documentElement.dataset.theme=localStorage.getItem('jupas-staging-theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');}catch(e){}</script>`;
 const EXTRA_CSS = `<style>
+  /* The app's mobile .app-shell is position:fixed (a pinned scroll container for the
+     app's gesture handling). A static page wants a normal-scrolling document, so
+     neutralise that and give the content comfortable top padding (the app's stepper-bar
+     normally supplies it). */
+  html,body{overflow-y:auto!important;height:auto!important;position:static!important}
+  main.app-shell.detail-static{position:static!important;height:auto!important;min-height:0!important;overflow:visible!important;width:100%;max-width:640px;margin:0 auto;padding:18px 14px 112px!important}
+  .detail-static .detail-panel,.detail-static .detail-header{position:static!important}
   a.stepper-next-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}
-  main.app-shell.detail-static{max-width:640px;margin:0 auto;padding-bottom:100px}
   .detail-static .detail-name h2{cursor:default}
   .seo-cta{margin:14px 0 4px}
   .seo-lede{color:var(--muted);font-size:.92rem;margin:0 0 4px}
@@ -98,6 +104,45 @@ function basisNote(p) {
   if (p.score_basis === "cuhk_2026_recalculated") return { en: "CUHK's official 2025 scores recalculated with the 2026 formula.", zh: "科大以 2026 年計分方法重新計算的 2025 年官方分數。" };
   if (p.score_basis === "cuhk_2026_simulated") return { en: "JUPASCal's estimate — the 2026 weighting applied to CUHK's published subject grades of past admitted students (no official recalc published).", zh: "JUPASCal 估算：以 2026 年加權套用於科大公佈的過往取錄學生成績（校方未公佈重算分數）。" };
   return null;
+}
+
+// Full Band A offers table (all years), exact app markup (offers-table / -row / -cell).
+function offersCard(p) {
+  const rows = p.offer_statistics || [];
+  const byYear = {};
+  for (const r of rows) { if (r.Type !== "Application" && r.Type !== "Offer") continue; (byYear[r.Year] ||= {})[r.Type] = r["Band A"]; }
+  const years = Object.keys(byYear).map(Number).sort((a, b) => b - a);
+  if (!years.length) return "";
+  const latest = years[0], la = byYear[latest].Application, lo = byYear[latest].Offer;
+  const rate = (la && lo != null) ? (lo / la * 100).toFixed(1) + "%" : null;
+  const trows = years.map((y) => {
+    const a = byYear[y].Application, o = byYear[y].Offer;
+    const r = (a && o != null) ? (o / a * 100).toFixed(1) + "%" : "—";
+    return `<div class="offers-table-row" role="row"><span role="cell" class="offers-table-year">${y}</span><span role="cell" class="offers-table-cell"><b>${a ?? "—"}</b></span><span role="cell" class="offers-table-cell"><b>${o ?? "—"}</b></span><span role="cell" class="offers-table-cell accent"><b>${r}</b></span></div>`;
+  }).join("");
+  return `<hr class="grade-section-divider"><section class="offers-card formula-card"><div class="offers-card-eyebrow"><span>Band A 取錄 · ${latest}</span>${rate ? `<b class="tally-badge offers-tally">取錄率 ${rate}</b>` : ""}</div>${la != null ? `<p class="formula-text">${la} 名 Band A 申請人中，${lo ?? "—"} 人獲取錄</p>` : ""}<small>Band A 申請人與取錄人數（${years[years.length - 1]}–${latest}）· applications vs offers by year</small><div class="offers-body"><div class="offers-table" role="table" aria-label="按年份列出的 Band A 取錄紀錄"><div class="offers-table-head" role="row"><span role="columnheader">年份</span><span role="columnheader">Band A 申請人</span><span role="columnheader">取錄人數</span><span role="columnheader">取錄率</span></div>${trows}</div></div></section>`;
+}
+
+// The full "more information" card (overview blocks + study level, tuition, contacts) —
+// exact app markup. The overview comes from our own compiled programme dataset.
+function descBlocksHtml(code) {
+  const b = DETAILS[code]?.blocks;
+  if (!b?.length) return "";
+  return b.map((blk) => {
+    const cls = blk.t === "li" ? "desc-block desc-li" : blk.t === "h" ? "desc-block desc-h" : "desc-block desc-p";
+    const inner = (blk.spans || []).map((s) => s.href ? `<a href="${esc(s.href)}" target="_blank" rel="noopener noreferrer" class="desc-link">${esc(s.text)}</a>` : `<span>${esc(s.text)}</span>`).join("");
+    return `<p class="${cls}">${inner}</p>`;
+  }).join("");
+}
+function extraInfoCard(p) {
+  const parts = [];
+  const blocks = descBlocksHtml(p.jupas_code);
+  if (blocks) parts.push(`<div class="extra-info-row"><em>概覽</em><div class="extra-info-value desc-blocks">${blocks}</div></div>`);
+  if (p.study_level) parts.push(`<div class="extra-info-row"><em>修讀程度</em><span class="extra-info-value">${esc(p.study_level)}</span></div>`);
+  if (p.tuition_fee_first_year) parts.push(`<div class="extra-info-row"><em>首年學費</em><span class="extra-info-value">${esc(p.tuition_fee_first_year)}</span></div>`);
+  if (p.contacts_text) parts.push(`<div class="extra-info-row"><em>聯絡資料</em><span class="extra-info-value multiline">${esc(p.contacts_text)}</span></div>`);
+  if (!parts.length) return "";
+  return `<hr class="grade-section-divider"><section class="extra-info-card formula-card"><div class="extra-info-eyebrow"><span>更多資料 · More information</span><b class="tally-badge extra-info-tally">${parts.length} 個部分</b></div><div class="extra-info-body">${parts.join("")}</div></section>`;
 }
 
 function head(title, desc, canonical, extraLd, extraStyle) {
@@ -180,14 +225,8 @@ function programmePage(p, siblings) {
 
   const weightCloud = witems.length ? `<hr class="weight-divider"><div class="weight-cloud">${witems.map(([k, v]) => `<span class="weight-item"><span>${k}</span><span>${v}</span></span>`).join("")}</div>` : "";
 
-  let offersHtml = "";
-  if (os && os.apps != null) {
-    const rate = os.offersBandA != null && os.appsBandA ? Math.round((os.offersBandA / os.appsBandA) * 100) : null;
-    offersHtml = `<hr class="grade-section-divider"><section class="offers-card formula-card"><div class="offers-card-eyebrow"><span>Band A 取錄 · ${os.year}</span>${rate != null ? `<b class="tally-badge offers-tally">取錄率 ${rate}%</b>` : ""}</div><p class="formula-text">${os.appsBandA != null ? `${os.appsBandA} 名 Band A 申請人中，${os.offersBandA ?? "—"} 人獲取錄` : `${os.apps} 份申請`}${os.quota != null ? `，約 ${os.quota} 個學額` : ""}</p><small>Band A applications: ${os.appsBandA ?? os.apps}, offers: ${os.offersBandA ?? os.offers ?? "—"} (${os.year}).</small></section>`;
-  }
-
-  const det = DETAILS[code];
-  const descBlock = det?.overview ? `<hr class="grade-section-divider"><section class="extra-info-card formula-card"><div class="extra-info-eyebrow"><span>課程概覽 · Overview</span></div><div class="extra-info-body"><p>${esc(String(det.overview).slice(0, 900))}</p></div></section>` : "";
+  const offersHtml = offersCard(p);
+  const descBlock = extraInfoCard(p);
 
   const links = [];
   const jupas = httpsHref(p.jupas_url);
