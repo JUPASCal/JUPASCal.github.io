@@ -3,6 +3,20 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<script>
+  // GitHub Pages is case-sensitive, so /p/js4725/ 404s while /p/JS4725/ works.
+  // A JUPAS code is "JS" + 4 alphanumerics (SSSDP has letters, e.g. JSSC02). If the
+  // 404'd path is a programme code in the wrong case, send it to the canonical
+  // uppercase page. Runs before paint (minimal flash) and only redirects when the
+  // target differs from the current path, so an invalid code can't loop.
+  (function () {
+    var m = location.pathname.match(/^\/p\/(js[a-z0-9]{4})\/?$/i);
+    if (m) {
+      var want = "/p/" + m[1].toUpperCase() + "/";
+      if (want !== location.pathname) location.replace(want + location.search + location.hash);
+    }
+  })();
+</script>
 <title>找不到頁面 · Page not found | JUPASCal</title>
 <meta name="robots" content="noindex, follow" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
