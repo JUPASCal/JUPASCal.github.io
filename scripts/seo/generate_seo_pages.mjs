@@ -94,6 +94,16 @@ const EXTRA_CSS = `<style>
   /* Benchmark labels carry both languages (上四分位 UQ / 中位數 MED / 下四分位 LQ) —
      shrink the label a touch so it stays on one line in the narrow cards. */
   .detail-static .benchmark-card span{font-size:.62rem;letter-spacing:.01em}
+  /* Per-benchmark "how it's computed" box (CUHK estimated/recalculated scores). */
+  .estdetail-intro{margin:6px 0 0}
+  .estdetail-intro .seo-en,.estdetail-method .seo-en,.estdetail-calc .seo-en{display:block;color:var(--muted)}
+  .estdetail-method{font-size:.84rem;margin:6px 0 0;line-height:1.5}
+  .estbench-toggle{margin-top:8px}
+  .estdetail-body{margin:4px 0 2px}
+  .estgrades{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+  .estgrade{display:flex;gap:6px;align-items:baseline;border:1px solid var(--line);border-radius:8px;padding:4px 9px;background:var(--surface-strong);font-size:.82rem}
+  .estgrade span{color:var(--muted)}.estgrade b{color:var(--ink)}
+  .estdetail-calc{font-size:.84rem;margin:8px 0 0;line-height:1.5}
   .stepper-footer .stepper-next-btn{width:100%}
 </style>`;
 
@@ -153,6 +163,35 @@ function basisNote(p) {
   if (p.score_basis === "cuhk_2026_recalculated") return str("detail.cuhkRecalc.note");
   if (p.score_basis === "cuhk_2026_simulated") return str("detail.cuhkSim.note");
   return null;
+}
+
+// Per-benchmark "how it's computed" box, for the CUHK estimated/recalculated scores.
+// score_grades_2025 holds the ACTUAL DSE grades of the student admitted at each of the
+// 2025 LQ / median / UQ positions — so each benchmark expands to show those real grades
+// and the resulting score. Only rendered for programmes that carry that grade data.
+const GKEY = [["CHIN", "中文 Chinese"], ["ENGL", "英文 English"], ["MATH", "數學 Maths"], ["CSD", "公民科 CSD"], ["M1/M2", "M1/M2"], ["Elective 1", "選修一 Elective 1"], ["Elective 2", "選修二 Elective 2"], ["Elective 3", "選修三 Elective 3"]];
+const BENCH = [["uq", "上四分位 UQ"], ["median", "中位數 MED"], ["lq", "下四分位 LQ"]];
+function gradeChips(profile) {
+  return GKEY.filter(([k]) => profile[k] != null && profile[k] !== "").map(([k, lab]) => `<li class="estgrade"><span>${lab}</span><b>${esc(profile[k])}</b></li>`).join("");
+}
+function estimateDetail(p) {
+  const sg = p.score_grades_2025, s = p.scores_2025 || {};
+  if (!sg || !p.score_basis) return "";
+  const isSim = p.score_basis === "cuhk_2026_simulated";
+  const rows = BENCH.map(([key, lab]) => {
+    const prof = sg[key], val = num(s[key]);
+    if (!prof || !Object.keys(prof).length || val == null) return "";
+    const chips = gradeChips(prof);
+    if (!chips) return "";
+    const calcZh = isSim ? `取錄學生的實際成績，以 2026 年加權按中大公式重算 → <b>${val}</b>。` : `中大公佈的取錄學生成績，以 2026 年新公式重算 → <b>${val}</b>。`;
+    const calcEn = isSim ? `The admitted student's real grades, re-scored with the 2026 weighting → ${val}.` : `CUHK's admitted-student grades, scored with the new 2026 formula → ${val}.`;
+    return `<button type="button" class="weight-toggle estbench-toggle" aria-expanded="false" data-collapse>${lab} · ${val}${CHEV}</button><div class="wt-hidden estdetail-body"><ul class="estgrades">${chips}</ul><p class="muted estdetail-calc">${calcZh}<span class="seo-en">${calcEn}</span></p></div>`;
+  }).filter(Boolean).join("");
+  if (!rows) return "";
+  const introZh = "點按任何分數，查看該取錄學生的實際 DSE 成績及計算方法。";
+  const introEn = "Tap any figure to see that admitted student's actual DSE grades and how it's worked out.";
+  const method = isSim ? str("detail.cuhkSim.method") : null;
+  return `<hr class="grade-section-divider"><section class="estdetail-card formula-card"><div class="eligibility-card-eyebrow"><span>逐項計算 · How each figure is worked out</span></div><p class="formula-text estdetail-intro">${introZh}<span class="seo-en">${introEn}</span></p>${method ? `<p class="muted estdetail-method">${esc(method.zh)}<span class="seo-en">${esc(method.en)}</span></p>` : ""}<hr class="weight-divider">${rows}</section>`;
 }
 
 // Full Band A offers table (all years), exact app markup (offers-table / -row / -cell).
@@ -292,6 +331,7 @@ function programmePage(p, siblings) {
 
   const weightCloud = witems.length ? `<hr class="weight-divider"><button type="button" class="weight-toggle" aria-expanded="false" data-collapse>比重詳情 · Weightings${CHEV}</button><div class="weight-cloud wt-hidden">${witems.map(([k, v]) => `<span class="weight-item"><span>${k}</span><span>${v}</span></span>`).join("")}</div>` : "";
 
+  const estHtml = estimateDetail(p);
   const offersHtml = offersCard(p);
   const descBlock = extraInfoCard(p);
 
@@ -323,6 +363,7 @@ function programmePage(p, siblings) {
       ${cards.length ? `<div class="benchmark-grid">${cards.join("")}</div>` : `<p class="muted" style="padding:8px 4px">暫無往年收生分數（多為新課程）。No 2025 benchmark on record.</p>`}
     </section>
     ${note ? `<p class="muted benchmark-caveat">${esc(note.zh)}<br><span class="seo-en">${esc(note.en)}</span></p>` : ""}
+    ${estHtml}
 
     ${reqs.length ? `<hr class="grade-section-divider"><section class="eligibility-card formula-card"><div class="eligibility-card-eyebrow"><span>入學要求 · Entrance requirements 2026</span></div><hr class="weight-divider"><div class="eligibility-body desktop-open"><ol class="eligibility-rows">${reqRows}</ol></div></section>` : ""}
 
