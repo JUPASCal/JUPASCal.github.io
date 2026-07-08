@@ -56,6 +56,11 @@ const EXTRA_CSS = `<style>
   .detail-static .detail-panel .detail-header{position:sticky!important;top:0!important;z-index:26}
   /* Collapsible bodies (offers table / more info / weight breakdown), toggled by JS. */
   .detail-static .wt-hidden{display:none!important}
+  /* The app's mobile .app-topbar bleeds -space-4 (−16px) sideways to sit flush inside
+     the padded .app-shell. On a static page it's a bare <body> child (no padding), so
+     that negative margin overflowed the viewport by 16px each side and the browser
+     zoomed the whole page out. Re-centre it on the content column with matching padding. */
+  body > .app-topbar{margin-left:auto!important;margin-right:auto!important;width:100%!important;max-width:640px!important;box-sizing:border-box;padding-left:14px!important;padding-right:14px!important}
   a.stepper-next-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}
   .detail-static .detail-name h2{cursor:default}
   .seo-cta{margin:14px 0 4px}
@@ -68,14 +73,15 @@ const EXTRA_CSS = `<style>
 </style>`;
 
 const INST = {
-  HKU: { en: "The University of Hong Kong", zh: "香港大學" }, CUHK: { en: "The Chinese University of Hong Kong", zh: "香港中文大學" },
-  HKUST: { en: "The Hong Kong University of Science and Technology", zh: "香港科技大學" }, PolyU: { en: "The Hong Kong Polytechnic University", zh: "香港理工大學" },
-  CityUHK: { en: "City University of Hong Kong", zh: "香港城市大學" }, HKBU: { en: "Hong Kong Baptist University", zh: "香港浸會大學" },
-  LingnanU: { en: "Lingnan University", zh: "嶺南大學" }, EdUHK: { en: "The Education University of Hong Kong", zh: "香港教育大學" },
-  HKMU: { en: "Hong Kong Metropolitan University", zh: "香港都會大學" }, SSSDP: { en: "SSSDP", zh: "SSSDP 指定專業／界別課程資助計劃" },
+  HKU: { en: "The University of Hong Kong", zh: "香港大學", short: "港大" }, CUHK: { en: "The Chinese University of Hong Kong", zh: "香港中文大學", short: "中大" },
+  HKUST: { en: "The Hong Kong University of Science and Technology", zh: "香港科技大學", short: "科大" }, PolyU: { en: "The Hong Kong Polytechnic University", zh: "香港理工大學", short: "理大" },
+  CityUHK: { en: "City University of Hong Kong", zh: "香港城市大學", short: "城大" }, HKBU: { en: "Hong Kong Baptist University", zh: "香港浸會大學", short: "浸大" },
+  LingnanU: { en: "Lingnan University", zh: "嶺南大學", short: "嶺大" }, EdUHK: { en: "The Education University of Hong Kong", zh: "香港教育大學", short: "教大" },
+  HKMU: { en: "Hong Kong Metropolitan University", zh: "香港都會大學", short: "都大" }, SSSDP: { en: "SSSDP", zh: "SSSDP 指定專業／界別課程資助計劃", short: "SSSDP" },
 };
 const instZh = (k) => (INST[k]?.zh || k);
 const instEn = (k) => (INST[k]?.en || k);
+const instShort = (k) => (INST[k]?.short || k);
 const esc = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const num = (x) => (x == null || Number.isNaN(x) ? null : x);
 const httpsHref = (u) => (/^https?:\/\//i.test(String(u ?? "").trim()) ? String(u).trim() : null);
@@ -83,7 +89,7 @@ const shortUrl = (u) => String(u).replace(/^https?:\/\/(www\.)?/, "").replace(/\
 
 const SHORT = { "English Language": "English 英文", "Chinese Language": "Chinese 中文", "Mathematics (Compulsory Part)": "Maths 數學", "Citizenship and Social Development": "CSD 公民科", "Mathematics Extended Part (Module 1)": "M1", "Mathematics Extended Part (Module 2)": "M2" };
 const shortSubj = (s) => SHORT[s] ?? s;
-const REQ_ZH = { chi: "中文", eng: "英文", math: "數學", csd: "公民科" };
+const REQ_ZH = { chi: "中文 Chinese", eng: "英文 English", math: "數學 Maths", csd: "公民科 CSD" };
 
 function weightItems(p) {
   const out = [];
@@ -100,7 +106,7 @@ function requirements(p) {
   if (r.csd) rows.push([REQ_ZH.csd, esc(r.csd), null]);
   for (const key of ["elect1", "elect2"]) {
     const e = r[key];
-    if (e && (e.subjects?.length || e.grade)) rows.push([key === "elect1" ? "選修一" : "選修二", esc(e.grade || "—"), (e.subjects || []).join(" / ") || null]);
+    if (e && (e.subjects?.length || e.grade)) rows.push([key === "elect1" ? "選修一 Elective 1" : "選修二 Elective 2", esc(e.grade || "—"), (e.subjects || []).join(" / ") || null]);
   }
   return rows;
 }
@@ -134,8 +140,8 @@ function offersCard(p) {
     const r = (a && o != null) ? (o / a * 100).toFixed(1) + "%" : "—";
     return `<div class="offers-table-row" role="row"><span role="cell" class="offers-table-year">${y}</span><span role="cell" class="offers-table-cell"><b>${a ?? "—"}</b></span><span role="cell" class="offers-table-cell"><b>${o ?? "—"}</b></span><span role="cell" class="offers-table-cell accent"><b>${r}</b></span></div>`;
   }).join("");
-  const yLabel = `${years.length} 年數據`;
-  return `<hr class="grade-section-divider"><section class="offers-card formula-card"><div class="offers-card-eyebrow"><span>Band A 取錄 · ${latest}</span>${rate ? `<b class="tally-badge offers-tally">取錄率 ${rate}</b>` : ""}</div>${la != null ? `<p class="formula-text">${la} 名 Band A 申請人中，${lo ?? "—"} 人獲取錄</p>` : ""}<small>Band A 申請人與取錄人數（${years[years.length - 1]}–${latest}）· applications vs offers by year</small><hr class="weight-divider"><button type="button" class="weight-toggle" aria-expanded="false" data-collapse data-show="顯示${yLabel}" data-hide="隱藏${yLabel}">顯示${yLabel}${CHEV}</button><div class="offers-body wt-hidden"><div class="offers-table" role="table" aria-label="按年份列出的 Band A 取錄紀錄"><div class="offers-table-head" role="row"><span role="columnheader">年份</span><span role="columnheader">Band A 申請人</span><span role="columnheader">取錄人數</span><span role="columnheader">取錄率</span></div>${trows}</div></div></section>`;
+  const yLabel = `${years.length} 年數據 ${years.length} yrs`;
+  return `<hr class="grade-section-divider"><section class="offers-card formula-card"><div class="offers-card-eyebrow"><span>Band A 取錄 Offers · ${latest}</span>${rate ? `<b class="tally-badge offers-tally">取錄率 Rate ${rate}</b>` : ""}</div>${la != null ? `<p class="formula-text">${la} 名 Band A 申請人中 ${lo ?? "—"} 人獲取錄 · ${lo ?? "—"} of ${la} Band A applicants got an offer</p>` : ""}<small>歷年 Band A 申請與取錄人數（${years[years.length - 1]}–${latest}）· Band A applications vs offers by year</small><hr class="weight-divider"><button type="button" class="weight-toggle" aria-expanded="false" data-collapse data-show="顯示${yLabel}" data-hide="隱藏${yLabel}">顯示${yLabel}${CHEV}</button><div class="offers-body wt-hidden"><div class="offers-table" role="table" aria-label="按年份列出的 Band A 取錄紀錄 · Band A offers by year"><div class="offers-table-head" role="row"><span role="columnheader">年份<br>Year</span><span role="columnheader">Band A 申請<br>Applicants</span><span role="columnheader">取錄<br>Offers</span><span role="columnheader">取錄率<br>Rate</span></div>${trows}</div></div></section>`;
 }
 
 // The full "more information" card (overview blocks + study level, tuition, contacts) —
@@ -152,12 +158,12 @@ function descBlocksHtml(code) {
 function extraInfoCard(p) {
   const parts = [];
   const blocks = descBlocksHtml(p.jupas_code);
-  if (blocks) parts.push(`<div class="extra-info-row"><em>概覽</em><div class="extra-info-value desc-blocks">${blocks}</div></div>`);
-  if (p.study_level) parts.push(`<div class="extra-info-row"><em>修讀程度</em><span class="extra-info-value">${esc(p.study_level)}</span></div>`);
-  if (p.tuition_fee_first_year) parts.push(`<div class="extra-info-row"><em>首年學費</em><span class="extra-info-value">${esc(p.tuition_fee_first_year)}</span></div>`);
-  if (p.contacts_text) parts.push(`<div class="extra-info-row"><em>聯絡資料</em><span class="extra-info-value multiline">${esc(p.contacts_text)}</span></div>`);
+  if (blocks) parts.push(`<div class="extra-info-row"><em>概覽 Overview</em><div class="extra-info-value desc-blocks">${blocks}</div></div>`);
+  if (p.study_level) parts.push(`<div class="extra-info-row"><em>修讀程度 Study level</em><span class="extra-info-value">${esc(p.study_level)}</span></div>`);
+  if (p.tuition_fee_first_year) parts.push(`<div class="extra-info-row"><em>首年學費 First-year tuition</em><span class="extra-info-value">${esc(p.tuition_fee_first_year)}</span></div>`);
+  if (p.contacts_text) parts.push(`<div class="extra-info-row"><em>聯絡資料 Contact</em><span class="extra-info-value multiline">${esc(p.contacts_text)}</span></div>`);
   if (!parts.length) return "";
-  return `<hr class="grade-section-divider"><section class="extra-info-card formula-card"><div class="extra-info-eyebrow"><span>更多資料 · More information</span><b class="tally-badge extra-info-tally">${parts.length} 個部分</b></div><hr class="weight-divider"><button type="button" class="weight-toggle" aria-expanded="false" data-collapse data-show="顯示課程詳情" data-hide="隱藏課程詳情">顯示課程詳情${CHEV}</button><div class="extra-info-body wt-hidden">${parts.join("")}</div></section>`;
+  return `<hr class="grade-section-divider"><section class="extra-info-card formula-card"><div class="extra-info-eyebrow"><span>更多資料 · More information</span><b class="tally-badge extra-info-tally">${parts.length} 部分 sections</b></div><hr class="weight-divider"><button type="button" class="weight-toggle" aria-expanded="false" data-collapse data-show="顯示課程詳情 Show details" data-hide="隱藏課程詳情 Hide details">顯示課程詳情 Show details${CHEV}</button><div class="extra-info-body wt-hidden">${parts.join("")}</div></section>`;
 }
 
 function head(title, desc, canonical, extraLd, extraStyle) {
@@ -209,9 +215,9 @@ function programmePage(p, siblings) {
   const formulaTxt = p.formula_2026 || p.formula_2025 || "Best 5 subjects";
   const plainWeights = witems.map(([k, v]) => `${k} ${v}`).join(", ").replace(/&amp;/g, "&");
 
-  const title = `${nameZh ? nameZh + " " : ""}${nameEn} (${code}) · ${instZh(inst)} 收生分數及計分方法 2026 | JUPASCal`;
-  const desc = `${nameZh ? nameZh + "（" + code + "）" : nameEn + " (" + code + ")"}｜${instZh(inst)}${med != null ? `：2025 年收生中位數 ${med}分` : ""}、2026 入學要求及計分比重。用 JUPASCal 估算你的 JUPAS 分數。`;
-  const summary = `${nameEn} (${code}) is a JUPAS undergraduate programme offered by ${instEn(inst)} (${inst}).`
+  const title = `${inst} ${nameEn}${nameZh ? " " + nameZh : ""} (${code}) · ${instZh(inst)}收生分數與計分方法 2026 | JUPASCal`;
+  const desc = `${instShort(inst)}${nameZh ? nameZh + "（" + code + "）" : nameEn + " (" + code + ")"}｜${instZh(inst)}${med != null ? `：2025 年收生中位數 ${med}分` : ""}、2026 入學要求及計分比重。用 JUPASCal 估算你的 JUPAS 分數。`;
+  const summary = `${inst} ${nameEn} (${code}) is a JUPAS undergraduate programme offered by ${instEn(inst)} (${inst}).`
     + (med != null ? ` Its 2025 median admission score was ${med}${uq != null && lq != null ? ` (upper quartile ${uq}, lower quartile ${lq})` : ""}.` : "")
     + ` It is scored on ${formulaTxt}${witems.length ? ` with weighting: ${plainWeights}` : " with equal subject weighting"}.`
     + (os && os.apps != null ? ` In ${os.year} it received ${os.apps} applications for about ${os.quota ?? "?"} places.` : "");
@@ -233,19 +239,19 @@ function programmePage(p, siblings) {
   if (lq != null) cards.push(`<div class="benchmark-card"><span>LQ</span><strong>${lq}</strong></div>`);
 
   const badges = [];
-  if (p.year_changes?.weighting_changed || p.score_basis) badges.push(`<span class="status change">2026 計分方法更新</span>`);
-  if (p.quota) badges.push(`<span class="status neutral">學額：${esc(p.quota)}</span>`);
+  if (p.year_changes?.weighting_changed || p.score_basis) badges.push(`<span class="status change">2026 計分更新 · Scoring updated</span>`);
+  if (p.quota) badges.push(`<span class="status neutral">學額 Quota ${esc(p.quota)}</span>`);
 
-  const reqRows = reqs.map(([k, v, note2]) => `<li class="eligibility-cell"><span class="eligibility-cell-mark" aria-hidden="true">·</span><span class="eligibility-cell-subject">${k}</span><span class="eligibility-cell-have"></span><span class="eligibility-cell-need"><em>要求</em><b>${v}</b></span>${note2 ? `<span class="eligibility-cell-note">${esc(note2)}</span>` : ""}</li>`).join("");
+  const reqRows = reqs.map(([k, v, note2]) => `<li class="eligibility-cell"><span class="eligibility-cell-mark" aria-hidden="true">·</span><span class="eligibility-cell-subject">${k}</span><span class="eligibility-cell-have"></span><span class="eligibility-cell-need"><em>要求 Req</em><b>${v}</b></span>${note2 ? `<span class="eligibility-cell-note">${esc(note2)}</span>` : ""}</li>`).join("");
 
-  const weightCloud = witems.length ? `<hr class="weight-divider"><button type="button" class="weight-toggle" aria-expanded="false" data-collapse>比重詳情${CHEV}</button><div class="weight-cloud wt-hidden">${witems.map(([k, v]) => `<span class="weight-item"><span>${k}</span><span>${v}</span></span>`).join("")}</div>` : "";
+  const weightCloud = witems.length ? `<hr class="weight-divider"><button type="button" class="weight-toggle" aria-expanded="false" data-collapse>比重詳情 Weightings${CHEV}</button><div class="weight-cloud wt-hidden">${witems.map(([k, v]) => `<span class="weight-item"><span>${k}</span><span>${v}</span></span>`).join("")}</div>` : "";
 
   const offersHtml = offersCard(p);
   const descBlock = extraInfoCard(p);
 
   const links = [];
   const jupas = httpsHref(p.jupas_url);
-  if (jupas) links.push(`<a class="official-link" href="${esc(jupas)}" target="_blank" rel="nofollow noopener"><strong>官方 JUPAS 頁面</strong><em>${code} · ${esc(inst)}</em></a>`);
+  if (jupas) links.push(`<a class="official-link" href="${esc(jupas)}" target="_blank" rel="nofollow noopener"><strong>官方 JUPAS 頁面 Official page</strong><em>${code} · ${esc(inst)}</em></a>`);
   const site = httpsHref((p.programme_websites || [])[0]);
   if (site) links.push(`<a class="official-link" href="${esc(site)}" target="_blank" rel="nofollow noopener"><strong>課程網站 Programme site</strong><em>${esc(shortUrl(site))}</em></a>`);
 
@@ -255,8 +261,8 @@ function programmePage(p, siblings) {
     + `<main class="app-shell layout-mobile detail-static">
   <aside class="panel detail-panel">
     <div class="detail-header"><div class="detail-header-main"><div class="detail-header-text">
-      <p class="eyebrow">課程詳情 · ${esc(inst)} · ${code}</p>
-      <div class="detail-name"><h2>${esc(nameZh || nameEn)}</h2>${nameZh ? `<p class="zh-name">${esc(nameEn)}</p>` : ""}</div>
+      <p class="eyebrow">課程詳情 · Programme · ${code}</p>
+      <div class="detail-name"><h2>${esc(nameZh ? instShort(inst) + " " + nameZh : inst + " " + nameEn)}</h2>${nameZh ? `<p class="zh-name">${esc(inst + " " + nameEn)}</p>` : ""}</div>
     </div></div>
     ${badges.length ? `<div class="detail-badges">${badges.join("")}</div>` : ""}</div>
 
@@ -274,7 +280,7 @@ function programmePage(p, siblings) {
 
     ${reqs.length ? `<hr class="grade-section-divider"><section class="eligibility-card formula-card"><div class="eligibility-card-eyebrow"><span>入學要求 · 2026 requirements</span></div><hr class="weight-divider"><div class="eligibility-body desktop-open"><ol class="eligibility-rows">${reqRows}</ol></div></section>` : ""}
 
-    <hr class="grade-section-divider"><section><div class="formula-year-grid"><div class="formula-card"><span>計分方法 · Scoring 2026</span><p class="formula-text">${esc(formulaTxt)}</p><small>各科同等比重（×1），另有加權見下。</small>${weightCloud}</div></div></section>
+    <hr class="grade-section-divider"><section><div class="formula-year-grid"><div class="formula-card"><span>計分方法 · Scoring 2026</span><p class="formula-text">${esc(formulaTxt)}</p><small>${witems.length ? "另有科目加權，詳見下方。 Some subjects are weighted — see below." : "各科同等比重（×1）。 Equal subject weighting (×1)."}</small>${weightCloud}</div></div></section>
 
     ${offersHtml}
     ${descBlock}
@@ -283,7 +289,7 @@ function programmePage(p, siblings) {
 
     <hr class="grade-section-divider"><section class="seo-faq"><p class="eyebrow">常見問題 · FAQ</p>${faqs.map(([q, a]) => `<h4>${esc(q)}</h4><p class="a">${esc(a)}</p>`).join("")}</section>
 
-    ${siblings.length > 1 ? `<hr class="grade-section-divider"><p class="eyebrow">${esc(inst)} 其他課程 · Other programmes</p><p class="seo-rel">${siblings.filter((q) => q.jupas_code !== code).slice(0, 8).map((q) => `<a href="/p/${q.jupas_code}/">${esc(q.name_zh || q.name_en || q.jupas_code)} <span class="muted">(${q.jupas_code})</span></a>`).join(" ")}</p>` : ""}
+    ${siblings.length > 1 ? `<hr class="grade-section-divider"><p class="eyebrow">${esc(instShort(inst))}其他課程 · Other ${esc(inst)} programmes</p><p class="seo-rel">${siblings.filter((q) => q.jupas_code !== code).slice(0, 8).map((q) => `<a href="/p/${q.jupas_code}/">${esc(q.name_zh || q.name_en || q.jupas_code)} <span class="muted">(${q.jupas_code})</span></a>`).join(" ")}</p>` : ""}
 
     <p class="muted" style="margin-top:18px;font-size:.76rem">JUPASCal 為免費、非官方的 JUPAS／DSE 收生計分工具，分數僅供參考，請以 ${esc(instZh(inst))} 及 JUPAS 公佈為準。A free, unofficial JUPAS / HKDSE score calculator — estimates for reference only.</p>
   </aside>
