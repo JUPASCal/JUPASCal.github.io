@@ -134,6 +134,13 @@ function shouldShowWelcome(): boolean {
 
 type Theme = "light" | "dark";
 
+// Shared flag so the calculator's back-sentinel / URL-watch (in CalculatorApp) can
+// tell when the About overlay owns the current history entry. About pushes ONE
+// history entry when it opens, so a hardware/browser Back closes About and reveals
+// the exact view underneath — instead of stepping the mobile flow back a level.
+// Both the ← button and Back pop that entry through the same path.
+const aboutNav = { open: false };
+
 function getRoute(): "home" | "about" {
   return window.location.hash === "#about" ? "about" : "home";
 }
@@ -141,24 +148,42 @@ function getRoute(): "home" | "about" {
 function App() {
   const [route, setRoute] = useState<"home" | "about">(() => getRoute());
   useEffect(() => {
-    const onHashChange = () => setRoute(getRoute());
-    const onOpenAbout = () => setRoute("about");
+    if (getRoute() === "about") aboutNav.open = true; // direct /#about load
+    const openAbout = () => {
+      if (!aboutNav.open) {
+        aboutNav.open = true;
+        window.history.pushState({ jcAbout: true }, ""); // own entry: Back closes About
+      }
+      setRoute("about");
+    };
+    // Back pressed while About owns the top entry → close it. The entry underneath
+    // is exactly where the user was, so it's revealed unchanged.
+    const onPop = () => {
+      if (aboutNav.open) { aboutNav.open = false; setRoute("home"); }
+    };
+    const onHashChange = () => { if (!aboutNav.open) setRoute(getRoute()); };
+    window.addEventListener("jupas:open-about", openAbout);
+    window.addEventListener("popstate", onPop);
     window.addEventListener("hashchange", onHashChange);
-    window.addEventListener("jupas:open-about", onOpenAbout);
     return () => {
+      window.removeEventListener("jupas:open-about", openAbout);
+      window.removeEventListener("popstate", onPop);
       window.removeEventListener("hashchange", onHashChange);
-      window.removeEventListener("jupas:open-about", onOpenAbout);
     };
   }, []);
 
   function closeAbout() {
-    setRoute("home");
-    if (window.location.hash === "#about") {
-      window.history.replaceState(
-        window.history.state,
-        "",
-        window.location.pathname + window.location.search,
-      );
+    // Route the ← button through the same history pop as the hardware Back, so both
+    // land on the exact previous view. Direct /#about loads have no pushed entry →
+    // fall back to a plain route flip + hash cleanup.
+    if (aboutNav.open && (window.history.state as { jcAbout?: boolean } | null)?.jcAbout) {
+      window.history.back(); // → onPop closes About
+    } else {
+      aboutNav.open = false;
+      setRoute("home");
+      if (window.location.hash === "#about") {
+        window.history.replaceState(window.history.state, "", window.location.pathname + window.location.search);
+      }
     }
   }
 
@@ -367,6 +392,9 @@ function CalculatorApp() {
   const inShareRef = useRef(false);
   useEffect(() => {
     const onUrlChange = () => {
+      // A Back that closes the About overlay is handled in App (it pops About's own
+      // entry); don't treat it as a URL/preview change here.
+      if (aboutNav.open) return;
       // Ignore navigations among our OWN history entries (jcOwn) – step / sub-
       // view backs handled by the back-nav trap below. Their URLs can be stale
       // (lower entries keep the plan as it was when current), so reacting here
@@ -976,6 +1004,9 @@ function CalculatorApp() {
 
   useEffect(() => {
     const onPopNav = (e: PopStateEvent) => {
+      // A Back that closes the About overlay must NOT also step the mobile flow back:
+      // App handles it (closing About reveals the exact previous view).
+      if (aboutNav.open) return;
       // Only act on navigations among our OWN entries. Foreign/pasted URLs land
       // with a null state and are handled by the URL-watch effect (preview).
       if (!(e.state as { jcOwn?: boolean } | null)?.jcOwn) return;
