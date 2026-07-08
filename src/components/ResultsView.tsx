@@ -182,7 +182,7 @@ export function ResultsView({ results, selectedCodes, activeCode, compact, delta
                 <td>{institutionLabel(result.programme.institution)}</td>
                 <td><QuotaBadge quota={result.programme.quota} compact label={false} /></td>
                 <td>{result.calculation.totalScore.toFixed(2)}</td>
-                <td><span className={`band ${result.band}`}>{t(bandLabelKey(result.band))}</span></td>
+                <td><BandBadge result={result} /></td>
                 <DeltaCell result={result} keyName="lq" deltaMode={deltaMode} />
                 <DeltaCell result={result} keyName="central" deltaMode={deltaMode} />
                 <DeltaCell result={result} keyName="uq" deltaMode={deltaMode} />
@@ -256,7 +256,7 @@ export function ResultsView({ results, selectedCodes, activeCode, compact, delta
               </span>
               <span className="card-score-badges">
                 <InterviewFlag programme={result.programme} compact />
-                <span className={`band ${result.band}`}>{t(bandLabelKey(result.band))}</span>
+                <BandBadge result={result} />
               </span>
             </span>
             <span className="card-benchmarks">
@@ -331,13 +331,37 @@ function SortableHeader({
   );
 }
 
+// The institution's published reference score for a benchmark key. Shown even when
+// the student has no score yet — the school's LQ/median/UQ exist independently of the
+// student's input, so the list should never blank them out to "-".
+function refScore(result: ProgrammeResult, key: BenchmarkKey | "central"): number | null {
+  const s = result.programme.scores_2025 || {};
+  if (key === "central" || key === "median") return s.median ?? s.mean ?? s.expected_score ?? null;
+  if (key === "mean") return s.mean ?? null;
+  if (key === "lq") return s.lq ?? null;
+  if (key === "uq") return s.uq ?? null;
+  if (key === "expected_score") return s.expected_score ?? null;
+  return null;
+}
+
+// The student's band (their score's position). Hidden while they simply haven't
+// entered grades yet but the programme HAS reference scores (shown alongside) — a
+// "No score data" chip there is misleading; the band returns once there's a score
+// to place. Kept for genuinely data-less programmes.
+function BandBadge({ result }: { result: ProgrammeResult }) {
+  const { t } = useLang();
+  if (result.band === "no-score" && result.hasScoreData) return null;
+  return <span className={`band ${result.band}`}>{t(bandLabelKey(result.band))}</span>;
+}
+
 function DeltaCell({ result, keyName, deltaMode }: { result: ProgrammeResult; keyName: "lq" | "central" | "uq"; deltaMode: "points" | "percent" }) {
   const { t } = useLang();
   const comparison = keyName === "central" ? centralComparison(result) : result.comparisons.find((item) => item.key === keyName);
+  const ref = comparison ? null : refScore(result, keyName);
   const positive = comparison && comparison.delta >= 0;
   const showMeanLabel = keyName === "central" && comparison?.key === "mean";
   return (
-    <td className={comparison ? "benchmark-cell" : "muted"}>
+    <td className={comparison || ref != null ? "benchmark-cell" : "muted"}>
       {comparison ? (
         <>
           {showMeanLabel ? <em className="benchmark-cell-label">{t("common.mean")}</em> : null}
@@ -346,7 +370,7 @@ function DeltaCell({ result, keyName, deltaMode }: { result: ProgrammeResult; ke
             {deltaMode === "percent" ? formatPercent(comparison.percent) : formatDelta(comparison.delta)}
           </span>
         </>
-      ) : "-"}
+      ) : ref != null ? <strong>{ref.toFixed(2)}</strong> : "-"}
     </td>
   );
 }
@@ -409,12 +433,13 @@ function benchmarkDiff(comparison: { delta: number; percent: number } | undefine
 
 function BenchmarkChip({ result, benchmarkKey, label, deltaMode = "points" }: { result: ProgrammeResult; benchmarkKey: BenchmarkKey; label: string; deltaMode?: "points" | "percent" }) {
   const comparison = result.comparisons.find((item) => item.key === benchmarkKey);
+  const ref = comparison ? null : refScore(result, benchmarkKey);
   const positive = comparison ? comparison.delta >= 0 : false;
   return (
     <span className={!comparison ? "benchmark-chip muted" : positive ? "benchmark-chip positive" : "benchmark-chip negative"}>
       <em>{label}</em>
-      <strong>{comparison ? comparison.score.toFixed(2) : "-"}</strong>
-      <b>{benchmarkDiff(comparison, deltaMode)}</b>
+      <strong>{comparison ? comparison.score.toFixed(2) : ref != null ? ref.toFixed(2) : "-"}</strong>
+      <b>{comparison ? benchmarkDiff(comparison, deltaMode) : ""}</b>
     </span>
   );
 }
@@ -434,14 +459,15 @@ function CentralBenchmarkChip({ result, deltaMode = "points" }: { result: Progra
 
 function CompactBenchmark({ result, benchmarkKey, label, deltaMode = "points" }: { result: ProgrammeResult; benchmarkKey: BenchmarkKey; label: string; deltaMode?: "points" | "percent" }) {
   const comparison = result.comparisons.find((item) => item.key === benchmarkKey);
+  const ref = comparison ? null : refScore(result, benchmarkKey);
   const positive = comparison ? comparison.delta >= 0 : false;
   return (
     <span className={!comparison ? "compact-benchmark muted" : positive ? "compact-benchmark positive" : "compact-benchmark negative"}>
       <span className="compact-benchmark-score">
         <em>{label}</em>
-        <strong>{comparison ? comparison.score.toFixed(2) : "-"}</strong>
+        <strong>{comparison ? comparison.score.toFixed(2) : ref != null ? ref.toFixed(2) : "-"}</strong>
       </span>
-      <b>{benchmarkDiff(comparison, deltaMode)}</b>
+      <b>{comparison ? benchmarkDiff(comparison, deltaMode) : ""}</b>
     </span>
   );
 }
