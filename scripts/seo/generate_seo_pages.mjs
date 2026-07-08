@@ -21,6 +21,17 @@ const data = JSON.parse(readFileSync(DATA, "utf8"));
 let DETAILS = {};
 try { DETAILS = JSON.parse(readFileSync("data/processed/programme_details_2026.json", "utf8")); } catch {}
 
+// Pull the authoritative score-basis disclaimers STRAIGHT from the app's i18n
+// dictionary (src/lib/strings.ts) instead of paraphrasing them here — so the static
+// pages carry the exact copy the app shows (single source of truth, no drift).
+const STR = {};
+try {
+  const src = readFileSync("src/lib/strings.ts", "utf8");
+  const re = /"([\w.]+)":\s*\{\s*en:\s*"((?:[^"\\]|\\.)*)"\s*,\s*zh:\s*"((?:[^"\\]|\\.)*)"\s*\}/g;
+  let m; while ((m = re.exec(src))) STR[m[1]] = { en: m[2].replace(/\\"/g, '"'), zh: m[3].replace(/\\"/g, '"') };
+} catch {}
+const str = (k) => STR[k] || null;
+
 const cssFiles = (() => {
   try { return readdirSync(`${OUT}/assets`).filter((x) => x.endsWith(".css")).sort((a, b) => (a.startsWith("index") ? -1 : 1) - (b.startsWith("index") ? -1 : 1)); } catch { return []; }
 })();
@@ -139,8 +150,8 @@ function offerStats(p) {
   return { year, apps: app.Total ?? null, appsBandA: app["Band A"] ?? null, offers: off?.Total ?? null, offersBandA: off?.["Band A"] ?? null, quota: app.Quota ?? off?.Quota ?? p.quota ?? null };
 }
 function basisNote(p) {
-  if (p.score_basis === "cuhk_2026_recalculated") return { en: "CUHK's official 2025 scores recalculated with the 2026 formula.", zh: "科大以 2026 年計分方法重新計算的 2025 年官方分數。" };
-  if (p.score_basis === "cuhk_2026_simulated") return { en: "JUPASCal's estimate — the 2026 weighting applied to CUHK's published subject grades of past admitted students (no official recalc published).", zh: "JUPASCal 估算：以 2026 年加權套用於科大公佈的過往取錄學生成績（校方未公佈重算分數）。" };
+  if (p.score_basis === "cuhk_2026_recalculated") return str("detail.cuhkRecalc.note");
+  if (p.score_basis === "cuhk_2026_simulated") return str("detail.cuhkSim.note");
   return null;
 }
 
