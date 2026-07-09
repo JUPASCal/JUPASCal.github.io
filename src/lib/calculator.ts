@@ -648,7 +648,10 @@ function matchElectives(
   programme: Programme,
 ): string[][] {
   const subjects = Object.keys(studentGrades).filter(
-    (s) => !used.has(s) && !s.includes(":"), // exclude UI/slot keys (…:subject, m12:module)
+    // Exclude UI slot POINTER keys only — NOT any colon: Cat-C languages
+    // ("Japanese: …") and Combined Science are real subjects that must be able to
+    // satisfy an elective requirement (same trap as the scoring filters).
+    (s) => !used.has(s) && !SLOT_BOOKKEEPING_KEY.test(s),
   );
 
   // Expand each pool into `count` slots, then build slot → eligible-subject adjacency.
