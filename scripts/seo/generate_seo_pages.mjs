@@ -162,6 +162,10 @@ function offerStats(p) {
 function basisNote(p) {
   if (p.score_basis === "cuhk_2026_recalculated") return str("detail.cuhkRecalc.note");
   if (p.score_basis === "cuhk_2026_simulated") return str("detail.cuhkSim.note");
+  if (p.score_basis === "restructured" && p.restructured_from) {
+    const s = str("detail.restructured.note");
+    return s ? { en: s.en.replaceAll("{from}", p.restructured_from), zh: s.zh.replaceAll("{from}", p.restructured_from) } : null;
+  }
   return null;
 }
 
@@ -324,7 +328,8 @@ function programmePage(p, siblings) {
   if (lq != null) cards.push(`<div class="benchmark-card"><span>下四分位 LQ</span><strong>${lq}</strong></div>`);
 
   const badges = [];
-  if (p.year_changes?.weighting_changed || p.score_basis) badges.push(`<span class="status change">2026 計分更新 · Scoring updated</span>`);
+  // "restructured" isn't a scoring change — it's disclosed via basisNote instead.
+  if (p.year_changes?.weighting_changed || (p.score_basis && p.score_basis !== "restructured")) badges.push(`<span class="status change">2026 計分更新 · Scoring updated</span>`);
   if (p.quota) badges.push(`<span class="status neutral">學額 Quota ${esc(p.quota)}</span>`);
 
   const reqRows = reqs.map(([k, v, note2]) => `<li class="eligibility-cell"><span class="eligibility-cell-mark" aria-hidden="true">·</span><span class="eligibility-cell-subject">${k}</span><span class="eligibility-cell-have"></span><span class="eligibility-cell-need"><em>要求 Req</em><b>${v}</b></span>${note2 ? `<span class="eligibility-cell-note">${esc(note2)}</span>` : ""}</li>`).join("");

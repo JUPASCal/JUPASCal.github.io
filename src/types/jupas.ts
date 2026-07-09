@@ -169,7 +169,12 @@ export type Programme = {
   // recalculation of the 2025 admission results with the (changed) 2026 formula, so
   // it stays comparable to a 2026-formula-scored student. Currently "cuhk_2026_recalculated"
   // for the CUHK programmes that changed formula for 2026 (see DetailPanel note).
+  // Also "restructured": the benchmark is borrowed from a discontinued predecessor
+  // programme (named in `restructured_from`), which the programme replaces.
   score_basis?: string;
+  // JUPAS code of the predecessor when `score_basis === "restructured"` — the
+  // benchmark shown is that (retired) programme's own admission score.
+  restructured_from?: string;
   score_grades_2025?: Record<string, Record<string, string> | null>;
   offer_statistics?: OfferStatistic[];
   quota?: number | null;

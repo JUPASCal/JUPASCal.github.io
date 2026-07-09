@@ -2867,6 +2867,20 @@ def unify_data():
             _hku_applied += 1
         print(f"HKU weight corrections applied: {_hku_applied} programme(s)")
 
+    # 4b-i-restructure. Restructured-programme disclosure. A programme that
+    # replaces a discontinued one carries its predecessor's admission score as a
+    # proxy (it has no history of its own yet). Flag it so the DetailPanel says
+    # the benchmark shown is borrowed from the predecessor. PolyU JS3243
+    # (Language Science and Technology, "subject to approval") restructures the
+    # retired JS3241 and reuses its 2025 lq/mean.
+    _restructured = {"JS3243": "JS3241"}
+    for _code, _from in _restructured.items():
+        _obj = unified_map.get(_code)
+        if _obj and (_obj.get("scores_2025") or {}).get("mean") is not None:
+            _obj["score_basis"] = "restructured"
+            _obj["restructured_from"] = _from
+            print(f"Restructured-programme flag: {_code} <- {_from}")
+
     # 4b-ii. Year-over-year change detection. Runs AFTER weight canonicalization so
     # the diff is over canonical subject keys. Attaches a compact `year_changes`
     # summary only when a real (noise-filtered) weighting/formula change exists;

@@ -445,6 +445,8 @@ export const STRINGS = {
   // Driven by programme.score_basis = "cuhk_2026_simulated".
   "detail.cuhkSim.note": { en: "These figures are a JUPASCal estimate, not official CUHK numbers. CUHK weighted a subject in this programme for 2026 but hasn't republished admission scores under the new formula, so they're estimated here instead.", zh: "以下分數為 JUPASCal 估算，並非中大官方數字。中大在 2026 年為此課程新增科目加權，但未有按新公式重新公佈收生分數，故此處以估算數值代替。" },
   "detail.cuhkSim.method": { en: "How: CUHK publishes the actual DSE grades of the students admitted at the 2025 lower quartile, median and upper quartile. Those grades are re-scored with the 2026 weighting — core subjects only, since CUHK hides the electives — by the same method as your score, so the two line up. Treat them as close estimates.", zh: "方法：中大公佈了 2025 年在下四分位、中位及上四分位獲取錄學生的實際 DSE 成績；再以 2026 年加權為這些成績重新計分（只加權核心科，因中大不公開選修科）。計法與你的分數相同，可互相比較，惟屬近似估算。" },
+  // Driven by programme.score_basis = "restructured"; {from} = predecessor JS code.
+  "detail.restructured.note": { en: "This is a new/restructured programme that replaces {from}. It has no admissions history of its own yet, so the scores shown are {from}'s 2025 admission scores, used here as a rough reference. Check its requirements and intake directly before relying on them.", zh: "此為取代 {from} 的新／重組課程，本身尚無收生記錄，故以下分數為 {from} 的 2025 年收生分數，僅作粗略參考。作準前請自行查核其入學要求及收生情況。" },
   "detail.formula2025Label": { en: "2025 comparison logic", zh: "2025 年比較邏輯" },
   "detail.formula2025Note": { en: "Used to compare your score against 2025 admission benchmarks.", zh: "用於將你的分數對照 2025 年收生基準。" },
   "detail.formula2026Label": { en: "2026 applicant reference", zh: "2026 年申請人參考" },

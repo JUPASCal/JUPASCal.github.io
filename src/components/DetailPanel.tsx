@@ -367,11 +367,9 @@ export function DetailPanel({ results, activeCode, reviewRequest, onActiveCodeCh
               <span className={`band ${result.band}`}>{t(bandLabelKey(result.band))}</span>
             </div>
             <p className="score-context-note">
-              {isNewProgramme(result)
-                ? null
-                : result.hasScoreData
-                  ? t("detail.calc2025")
-                  : t("detail.noData2025")}
+              {isNewProgramme(result) || !result.hasScoreData
+                ? t("detail.noData2025")
+                : t("detail.calc2025")}
               <span className="score-context-tap">
                 {auditOpen ? t("detail.tapBreakdownHide") : t("detail.tapBreakdownShow")}
                 <svg className={"collapsible-chevron" + (auditOpen ? " open" : "")} width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -470,6 +468,9 @@ export function DetailPanel({ results, activeCode, reviewRequest, onActiveCodeCh
                 {t("detail.cuhkRecalc.source")} ↗
               </a>
             </div>
+          ) : null}
+          {programme.score_basis === "restructured" && programme.restructured_from ? (
+            <p className="warning">{t("detail.restructured.note", { from: programme.restructured_from })}</p>
           ) : null}
           {programme.scores_2025?.score_type === "estimated" ? (
             <p className="warning">{t("detail.estimatedNotePre")}<b>{t("detail.estimatedNoteBold")}</b>{t("detail.estimatedNotePost")}</p>
