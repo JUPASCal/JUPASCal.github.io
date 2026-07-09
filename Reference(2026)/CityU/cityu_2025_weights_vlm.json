@@ -1,0 +1,506 @@
+{
+ "JS1000": {
+  "count": "best5",
+  "subject_weights_2025": {}
+ },
+ "JS1001": {
+  "count": "best5",
+  "subject_weights_2025": {}
+ },
+ "JS1002": {
+  "count": "best5",
+  "subject_weights_2025": {}
+ },
+ "JS1005": {
+  "count": "best5",
+  "subject_weights_2025": {}
+ },
+ "JS1007": {
+  "count": "best5",
+  "subject_weights_2025": {
+   "English Language": 1.5
+  }
+ },
+ "JS1012": {
+  "count": "best5",
+  "subject_weights_2025": {}
+ },
+ "JS1013": {
+  "count": "best5",
+  "subject_weights_2025": {}
+ },
+ "JS1014": {
+  "count": "best5",
+  "subject_weights_2025": {}
+ },
+ "JS1017": {
+  "count": "best5",
+  "subject_weights_2025": {}
+ },
+ "JS1018": {
+  "count": "best5",
+  "subject_weights_2025": {}
+ },
+ "JS1019": {
+  "count": "best5",
+  "subject_weights_2025": {}
+ },
+ "JS1025": {
+  "count": "best5",
+  "subject_weights_2025": {}
+ },
+ "JS1026": {
+  "count": "best5",
+  "subject_weights_2025": {}
+ },
+ "JS1027": {
+  "count": "best5",
+  "subject_weights_2025": {}
+ },
+ "JS1040": {
+  "count": "best5",
+  "subject_weights_2025": {
+   "English Language": 2.0
+  }
+ },
+ "JS1041": {
+  "count": "best5",
+  "subject_weights_2025": {
+   "English Language": 2.0
+  }
+ },
+ "JS1042": {
+  "count": "best5",
+  "subject_weights_2025": {
+   "English Language": 2.0
+  }
+ },
+ "JS1043": {
+  "count": "best5",
+  "subject_weights_2025": {
+   "English Language": 2.0,
+   "Mathematics (Compulsory Part)": 1.5
+  }
+ },
+ "JS1044": {
+  "count": "best5",
+  "subject_weights_2025": {
+   "English Language": 2.0
+  }
+ },
+ "JS1050": {
+  "best_of_weights_2025": [
+   {
+    "count": 1,
+    "subjects": [
+     "Biology",
+     "Chemistry",
+     "Physics"
+    ],
+    "weight": 2.5
+   }
+  ],
+  "count": "best5",
+  "subject_weights_2025": {
+   "Biology": 1.5,
+   "Chemistry": 1.5,
+   "English Language": 2.0,
+   "Geography": 1.5,
+   "Mathematics (Compulsory Part)": 2.5,
+   "Mathematics Extended Part (Module 1)": 1.5,
+   "Mathematics Extended Part (Module 2)": 1.5,
+   "Physics": 1.5
+  }
+ },
+ "JS1051": {
+  "best_of_weights_2025": [
+   {
+    "count": 1,
+    "subjects": [
+     "Biology",
+     "Chemistry",
+     "Physics"
+    ],
+    "weight": 2.5
+   }
+  ],
+  "count": "best5",
+  "subject_weights_2025": {
+   "Biology": 1.5,
+   "Chemistry": 1.5,
+   "English Language": 2.0,
+   "Geography": 1.5,
+   "Mathematics (Compulsory Part)": 2.5,
+   "Mathematics Extended Part (Module 1)": 1.5,
+   "Mathematics Extended Part (Module 2)": 1.5,
+   "Physics": 1.5
+  }
+ },
+ "JS1052": {
+  "best_of_weights_2025": [
+   {
+    "count": 1,
+    "subjects": [
+     "Biology",
+     "Chemistry",
+     "Physics"
+    ],
+    "weight": 2.5
+   }
+  ],
+  "count": "best5",
+  "subject_weights_2025": {
+   "Biology": 1.5,
+   "Chemistry": 1.5,
+   "English Language": 2.0,
+   "Geography": 1.5,
+   "Mathematics (Compulsory Part)": 2.5,
+   "Mathematics Extended Part (Module 1)": 1.5,
+   "Mathematics Extended Part (Module 2)": 1.5,
+   "Physics": 1.5
+  }
+ },
+ "JS1053": {
+  "best_of_weights_2025": [
+   {
+    "count": 1,
+    "subjects": [
+     "Biology",
+     "Chemistry",
+     "Physics"
+    ],
+    "weight": 2.5
+   }
+  ],
+  "count": "best5",
+  "subject_weights_2025": {
+   "Biology": 1.5,
+   "Business, Accounting and Financial Studies": 2.5,
+   "Chemistry": 1.5,
+   "Economics": 2.5,
+   "English Language": 2.0,
+   "Geography": 1.5,
+   "Mathematics (Compulsory Part)": 2.5,
+   "Mathematics Extended Part (Module 1)": 1.5,
+   "Mathematics Extended Part (Module 2)": 1.5,
+   "Physics": 1.5
+  }
+ },
+ "JS1061": {
+  "count": "best5",
+  "subject_weights_2025": {}
+ },
+ "JS1062": {
+  "count": "best5",
+  "subject_weights_2025": {
+   "English Language": 1.5
+  }
+ },
+ "JS1070": {
+  "count": "best5",
+  "subject_weights_2025": {
+   "English Language": 2.0,
+   "Mathematics (Compulsory Part)": 2.0
+  }
+ },
+ "JS1071": {
+  "count": "best5",
+  "subject_weights_2025": {
+   "English Language": 2.0,
+   "Mathematics (Compulsory Part)": 2.0
+  }
+ },
+ "JS1072": {
+  "count": "best5",
+  "subject_weights_2025": {
+   "English Language": 2.0,
+   "Mathematics (Compulsory Part)": 2.0
+  }
+ },
+ "JS1074": {
+  "count": "best5",
+  "subject_weights_2025": {
+   "English Language": 2.0,
+   "Mathematics (Compulsory Part)": 2.0
+  }
+ },
+ "JS1100": {
+  "count": "best4",
+  "subject_weights_2025": {
+   "English Language": 2.0
+  }
+ },
+ "JS1102": {
+  "count": "best5",
+  "subject_weights_2025": {
+   "English Language": 1.5
+  }
+ },
+ "JS1103": {
+  "count": "best5",
+  "subject_weights_2025": {
+   "Chinese History": 1.5,
+   "Chinese Language": 2.0,
+   "Chinese Literature": 1.5,
+   "English Language": 2.0,
+   "History": 1.5,
+   "Visual Arts": 1.5
+  }
+ },
+ "JS1104": {
+  "count": "best5",
+  "subject_weights_2025": {
+   "English Language": 2.5,
+   "Literature in English": 1.5
+  }
+ },
+ "JS1106": {
+  "count": "best4",
+  "subject_weights_2025": {
+   "Chinese Language": 1.25,
+   "English Language": 1.25
+  }
+ },
+ "JS1108": {
+  "count": "best5",
+  "subject_weights_2025": {
+   "English Language": 1.5
+  }
+ },
+ "JS1109": {
+  "count": "best5",
+  "subject_weights_2025": {
+   "Chinese Language": 1.5,
+   "English Language": 2.0,
+   "Mathematics (Compulsory Part)": 1.5
+  }
+ },
+ "JS1111": {
+  "count": "best4",
+  "subject_weights_2025": {
+   "English Language": 2.0
+  }
+ },
+ "JS1112": {
+  "count": "best4",
+  "subject_weights_2025": {
+   "English Language": 2.0
+  }
+ },
+ "JS1113": {
+  "count": "best4",
+  "subject_weights_2025": {
+   "English Language": 2.0
+  }
+ },
+ "JS1123": {
+  "count": "best5",
+  "subject_weights_2025": {}
+ },
+ "JS1200": {
+  "count": "best4",
+  "subject_weights_2025": {
+   "Biology": 2.5,
+   "Chemistry": 2.5,
+   "Economics": 2.5,
+   "English Language": 2.0,
+   "Mathematics (Compulsory Part)": 2.5,
+   "Mathematics Extended Part (Module 1)": 2.5,
+   "Mathematics Extended Part (Module 2)": 2.5,
+   "Physics": 2.5
+  }
+ },
+ "JS1201": {
+  "count": "best5",
+  "subject_weights_2025": {
+   "Chinese Language": 1.5,
+   "English Language": 2.5,
+   "Mathematics (Compulsory Part)": 2.5,
+   "Mathematics Extended Part (Module 1)": 2.5,
+   "Mathematics Extended Part (Module 2)": 2.5,
+   "Physics": 2.5
+  }
+ },
+ "JS1202": {
+  "count": "best4",
+  "subject_weights_2025": {
+   "Chemistry": 2.0,
+   "English Language": 2.0,
+   "Mathematics (Compulsory Part)": 1.5
+  }
+ },
+ "JS1204": {
+  "count": "best5",
+  "subject_weights_2025": {}
+ },
+ "JS1205": {
+  "count": "best5",
+  "subject_weights_2025": {
+   "Biology": 1.5,
+   "Chemistry": 1.5,
+   "English Language": 2.0,
+   "Information and Communication Technology": 2.0,
+   "Mathematics (Compulsory Part)": 2.0,
+   "Mathematics Extended Part (Module 1)": 2.0,
+   "Mathematics Extended Part (Module 2)": 2.0,
+   "Physics": 2.0
+  }
+ },
+ "JS1206": {
+  "count": "best4",
+  "subject_weights_2025": {
+   "Biology": 1.5,
+   "Chemistry": 1.5,
+   "English Language": 2.0,
+   "Mathematics (Compulsory Part)": 2.5,
+   "Mathematics Extended Part (Module 1)": 2.0,
+   "Mathematics Extended Part (Module 2)": 2.0,
+   "Physics": 1.5
+  }
+ },
+ "JS1207": {
+  "count": "best5",
+  "subject_weights_2025": {
+   "Chemistry": 1.5,
+   "Design and Applied Technology": 1.5,
+   "English Language": 2.0,
+   "Mathematics (Compulsory Part)": 2.0,
+   "Mathematics Extended Part (Module 1)": 1.5,
+   "Mathematics Extended Part (Module 2)": 1.5,
+   "Physics": 2.0
+  }
+ },
+ "JS1208": {
+  "count": "best4",
+  "subject_weights_2025": {
+   "English Language": 2.0,
+   "Mathematics (Compulsory Part)": 1.25,
+   "Mathematics Extended Part (Module 1)": 1.5,
+   "Mathematics Extended Part (Module 2)": 1.5,
+   "Physics": 2.0
+  }
+ },
+ "JS1210": {
+  "count": "best5",
+  "subject_weights_2025": {
+   "Biology": 1.5,
+   "Chemistry": 1.5,
+   "English Language": 1.5,
+   "Mathematics (Compulsory Part)": 2.0,
+   "Mathematics Extended Part (Module 1)": 1.5,
+   "Mathematics Extended Part (Module 2)": 1.5,
+   "Physics": 2.0
+  }
+ },
+ "JS1211": {
+  "count": "best5",
+  "subject_weights_2025": {
+   "Biology": 2.0,
+   "Chemistry": 2.0,
+   "English Language": 2.0,
+   "Mathematics (Compulsory Part)": 2.0,
+   "Mathematics Extended Part (Module 1)": 2.0,
+   "Mathematics Extended Part (Module 2)": 2.0,
+   "Physics": 2.0
+  }
+ },
+ "JS1216": {
+  "count": "best5",
+  "subject_weights_2025": {
+   "Chemistry": 1.5,
+   "Design and Applied Technology": 1.5,
+   "English Language": 2.0,
+   "Information and Communication Technology": 2.0,
+   "Mathematics (Compulsory Part)": 2.0,
+   "Mathematics Extended Part (Module 1)": 2.0,
+   "Mathematics Extended Part (Module 2)": 2.0,
+   "Physics": 2.0
+  }
+ },
+ "JS1217": {
+  "count": "best5",
+  "subject_weights_2025": {
+   "Biology": 2.0,
+   "Chemistry": 2.0,
+   "Design and Applied Technology": 2.0,
+   "English Language": 2.0,
+   "Information and Communication Technology": 2.0,
+   "Mathematics (Compulsory Part)": 2.0,
+   "Mathematics Extended Part (Module 1)": 2.0,
+   "Mathematics Extended Part (Module 2)": 2.0,
+   "Physics": 2.0
+  }
+ },
+ "JS1218": {
+  "count": "best5",
+  "subject_weights_2025": {}
+ },
+ "JS1219": {
+  "count": "best5",
+  "subject_weights_2025": {
+   "Biology": 2.0,
+   "Chemistry": 2.0,
+   "Design and Applied Technology": 2.0,
+   "Economics": 2.0,
+   "English Language": 2.0,
+   "Information and Communication Technology": 2.0,
+   "Mathematics (Compulsory Part)": 2.0,
+   "Mathematics Extended Part (Module 1)": 2.0,
+   "Mathematics Extended Part (Module 2)": 2.0,
+   "Physics": 2.0
+  }
+ },
+ "JS1221": {
+  "count": "best5",
+  "subject_weights_2025": {}
+ },
+ "JS1801": {
+  "count": "best5",
+  "subject_weights_2025": {}
+ },
+ "JS1805": {
+  "count": "best5",
+  "subject_weights_2025": {
+   "Biology": 2.0,
+   "Business, Accounting and Financial Studies": 1.5,
+   "Chemistry": 2.0,
+   "Design and Applied Technology": 1.5,
+   "English Language": 2.0,
+   "Information and Communication Technology": 1.5,
+   "Mathematics (Compulsory Part)": 1.5,
+   "Mathematics Extended Part (Module 1)": 1.5,
+   "Mathematics Extended Part (Module 2)": 1.5,
+   "Physics": 1.5
+  }
+ },
+ "JS1806": {
+  "count": "best5",
+  "subject_weights_2025": {
+   "Biology": 2.0,
+   "Business, Accounting and Financial Studies": 1.5,
+   "Chemistry": 2.0,
+   "Design and Applied Technology": 1.5,
+   "English Language": 2.0,
+   "Information and Communication Technology": 1.5,
+   "Mathematics (Compulsory Part)": 1.5,
+   "Mathematics Extended Part (Module 1)": 1.5,
+   "Mathematics Extended Part (Module 2)": 1.5,
+   "Physics": 1.5
+  }
+ },
+ "JS1807": {
+  "count": "best5",
+  "subject_weights_2025": {
+   "Biology": 2.0,
+   "Business, Accounting and Financial Studies": 1.5,
+   "Chemistry": 2.0,
+   "Design and Applied Technology": 1.5,
+   "English Language": 2.0,
+   "Information and Communication Technology": 1.5,
+   "Mathematics (Compulsory Part)": 1.5,
+   "Mathematics Extended Part (Module 1)": 1.5,
+   "Mathematics Extended Part (Module 2)": 1.5,
+   "Physics": 1.5
+  }
+ }
+}

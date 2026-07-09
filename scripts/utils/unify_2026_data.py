@@ -36,6 +36,10 @@ FILES = {
 
 # Supplemental: HKUST structured formula data reverse-engineered from official JS calculator
 HKUST_JS_EXTRACT = "Reference(2026)/HKUST/HKUST_2026_JS_Extracted.json"
+# CityU 2025 weightings, VLM-transcribed from the 2025 PDF (the scrape's 2025 field
+# was garbled; unify was also copying 2026 onto 2025). See scripts/extraction/
+# cityu_2025_weights_from_pdf.py. Keyed by JS code.
+CITYU_2025_WEIGHTS = "Reference(2026)/CityU/cityu_2025_weights_vlm.json"
 
 # Supplemental Data Files (PDF extractions or raw API caches)
 CUHK_2025_REQ = "Reference(2026)/CUHK/CUHK_PDF_2025_Requirements.json"
@@ -1562,6 +1566,14 @@ def unify_data():
                 hkust_js_data[entry['jupas_code']] = entry
         print(f"Loaded HKUST JS extract: {len(hkust_js_data)} entries")
 
+    # Load CityU 2025 weightings (VLM-transcribed from the 2025 PDF) — authoritative
+    # 2025 source; the scrape's 2025 field was garbled and unify copied 2026 onto 2025.
+    cityu_2025_weights = {}
+    if os.path.exists(CITYU_2025_WEIGHTS):
+        with open(CITYU_2025_WEIGHTS, 'r', encoding='utf-8') as f:
+            cityu_2025_weights = json.load(f)
+        print(f"Loaded CityU 2025 weightings: {len(cityu_2025_weights)} entries")
+
         # Known scrape error — JS5901. Its official formula (HKUST PDF) is identical
         # to the other engineering programmes: English×2 + Math×2 + best of
         # {Bio/Chem/Phys ×2, ICT ×1} + best 2 other {M1/M2 ×1.5, else ×1}, giving a
@@ -1698,10 +1710,23 @@ def unify_data():
                 else:
                     obj["subject_weights_2026"] = {normalize_subject(k): float(v) for k, v in sw2026.items()}
 
-                # CityU 2025 weights are effectively identical to 2026 (the per-year
-                # source strings confirm the same positional 1st/2nd-elective split).
-                obj["subject_weights_2025"] = obj["subject_weights_2026"].copy()
-                obj["best_of_weights_2025"] = [dict(p) for p in obj["best_of_weights_2026"]]
+                # CityU 2025 weights: use the VLM-transcribed 2025 PDF (authoritative).
+                # 7 programmes genuinely differ from 2026 (e.g. JS1001 English ×1 not
+                # ×1.5; JS1200 Math/sciences ×2.5; JS1216/JS1219 weighted electives the
+                # 2026 data lost). Fall back to the 2026 copy only for programmes absent
+                # from the 2025 PDF (e.g. JS1300, new/renamed since).
+                _c25 = cityu_2025_weights.get(code)
+                if _c25:
+                    obj["subject_weights_2025"] = {normalize_subject(k): float(v)
+                                                   for k, v in _c25["subject_weights_2025"].items()}
+                    obj["best_of_weights_2025"] = [
+                        {"count": p["count"], "weight": float(p["weight"]),
+                         "subjects": [normalize_subject(s) for s in p["subjects"]]}
+                        for p in _c25.get("best_of_weights_2025", [])
+                    ]
+                else:
+                    obj["subject_weights_2025"] = obj["subject_weights_2026"].copy()
+                    obj["best_of_weights_2025"] = [dict(p) for p in obj["best_of_weights_2026"]]
                 
                 # Regex extraction of compulsory subjects embedded in "Best 5 (includes ...)" strings
                 sf = str(entry.get('score_formula', ''))
