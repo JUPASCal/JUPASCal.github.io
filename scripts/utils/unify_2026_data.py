@@ -2801,6 +2801,36 @@ def unify_data():
             _corr_applied += 1
         print(f"CUHK VLM corrections applied: {_corr_applied} programme(s)")
 
+    # 4b-i-hku. HKU footnote WEIGHTING-n pools. The HKU formula-text scrape
+    # references "with WEIGHTING n" but does NOT carry the pool composition (it
+    # lives in a separate PDF footnote box), so parse_hku_formula_weights leaves
+    # best_of empty / weights incomplete for JS6224 (W7), JS6999 (W8), JS6602
+    # (W10). These pools were VLM-read from the 2025 subject-weightings booklet
+    # and are supplied via hku_weight_corrections.json. Runs before year-changes.
+    _hku_corr_path = "Reference(2026)/HKU/hku_weight_corrections.json"
+    if os.path.exists(_hku_corr_path):
+        with open(_hku_corr_path, encoding="utf-8") as _hf:
+            _hku_corr = json.load(_hf)
+        _hku_applied = 0
+        for _code, _fix in _hku_corr.items():
+            if _code.startswith("_"):
+                continue
+            _obj = unified_map.get(_code)
+            if not _obj:
+                print(f"  WARNING: HKU correction for {_code} but no such programme")
+                continue
+            if "subject_weights_2025" in _fix:
+                _obj["subject_weights_2025"] = {normalize_subject(k): float(v)
+                                                for k, v in _fix["subject_weights_2025"].items()}
+            if "best_of_weights_2025" in _fix:
+                _obj["best_of_weights_2025"] = [
+                    {"count": p["count"], "weight": float(p["weight"]),
+                     "subjects": [normalize_subject(s) for s in p["subjects"]]}
+                    for p in _fix["best_of_weights_2025"]
+                ]
+            _hku_applied += 1
+        print(f"HKU weight corrections applied: {_hku_applied} programme(s)")
+
     # 4b-ii. Year-over-year change detection. Runs AFTER weight canonicalization so
     # the diff is over canonical subject keys. Attaches a compact `year_changes`
     # summary only when a real (noise-filtered) weighting/formula change exists;

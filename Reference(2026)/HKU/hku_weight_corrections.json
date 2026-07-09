@@ -1,0 +1,77 @@
+{
+ "_comment": "HKU WEIGHTING-n footnote pools that the formula-text scrape references (\"with WEIGHTING n\") but does not DEFINE — the pool composition lives in a separate PDF footnote box, VLM-read 2026-07 from Reference(2025)/HKU/\"HKU 2025 Requirements & 2024 Weighting & Admission Score.pdf\" (content header: \"HKU 2025 Admissions Information for Programmes with Subject Weightings\"). parse_hku_formula_weights sees the reference but had no pool -> best_of empty / weights incomplete. Applied by unify after the HKU block. HKU formula is stable across the cycle unless the source formula_2025/2026 differ, so 2025 pools mirror to 2026 only when 2026 keeps the weighting.",
+ "_verified": "2026-07-09 VLM (5-page HKU 2025 subject-weightings booklet)",
+ "JS6224": {
+  "_note": "Applied AI. formula_2025 \"2xEng+2xMath+2xM1/M2+Best 2 with WEIGHTING 7\"; WEIGHTING7 = x1.5 best-2 of {Bio,Chem,ICT,Phys}. NOTE formula_2026 is \"Eng+Math+Best 3\" (HKU DROPPED the weighting for 2026) so the pool is 2025-only.",
+  "best_of_weights_2025": [
+   {
+    "count": 2,
+    "subjects": [
+     "Biology",
+     "Chemistry",
+     "Information and Communication Technology",
+     "Physics"
+    ],
+    "weight": 1.5
+   }
+  ]
+ },
+ "JS6999": {
+  "_note": "Computing and Data Science. formula_2025 \"Eng+1.5xMath+Best 2 with WEIGHTING 8+Best Subject\"; WEIGHTING8 = x1.5 best-2 of {Bio,Chem,Econ,ICT,M1,M2,Phys}. 2026 formula \"Eng+Math+Best 3\" dropped it -> 2025-only.",
+  "best_of_weights_2025": [
+   {
+    "count": 2,
+    "subjects": [
+     "Biology",
+     "Chemistry",
+     "Economics",
+     "Information and Communication Technology",
+     "Mathematics Extended Part (Module 1)",
+     "Mathematics Extended Part (Module 2)",
+     "Physics"
+    ],
+    "weight": 1.5
+   }
+  ]
+ },
+ "JS6602": {
+  "_note": "Innovation and Technology. formula_2025 \"2xEng+2xMath+Best 4 with WEIGHTING 10\"; WEIGHTING10 = x2 {Bio,Chem,CombSci,DAT,ICT,IntSci,Phys,Tech&Living} and x1.5 {ALL other subjects}. The scrape captured the x2 pool but not the x1.5 floor (and left M1/M2 at x2 though they are NOT in the x2 pool). Full explicit map below (x2 heavy pool + Eng/Math; x1.5 on every other Cat-A/M1/M2/Chinese/Cat-C).",
+  "subject_weights_2025": {
+   "English Language": 2.0,
+   "Mathematics (Compulsory Part)": 2.0,
+   "Biology": 2.0,
+   "Chemistry": 2.0,
+   "Physics": 2.0,
+   "Combined Science: Biology + Chemistry": 2.0,
+   "Combined Science: Biology + Physics": 2.0,
+   "Combined Science: Physics + Chemistry": 2.0,
+   "Integrated Science": 2.0,
+   "Design and Applied Technology": 2.0,
+   "Information and Communication Technology": 2.0,
+   "Technology and Living (Food Science and Technology)": 2.0,
+   "Technology and Living (Fashion, Clothing and Textiles)": 2.0,
+   "Business, Accounting and Financial Studies": 1.5,
+   "Chinese History": 1.5,
+   "Chinese Language": 1.5,
+   "Chinese Literature": 1.5,
+   "Economics": 1.5,
+   "Ethics and Religious Studies": 1.5,
+   "French: Advanced Diploma of French Language Studies / Diploma of French Language Studies": 1.5,
+   "Geography": 1.5,
+   "German: Goethe-Certificate": 1.5,
+   "Health Management and Social Care": 1.5,
+   "History": 1.5,
+   "Japanese: Japanese-Language Proficiency Test": 1.5,
+   "Korean: Test of Proficiency in Korean II": 1.5,
+   "Literature in English": 1.5,
+   "Mathematics Extended Part (Module 1)": 1.5,
+   "Mathematics Extended Part (Module 2)": 1.5,
+   "Music": 1.5,
+   "Physical Education": 1.5,
+   "Spanish: Diploma of Spanish as a Foreign Language": 1.5,
+   "Tourism and Hospitality Studies": 1.5,
+   "Urdu: Urdu (International)": 1.5,
+   "Visual Arts": 1.5
+  }
+ }
+}
