@@ -832,6 +832,37 @@ def expand_combined_science(subjs):
     return out
 
 
+# Some weighting feeds label a COMPOUND or GENERIC subject that is not a single
+# canonical subject — e.g. LingU's "Chinese History / Chinese Literature" (either
+# counts) and the bare "Technology and Living" (either strand). Left as-is they
+# are non-canonical keys and the weight is SILENTLY dropped by canonicalisation.
+# Split each onto its member subjects at the SAME weight (a student takes at most
+# one, so a flat weight on each is exact).
+COMPOUND_WEIGHT_EXPANSIONS = {
+    "chinese history / chinese literature": ["Chinese History", "Chinese Literature"],
+    "technology and living": [
+        "Technology and Living (Food Science and Technology)",
+        "Technology and Living (Fashion, Clothing and Textiles)",
+    ],
+}
+
+
+def expand_compound_weight_keys(weights):
+    """Expand compound/generic subject keys in a {subject: weight} dict onto their
+    member canonical subjects (see COMPOUND_WEIGHT_EXPANSIONS)."""
+    if not weights or not isinstance(weights, dict):
+        return weights
+    out = {}
+    for k, v in weights.items():
+        members = COMPOUND_WEIGHT_EXPANSIONS.get(str(k).strip().lower())
+        if members:
+            for m in members:
+                out[m] = v
+        else:
+            out[k] = v
+    return out
+
+
 # Case-insensitive lookup of every registry alias + canonical self-map.
 _ALIAS_LC = {k.lower(): v for k, v in SUBJECT_ALIASES.items()}
 _ALIAS_LC.update({c.lower(): c for c in CANONICAL_SUBJECTS})
@@ -2371,12 +2402,17 @@ def unify_data():
                 obj["formula_2025"] = entry.get('formula')
                 obj["formula_2026"] = entry.get('formula')
                 
-                sw2026 = entry.get('subject_weights', {})
+                # LingU weights compound/generic subjects ("Chinese History /
+                # Chinese Literature", generic "Technology and Living") — expand
+                # onto member subjects before canonicalising so the weight isn't
+                # silently dropped (see expand_compound_weight_keys).
+                sw2026 = expand_compound_weight_keys(entry.get('subject_weights', {}))
                 obj["subject_weights_2026"] = {normalize_subject(k): float(v) for k, v in sw2026.items()}
                 obj["subject_weights_2026_raw"] = entry.get('subject_weights_raw')
-                
+
                 sw2025 = entry.get('subject_weights_2025')
                 if sw2025 and isinstance(sw2025, dict):
+                    sw2025 = expand_compound_weight_keys(sw2025)
                     obj["subject_weights_2025"] = {normalize_subject(k): float(v) for k, v in sw2025.items()}
                 else:
                     obj["subject_weights_2025"] = obj["subject_weights_2026"].copy()
