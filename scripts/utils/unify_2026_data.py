@@ -40,6 +40,10 @@ HKUST_JS_EXTRACT = "Reference(2026)/HKUST/HKUST_2026_JS_Extracted.json"
 # was garbled; unify was also copying 2026 onto 2025). See scripts/extraction/
 # cityu_2025_weights_from_pdf.py. Keyed by JS code.
 CITYU_2025_WEIGHTS = "Reference(2026)/CityU/cityu_2025_weights_vlm.json"
+# CUHK 2025 weightings, parsed from the reliable scraped 2025 weight strings
+# (verified vs Reference(2025)/CUHK/CUHK 2025 Weightings.pdf); unify used to copy
+# 2026 onto 2025. See scripts/extraction/cuhk_2025_weights_from_scrape.py.
+CUHK_2025_WEIGHTS = "Reference(2026)/CUHK/cuhk_2025_weights.json"
 
 # Supplemental Data Files (PDF extractions or raw API caches)
 CUHK_2025_REQ = "Reference(2026)/CUHK/CUHK_PDF_2025_Requirements.json"
@@ -1574,6 +1578,12 @@ def unify_data():
             cityu_2025_weights = json.load(f)
         print(f"Loaded CityU 2025 weightings: {len(cityu_2025_weights)} entries")
 
+    cuhk_2025_weights = {}
+    if os.path.exists(CUHK_2025_WEIGHTS):
+        with open(CUHK_2025_WEIGHTS, 'r', encoding='utf-8') as f:
+            cuhk_2025_weights = json.load(f)
+        print(f"Loaded CUHK 2025 weightings: {len(cuhk_2025_weights)} entries")
+
         # Known scrape error — JS5901. Its official formula (HKUST PDF) is identical
         # to the other engineering programmes: English×2 + Math×2 + best of
         # {Bio/Chem/Phys ×2, ICT ×1} + best 2 other {M1/M2 ×1.5, else ×1}, giving a
@@ -1843,12 +1853,26 @@ def unify_data():
                     f25 = f26
                 obj["formula_2025"] = f25
                 
-                # Use highly structured 2026 API weight strings for 2025 fallback where possible
+                # 2026 weights from the structured API string.
                 flat_weights, best_of_weights = parse_cuhk_weights(entry.get('weight'))
                 obj["subject_weights_2026"] = flat_weights
                 obj["best_of_weights_2026"] = best_of_weights
-                obj["subject_weights_2025"] = obj["subject_weights_2026"].copy()
-                obj["best_of_weights_2025"] = obj["best_of_weights_2026"].copy()
+                # 2025 weights: use the parsed 2025 PDF (authoritative) instead of
+                # copying 2026. CUHK's real 2025 formula differs for some programmes
+                # (e.g. JS4412 M1/M2 ×1.75, JS4361 best-of language/science pools).
+                # Fall back to the 2026 copy only for programmes with no 2025 entry.
+                _cu25 = cuhk_2025_weights.get(code)
+                if _cu25 is not None:
+                    obj["subject_weights_2025"] = {normalize_subject(k): float(v)
+                                                   for k, v in _cu25.get("subject_weights_2025", {}).items()}
+                    obj["best_of_weights_2025"] = [
+                        {"count": p["count"], "weight": float(p["weight"]),
+                         "subjects": [normalize_subject(s) for s in p["subjects"]]}
+                        for p in _cu25.get("best_of_weights_2025", [])
+                    ]
+                else:
+                    obj["subject_weights_2025"] = obj["subject_weights_2026"].copy()
+                    obj["best_of_weights_2025"] = obj["best_of_weights_2026"].copy()
                 
                 obj["subject_weights_2025_raw"] = req25.get('weight')
                 obj["subject_weights_2026_raw"] = entry.get('weight_remarks')
