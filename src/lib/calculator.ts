@@ -130,24 +130,60 @@ function scoreHkustSteps(
     selectedSubjects.push(cand);
     addScore(cand.weightedScore);
   };
+  // Phase 1 — the required cores (English, Math) are fixed.
   for (const step of steps) {
     if (step.type === "required" && step.subject) {
       const cand = candidates.find((c) => !c.used && hkNorm(c.subject) === hkNorm(step.subject!));
       if (cand) take(cand, Number(step.weight ?? 1), true);
-    } else if (step.type === "best_from_pool") {
-      const filter = step.subject_filter || [];
-      let best: CandidateScore | null = null;
-      let bestWeight = 1;
-      let bestScore = -Infinity;
-      for (const cand of candidates) {
-        if (cand.used || !catOk(step, cand)) continue;
-        if (filter.length && !filter.some((s) => hkNorm(s) === hkNorm(cand.subject))) continue;
-        const weight = stepWeight(step, cand);
-        const score = cand.basePoints * weight;
-        if (score > bestScore) { bestScore = score; best = cand; bestWeight = weight; }
-      }
-      if (best) take(best, bestWeight, false);
     }
+  }
+
+  // Phase 2 — the best_from_pool slots. Choose the assignment of still-unused
+  // candidates to these slots that MAXIMISES the total (slot weighted scores plus
+  // the 6th-subject bonus), NOT a per-slot greedy pick. Greedy can strand a subject
+  // that would score higher in a LATER slot's weighting — e.g. an "any" slot grabs a
+  // plainly-high ×1 subject over M1/M2, pushing M1/M2 to a ×1 slot and losing its ×2.
+  // Slot count is tiny (≤3), so an exhaustive search is cheap.
+  const poolSteps = steps.filter((step) => step.type === "best_from_pool");
+  if (poolSteps.length) {
+    const avail = candidates.filter((c) => !c.used);
+    const ust = (programme.calculation_constraints || []).find((c) => c.type === "hkust_weighted_best");
+    const bonusRate = ust ? Number(ust.max_attainable_weighting || 5) * (Number(ust.bonus_percentage || 5) / 100) : 0;
+    const slotEligible = (step: HkustFormulaStep, cand: CandidateScore): boolean => {
+      if (!catOk(step, cand)) return false;
+      const filter = step.subject_filter || [];
+      return !filter.length || filter.some((s) => hkNorm(s) === hkNorm(cand.subject));
+    };
+    let bestTotal = -Infinity;
+    let bestPicks: { cand: CandidateScore; weight: number }[] = [];
+    const chosen: { cand: CandidateScore; weight: number }[] = [];
+    const inPool = new Set<CandidateScore>();
+    const search = (i: number, slotSum: number): void => {
+      if (i === poolSteps.length) {
+        // 6th-subject bonus = rate × best base among the still-unused (mirrors the
+        // hkust_weighted_best block below, which is best-base of the unused).
+        let bonusBase = 0;
+        if (bonusRate > 0) {
+          for (const c of avail) if (!inPool.has(c) && c.basePoints > bonusBase) bonusBase = c.basePoints;
+        }
+        const total = slotSum + bonusRate * bonusBase;
+        if (total > bestTotal) { bestTotal = total; bestPicks = chosen.slice(); }
+        return;
+      }
+      const step = poolSteps[i];
+      let anyEligible = false;
+      for (const cand of avail) {
+        if (inPool.has(cand) || !slotEligible(step, cand)) continue;
+        anyEligible = true;
+        const weight = stepWeight(step, cand);
+        inPool.add(cand); chosen.push({ cand, weight });
+        search(i + 1, slotSum + cand.basePoints * weight);
+        chosen.pop(); inPool.delete(cand);
+      }
+      if (!anyEligible) search(i + 1, slotSum); // slot unfillable (student lacks a pool subject)
+    };
+    search(0, 0);
+    for (const { cand, weight } of bestPicks) take(cand, weight, false);
   }
 }
 
