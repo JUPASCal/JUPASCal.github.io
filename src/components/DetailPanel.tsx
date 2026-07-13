@@ -6,6 +6,7 @@ import { slotLabel } from "../lib/slots";
 import { useLang, pickName, type Lang, type Translate } from "../lib/i18n";
 import { localizedShortSubject, localizedSubject } from "../lib/subjectsI18n";
 import { describeFormula } from "../lib/formulaText";
+import { scoringBasisYear } from "../lib/scoreBasis";
 import { getSelection, selectionTypeKey, selectionTimingKey, selectionSalienceKey, translateSelectionText } from "../lib/selection";
 import { loadProgrammeDetails, type DescBlock, type ProgrammeDetail } from "../lib/programmeDetails";
 import type { CandidateScore, EligibilityDetail, OfferStatistic, Programme, ProgrammeResult, YearChanges } from "../types/jupas";
@@ -37,6 +38,23 @@ const HKUST_JUPAS_URL = "https://join.hkust.edu.hk/admissions/jupas";
 const CUHK_JUPAS_URL = "https://admission.cuhk.edu.hk/jupas/";
 const CITYU_JUPAS_URL = "https://www.cityu.edu.hk/admo/jupas-admissions";
 const HKBU_JUPAS_URL = "https://admissions.hkbu.edu.hk/admissions/hkdse.html";
+
+// The TRUE 2025 weighting facts for programmes whose scoring fields were
+// mirrored onto the 2026 basis (CityU recalculated / HKBU simulated) — shown
+// under the scoring-logic card so the "2025" facts stay visible and never
+// contradict the year-change pill. Null when the programme isn't mirrored.
+function official2025Line(programme: Programme, t: Translate, lang: Lang): string | null {
+  const weights = programme.subject_weights_2025_official;
+  if (weights == null) return null;
+  const parts = Object.entries(weights).map(([subject, w]) => `${localizedShortSubject(subject, lang)} ×${w}`);
+  for (const pool of programme.best_of_weights_2025_official ?? []) {
+    parts.push(
+      `${t("detail.bestOf", { count: pool.count, subjects: pool.subjects.map((s) => localizedShortSubject(s, lang)).join("/") })} ×${pool.weight}`
+    );
+  }
+  if (!parts.length) return t("detail.official2025NoWeights");
+  return t("detail.official2025Weights", { weights: parts.join(lang === "zh" ? "、" : ", ") });
+}
 
 // One line of an HKBU published admit grade profile ("Chi 4 · Eng 3 · Maths 4 ·
 // electives 4 / 4 / 3"). CSD is skipped — it carries no score. Returns null
@@ -197,6 +215,19 @@ export function DetailPanel({ results, activeCode, reviewRequest, onActiveCodeCh
   // model; raw wording kept as a muted "Official:" line — see describeFormula).
   const formula2025 = describeFormula(programme, "2025", lang, t);
   const formula2026 = describeFormula(programme, "2026", lang, t);
+  // Which weighting the score actually runs on. Programmes whose benchmarks
+  // are already on the 2026 basis (CityU recalculated, HKBU simulated, CUHK
+  // recalc/sim, HKUST Engineering) score with the 2026 weighting, and every
+  // year label below must say so instead of claiming "2025".
+  const basisYear = scoringBasisYear(programme);
+  const changesNote =
+    basisYear === "2025"
+      ? t("detail.changes.note")
+      : (programme.score_basis ?? "").endsWith("recalculated")
+        ? t("detail.changes.noteRecalc", {
+            inst: programme.institution === "CityUHK" ? (lang === "zh" ? "城大" : "CityU") : lang === "zh" ? "中大" : "CUHK",
+          })
+        : t("detail.changes.noteSimulated");
 
   function moveActive(direction: 1 | -1) {
     if (resultsNonNull.length <= 1 || activeIndex < 0) return;
@@ -393,7 +424,7 @@ export function DetailPanel({ results, activeCode, reviewRequest, onActiveCodeCh
             <p className="score-context-note">
               {isNewProgramme(result) || !result.hasScoreData
                 ? t("detail.noData2025")
-                : t("detail.calc2025")}
+                : t("detail.calcBasis", { year: basisYear })}
               <span className="score-context-tap">
                 {auditOpen ? t("detail.tapBreakdownHide") : t("detail.tapBreakdownShow")}
                 <svg className={"collapsible-chevron" + (auditOpen ? " open" : "")} width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -405,6 +436,7 @@ export function DetailPanel({ results, activeCode, reviewRequest, onActiveCodeCh
               <AuditRows
                 candidates={calculation.allCandidates}
                 formula={formula2025.text || formula2026.text || null}
+                basisYear={basisYear}
                 t={t}
                 lang={lang}
               />
@@ -616,12 +648,13 @@ export function DetailPanel({ results, activeCode, reviewRequest, onActiveCodeCh
         <hr className="grade-section-divider" />
 
         <section>
-          {programme.year_changes ? <YearChangesPanel yc={programme.year_changes} t={t} lang={lang} /> : null}
+          {programme.year_changes ? <YearChangesPanel yc={programme.year_changes} note={changesNote} t={t} lang={lang} /> : null}
           <div className="formula-year-grid">
             {isNewProgramme(result) ? null : (
               <FormulaBlock
-                label={t("detail.formula2025Label")}
-                note={t("detail.formula2025Note")}
+                label={basisYear === "2026" ? t("detail.formulaScoringLabel") : t("detail.formula2025Label")}
+                note={basisYear === "2026" ? t("detail.formulaScoringNote") : t("detail.formula2025Note")}
+                extraNote={official2025Line(programme, t, lang)}
                 formula={formula2025.text}
                 rawFormula={formula2025.showOfficial ? formula2025.raw : null}
                 weights={programme.subject_weights_2025 || {}}
@@ -825,7 +858,7 @@ function shortenUrl(url: string): string {
   }
 }
 
-function AuditRows({ candidates, formula, t, lang }: { candidates: CandidateScore[]; formula?: string | null; t: Translate; lang: Lang }) {
+function AuditRows({ candidates, formula, basisYear, t, lang }: { candidates: CandidateScore[]; formula?: string | null; basisYear: "2025" | "2026"; t: Translate; lang: Lang }) {
   const sorted = [...candidates].sort(
     (a, b) => Number(b.used) - Number(a.used) || b.weightedScore - a.weightedScore
   );
@@ -834,7 +867,7 @@ function AuditRows({ candidates, formula, t, lang }: { candidates: CandidateScor
   return (
     <div className="score-audit" onClick={(event) => event.stopPropagation()}>
       <p className="score-audit-method">
-        <em>{t("detail.method2025")}</em>
+        <em>{t("detail.methodBasis", { year: basisYear })}</em>
         <span>{formula || t("detail.bestSubjects")}</span>
         <b>{t("detail.counted", { used: used.length, total: sorted.length })}</b>
       </p>
@@ -1102,7 +1135,7 @@ function prioritySlot(index: number) {
 // computed in the data pipeline as plain-language lines. Weighting changes are
 // grouped by transition (e.g. "13 subjects: ×5 → ×7") so broad rescales stay
 // readable; small groups list the subjects.
-function YearChangesPanel({ yc, t, lang }: { yc: YearChanges; t: Translate; lang: Lang }) {
+function YearChangesPanel({ yc, note, t, lang }: { yc: YearChanges; note: string; t: Translate; lang: Lang }) {
   const lines: string[] = [];
 
   for (const it of yc.items) {
@@ -1143,7 +1176,7 @@ function YearChangesPanel({ yc, t, lang }: { yc: YearChanges; t: Translate; lang
           <li key={i}>{line}</li>
         ))}
       </ul>
-      <small className="year-changes-note">{t("detail.changes.note")}</small>
+      <small className="year-changes-note">{note}</small>
     </div>
   );
 }
@@ -1151,6 +1184,7 @@ function YearChangesPanel({ yc, t, lang }: { yc: YearChanges; t: Translate; lang
 function FormulaBlock({
   label,
   note,
+  extraNote,
   formula,
   rawFormula,
   weights,
@@ -1160,6 +1194,7 @@ function FormulaBlock({
 }: {
   label: string;
   note: string;
+  extraNote?: string | null;
   formula?: string | null;
   rawFormula?: string | null;
   weights: Record<string, number>;
@@ -1176,6 +1211,7 @@ function FormulaBlock({
       <p className="formula-text">{formula || t("detail.formulaNA")}</p>
       {rawFormula ? <small className="formula-official">{t("detail.formulaGen.official", { raw: rawFormula })}</small> : null}
       <small>{note}</small>
+      {extraNote ? <small className="formula-official">{extraNote}</small> : null}
       {hasWeights ? (
         <>
           <hr className="weight-divider" />

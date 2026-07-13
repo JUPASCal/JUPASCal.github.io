@@ -416,7 +416,10 @@ export const STRINGS = {
   "detail.aplAdvisoryPre": { en: "This programme recognises your Applied Learning subject ", zh: "本課程承認你的應用學習科目 " },
   "detail.aplAdvisoryPost": { en: " as an extra bonus subject — an advantage the university considers but does not publish a value for, so it is not reflected in the score above.", zh: "為額外加分科目 — 院校會考慮但未公佈計分方法，故不計入上方分數。" },
   "common.listSep": { en: ", ", zh: "、" },
-  "detail.calc2025": { en: "Calculated based on 2025 formula", zh: "按 2025 年公式計算" },
+  // {year} = scoringBasisYear(programme): "2026" for programmes whose
+  // benchmarks are already on the 2026 basis (CityU recalculated, HKBU
+  // simulated, CUHK recalc/sim, HKUST Engineering), else "2025".
+  "detail.calcBasis": { en: "Calculated based on {year} formula", zh: "按 {year} 年公式計算" },
   "detail.noData2025": { en: "No 2025 admission data – comparing against 2026 logic only", zh: "暫無 2025 年收生數據 – 只與 2026 年計分邏輯比較" },
   "detail.tapBreakdownHide": { en: "Hide subject breakdown", zh: "隱藏科目細項" },
   "detail.tapBreakdownShow": { en: "Tap to see subject breakdown", zh: "點選查看科目細項" },
@@ -478,6 +481,13 @@ export const STRINGS = {
   "detail.restructured.note": { en: "This is a new/restructured programme that replaces {from}. It has no admissions history of its own yet, so the scores shown are {from}'s 2025 admission scores, used here as a rough reference. Check its requirements and intake directly before relying on them.", zh: "此為取代 {from} 的新／重組課程，本身尚無收生記錄，故以下分數為 {from} 的 2025 年收生分數，僅作粗略參考。作準前請自行查核其入學要求及收生情況。" },
   "detail.formula2025Label": { en: "2025 comparison logic", zh: "2025 年比較邏輯" },
   "detail.formula2025Note": { en: "Used to compare your score against 2025 admission benchmarks.", zh: "用於將你的分數對照 2025 年收生基準。" },
+  // Shown in place of the two strings above when the programme scores on the
+  // 2026 weighting (scoringBasisYear === "2026"). The official 2025 weighting
+  // stays visible as facts via detail.official2025Weights/NoWeights below.
+  "detail.formulaScoringLabel": { en: "Scoring logic (2026 weighting)", zh: "計分邏輯（2026 年比重）" },
+  "detail.formulaScoringNote": { en: "Your score and the 2025 benchmarks both use the 2026 weighting — see the note beside the admission scores.", zh: "你的分數與 2025 年收生基準均以 2026 年比重計算，詳見收生分數旁的說明。" },
+  "detail.official2025Weights": { en: "Official 2025 weighting, for the record: {weights}", zh: "2025 年官方比重（僅作記錄）：{weights}" },
+  "detail.official2025NoWeights": { en: "Officially, 2025 had no subject weighting — kept here for the record.", zh: "2025 年官方並無科目比重，僅在此記錄。" },
   "detail.formula2026Label": { en: "2026 applicant reference", zh: "2026 年申請人參考" },
   "detail.formula2026Note": { en: "Current-year formula/weighting may differ; check this when making choices.", zh: "本年度計分公式／比重或有不同，排序時宜以此為準。" },
   "detail.formulaNA": { en: "Formula not available", zh: "暫無計算公式資料" },
@@ -489,6 +499,12 @@ export const STRINGS = {
   "detail.pill.formulaChanged": { en: "Formula changed", zh: "計分方式有變" },
   "detail.changes.title": { en: "What changed for 2026 entry", zh: "2026 收生變動" },
   "detail.changes.note": { en: "Your estimate uses 2025 logic to compare against past admission scores. 2026 admission uses the updated rules above.", zh: "你的估算採用 2025 年邏輯，以對照歷年收生分數；2026 年收生則採用以上更新後的規則。" },
+  // Variants for programmes already scored on the 2026 basis. The recalc one
+  // ({inst} = CityU/CUHK) covers OFFICIAL republished scores; the simulated
+  // one covers rebuilt benchmarks (HKBU/CUHK sims are ours, HKUST's are its
+  // own) — the note beside the admission scores says whose.
+  "detail.changes.noteRecalc": { en: "{inst} republished its 2025 admission scores recalculated under these updated rules, and your estimate uses the same rules — the comparison already reflects this change.", zh: "{inst}已按以上更新後的規則重新計算並公佈 2025 年收生分數；你的估算採用同一規則，對照已反映此變動。" },
+  "detail.changes.noteSimulated": { en: "Your estimate uses these updated rules, and the benchmarks shown were rebuilt under the same rules — the comparison already reflects this change.", zh: "你的估算採用以上更新後的規則；所示收生基準亦按同一規則重新得出，對照已反映此變動。" },
   "detail.changes.formulaCount": { en: "Formula: {from} → {to}", zh: "計分方式：{from} → {to}" },
   "detail.changes.weighting": { en: "{subjects}: ×{from} → ×{to}", zh: "{subjects}：×{from} → ×{to}" },
   "detail.changes.weightingMany": { en: "{n} subjects: ×{from} → ×{to}", zh: "{n} 科：×{from} → ×{to}" },
@@ -506,7 +522,7 @@ export const STRINGS = {
   "detail.formulaGen.bonus6": { en: " + bonus for a 6th subject", zh: "＋第 6 科額外加分" },
   "detail.formulaGen.bonus7": { en: " + bonus for a 7th subject", zh: "＋第 7 科額外加分" },
   "detail.formulaGen.official": { en: "Official: {raw}", zh: "官方原文：{raw}" },
-  "detail.method2025": { en: "Method (2025)", zh: "計分方法（2025）" },
+  "detail.methodBasis": { en: "Method ({year})", zh: "計分方法（{year}）" },
   "detail.bestSubjects": { en: "Best subjects", zh: "最佳科目" },
   "detail.counted": { en: "{used} of {total} counted", zh: "共 {total} 科，計入 {used} 科" },
   "detail.toggleFullName": { en: "Tap to show the full programme name", zh: "點按以顯示完整課程名稱" },

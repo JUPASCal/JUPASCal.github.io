@@ -179,6 +179,12 @@ export type Programme = {
   // Also "restructured": the benchmark is borrowed from a discontinued predecessor
   // programme (named in `restructured_from`), which the programme replaces.
   score_basis?: string;
+  // TRUE 2025 weighting kept as displayable facts when the scoring fields
+  // were mirrored onto the 2026 basis (CityU recalculated / HKBU simulated) —
+  // the "2025" UI sections show these instead of the mirrored values.
+  subject_weights_2025_official?: Record<string, number>;
+  best_of_weights_2025_official?: BestOfPool[];
+  subject_weights_2025_official_raw?: string | null;
   // JUPAS code of the predecessor when `score_basis === "restructured"` — the
   // benchmark shown is that (retired) programme's own admission score.
   restructured_from?: string;

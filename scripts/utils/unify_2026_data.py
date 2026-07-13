@@ -3002,10 +3002,22 @@ def unify_data():
                  and _obj.get("best_of_weights_2025") == _obj.get("best_of_weights_2026"))
         if not _same:
             _obj["score_basis"] = "cityu_2026_recalculated"
+            # Keep the TRUE 2025 weighting as displayable FACTS. The scoring
+            # fields below become the 2026 basis, but the DetailPanel must not
+            # present those as "2025" — it shows these official values instead
+            # (user-reported: the 2025 box contradicted the change pill).
+            _obj["subject_weights_2025_official"] = json.loads(json.dumps(_obj.get("subject_weights_2025") or {}))
+            _obj["best_of_weights_2025_official"] = json.loads(json.dumps(_obj.get("best_of_weights_2025") or []))
+            _obj["subject_weights_2025_official_raw"] = _obj.get("subject_weights_2025_raw")
             _cityu_realigned += 1
         _obj["subject_weights_2025"] = json.loads(json.dumps(_obj.get("subject_weights_2026") or {}))
         _obj["best_of_weights_2025"] = json.loads(json.dumps(_obj.get("best_of_weights_2026") or []))
         _obj["subject_weights_2025_raw"] = _obj.get("subject_weights_2026_raw")
+        # Formula text/id follow the same basis. Identical across years for all
+        # 58 CityU programmes today — mirrored so a future cycle where CityU
+        # changes the text keeps scoring and slot counts on the published basis.
+        _obj["formula_2025"] = _obj.get("formula_2026")
+        _obj["formula_2025_id"] = _obj.get("formula_2026_id")
     print(f"CityU 2026-basis alignment: 2025 scoring fields mirrored from 2026; {_cityu_realigned} programme(s) flagged cityu_2026_recalculated")
 
     # 4c. Merge non-academic admission requirements (interview arrangements)
@@ -3198,6 +3210,11 @@ def unify_data():
             continue
         if _obj.get("subject_weights_2025") or not _obj.get("subject_weights_2026"):
             continue
+        # Keep the TRUE 2025 state (no weighting) as displayable facts — same
+        # convention as the CityU 4b-iii stash.
+        _obj["subject_weights_2025_official"] = json.loads(json.dumps(_obj.get("subject_weights_2025") or {}))
+        _obj["best_of_weights_2025_official"] = json.loads(json.dumps(_obj.get("best_of_weights_2025") or []))
+        _obj["subject_weights_2025_official_raw"] = _obj.get("subject_weights_2025_raw")
         _obj["subject_weights_2025"] = json.loads(json.dumps(_obj.get("subject_weights_2026") or {}))
         _obj["best_of_weights_2025"] = json.loads(json.dumps(_obj.get("best_of_weights_2026") or []))
         _obj["subject_weights_2025_raw"] = _obj.get("subject_weights_2026_raw")
