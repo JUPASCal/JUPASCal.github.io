@@ -429,14 +429,14 @@ export const STRINGS = {
   // their subject weightings, so HKUST published "simulated" scores – 2025 admission
   // results recalculated with the 2026 formula – which is exactly what these
   // LQ/median/highest figures are, and what our calculator reproduces.
-  "detail.hkustSim.note": { en: "HKUST is updating its Engineering subject weightings for 2026. These LQ, median, and highest figures are HKUST's official simulated scores — 2025 admission results recalculated with the 2026 formula — so they compare directly with your calculated score.", zh: "香港科技大學工學院於 2026 年更新各科加權。以下 LQ、中位數及最高分為科大公佈的「模擬分數」，即以 2026 年計分方法重新計算 2025 年收生成績，因此可與你的計算分數直接比較。" },
+  "detail.hkustSim.note": { en: "HKUST is updating its Engineering subject weightings for 2026. These LQ, median, and highest figures are HKUST's official simulated scores — 2025 admission results recalculated with the 2026 formula — so they compare directly with your calculated score.", zh: "香港科技大學工學院於 2026 年更新各科加權。以上 LQ、中位數及最高分為科大公佈的「模擬分數」，即以 2026 年計分方法重新計算 2025 年收生成績，因此可與你的計算分數直接比較。" },
   "detail.hkustSim.formula": { en: "2026 formula: English ×2 + Maths ×2 + best 3 weighted electives + 6th-subject bonus.", zh: "2026 計分方法：英文 ×2 ＋ 數學 ×2 ＋ 3 科按指定比重的選修科 ＋ 第 6 科獎勵分。" },
   "detail.hkustSim.source": { en: "HKUST JUPAS admissions", zh: "香港科技大學 JUPAS 收生資訊" },
   // CUHK programmes that changed their scoring formula for 2026. CUHK republished the
   // 2025 admission scores recalculated with the new 2026 formula, so these benchmarks
   // are 2026-formula-based (like the HKUST simulated scores) — and we score you with
   // the 2026 formula to match. Driven by programme.score_basis = "cuhk_2026_recalculated".
-  "detail.cuhkRecalc.note": { en: "CUHK changed this programme's formula for 2026. These figures are CUHK's 2025 admission scores recalculated with the new formula — the same one used for your score, so they compare directly.", zh: "中大在 2026 年更改了此課程的計分方法。以下是中大用新方法重算的 2025 年收生分數，與你的分數用同一方法，可直接比較。" },
+  "detail.cuhkRecalc.note": { en: "CUHK changed this programme's formula for 2026. These figures are CUHK's 2025 admission scores recalculated with the new formula — the same one used for your score, so they compare directly.", zh: "中大在 2026 年更改了此課程的計分方法。以上是中大用新方法重算的 2025 年收生分數，與你的分數用同一方法，可直接比較。" },
   "detail.cuhkRecalc.source": { en: "CUHK JUPAS admissions", zh: "香港中文大學 JUPAS 收生資訊" },
   // CityU republishes past admission scores RECALCULATED under the CURRENT
   // cycle's formula (stated in the header of its "Admission Score Formula and
@@ -444,7 +444,7 @@ export const STRINGS = {
   // basis and we score CityU with the 2026 weights to match. This note surfaces
   // only on programmes whose weighting actually changed between the cycles.
   // Driven by programme.score_basis = "cityu_2026_recalculated".
-  "detail.cityuRecalc.note": { en: "CityU changed this programme's weighting for 2026. These figures are CityU's 2025 admission scores recalculated with the new weighting — the same one used for your score, so they compare directly.", zh: "城大在 2026 年更改了此課程的科目比重。以下是城大以新比重重新計算的 2025 年收生分數，與你的分數用同一比重，可直接比較。" },
+  "detail.cityuRecalc.note": { en: "CityU changed this programme's weighting for 2026. These figures are CityU's 2025 admission scores recalculated with the new weighting — the same one used for your score, so they compare directly.", zh: "城大在 2026 年更改了此課程的科目比重。以上是城大以新比重重新計算的 2025 年收生分數，與你的分數用同一比重，可直接比較。" },
   "detail.cityuRecalc.source": { en: "CityUHK JUPAS admissions", zh: "香港城市大學 JUPAS 收生資訊" },
   // HKBU programmes that INTRODUCED subject weighting for 2026 (had none in
   // 2025, per the Sep-2025 GER/PER PDF — authoritative over HKBU's own online
@@ -475,10 +475,10 @@ export const STRINGS = {
   // weighting to CUHK's published subject-grade profiles of past admitted students
   // (electives stay ×1 — anonymised). Honest about being our estimate.
   // Driven by programme.score_basis = "cuhk_2026_simulated".
-  "detail.cuhkSim.note": { en: "These figures are a JUPASCal estimate, not official CUHK numbers. CUHK weighted a subject in this programme for 2026 but hasn't republished admission scores under the new formula, so they're estimated here instead.", zh: "以下分數為 JUPASCal 估算，並非中大官方數字。中大在 2026 年為此課程新增科目加權，但未有按新公式重新公佈收生分數，故此處以估算數值代替。" },
+  "detail.cuhkSim.note": { en: "These figures are a JUPASCal estimate, not official CUHK numbers. CUHK weighted a subject in this programme for 2026 but hasn't republished admission scores under the new formula, so they're estimated here instead.", zh: "以上分數為 JUPASCal 估算，並非中大官方數字。中大在 2026 年為此課程新增科目加權，但未有按新公式重新公佈收生分數，故此處以估算數值代替。" },
   "detail.cuhkSim.method": { en: "How: CUHK publishes the actual DSE grades of the students admitted at the 2025 lower quartile, median and upper quartile. Those grades are re-scored with the 2026 weighting — core subjects only, since CUHK hides the electives — by the same method as your score, so the two line up. Treat them as close estimates.", zh: "方法：中大公佈了 2025 年在下四分位、中位及上四分位獲取錄學生的實際 DSE 成績；再以 2026 年加權為這些成績重新計分（只加權核心科，因中大不公開選修科）。計法與你的分數相同，可互相比較，惟屬近似估算。" },
   // Driven by programme.score_basis = "restructured"; {from} = predecessor JS code.
-  "detail.restructured.note": { en: "This is a new/restructured programme that replaces {from}. It has no admissions history of its own yet, so the scores shown are {from}'s 2025 admission scores, used here as a rough reference. Check its requirements and intake directly before relying on them.", zh: "此為取代 {from} 的新／重組課程，本身尚無收生記錄，故以下分數為 {from} 的 2025 年收生分數，僅作粗略參考。作準前請自行查核其入學要求及收生情況。" },
+  "detail.restructured.note": { en: "This is a new/restructured programme that replaces {from}. It has no admissions history of its own yet, so the scores shown are {from}'s 2025 admission scores, used here as a rough reference. Check its requirements and intake directly before relying on them.", zh: "此為取代 {from} 的新／重組課程，本身尚無收生記錄，故以上分數為 {from} 的 2025 年收生分數，僅作粗略參考。作準前請自行查核其入學要求及收生情況。" },
   "detail.formula2025Label": { en: "2025 comparison logic", zh: "2025 年比較邏輯" },
   "detail.formula2025Note": { en: "Used to compare your score against 2025 admission benchmarks.", zh: "用於將你的分數對照 2025 年收生基準。" },
   // Shown in place of the two strings above when the programme scores on the
@@ -494,6 +494,9 @@ export const STRINGS = {
   "detail.weightingDetails": { en: "Weighting details", zh: "比重詳情" },
   "detail.bestOf": { en: "Best {count}: {subjects}", zh: "最佳 {count} 科：{subjects}" },
   "detail.noWeighting": { en: "No specific subject weighting.", zh: "沒有特定科目比重。" },
+  // Bulk-select control beside the shown-count in the Browse header.
+  "filters.selectAllShown": { en: "Select all shown", zh: "全選顯示課程" },
+  "filters.unselectAllShown": { en: "Unselect all shown", zh: "取消全選" },
   // Year-over-year change pills + "what changed" panel
   "detail.pill.weightingChanged": { en: "Weighting changed", zh: "比重有變" },
   "detail.pill.formulaChanged": { en: "Formula changed", zh: "計分方式有變" },

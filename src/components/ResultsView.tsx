@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import type { MouseEvent as ReactMouseEvent } from "react";
 import { institutionLabel } from "../lib/institutions";
 import { slotLabel } from "../lib/slots";
 import { bandLabelKey, formatDelta, formatPercent } from "../lib/results";
@@ -31,6 +32,11 @@ type Props = {
   onFocus: (code: string) => void;
   onPick: (code: string) => void;
   onUnpick: (code: string) => void;
+  // Bulk variants used by desktop multi-select (shift-click range, tick drag,
+  // select-all). One atomic state update instead of N — optional so other
+  // ResultsView embeds keep working with the per-code handlers.
+  onPickMany?: (codes: string[]) => void;
+  onUnpickMany?: (codes: string[]) => void;
   onSortChange: (sortKey: SortKey) => void;
   // Desktop Browse row-click mode: "select" (default) toggles the pick; "view"
   // opens the detail panel via onOpenDetail (the tick box still toggles the pick).
@@ -38,7 +44,7 @@ type Props = {
   onOpenDetail?: (code: string) => void;
 };
 
-export function ResultsView({ results, selectedCodes, activeCode, compact, deltaMode = "points", sortKey, sortDirection, readOnly = false, onFocus, onPick, onUnpick, onSortChange, rowMode = "select", onOpenDetail }: Props) {
+export function ResultsView({ results, selectedCodes, activeCode, compact, deltaMode = "points", sortKey, sortDirection, readOnly = false, onFocus, onPick, onUnpick, onPickMany, onUnpickMany, onSortChange, rowMode = "select", onOpenDetail }: Props) {
   const { t, lang } = useLang();
   const slotByCode = new Map(selectedCodes.map((code, index) => [code, slotLabel(index)]));
   // Render only the view that matches the current viewport instead
@@ -85,9 +91,89 @@ export function ResultsView({ results, selectedCodes, activeCode, compact, delta
   const visibleResults = results.slice(0, visibleCount);
   const hasMore = visibleCount < results.length;
 
-  function togglePick(code: string) {
+  // ── Desktop multi-select ─────────────────────────────────────────────────
+  // anchorRef remembers the last plain tick interaction (code + whether it
+  // picked or unpicked); a shift-click applies that same mode to the whole
+  // range between anchor and target — file-manager style, not per-row toggle.
+  // dragRef tracks a mousedown that started on a tick: once the pointer enters
+  // a different row the drag activates and paints its mode over every row it
+  // crosses. suppressClickRef swallows the synthetic click that fires when a
+  // drag releases back on its origin tick (the drag already applied it).
+  const anchorRef = useRef<{ code: string; mode: "pick" | "unpick" } | null>(null);
+  const dragRef = useRef<{ originCode: string; mode: "pick" | "unpick"; started: boolean } | null>(null);
+  const suppressClickRef = useRef(false);
+
+  useEffect(() => {
+    const endDrag = () => {
+      if (dragRef.current?.started) {
+        suppressClickRef.current = true;
+        // The origin-tick click (if any) dispatches synchronously after
+        // mouseup, before timers — clear the flag right after so it never
+        // swallows an unrelated later click.
+        window.setTimeout(() => {
+          suppressClickRef.current = false;
+        }, 0);
+      }
+      dragRef.current = null;
+    };
+    window.addEventListener("mouseup", endDrag);
+    return () => window.removeEventListener("mouseup", endDrag);
+  }, []);
+
+  function applyMode(codes: string[], mode: "pick" | "unpick") {
     if (readOnly) return;
-    if (selectedCodes.includes(code)) {
+    const targets = codes.filter((code) => selectedCodes.includes(code) === (mode === "unpick"));
+    if (!targets.length) return;
+    if (mode === "pick") {
+      if (onPickMany) onPickMany(targets);
+      else targets.forEach(onPick);
+    } else {
+      if (onUnpickMany) onUnpickMany(targets);
+      else targets.forEach(onUnpick);
+    }
+  }
+
+  function rangeCodes(fromCode: string, toCode: string): string[] {
+    const codes = results.map((result) => result.programme.jupas_code);
+    const a = codes.indexOf(fromCode);
+    const b = codes.indexOf(toCode);
+    if (a === -1 || b === -1) return [];
+    return codes.slice(Math.min(a, b), Math.max(a, b) + 1);
+  }
+
+  function beginTickDrag(code: string) {
+    if (readOnly || !isDesktop) return;
+    dragRef.current = { originCode: code, mode: selectedCodes.includes(code) ? "unpick" : "pick", started: false };
+  }
+
+  function dragOverRow(code: string) {
+    const drag = dragRef.current;
+    if (!drag || readOnly) return;
+    if (!drag.started) {
+      if (code === drag.originCode) return;
+      drag.started = true;
+      anchorRef.current = { code: drag.originCode, mode: drag.mode };
+    }
+    // Paint the whole origin→pointer range on every move: a fast flick can
+    // skip mouseenter on intermediate rows (mouse events are sampled), and
+    // re-applying the range keeps them covered. Additive — overshoot stays.
+    applyMode(rangeCodes(drag.originCode, code), drag.mode);
+  }
+
+  function togglePick(code: string, shiftKey = false) {
+    if (readOnly) return;
+    if (suppressClickRef.current) {
+      suppressClickRef.current = false;
+      return;
+    }
+    if (shiftKey && isDesktop && anchorRef.current) {
+      // Anchor stays put so further shift-clicks keep extending from it.
+      applyMode(rangeCodes(anchorRef.current.code, code), anchorRef.current.mode);
+      return;
+    }
+    const mode: "pick" | "unpick" = selectedCodes.includes(code) ? "unpick" : "pick";
+    anchorRef.current = { code, mode };
+    if (mode === "unpick") {
       onUnpick(code);
       return;
     }
@@ -97,13 +183,13 @@ export function ResultsView({ results, selectedCodes, activeCode, compact, delta
   // What a row-body click/Enter does. "view" mode drills into the detail panel;
   // "select" mode (default) toggles the pick + focuses. The tick box (PickButton)
   // always toggles the pick regardless of mode.
-  function activateRow(code: string) {
+  function activateRow(code: string, shiftKey = false) {
     if (readOnly) return;
     if (rowMode === "view" && onOpenDetail) {
       onOpenDetail(code);
       return;
     }
-    togglePick(code);
+    togglePick(code, shiftKey);
     onFocus(code);
   }
 
@@ -146,11 +232,12 @@ export function ResultsView({ results, selectedCodes, activeCode, compact, delta
                 className={resultClassName(result.programme.jupas_code)}
                 role={readOnly ? undefined : "button"}
                 tabIndex={readOnly ? -1 : 0}
-                onClick={readOnly ? undefined : () => activateRow(result.programme.jupas_code)}
+                onClick={readOnly ? undefined : (event) => activateRow(result.programme.jupas_code, event.shiftKey)}
+                onMouseEnter={readOnly ? undefined : () => dragOverRow(result.programme.jupas_code)}
                 onKeyDown={readOnly ? undefined : (event) => {
                   if (event.key === "Enter" || event.key === " ") {
                     event.preventDefault();
-                    activateRow(result.programme.jupas_code);
+                    activateRow(result.programme.jupas_code, event.shiftKey);
                   }
                 }}
                 style={readOnly ? undefined : { cursor: "pointer" }}
@@ -161,11 +248,14 @@ export function ResultsView({ results, selectedCodes, activeCode, compact, delta
                       // Enlarged selection hit-zone: the whole left gutter around the
                       // tick box toggles the pick (so "view mode" rows still open on a
                       // body click, but the left area is an easy select target).
+                      // mousedown arms a drag-select; shift-click extends from the
+                      // last tick (preventDefault stops text selection for both).
                       <span
                         className="pick-hitzone"
-                        onClick={(event) => { event.stopPropagation(); togglePick(result.programme.jupas_code); }}
+                        onMouseDown={(event) => { event.preventDefault(); beginTickDrag(result.programme.jupas_code); }}
+                        onClick={(event) => { event.stopPropagation(); togglePick(result.programme.jupas_code, event.shiftKey); }}
                       >
-                        <PickButton picked={selectedCodes.includes(result.programme.jupas_code)} onClick={() => togglePick(result.programme.jupas_code)} />
+                        <PickButton picked={selectedCodes.includes(result.programme.jupas_code)} onClick={(event) => togglePick(result.programme.jupas_code, event.shiftKey)} />
                       </span>
                     )}
                     <span className="programme-cell-text">
@@ -205,15 +295,16 @@ export function ResultsView({ results, selectedCodes, activeCode, compact, delta
             data-code={result.programme.jupas_code}
             className={resultClassName(result.programme.jupas_code, "mobile-card")}
             key={result.programme.jupas_code}
-            onClick={readOnly ? undefined : () => {
+            onClick={readOnly ? undefined : (event) => {
               // Desktop compact-card Browse honours the same "view" row-click mode
               // as the table. Gated on isDesktop so mobile card taps are unchanged.
               if (isDesktop && rowMode === "view" && onOpenDetail) {
                 onOpenDetail(result.programme.jupas_code);
                 return;
               }
-              togglePick(result.programme.jupas_code);
+              togglePick(result.programme.jupas_code, event.shiftKey);
             }}
+            onMouseEnter={readOnly ? undefined : () => dragOverRow(result.programme.jupas_code)}
             onKeyDown={readOnly ? undefined : (event) => {
               if (event.key === "Enter" || event.key === " ") {
                 event.preventDefault();
@@ -221,7 +312,7 @@ export function ResultsView({ results, selectedCodes, activeCode, compact, delta
                   onOpenDetail(result.programme.jupas_code);
                   return;
                 }
-                togglePick(result.programme.jupas_code);
+                togglePick(result.programme.jupas_code, event.shiftKey);
               }
             }}
           >
@@ -235,7 +326,13 @@ export function ResultsView({ results, selectedCodes, activeCode, compact, delta
                 <QuotaBadge quota={result.programme.quota} />
                 <StatusBadge pass={result.eligibility.eligible} />
               </span>
-              {readOnly ? null : <PickButton picked={selectedCodes.includes(result.programme.jupas_code)} onClick={() => togglePick(result.programme.jupas_code)} />}
+              {readOnly ? null : (
+                <PickButton
+                  picked={selectedCodes.includes(result.programme.jupas_code)}
+                  onMouseDown={(event) => { event.preventDefault(); event.stopPropagation(); beginTickDrag(result.programme.jupas_code); }}
+                  onClick={(event) => togglePick(result.programme.jupas_code, event.shiftKey)}
+                />
+              )}
             </span>
             <div className="mobile-card-main">
               <strong>{pickName(result.programme, lang)}</strong>
@@ -277,16 +374,17 @@ function SlotBadge({ slot }: { slot: string }) {
   return <span className="selected-slot-badge">{slot}</span>;
 }
 
-function PickButton({ picked, onClick }: { picked: boolean; onClick: () => void }) {
+function PickButton({ picked, onClick, onMouseDown }: { picked: boolean; onClick: (event: ReactMouseEvent) => void; onMouseDown?: (event: ReactMouseEvent) => void }) {
   const { t } = useLang();
   return (
     <button
       className={picked ? "pick-button picked" : "pick-button"}
       type="button"
       aria-label={picked ? t("results.removeFromCompare") : t("results.addToCompare")}
+      onMouseDown={onMouseDown}
       onClick={(event) => {
         event.stopPropagation();
-        onClick();
+        onClick(event);
       }}
     >
       {picked ? (

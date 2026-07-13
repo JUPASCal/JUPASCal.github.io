@@ -26,6 +26,10 @@ type Props = {
   onFiltersChange: (filters: Filters) => void;
   onOpenChange: (open: boolean) => void;
   onSelectedOnlyChange: (selectedOnly: boolean) => void;
+  // Bulk-select of every result currently shown (post-filter). Omit to hide
+  // the button (e.g. embeds without a pick list).
+  onSelectAllShown?: () => void;
+  allShownSelected?: boolean;
   onCompactResultsChange: (compact: boolean) => void;
   onDeltaModeChange: (mode: "points" | "percent") => void;
   onSortChange: (sortKey: SortKey) => void;
@@ -37,7 +41,7 @@ type Props = {
 const bands: Array<BenchmarkBand | "all"> = ["all", "above-uq", "above-median", "above-lq", "below-lq", "no-score"];
 const sortOptions: SortKey[] = ["code", "lq", "median", "uq", "quota"];
 
-export function FiltersBar({ filters, open, institutions, total, shown, selectedCount, selectedOnly, compactResults, deltaMode, rowMode = "select", onRowModeChange, sortKey, sortDirection, showStepEyebrow = true, onFiltersChange, onOpenChange, onSelectedOnlyChange, onCompactResultsChange, onDeltaModeChange, onSortChange, onReviewSelected, onResetSelected, selectedOrder }: Props) {
+export function FiltersBar({ filters, open, institutions, total, shown, selectedCount, selectedOnly, compactResults, deltaMode, rowMode = "select", onRowModeChange, sortKey, sortDirection, showStepEyebrow = true, onFiltersChange, onOpenChange, onSelectedOnlyChange, onSelectAllShown, allShownSelected = false, onCompactResultsChange, onDeltaModeChange, onSortChange, onReviewSelected, onResetSelected, selectedOrder }: Props) {
   const { t } = useLang();
   const activeFilterCount = filters.institutions.length + Number(filters.eligibleOnly) + Number(filters.band !== "all") + Number(filters.interview !== "all") + Number(selectedOnly);
   const [sortOpen, setSortOpen] = useState(false);
@@ -103,6 +107,11 @@ export function FiltersBar({ filters, open, institutions, total, shown, selected
           {showStepEyebrow ? <p className="eyebrow">{t("filters.eyebrow")}</p> : null}
           <h2>{t("filters.title")}</h2>
           <p className="filters-title-count">{t("filters.count", { shown, total })}</p>
+          {onSelectAllShown && shown > 0 ? (
+            <button type="button" className="pill select-all-shown" onClick={onSelectAllShown}>
+              {allShownSelected ? t("filters.unselectAllShown") : t("filters.selectAllShown")}
+            </button>
+          ) : null}
           {/* Desktop console: a ⓘ next to the heading opens a feature tour of the
               Browse tab (the mobile flow gets the same via .step2-info below). One
               button per viewport, so they share the infoOpen state + popover CSS. */}

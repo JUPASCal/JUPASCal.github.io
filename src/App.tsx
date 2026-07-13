@@ -1257,6 +1257,31 @@ function CalculatorApp() {
     setActiveCode(code);
   }
 
+  // Bulk pick/unpick for the Browse multi-select (shift-click range, tick
+  // drag, select-all-shown): one atomic update, same null-slot filling as
+  // pickProgramme, and no active-code churn per row.
+  function pickManyProgrammes(codes: string[]) {
+    setPickedCodes((current) => {
+      const have = new Set(current.filter(Boolean));
+      const additions = codes.filter((code) => !have.has(code));
+      if (!additions.length) return current;
+      const next = [...current];
+      for (const code of additions) {
+        const firstNullIndex = next.indexOf(null);
+        if (firstNullIndex !== -1) next[firstNullIndex] = code;
+        else next.push(code);
+      }
+      return next;
+    });
+  }
+
+  function unpickManyProgrammes(codes: string[]) {
+    const drop = new Set(codes);
+    setPickedCodes((current) =>
+      trimTrailingNulls(current.map((code) => (code !== null && drop.has(code) ? null : code))),
+    );
+  }
+
   function setSlotCode(slotIndex: number, code: string) {
     const trimmed = code.trim().toUpperCase();
     if (!trimmed) return;
@@ -1514,6 +1539,12 @@ function CalculatorApp() {
         onFiltersChange={setFilters}
         onOpenChange={setProgrammeFiltersOpen}
         onSelectedOnlyChange={setSelectedOnly}
+        onSelectAllShown={readOnly ? undefined : () => {
+          const codes = filteredResults.map((r) => r.programme.jupas_code);
+          if (codes.length && codes.every((code) => pickedCodes.includes(code))) unpickManyProgrammes(codes);
+          else pickManyProgrammes(codes);
+        }}
+        allShownSelected={filteredResults.length > 0 && filteredResults.every((r) => pickedCodes.includes(r.programme.jupas_code))}
         onCompactResultsChange={setCompactResults}
         onDeltaModeChange={setDeltaMode}
         onSortChange={(nextSortKey) => {
@@ -1539,6 +1570,8 @@ function CalculatorApp() {
         onOpenDetail={openBrowseDetail}
         onFocus={(code) => setActiveCode(code)}
         onPick={pickProgramme}
+        onPickMany={pickManyProgrammes}
+        onUnpickMany={unpickManyProgrammes}
         onUnpick={(code) => {
           setPickedCodes((current) => {
             const index = current.indexOf(code);

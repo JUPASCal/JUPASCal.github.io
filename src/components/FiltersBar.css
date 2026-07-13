@@ -184,6 +184,19 @@
 }
 
 
+/* "Select all shown" bulk-pick — sits under the shown-count line and toggles
+   to "Unselect all shown" once every displayed programme is picked. */
+.select-all-shown {
+  grid-column: 1 / -1;
+  justify-self: start;
+  margin-top: 4px;
+  font-size: 0.72rem;
+  padding: 2px 10px;
+  min-height: 25px;
+  cursor: pointer;
+}
+
+
 .search-count {
   grid-column: 1 / -1;
   margin: var(--space-2) 0 0;
@@ -387,7 +400,10 @@
 
 .advanced-filters {
   display: grid;
-  grid-template-columns: auto auto 1fr;
+  /* Four children: the two toggle pills + the interview and score-range
+     selects. Three columns wrapped the fourth onto its own row on
+     iPad/desktop — one flexible column per select keeps a single row. */
+  grid-template-columns: auto auto 1fr 1fr;
   align-items: center;
   gap: var(--space-2);
 }
