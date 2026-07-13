@@ -663,9 +663,9 @@
 
 .benchmark-card small {
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-1);
-  align-items: baseline;
+  flex-direction: column;
+  gap: 1px;
+  align-items: flex-start;
 }
 
 
@@ -2674,6 +2674,20 @@
   font-size: 0.85rem;
   font-weight: 600;
   line-height: 1.55;
+  color: var(--ink);
+}
+
+/* 收生備註 — advisory admission tips pulled from jupas_requirements.notes. */
+.detail-notes-list {
+  margin: 0;
+  padding-left: 1.1em;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.detail-notes-list li {
+  font-size: 0.83rem;
+  line-height: 1.5;
   color: var(--ink);
 }
 

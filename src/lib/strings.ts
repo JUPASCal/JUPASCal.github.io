@@ -563,6 +563,7 @@ export const STRINGS = {
   "detail.col.rate": { en: "Rate", zh: "取錄率" },
   "detail.eligibility": { en: "Eligibility", zh: "入學資格" },
   "detail.preferred": { en: "Preferred subjects", zh: "優先考慮科目" },
+  "detail.admissionNotes": { en: "Admission notes", zh: "收生備註" },
   "detail.preferredAria": { en: "About preferred subjects", zh: "關於優先考慮科目" },
   "detail.preferredLede": {
     en: "Preferred, not required — these don't affect your eligibility or score, but the institution favours applicants who take them.",

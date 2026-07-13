@@ -70,6 +70,37 @@ function preferredSubjectsDisplay(raw: string | null | undefined, lang: Lang): P
   return { subjects };
 }
 
+// Insightful admission notes buried in `jupas_requirements.notes` — advisory tips
+// ("Good results in Chinese/English preferred", "High choice banding is
+// preferred", "Level 3 in M1/M2 is preferred") that were never surfaced. Filter
+// the list down to advisory sentences: keep the soft-preference language, drop
+// boilerplate (score-conversion tables, NCS-Chinese/CSD notes, elective
+// structure, sitting policy, links) and interview/portfolio (shown elsewhere).
+// When the preferred-subjects chips already show, drop subject-preference notes
+// so the two don't duplicate.
+const NOTE_ADVISORY_RE = /\b(prefer|preferred|preference|priorit|advantage|advantageous|recommend|favou?rab|banding)\b|優先|建議/i;
+const NOTE_BOILER_RE = /note\s*\d|https?:|converted as follows|in lieu|more than 1 sitting|combined results|one of the electives?|the other elective|category [abc] subjects?\s*(excluding|including)|=\s*\d|conversion|equivalen|remarks on admission|calculation of scores/i;
+const NOTE_ELSEWHERE_RE = /\binterview\b|\bportfolio\b|\baudition\b|written (test|exam)|aptitude/i;
+const NOTE_SUBJECT_PREF_RE = /preferred subject|subjects?.{0,40}(is|are)\s+preferred|(level\s*\d|good results).{0,60}preferred/i;
+
+function admissionNotes(programme: Programme, hasPreferredSection: boolean): string[] {
+  const notes = programme.jupas_requirements?.notes;
+  if (!notes) return [];
+  const out: string[] = [];
+  const seen = new Set<string>();
+  for (const raw of notes) {
+    const n = String(raw).trim().replace(/\s+/g, " ");
+    if (n.length < 8 || n.length > 200) continue;
+    if (!NOTE_ADVISORY_RE.test(n) || NOTE_BOILER_RE.test(n) || NOTE_ELSEWHERE_RE.test(n)) continue;
+    if (hasPreferredSection && NOTE_SUBJECT_PREF_RE.test(n)) continue;
+    const key = n.toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(n);
+  }
+  return out;
+}
+
 
 // Defence-in-depth for every href that originates from SCRAPED programme data
 // (overview links, tuition page, JUPAS/institution sites). The scrape step only
@@ -270,6 +301,7 @@ export function DetailPanel({ results, activeCode, reviewRequest, onActiveCodeCh
   const { programme, calculation, eligibility } = result;
   const selection = getSelection(programme);
   const preferredSubjects = preferredSubjectsDisplay(programme.min_requirements_2026?.conditional_remarks, lang);
+  const admissionNotesList = admissionNotes(programme, !!preferredSubjects);
   // Standardized, bilingual formula descriptions (generated from the structured
   // model; raw wording kept as a muted "Official:" line — see describeFormula).
   const formula2025 = describeFormula(programme, "2025", lang, t);
@@ -661,6 +693,15 @@ export function DetailPanel({ results, activeCode, reviewRequest, onActiveCodeCh
                 ? preferredSubjects.subjects.join(" · ")
                 : preferredSubjects.note}
             </p>
+          </section>
+        ) : null}
+
+        {admissionNotesList.length > 0 ? (
+          <section className="detail-notes formula-card">
+            <span>{t("detail.admissionNotes")}</span>
+            <ul className="detail-notes-list">
+              {admissionNotesList.map((n, i) => <li key={i}>{n}</li>)}
+            </ul>
           </section>
         ) : null}
 
