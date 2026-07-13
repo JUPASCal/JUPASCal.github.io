@@ -26,6 +26,13 @@ export type MinRequirements = {
   elect1?: RequirementPool;
   elect2?: RequirementPool;
   conditional_remarks?: string;
+  // OR-alternatives: some JUPAS programmes list the requirement as two (or more)
+  // acceptable patterns (e.g. JS1202: "Math 3 + any elective" OR "Math 2 +
+  // a specific science elective", encoded on the listing as a conditional
+  // elective row). A student is eligible if the base pattern OR ANY alternative
+  // is fully satisfied. Each alternative is a self-contained pattern; its own
+  // `alternatives` (if any) is ignored to keep the check one level deep.
+  alternatives?: MinRequirements[];
 };
 
 export type BestOfPool = {
@@ -36,6 +43,16 @@ export type BestOfPool = {
   // to claim a candidate wins it (CityU "in 2nd Elective" alternatives).
   slot?: string;
   [key: string]: unknown;
+};
+
+export type HkustFormulaStep = {
+  type: "required" | "best_from_pool" | "better_of";
+  subject?: string;               // required
+  weight?: number;                // required
+  subject_filter?: string[];      // best_from_pool — [] means "any remaining"
+  weights?: Array<{ subjects: string[]; weight: number }>; // tiered pool weights
+  options?: HkustFormulaStep[][]; // better_of — take whichever branch scores higher
+  eligible_categories?: string[];
 };
 
 export type Constraint = {
@@ -129,6 +146,12 @@ export type Programme = {
   subject_weights_2026?: Record<string, number>;
   best_of_weights_2025?: BestOfPool[];
   best_of_weights_2026?: BestOfPool[];
+  // HKUST-only: the sequential graded-pool formula (English/Math ×2 → tiered
+  // "best from pool" → best-of-other pools, optionally a `better_of`). This is
+  // the AUTHORITATIVE HKUST model the calculator walks; the flat
+  // subject_weights/best_of fields can't represent it and mislead the display,
+  // so the DetailPanel breakdown renders from this for HKUST.
+  hkust_formula_steps?: HkustFormulaStep[];
   // Noise-filtered 2025→2026 scoring changes (unify computes this; present only
   // when a real weighting/formula change exists). Drives the DetailPanel pills
   // + "what changed" panel.

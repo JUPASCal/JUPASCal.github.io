@@ -2966,6 +2966,55 @@ def unify_data():
             _obj["restructured_from"] = _from
             print(f"Restructured-programme flag: {_code} <- {_from}")
 
+    # 4b-i-or. OR-alternative entrance requirements. A few JUPAS programmes list
+    # their requirements as more than one acceptable pattern (an "OR"), encoded
+    # on the listing as a conditional elective row (e.g. JS1202: "ANY 1 SUBJECT
+    # for students who have attained Level 3 or above in MATHEMATICS COMPULSORY
+    # PART"). The scrapers flatten this to a single pattern, so a student who
+    # qualifies only via the alternative was wrongly rejected by checkEligibility.
+    # Attach the alternative pattern(s); the app passes eligibility if the base OR
+    # any alternative is satisfied. A full live sweep of all 422 JUPAS pages found
+    # JS1202 to be the only such case. Source: data/raw/or_requirements_2026.json.
+    _or_path = "data/raw/or_requirements_2026.json"
+    if os.path.exists(_or_path):
+        with open(_or_path, encoding="utf-8") as _f:
+            _or_specs = json.load(_f)
+        _or_n = 0
+        for _code, _spec in _or_specs.items():
+            if _code.startswith("_"):
+                continue
+            _obj = unified_map.get(_code)
+            if _obj and _spec.get("alternatives"):
+                _obj.setdefault("min_requirements_2026", {})["alternatives"] = _spec["alternatives"]
+                _or_n += 1
+        print(f"OR-alternative requirements applied: {_or_n} programme(s)")
+
+    # 4b-i-hkust. HKUST School of Engineering moved to PER-DEPARTMENT weightings
+    # for 2026 (2025 was UNIFORM across all Engineering: English x2 + Math x2 +
+    # best science [Bio/Chem/Physics] x2 + ICT x1 + best-2-other with M1/2 x1.5).
+    # The HKUST block above copies the 2026 weights onto the 2025 slots ("formula
+    # stable across cycles"), which is now false and hides the change from the
+    # year_changes diff below. Restore the true 2025 uniform weighting — it equals
+    # JS5270's 2026 (the one department that did NOT change) — so the 7 departments
+    # that moved get flagged. Scoring is unaffected: HKUST scores via
+    # hkust_formula_steps (always the 2026 formula), never subject_weights.
+    _HKUST_ENG_2025_SW = {
+        "English Language": 2.0, "Mathematics (Compulsory Part)": 2.0,
+        "Information and Communication Technology": 1.0,
+        "Mathematics Extended Part (Module 2)": 1.5,
+        "Mathematics Extended Part (Module 1)": 1.5,
+    }
+    _HKUST_ENG_2025_BO = [{"count": 1, "subjects": ["Biology", "Chemistry", "Physics"], "weight": 2.0}]
+    _hkust_eng = 0
+    for _obj in unified_map.values():
+        if _obj.get("institution") == "HKUST" and _obj.get("faculty") == "School of Engineering":
+            _obj["subject_weights_2025"] = json.loads(json.dumps(_HKUST_ENG_2025_SW))
+            _obj["best_of_weights_2025"] = json.loads(json.dumps(_HKUST_ENG_2025_BO))
+            _obj["subject_weights_2025_official"] = json.loads(json.dumps(_HKUST_ENG_2025_SW))
+            _obj["best_of_weights_2025_official"] = json.loads(json.dumps(_HKUST_ENG_2025_BO))
+            _hkust_eng += 1
+    print(f"HKUST Engineering 2025 uniform weighting restored: {_hkust_eng} programme(s)")
+
     # 4b-ii. Year-over-year change detection. Runs AFTER weight canonicalization so
     # the diff is over canonical subject keys. Attaches a compact `year_changes`
     # summary only when a real (noise-filtered) weighting/formula change exists;

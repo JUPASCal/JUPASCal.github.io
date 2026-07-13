@@ -543,7 +543,25 @@ function getBonusConstraint(constraints: Constraint[], type: string): (Constrain
   return constraint;
 }
 
+// Public eligibility check. A programme may list its requirements as several
+// acceptable OR-patterns (`reqs.alternatives`) — e.g. JS1202: "Math 3 + any
+// elective" OR "Math 2 + a specific science elective". The student is eligible
+// if the base pattern OR any alternative is fully satisfied; we surface the
+// details of whichever pattern passes (or the base pattern's, when none do, as
+// the most representative failure).
 export function checkEligibility(studentGrades: StudentGrades, reqs: MinRequirements, programme: Programme): EligibilityResult {
+  const base = checkPattern(studentGrades, reqs, programme);
+  const alts = reqs?.alternatives;
+  if (base.eligible || !alts || alts.length === 0) return base;
+  for (const alt of alts) {
+    // Ignore any nested `alternatives` on an alternative (one level deep).
+    const r = checkPattern(studentGrades, { ...alt, alternatives: undefined }, programme);
+    if (r.eligible) return r;
+  }
+  return base;
+}
+
+function checkPattern(studentGrades: StudentGrades, reqs: MinRequirements, programme: Programme): EligibilityResult {
   const details: EligibilityDetail[] = [];
   let eligible = true;
   for (const key of ["chi", "eng", "math", "csd"] as const) {

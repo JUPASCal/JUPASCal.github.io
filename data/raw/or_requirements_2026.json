@@ -1,0 +1,49 @@
+{
+  "_doc": "OR-alternative entrance-requirement patterns. A few JUPAS programmes list their requirements as more than one acceptable pattern (an 'OR'), typically encoded on the listing as a conditional elective row such as 'ANY 1 SUBJECT for students who have attained Level 3 or above in MATHEMATICS COMPULSORY PART'. The per-school and JUPAS scrapers each flatten this to a single pattern, so a student who qualifies only via the alternative is wrongly rejected. unify attaches these as min_requirements_2026.alternatives; checkEligibility passes if the base pattern OR any alternative is fully satisfied. Source: the JUPAS programme listing (verified against the live page). Keys starting with '_' are ignored.",
+  "JS4238": {
+    "_note": "CUHK. JUPAS footnote (NOTE1 on the Math Compulsory row): 'Mathematics (Module 1 or 2) at Level 5 is required if Mathematics (Compulsory Part) is at Level 3 or 4'. So: (Pattern 1, stored base) Math Compulsory >= 5; OR (Pattern 2, this alternative) Math Compulsory 3-4 AND M1/M2 >= 5. Base stores math:5, so Math-4 + M1/M2-5 applicants were wrongly rejected. This is a core-row footnote conditional (not an elective-row OR like JS1202), so the elective-row sweep missed it — caught via the 2025 Excel AG note + conditional_remarks.",
+    "alternatives": [
+      {
+        "chi": "3",
+        "eng": "3",
+        "math": "3",
+        "csd": "A",
+        "elect1": {
+          "count": 1,
+          "subjects": ["Mathematics Extended Part (Module 1)", "Mathematics Extended Part (Module 2)"],
+          "grade": "5",
+          "note": "M1/M2 at Level 5 (Math Compulsory 3-4 branch)"
+        },
+        "elect2": {
+          "count": 1,
+          "subjects": ["Any"],
+          "grade": "3",
+          "note": "one further elective at Level 3"
+        }
+      }
+    ]
+  },
+  "JS1202": {
+    "_note": "CityU BSc Chemistry. JUPAS lists two acceptable patterns: (Pattern 1, the stored base) Math L3 + any elective + Chemistry; OR (Pattern 2, this alternative) Math L2 + Chemistry + one of Biology/BAFS/DAT/ICT/Physics. The base min_requirements captures Pattern 1 (Math 3), so Math-2 applicants qualifying via Pattern 2 were wrongly rejected.",
+    "alternatives": [
+      {
+        "chi": "3",
+        "eng": "3",
+        "math": "2",
+        "csd": "A",
+        "elect1": {
+          "count": 1,
+          "subjects": ["Chemistry", "Combined Science: Biology + Chemistry", "Combined Science: Physics + Chemistry"],
+          "grade": "3",
+          "note": "Level 3 in Chemistry"
+        },
+        "elect2": {
+          "count": 1,
+          "subjects": ["Biology", "Business, Accounting and Financial Studies", "Design and Applied Technology", "Information and Communication Technology", "Physics", "Combined Science: Biology + Physics", "Combined Science: Biology + Chemistry", "Combined Science: Physics + Chemistry"],
+          "grade": "3",
+          "note": "Math-2 branch: Level 3 in one of Biology / BAFS / DAT / ICT / Physics"
+        }
+      }
+    ]
+  }
+}
