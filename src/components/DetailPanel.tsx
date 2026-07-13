@@ -518,24 +518,32 @@ export function DetailPanel({ results, activeCode, reviewRequest, onActiveCodeCh
             const refKeys: string[] = ["uq", "median", "lq", "mean"];
             if (sc.median == null && sc.mean == null && sc.expected_score != null) refKeys.push("expected_score");
             const cmpByKey = new Map(result.comparisons.map((c) => [c.key as string, c]));
-            const cards = refKeys
+            const cards: Array<{ key: string; score: number; unweighted?: boolean }> = refKeys
               .map((key) => ({ key, score: (sc as Record<string, number | null | undefined>)[key] }))
               .filter((c): c is { key: string; score: number } => c.score != null);
+            // HKBU 2026-simulated: median/LQ are re-weighted estimates, but HKBU's
+            // published MEAN was computed under the old (unweighted) formula. Show it
+            // as a distinct "無比重" card — no delta, since it isn't on the weighted basis.
+            if (programme.score_basis === "hkbu_2026_simulated" && sc.mean_official_2025_basis != null) {
+              cards.push({ key: "mean", score: sc.mean_official_2025_basis, unweighted: true });
+            }
             if (!cards.length) return <p className="muted">{t("detail.noBenchmark")}</p>;
             return (
               <div className="benchmark-grid">
-                {cards.map(({ key, score }) => {
-                  const cmp = cmpByKey.get(key);
+                {cards.map(({ key, score, unweighted }) => {
+                  const cmp = unweighted ? undefined : cmpByKey.get(key);
                   const cls = !cmp ? "benchmark-card" : cmp.delta >= 0 ? "benchmark-card positive-card" : "benchmark-card negative-card";
                   return (
-                    <div className={cls} key={key}>
-                      <span>{t(`common.${key}`)}</span>
+                    <div className={cls} key={unweighted ? "mean-unweighted" : key}>
+                      <span>{unweighted ? t("detail.hkbuSim.meanCardLabel") : t(`common.${key}`)}</span>
                       <strong>{score}</strong>
                       {cmp ? (
                         <small>
                           <b>{formatDelta(cmp.delta)}</b>
                           <em>{formatPercent(cmp.percent)}</em>
                         </small>
+                      ) : unweighted ? (
+                        <small className="muted">{t("detail.hkbuSim.meanCardHint")}</small>
                       ) : null}
                     </div>
                   );

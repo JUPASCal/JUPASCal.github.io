@@ -456,7 +456,9 @@ export const STRINGS = {
   // merely changed keep the 2025 basis (year-change pill discloses).
   // Driven by score_basis = "hkbu_2026_simulated".
   "detail.hkbuSim.note": { en: "HKBU introduced subject weighting for this programme for 2026. The LQ and median here re-score the grades of the students admitted in 2025 with that new weighting — a JUPASCal estimate, not official HKBU numbers.", zh: "浸大在 2026 年為此課程新增科目比重。此處的 LQ 及中位數是把 2025 年獲取錄學生的成績以新比重重新計分，屬 JUPASCal 估算，並非浸大官方數字。" },
-  "detail.hkbuSim.meanNote": { en: "HKBU's published average score is not shown here — it was calculated under the old formula, before this weighting, and would read misleadingly low next to weighted scores.", zh: "此處不顯示浸大公佈的平均分：該數字以舊計分方法（未計新比重）計算，與加權後的分數並列會偏低而造成誤導。" },
+  "detail.hkbuSim.meanNote": { en: "The \"Mean (unweighted)\" above is HKBU's published average under the old formula, before this weighting — it reads lower and isn't directly comparable to your weighted score.", zh: "上方「平均分（無比重）」為浸大以舊計分方法（未計新比重）公佈的平均分，數值偏低，不可與你的加權分數直接比較。" },
+  "detail.hkbuSim.meanCardLabel": { en: "Mean (unweighted)", zh: "平均分（無比重）" },
+  "detail.hkbuSim.meanCardHint": { en: "HKBU official · old formula", zh: "浸大公佈・未計新比重" },
   "detail.hkbuSim.source": { en: "HKBU JUPAS admissions", zh: "香港浸會大學 JUPAS 收生資訊" },
   // Every HKBU benchmark is estimated: HKBU publishes the admitted students'
   // GRADES (median + LQ profiles), not score totals. This block explains the
