@@ -3309,7 +3309,26 @@ def unify_data():
         except Exception as e:  # noqa: BLE001
             print(f"Archive step skipped ({e})")
 
+    # Decode any HTML entities that leaked in from scraping (e.g. JUPAS notes
+    # carry &quot; / &amp; / &#39; …). Global recursive pass over every string so
+    # nothing HTML-encoded ever reaches the UI/Excel/SEO. Runs last, right before
+    # serialisation, so it catches all fields regardless of their source scraper.
+    import html as _html
+    def _unescape_all(obj):
+        if isinstance(obj, str):
+            out = _html.unescape(obj)
+            return _html.unescape(out) if "&" in out else out  # double-encoded
+        if isinstance(obj, list):
+            return [_unescape_all(v) for v in obj]
+        if isinstance(obj, dict):
+            return {k: _unescape_all(v) for k, v in obj.items()}
+        return obj
+    final_unified = _unescape_all(final_unified)
+
     payload = json.dumps(final_unified, ensure_ascii=False, separators=(",", ":"))
+    import re as _re_ent
+    _leftover = len(_re_ent.findall(r"&(?:[a-zA-Z][a-zA-Z0-9]{1,10}|#[0-9]{1,6}|#x[0-9a-fA-F]{1,5});", payload))
+    print(f"HTML-entity unescape pass: {_leftover} entity-like token(s) remain (URL '&' etc. are fine)")
     with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
         f.write(payload)
     # Sidecar version file — short content hash. The frontend fetches this
