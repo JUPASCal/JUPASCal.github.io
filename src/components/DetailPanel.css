@@ -2109,6 +2109,25 @@
 
 .detail-selection-note { flex-basis: 100%; font-size: 0.8rem; line-height: 1.45; opacity: 0.85; }
 
+.detail-selection-details {
+  flex: 0 0 100%;
+  min-width: 0;
+  margin: 0.05rem 0 0;
+  padding-left: 1.05em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.24rem;
+  list-style: disc;
+}
+
+.detail-selection-details li {
+  color: var(--ink);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.detail-selection-details li::marker { color: var(--muted); }
+
 @media (max-width: 920px) {
   .detail-edge-tap {
       position: fixed;

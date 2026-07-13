@@ -18,7 +18,6 @@
   "july 22 - 23": "7月22至23日",
   "july 23 - 27": "7月23至27日",
   "july 23 - 24": "7月23至24日",
-
   "feb 2026; 15-18 june 2026": "2026年2月；2026年6月15至18日",
   "mid-june": "6月中旬",
   "may / june": "5月 / 6月",
@@ -66,7 +65,6 @@
   "on a selective basis - mid-june 2026 - group interview - english": "選擇性安排 - 2026年6月中 - 小組面試 - 英語",
   "on a selective basis - early to mid-may 2026 - group and/or individual interviews - english": "選擇性安排 - 2026年5月上旬至月中 - 小組及/或個人面試 - 英語",
   "on a selective basis - early july 2026 - group interview - english": "選擇性安排 - 2026年7月上旬 - 小組面試 - 英語",
-  "on a selective basis - mid-july 2026 - group interview - english": "選擇性安排 - 2026年7月中旬 - 小組面試 - 英語",
   "on a selective basis - june 2026 - individual interview - english": "選擇性安排 - 2026年6月 - 個人面試 - 英語",
   "on a selective basis - june 2026 - group interview (40 minutes) - english": "選擇性安排 - 2026年6月 - 小組面試（40分鐘） - 英語",
   "may - june 2026": "2026年5月至6月",
@@ -77,7 +75,6 @@
   "january / february july": "1月 / 2月、7月",
   "june 16 - 18": "6月16至18日",
   "june 10 - 12": "6月10至12日",
-
   "after the announcement of hkdse results": "香港中學文憑考試成績公佈後",
   "26 june 2025": "2025年6月26日",
   "after release of hkdse results": "香港中學文憑考試成績公佈後",
@@ -103,11 +100,23 @@
   "after the announcement of hkdse results. students shortlisted for the non-academic admission scheme will be interviewed prior to the announcement of hkdse results.": "香港中學文憑考試成績公佈後。入圍非學術收生計劃的學生將於文憑試成績公佈前接受面試。",
   "between may and august": "5月至8月",
   "interviews may be arranged after the announcement of hkdse results.": "香港中學文憑考試成績公佈後或會安排面試。",
-
   "group interview (1 hour)": "小組面試（1小時）",
   "group interview & written test (half day)": "小組面試及筆試（半日）",
   "group interview (30 minutes)": "小組面試（30分鐘）",
   "individual & group interview (half day)": "個人及小組面試（半日）",
   "group interview & written test (1 hour)": "小組面試及筆試（1小時）",
-  "group interview (half day)": "小組面試（半日）"
+  "group interview (half day)": "小組面試（半日）",
+  "(d) composition portfolio (if available).": "（d）作曲作品集（如有）。",
+  "candidates are required to submit a portfolio of creative work samples, formatted into a pdf of no more than five (5) a4 size portrait pages.": "申請人須提交創作作品樣本集，整理成不多於五（5）頁 A4 直度版面的 PDF 檔案。",
+  "candidates are required to submit a portfolio of creative work samples.": "申請人須提交創作作品樣本集。",
+  "candidates are required to submit their portfolios before the interview, and/or present their portfolios to the interview panel.": "申請人須於面試前提交作品集，及／或於面試時向評審小組展示作品集。",
+  "candidates are strongly encouraged to show a portfolio of creative work (which may include drawing, painting, collage, sculpture, creative writing, video, multi-media work) during the interview.": "強烈建議申請人於面試時展示創作作品集（可包括繪畫、油畫、拼貼、雕塑、創意寫作、錄像及多媒體作品）。",
+  "candidates may submit a separate portfolio of creative work (which may include drawing, painting, collage, sculpture, creative writing, video, or multimedia work) in soft copy.": "申請人可另行以電子檔提交創作作品集（可包括繪畫、油畫、拼貼、雕塑、創意寫作、錄像或多媒體作品）。",
+  "candidates should prepare their portfolios in digital format for the ease of presentation.": "申請人應以電子格式準備作品集，以便展示。",
+  "in addition to fulfilling the university requirements, applicants are required to submit a design portfolio to the general office of the school of architecture directly.": "除滿足大學的入學要求外，申請人須將設計作品集直接提交至建築學院辦公室。",
+  "note: satisfactory performance in a practical test* and a portfolio interview is also required.": "注意：亦須在實作測試＊及作品集面試中表現理想。",
+  "portfolios should demonstrate candidates' potential in creativity, story telling techniques and concepts of images.": "作品集應展示申請人在創意、敘事技巧及影像概念方面的潛能。",
+  "the portfolio is an opportunity for applicants to demonstrate their potential in architectural thinking, drawing and making.": "作品集是申請人展示其建築思維、繪圖及製作潛能的機會。",
+  "the portfolio of creative work samples could be from previous output of the student.": "創作作品樣本集可取自學生過往的作品。",
+  "the portfolio should be submitted as a digital file to the faculty office directly.": "作品集應以電子檔案直接提交至學院辦公室。"
 }

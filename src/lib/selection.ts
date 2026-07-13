@@ -64,6 +64,11 @@ export type SelectionItem = {
   // Optional i18n key for extra programme-specific guidance shown under the item
   // (e.g. what to put in the OEA). Curated layer only.
   note?: string;
+  // Programme-specific requirement detail sentences pulled from the notes (e.g.
+  // a portfolio's format/content rules). Source text, localised at render via
+  // translateSelectionText. Populated for non-interview types (interview already
+  // carries structured before/after).
+  details?: string[];
 };
 export type Selection = {
   items: SelectionItem[];
@@ -209,6 +214,41 @@ function detectFromText(p: Programme): SelectionItem[] {
   return [...found].map(([type, salience]) => ({ type, salience, source: "text" as const }));
 }
 
+// Split text into display sentences (keeping their terminator). No regex
+// lookbehind — that's a SyntaxError on iOS Safari < 16.4 (fails the bundle).
+function splitSentences(text: string): string[] {
+  return (text.match(/[^.;!?\n]+[.;!?]?/g) || []).map((s) => s.trim()).filter(Boolean);
+}
+
+// The programme-specific detail sentence(s) describing a non-interview
+// requirement (portfolio format/content, audition/test specifics), pulled from
+// the same notes the type was detected in. Lets the UI show WHAT the portfolio
+// must contain rather than a bare "Portfolio · required".
+const TYPE_RE: Partial<Record<SelectionType, RegExp>> = Object.fromEntries(
+  TYPE_PATTERNS.map(([re, type]) => [type, re]),
+);
+function detailSentences(p: Programme, type: SelectionType): string[] {
+  const re = TYPE_RE[type];
+  if (!re) return [];
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const text of selectionTexts(p)) {
+    for (const raw of splitSentences(text)) {
+      const s = raw.replace(/^[\s,;:]+/, "").trim();
+      if (s.length < 8 || s.length > 300 || !re.test(s)) continue;
+      // Drop scrape noise: stray HTML tags, truncated URLs, and PDF line-wrap
+      // fragments (which start mid-sentence, i.e. not on a sentence opener).
+      if (/[<>]|https?:|www\./i.test(s)) continue;
+      if (!/^[A-Z(*"'“]/.test(s)) continue;
+      const key = s.toLowerCase().replace(/\s+/g, " ");
+      if (seen.has(key)) continue;
+      seen.add(key);
+      out.push(s);
+    }
+  }
+  return out.slice(0, 4);
+}
+
 // ── 3. Discipline heuristics (name/faculty → likely requirement) ──────────────
 // Word-boundary patterns to avoid "Bachelor of Arts" / "...dent..." style false
 // positives. Always emitted as `heuristic` (inferred); curated/text override.
@@ -277,6 +317,15 @@ export function getSelection(p: Programme): Selection {
   (CURATED[p.jupas_code] || []).forEach(add);
 
   const items = [...byType.values()];
+  // Enrich the portfolio item with its source detail sentences (what the
+  // portfolio must contain / its format) so it reads richer than a bare
+  // "Portfolio · required". Interview keeps its structured before/after; other
+  // types stay bare (their scraped detail text is noisier / less useful).
+  for (const item of items) {
+    if (item.type !== "portfolio") continue;
+    const details = detailSentences(p, item.type);
+    if (details.length) item.details = details;
+  }
   return { items, confirmed: items.length > 0 && items.every((i) => !i.inferred) };
 }
 

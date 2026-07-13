@@ -10,6 +10,7 @@ import { describeFormula } from "../lib/formulaText";
 import { scoringBasisYear } from "../lib/scoreBasis";
 import { getSelection, selectionTypeKey, selectionTimingKey, selectionSalienceKey, translateSelectionText } from "../lib/selection";
 import { loadProgrammeDetails, type DescBlock, type ProgrammeDetail } from "../lib/programmeDetails";
+import { localizeElectiveNote, localizeAdmissionNote } from "../lib/requirementI18n";
 import type { CandidateScore, EligibilityDetail, HkustFormulaStep, OfferStatistic, Programme, ProgrammeResult, YearChanges } from "../types/jupas";
 import "./DetailPanel.css";
 
@@ -682,6 +683,7 @@ export function DetailPanel({ results, activeCode, reviewRequest, onActiveCodeCh
           onToggleDesktopOpen={() => setEligibilityOpen(!eligibilityOpen)}
           onTogglePassed={() => setShowPassedReqs((v) => !v)}
           t={t}
+          lang={lang}
         />
 
         {preferredSubjects ? (
@@ -700,7 +702,7 @@ export function DetailPanel({ results, activeCode, reviewRequest, onActiveCodeCh
           <section className="detail-notes formula-card">
             <span>{t("detail.admissionNotes")}</span>
             <ul className="detail-notes-list">
-              {admissionNotesList.map((n, i) => <li key={i}>{n}</li>)}
+              {admissionNotesList.map((n, i) => <li key={i}>{localizeAdmissionNote(n, lang)}</li>)}
             </ul>
           </section>
         ) : null}
@@ -748,6 +750,12 @@ export function DetailPanel({ results, activeCode, reviewRequest, onActiveCodeCh
                             </div>
                           ) : null}
                         </div>
+                      ) : item.details && item.details.length ? (
+                        <ul className="detail-selection-details">
+                          {item.details.map((d, i) => (
+                            <li key={i}>{translateSelectionText(d, lang)}</li>
+                          ))}
+                        </ul>
                       ) : item.when ? (
                         <span className="detail-selection-source">
                           <span>{t("detail.selection.source")}</span>
@@ -1140,6 +1148,7 @@ function EligibilityBlock({
   onToggleDesktopOpen,
   onTogglePassed,
   t,
+  lang,
 }: {
   eligible: boolean;
   details: EligibilityDetail[];
@@ -1148,6 +1157,7 @@ function EligibilityBlock({
   onToggleDesktopOpen: () => void;
   onTogglePassed: () => void;
   t: Translate;
+  lang: Lang;
 }) {
   const failed = details.filter((d) => !d.pass);
   const passed = details.filter((d) => d.pass);
@@ -1211,7 +1221,7 @@ function EligibilityBlock({
                 <em>{t("detail.need")}</em>
                 <b>{detail.need ? eligValue(detail.need) : "–"}</b>
               </span>
-              {detail.note ? <span className="eligibility-cell-note">{detail.note}</span> : null}
+              {detail.note ? <span className="eligibility-cell-note">{localizeElectiveNote(detail.note, lang)}</span> : null}
             </li>
           ))}
         </ol>
