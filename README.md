@@ -1,11 +1,12 @@
-# JUPAS Cal
+# JUPASCal · JUPAS Score Calculator 2026 (Hong Kong DSE)
 
-An **unofficial** score calculator for Hong Kong DSE students applying through
-JUPAS. Enter your HKDSE grades, build your A1–B6 programme list, and the tool
+A free, open-source, **unofficial JUPAS score calculator** for Hong Kong DSE
+students. Enter your HKDSE grades, build your A1–B6 programme list, and the tool
 estimates your admission score for every JUPAS programme (400+ across 10
-institutions) and compares it against historical admission data.
+institutions) and compares it against historical admission data — a fast **DSE
+score calculator** that works out each programme's own weighting for you.
 
-🔗 **Live site: <https://jupascal.com>**
+🔗 **Live site: <https://jupascal.com>** — no account, no download, no ads.
 
 > [!IMPORTANT]
 > **This is an unofficial, educational tool — not affiliated with JUPAS or any
