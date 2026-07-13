@@ -216,17 +216,9 @@
 
 
 .mc-row-filled::before {
-  /* Band-coloured left stripe – sits against the card edge as a
-     per-row status cue. No border-radius needed: the parent's
-     overflow: hidden clips the stripe to the card's rounded
-     corners, so the stripe ends naturally follow the curve. */
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 4px;
-  background: var(--line);
+  /* Band status is carried by the row's pill (高於中位數 / 未達入學要求 …),
+     so no left-edge stripe — it read as a generic "vibe-coded" callout. */
+  display: none;
 }
 
 

@@ -5,12 +5,70 @@ import { bandLabelKey, formatDelta, formatPercent } from "../lib/results";
 import { slotLabel } from "../lib/slots";
 import { useLang, pickName, type Lang, type Translate } from "../lib/i18n";
 import { localizedShortSubject, localizedSubject } from "../lib/subjectsI18n";
+import { SUBJECTS } from "../lib/strings";
 import { describeFormula } from "../lib/formulaText";
 import { scoringBasisYear } from "../lib/scoreBasis";
 import { getSelection, selectionTypeKey, selectionTimingKey, selectionSalienceKey, translateSelectionText } from "../lib/selection";
 import { loadProgrammeDetails, type DescBlock, type ProgrammeDetail } from "../lib/programmeDetails";
-import type { CandidateScore, EligibilityDetail, OfferStatistic, Programme, ProgrammeResult, YearChanges } from "../types/jupas";
+import type { CandidateScore, EligibilityDetail, HkustFormulaStep, OfferStatistic, Programme, ProgrammeResult, YearChanges } from "../types/jupas";
 import "./DetailPanel.css";
+
+// "Preferred subjects" are a soft, non-binding preference the institution lists
+// on JUPAS (they don't affect eligibility or score). They live in
+// `min_requirements_2026.conditional_remarks` and are otherwise unsurfaced in
+// the UI. Surface + localize them for the info tooltip.
+//
+// We MATCH known subject names (longest-first, non-overlapping) rather than
+// splitting on separators — a naive split on "," / "and" shreds multi-word
+// subjects like "Information and Communication Technology" or "Business,
+// Accounting and Financial Studies". Prose notes with lettered "(a)…(b)…"
+// clauses (JS4501/4502) are shown verbatim; a note with no matchable subject
+// falls back to its cleaned text.
+const PREFERRED_ALIAS: Record<string, string> = {
+  // CUHK/JUPAS naming for the Maths extended modules
+  "Mathematics (Module 1 or 2)": "Mathematics Extended Part (Module 1 or 2)",
+  "Mathematics (Module 1)": "Mathematics Extended Part (Module 1)",
+  "Mathematics (Module 2)": "Mathematics Extended Part (Module 2)",
+  // PolyU naming for the same modules
+  "Mathematics (Extended part - Calculus and Statistics)": "Mathematics Extended Part (Module 1)",
+  "Mathematics (Extended part - Algebra and Calculus)": "Mathematics Extended Part (Module 2)",
+  // bare "Mathematics" (PolyU lists) = the compulsory part
+  "Mathematics": "Mathematics (Compulsory Part)",
+};
+const PREFERRED_KNOWN = [...Object.keys(SUBJECTS), ...Object.keys(PREFERRED_ALIAS)]
+  .sort((a, b) => b.length - a.length);
+
+type PreferredInfo = { subjects: string[] } | { note: string } | null;
+
+function preferredSubjectsDisplay(raw: string | null | undefined, lang: Lang): PreferredInfo {
+  if (!raw || !/prefer|優先/i.test(raw)) return null;
+  if (/\([a-z]\)/i.test(raw)) return { note: raw.trim() }; // prose clauses — verbatim
+  const used = new Array(raw.length).fill(false);
+  const found: Array<{ idx: number; name: string }> = [];
+  for (const name of PREFERRED_KNOWN) {
+    let from = 0;
+    let idx = raw.indexOf(name, from);
+    while (idx !== -1) {
+      let overlap = false;
+      for (let i = idx; i < idx + name.length; i++) if (used[i]) { overlap = true; break; }
+      if (!overlap) {
+        found.push({ idx, name });
+        for (let i = idx; i < idx + name.length; i++) used[i] = true;
+      }
+      from = idx + name.length;
+      idx = raw.indexOf(name, from);
+    }
+  }
+  if (found.length === 0) return raw.trim() ? { note: raw.trim() } : null;
+  found.sort((a, b) => a.idx - b.idx);
+  const seen = new Set<string>();
+  const subjects: string[] = [];
+  for (const f of found) {
+    const loc = localizedSubject(PREFERRED_ALIAS[f.name] ?? f.name, lang);
+    if (!seen.has(loc)) { seen.add(loc); subjects.push(loc); }
+  }
+  return { subjects };
+}
 
 
 // Defence-in-depth for every href that originates from SCRAPED programme data
@@ -211,6 +269,7 @@ export function DetailPanel({ results, activeCode, reviewRequest, onActiveCodeCh
 
   const { programme, calculation, eligibility } = result;
   const selection = getSelection(programme);
+  const preferredSubjects = preferredSubjectsDisplay(programme.min_requirements_2026?.conditional_remarks, lang);
   // Standardized, bilingual formula descriptions (generated from the structured
   // model; raw wording kept as a muted "Official:" line — see describeFormula).
   const formula2025 = describeFormula(programme, "2025", lang, t);
@@ -585,11 +644,21 @@ export function DetailPanel({ results, activeCode, reviewRequest, onActiveCodeCh
           t={t}
         />
 
+        {preferredSubjects ? (
+          <section className="detail-preferred formula-card">
+            <span>{t("detail.preferred")}</span>
+            <p className="muted detail-preferred-lede">{t("detail.preferredLede")}</p>
+            <p className="detail-preferred-subjects">
+              {"subjects" in preferredSubjects
+                ? preferredSubjects.subjects.join(" · ")
+                : preferredSubjects.note}
+            </p>
+          </section>
+        ) : null}
+
         {selection.items.length > 0 ? (
-          <>
-            <hr className="grade-section-divider" />
-            <section className="detail-selection">
-              <p className="eyebrow">{t("detail.selection.heading")}</p>
+          <section className="detail-selection formula-card">
+              <span>{t("detail.selection.heading")}</span>
               <p className="muted detail-selection-sub">{t("detail.selection.sub")}</p>
               <ul className="detail-selection-list">
                 {selection.items.map((item) => {
@@ -641,8 +710,7 @@ export function DetailPanel({ results, activeCode, reviewRequest, onActiveCodeCh
                   );
                 })}
               </ul>
-            </section>
-          </>
+          </section>
         ) : null}
 
         <hr className="grade-section-divider" />
@@ -659,6 +727,7 @@ export function DetailPanel({ results, activeCode, reviewRequest, onActiveCodeCh
                 rawFormula={formula2025.showOfficial ? formula2025.raw : null}
                 weights={programme.subject_weights_2025 || {}}
                 pools={programme.best_of_weights_2025 || []}
+                steps={programme.institution === "HKUST" ? programme.hkust_formula_steps : undefined}
                 t={t}
                 lang={lang}
               />
@@ -670,6 +739,7 @@ export function DetailPanel({ results, activeCode, reviewRequest, onActiveCodeCh
               rawFormula={formula2026.showOfficial ? formula2026.raw : null}
               weights={programme.subject_weights_2026 || {}}
               pools={programme.best_of_weights_2026 || []}
+              steps={programme.institution === "HKUST" ? programme.hkust_formula_steps : undefined}
               t={t}
               lang={lang}
             />
@@ -1181,6 +1251,105 @@ function YearChangesPanel({ yc, note, t, lang }: { yc: YearChanges; note: string
   );
 }
 
+// HKUST's scoring is a sequential graded-pool formula — English/Math ×2, then a
+// tiered "best from {pool}" (e.g. Physics ×2 / ICT ×1.5 / Bio·Chem ×1), then
+// best-of-other pools (M1/M2 ×2, else ×1), optionally a `better_of`. The flat
+// subject_weights/best_of fields flatten this WRONGLY (Bio/Chem look fixed, the
+// pool splits into separate best-1 chips), so the breakdown renders from the
+// authoritative `hkust_formula_steps` instead, mirroring HKUST's own brochure.
+const HKUST_SUBJ_ALIAS: Record<string, string> = {
+  "Mathematics Compulsory Part": "Mathematics (Compulsory Part)",
+  "Mathematics Extended Part (Algebra and Calculus) - Module 2": "Mathematics Extended Part (Module 2)",
+  "Mathematics Extended Part (Calculus and Statistics) - Module 1": "Mathematics Extended Part (Module 1)",
+};
+function hkSubjLabel(name: string, lang: Lang): string {
+  return localizedShortSubject(HKUST_SUBJ_ALIAS[name] ?? name, lang);
+}
+// Join a subject set for display, collapsing M1 + M2 → "M1/M2".
+function hkSubjList(subjects: string[], lang: Lang): string {
+  const canon = subjects.map((s) => HKUST_SUBJ_ALIAS[s] ?? s);
+  const labels = canon.filter((s) => !s.includes("Module 1") && !s.includes("Module 2")).map((s) => localizedShortSubject(s, lang));
+  const hasM1 = canon.some((s) => s.includes("Module 1"));
+  const hasM2 = canon.some((s) => s.includes("Module 2"));
+  if (hasM1 && hasM2) labels.push("M1／M2");
+  else if (hasM1) labels.push("M1");
+  else if (hasM2) labels.push("M2");
+  return labels.join("／");
+}
+type HkTier = { subjects: string; weight: number };
+type HkGroup = { label: string; tiers: HkTier[] };
+// Turn a run of best_from_pool steps into display groups: each filtered pool is
+// its own group ("Best 1 from …" + tiers); consecutive unfiltered pools merge
+// into one "Best N other subjects" group (+ an implicit ×1 "other" tier).
+function hkPoolGroups(poolSteps: HkustFormulaStep[], lang: Lang, t: Translate): HkGroup[] {
+  const groups: HkGroup[] = [];
+  let otherCount = 0;
+  let otherTiers: HkTier[] = [];
+  const flush = () => {
+    if (otherCount === 0) return;
+    groups.push({ label: t("detail.hkust.bestOther", { count: otherCount }), tiers: [...otherTiers, { subjects: t("detail.hkust.other"), weight: 1 }] });
+    otherCount = 0;
+    otherTiers = [];
+  };
+  for (const step of poolSteps) {
+    if (step.subject_filter && step.subject_filter.length > 0) {
+      flush();
+      groups.push({
+        label: t("detail.hkust.bestFrom", { subjects: hkSubjList(step.subject_filter, lang) }),
+        tiers: (step.weights ?? []).map((w) => ({ subjects: hkSubjList(w.subjects, lang), weight: w.weight })),
+      });
+    } else {
+      otherCount += 1;
+      for (const w of step.weights ?? []) {
+        const subjects = hkSubjList(w.subjects, lang);
+        if (!otherTiers.some((ti) => ti.subjects === subjects && ti.weight === w.weight)) otherTiers.push({ subjects, weight: w.weight });
+      }
+    }
+  }
+  flush();
+  return groups;
+}
+function HkGroupRows({ group }: { group: HkGroup }) {
+  return (
+    <div className="weight-hkust-group">
+      <div className="weight-hkust-group-head">{group.label}</div>
+      {group.tiers.map((tier, i) => (
+        <div key={i} className="weight-hkust-row weight-hkust-tier">
+          <span>{tier.subjects}</span>
+          <span>x{tier.weight}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+function HkustBreakdown({ steps, lang, t }: { steps: HkustFormulaStep[]; lang: Lang; t: Translate }) {
+  const required = steps.filter((s) => s.type === "required");
+  const topGroups = hkPoolGroups(steps.filter((s) => s.type === "best_from_pool"), lang, t);
+  const betterOf = steps.find((s) => s.type === "better_of");
+  return (
+    <div className="weight-hkust">
+      {required.map((r, i) => (
+        <div key={`r${i}`} className="weight-hkust-row">
+          <span>{hkSubjLabel(r.subject ?? "", lang)}</span>
+          <span>x{r.weight}</span>
+        </div>
+      ))}
+      {topGroups.map((g, i) => <HkGroupRows key={`g${i}`} group={g} />)}
+      {betterOf?.options ? (
+        <div className="weight-hkust-betterof">
+          <div className="weight-hkust-betterof-head">{t("detail.hkust.betterOf")}</div>
+          {betterOf.options.map((opt, oi) => (
+            <div key={oi} className="weight-hkust-option">
+              <div className="weight-hkust-option-tag">{t("detail.hkust.option", { n: oi + 1 })}</div>
+              {hkPoolGroups(opt.filter((s) => s.type === "best_from_pool"), lang, t).map((g, gi) => <HkGroupRows key={gi} group={g} />)}
+            </div>
+          ))}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
 function FormulaBlock({
   label,
   note,
@@ -1189,6 +1358,7 @@ function FormulaBlock({
   rawFormula,
   weights,
   pools,
+  steps,
   t,
   lang,
 }: {
@@ -1199,10 +1369,11 @@ function FormulaBlock({
   rawFormula?: string | null;
   weights: Record<string, number>;
   pools: Array<{ count: number; subjects: string[]; weight: number }>;
+  steps?: HkustFormulaStep[];
   t: Translate;
   lang: Lang;
 }) {
-  const hasWeights = Object.keys(weights).length > 0 || pools.length > 0;
+  const hasWeights = (steps && steps.length > 0) || Object.keys(weights).length > 0 || pools.length > 0;
   const [weightsOpen, setWeightsOpen] = useState(false);
 
   return (
@@ -1221,20 +1392,26 @@ function FormulaBlock({
               <polyline points="3,5 8,11 13,5" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </button>
-          <div className={weightsOpen ? "weight-cloud" : "weight-cloud collapsed"}>
-            {Object.entries(weights).map(([subject, weight]) => (
-              <span key={subject} className="weight-item">
-                <span>{localizedShortSubject(subject, lang)}</span>
-                <span>x{weight}</span>
-              </span>
-            ))}
-            {pools.map((pool, index) => (
-              <span key={index} className="weight-item">
-                <span>{t("detail.bestOf", { count: pool.count, subjects: pool.subjects.map((s) => localizedShortSubject(s, lang)).join("/") })}</span>
-                <span>x{pool.weight}</span>
-              </span>
-            ))}
-          </div>
+          {steps && steps.length > 0 ? (
+            <div className={weightsOpen ? "weight-cloud" : "weight-cloud collapsed"}>
+              <HkustBreakdown steps={steps} lang={lang} t={t} />
+            </div>
+          ) : (
+            <div className={weightsOpen ? "weight-cloud" : "weight-cloud collapsed"}>
+              {Object.entries(weights).map(([subject, weight]) => (
+                <span key={subject} className="weight-item">
+                  <span>{localizedShortSubject(subject, lang)}</span>
+                  <span>x{weight}</span>
+                </span>
+              ))}
+              {pools.map((pool, index) => (
+                <span key={index} className="weight-item">
+                  <span>{t("detail.bestOf", { count: pool.count, subjects: pool.subjects.map((s) => localizedShortSubject(s, lang)).join("/") })}</span>
+                  <span>x{pool.weight}</span>
+                </span>
+              ))}
+            </div>
+          )}
         </>
       ) : <em className="muted">{t("detail.noWeighting")}</em>}
     </div>

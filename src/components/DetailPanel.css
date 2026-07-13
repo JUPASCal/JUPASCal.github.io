@@ -374,24 +374,13 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-  padding: var(--space-3) var(--space-4) var(--space-3) calc(var(--space-4) + 4px);
+  padding: var(--space-3) var(--space-4);
   border-radius: 16px;
-  background:
-    linear-gradient(135deg, color-mix(in srgb, var(--band-tone) 14%, transparent), transparent 60%),
-    var(--surface-strong);
-  border: 1px solid var(--line);
+  /* Soft, uniform band-tinted wash (green / gold / red) — gives the hero score
+     card status colour without the old corner gradient-glow or edge stripe. */
+  background: color-mix(in srgb, var(--band-tone) 9%, var(--surface-strong));
+  border: 1px solid color-mix(in srgb, var(--band-tone) 20%, var(--line));
   overflow: hidden;
-}
-
-
-.score-context-header::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 4px;
-  background: var(--band-tone);
 }
 
 
@@ -477,7 +466,6 @@
   color: var(--muted);
   background: color-mix(in srgb, var(--accent) 7%, var(--surface-strong));
   border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--line));
-  border-left: 3px solid var(--accent);
   border-radius: 9px;
 }
 
@@ -545,9 +533,7 @@
 
 
 .score-context-header.expanded {
-  background:
-    linear-gradient(135deg, color-mix(in srgb, var(--band-tone, var(--accent)) 18%, transparent), transparent 60%),
-    var(--surface-strong);
+  background: var(--surface-strong);
 }
 
 
@@ -1590,8 +1576,6 @@
 
 .audit-cell.used {
   background: color-mix(in srgb, var(--band-tone, var(--accent)) 14%, var(--surface-strong));
-  border-left: 3px solid var(--band-tone, var(--accent));
-  padding-left: 8px;
 }
 
 
@@ -1599,7 +1583,6 @@
    on top, distinct from the counted best-N rows. */
 .audit-cell.is-bonus {
   background: color-mix(in srgb, var(--good) 16%, var(--surface-strong));
-  border-left-color: var(--good);
 }
 
 
@@ -1612,8 +1595,6 @@
 .audit-cell.unused {
   background: transparent;
   opacity: 0.5;
-  border-left: 3px solid transparent;
-  padding-left: 8px;
 }
 
 
@@ -1907,7 +1888,6 @@
   margin-bottom: var(--space-4);
   padding: var(--space-3) var(--space-4);
   border: 1px solid var(--line);
-  border-left: 3px solid var(--accent);
   border-radius: 14px;
   background: var(--surface-strong);
 }
@@ -2057,23 +2037,16 @@
 }
 
 
-/* Non-academic requirement ("Beyond your grades") section — DetailPanel */
-.detail-selection-sub { margin: 0.15rem 0 0.5rem; font-size: 0.82rem; }
+/* Non-academic requirement ("Beyond your grades") section — DetailPanel.
+   Boxed via .formula-card (like 入學資格 / 優先考慮科目); the interview rows sit
+   plain inside it (no box-in-box). */
+.detail-selection-sub { margin: 0; font-size: 0.82rem; }
 
-.detail-selection-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.4rem; }
+.detail-selection-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.5rem; }
 
 .detail-selection-item {
   display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.35rem 0.6rem;
-  padding: 0.5rem 0.65rem; border-radius: 0.55rem;
-  background: var(--surface-2, rgba(127,127,127,0.08));
-  border-left: 3px solid var(--border, rgba(127,127,127,0.35));
 }
-
-.detail-selection-item.sal-required { border-left-color: var(--tone-alert, #d98324); }
-
-.detail-selection-item.sal-weighty  { border-left-color: var(--tone-warn, #c79a2e); }
-
-.detail-selection-item.sal-optional { border-left-color: var(--border, rgba(127,127,127,0.4)); }
 
 .detail-selection-item strong { font-size: 0.9rem; }
 
@@ -2684,4 +2657,59 @@
       border: 1px solid #eee !important;
       page-break-inside: avoid;
     }
+}
+
+/* Preferred subjects — a soft, non-binding preference the institution lists on
+   JUPAS (doesn't affect eligibility or score). Reuses the .formula-card box so
+   it aligns with the other boxed sections (入學資格 / 2025 邏輯 / …) instead of
+   sitting as flush-left bare text. */
+.detail-preferred-lede {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: var(--muted);
+}
+.detail-preferred-subjects {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.55;
+  color: var(--ink);
+}
+
+/* HKUST tiered-pool weighting breakdown (renders from hkust_formula_steps so the
+   graded pools read accurately, matching HKUST's own brochure). */
+.weight-hkust { display: flex; flex-direction: column; }
+.weight-hkust-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+.weight-hkust > .weight-hkust-row { border-bottom: 1px solid var(--line); }
+.weight-hkust-group { border-bottom: 1px solid var(--line); padding-bottom: var(--space-1); }
+.weight-hkust-group-head {
+  padding: var(--space-2) 0 0;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+.weight-hkust-tier { padding: 2px 0 2px var(--space-4); }
+.weight-hkust-betterof-head {
+  padding: var(--space-3) 0 var(--space-1);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+.weight-hkust-option { padding-left: var(--space-2); }
+.weight-hkust-option-tag {
+  padding: var(--space-2) 0 var(--space-1);
+  font-size: 0.74rem;
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }

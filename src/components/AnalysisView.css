@@ -129,11 +129,7 @@ main.analysis-view > .app-topbar {
 }
 
 .chance-row::before {
-  content: "";
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: 4px;
-  background: var(--chance-tone);
+  display: none;
 }
 
 .chance-row.tone-good {
@@ -223,11 +219,23 @@ main.analysis-view > .app-topbar {
   transform: rotate(180deg);
 }
 
+/* Solid band-coloured slot badge (green / gold / red by chance), mirroring the
+   share card — carries the row's status now that the left stripe is gone. */
 .chance-slot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  height: 23px;
+  padding: 0 9px;
+  border-radius: 999px;
   font-weight: 900;
-  font-size: 0.8rem;
-  color: var(--muted);
+  font-size: 0.76rem;
+  letter-spacing: 0.03em;
   font-variant-numeric: tabular-nums;
+  background: var(--chance-tone);
+  color: var(--surface-strong);
+  flex: 0 0 auto;
 }
 
 .chance-prog {
@@ -581,7 +589,6 @@ main.analysis-view > .app-topbar {
   gap: var(--space-3);
   padding: var(--space-3);
   border: 1px solid var(--line);
-  border-left-width: 3px;
   border-radius: 14px;
   background: var(--surface);
 }
@@ -666,14 +673,6 @@ main.analysis-view > .app-topbar {
   outline: none;
 }
 
-
-.analysis-finding.tone-critical { border-left-color: var(--bad); }
-
-.analysis-finding.tone-warning { border-left-color: var(--warn); }
-
-.analysis-finding.tone-info { border-left-color: var(--accent-2); }
-
-.analysis-finding.tone-good { border-left-color: var(--good); }
 
 .analysis-finding.tone-critical .analysis-finding-mark { background: var(--bad); }
 

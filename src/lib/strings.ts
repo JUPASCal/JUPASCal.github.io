@@ -494,6 +494,12 @@ export const STRINGS = {
   "detail.weightingDetails": { en: "Weighting details", zh: "比重詳情" },
   "detail.bestOf": { en: "Best {count}: {subjects}", zh: "最佳 {count} 科：{subjects}" },
   "detail.noWeighting": { en: "No specific subject weighting.", zh: "沒有特定科目比重。" },
+  // HKUST tiered-pool breakdown
+  "detail.hkust.bestFrom": { en: "Best 1 from {subjects}", zh: "最佳 1 科（{subjects}）" },
+  "detail.hkust.bestOther": { en: "Best {count} other subject(s)", zh: "最佳 {count} 科（其他）" },
+  "detail.hkust.other": { en: "other subjects", zh: "其他科目" },
+  "detail.hkust.betterOf": { en: "Whichever of the following scores higher:", zh: "以下兩種計法取較高者：" },
+  "detail.hkust.option": { en: "Method {n}", zh: "計法 {n}" },
   // Bulk-select control beside the shown-count in the Browse header.
   "filters.selectAllShown": { en: "Select all shown", zh: "全選顯示課程" },
   "filters.unselectAllShown": { en: "Unselect all shown", zh: "取消全選" },
@@ -554,6 +560,12 @@ export const STRINGS = {
   "detail.col.offers": { en: "Offers", zh: "取錄人數" },
   "detail.col.rate": { en: "Rate", zh: "取錄率" },
   "detail.eligibility": { en: "Eligibility", zh: "入學資格" },
+  "detail.preferred": { en: "Preferred subjects", zh: "優先考慮科目" },
+  "detail.preferredAria": { en: "About preferred subjects", zh: "關於優先考慮科目" },
+  "detail.preferredLede": {
+    en: "Preferred, not required — these don't affect your eligibility or score, but the institution favours applicants who take them.",
+    zh: "屬優先考慮，並非入學要求 — 不影響你的入學資格或分數，但院校會較優先考慮修讀這些科目的申請人。",
+  },
   "detail.passTally": { en: "{n}/{total} pass", zh: "{n}/{total} 符合" },
   "detail.unmetTally": { en: "{failed}/{total} unmet", zh: "{failed}/{total} 未符合" },
   "detail.showChecks": { en: "Show {n} requirement checks", zh: "顯示 {n} 項入學要求檢查" },

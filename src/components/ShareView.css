@@ -227,13 +227,7 @@
 
 
 .recap-bar::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 4px;
-  background: var(--line);
+  display: none;
 }
 
 
@@ -977,13 +971,9 @@
 
 
 .plan-row::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 4px;
-  background: var(--line);
+  /* Band status is carried by the row's pill (高於中位數 / 不符合資格 …),
+     so no left-edge stripe — it read as a generic "vibe-coded" callout. */
+  display: none;
 }
 
 

@@ -1491,7 +1491,6 @@ select {
 
 
 .warning {
-  border-left: 4px solid var(--warn);
   padding-left: var(--space-3);
 }
 
