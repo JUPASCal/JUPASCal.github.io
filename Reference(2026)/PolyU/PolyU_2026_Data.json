@@ -692,7 +692,8 @@
     "score_lq": "188.6",
     "weights_2025": "Biology (W=7, CatA); Business, Accounting and Financial Studies (W=7, CatA); Business, Accounting and Financial Studies (Accounting) (W=7, CatA); Business, Accounting and Financial Studies (Business Management) (W=7, CatA); Chemistry (W=7, CatA); Chinese History (W=7, CatA); Chinese Language (W=10, CatA); Chinese Literature (W=7, CatA); Combined Science: Biology + Chemistry (W=7, CatA); Combined Science: Biology + Physics (W=7, CatA); Combined Science: Physics + Chemistry (W=7, CatA); Design and Applied Technology (W=5, CatA); Economics (W=7, CatA); English Language (W=10, CatA); Ethics and Religious Studies (W=7, CatA); Geography (W=7, CatA); Health Management and Social Care (W=7, CatA); History (W=7, CatA); Information and Communication Technology (W=7, CatA); Integrated Science (W=7, CatA); Literature in English (W=7, CatA); Mathematics (W=10, CatA); Mathematics (Extended part - Algebra and Calculus) (W=7, CatA); Mathematics (Extended part - Calculus and Statistics) (W=7, CatA); Music (W=5, CatA); Physical Education (W=5, CatA); Physics (W=7, CatA); Technology and Living (Fashion, Clothing and Textiles) (W=5, CatA); Technology and Living (Food Science and Technology) (W=5, CatA); Tourism and Hospitality Studies (W=7, CatA); Visual Arts (W=5, CatA); Adv Dip of French Lang Studies/Dip of French Lang Studies (W=7, CatC); Diploma of Spanish as a Foreign Language (W=7, CatC); French # (W=7, CatC); German # (W=7, CatC); Goethe-Certificate (W=7, CatC); Hindi # (W=7, CatC); Japanese # (W=7, CatC); Japanese-Language Proficiency Test (W=7, CatC); Spanish # (W=7, CatC); Test of Proficiency in Korean II (W=7, CatC); Urdu # (W=7, CatC)",
     "data_year_weightings_2025": 2025,
-    "weightings_2025_source": "2025_JS3241_SW.pdf (renamed JS3243 in 2026)"
+    "weightings_2025_source": "2025_JS3241_SW.pdf (renamed JS3243 in 2026)",
+    "score_median": "189.5"
   },
   {
     "jupas_code": "JS3250",

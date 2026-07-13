@@ -15,7 +15,13 @@ MEDIANS = {
     "JS3080": "182.5", "JS3741": "208.0", "JS3478": "309.0", "JS3337": "209.0",
     "JS3648": "218.0", "JS3624": "278.0", "JS3290": "277.8", "JS3030": "215.0",
     "JS3636": "320.0", "JS3236": "195.0", "JS3612": "339.0", "JS3008": "208.0",
-    "JS3130": "206.0", "JS3242": "264.3", "JS3789": "175.8", "JS3241": "189.5"
+    "JS3130": "206.0", "JS3242": "264.3", "JS3789": "175.8",
+    # af_2025_PolyU.pdf lists this under the retired 2025 code JS3241; the
+    # programme was restructured to JS3243 (Language Science and Technology,
+    # "subject to approval"), so key the median by its CURRENT code — else it
+    # never lands (avg/LQ come through from PolyU's own page under JS3243, but
+    # the median lives only in the JUPAS PDF under the old code). See unify §4b-i.
+    "JS3243": "189.5"
 }
 
 def patch():
