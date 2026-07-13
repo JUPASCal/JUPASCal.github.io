@@ -421,9 +421,6 @@ export const STRINGS = {
   "detail.tapBreakdownHide": { en: "Hide subject breakdown", zh: "隱藏科目細項" },
   "detail.tapBreakdownShow": { en: "Tap to see subject breakdown", zh: "點選查看科目細項" },
   "detail.noBenchmark": { en: "No 2025 LQ/Median/UQ score data is available for this programme.", zh: "此課程暫無 2025 年 LQ／中位數／UQ 分數數據。" },
-  "detail.estimatedNotePre": { en: "These LQ and median figures are ", zh: "這些 LQ 及中位數是根據浸大公佈的成績分佈" },
-  "detail.estimatedNoteBold": { en: "estimated", zh: "估算" },
-  "detail.estimatedNotePost": { en: " from HKBU's published grade breakdowns (not actual admission scores), so treat them as approximate.", zh: "所得（並非實際收生分數），只可視作約數。" },
   "detail.lqCaveat": { en: "LQ above the median isn't a bug – this programme likely weighs more than your score (interview, portfolio, etc.).", zh: "LQ 高於中位數並非系統錯誤 – 此課程或會較重視分數以外的因素（如面試、作品集等）。" },
   // HKUST School of Engineering benchmark note. For 2026 these departments changed
   // their subject weightings, so HKUST published "simulated" scores – 2025 admission
@@ -438,6 +435,38 @@ export const STRINGS = {
   // the 2026 formula to match. Driven by programme.score_basis = "cuhk_2026_recalculated".
   "detail.cuhkRecalc.note": { en: "CUHK changed this programme's formula for 2026. These figures are CUHK's 2025 admission scores recalculated with the new formula — the same one used for your score, so they compare directly.", zh: "中大在 2026 年更改了此課程的計分方法。以下是中大用新方法重算的 2025 年收生分數，與你的分數用同一方法，可直接比較。" },
   "detail.cuhkRecalc.source": { en: "CUHK JUPAS admissions", zh: "香港中文大學 JUPAS 收生資訊" },
+  // CityU republishes past admission scores RECALCULATED under the CURRENT
+  // cycle's formula (stated in the header of its "Admission Score Formula and
+  // Admissions Scores" PDF every year), so ALL CityU benchmarks are on the 2026
+  // basis and we score CityU with the 2026 weights to match. This note surfaces
+  // only on programmes whose weighting actually changed between the cycles.
+  // Driven by programme.score_basis = "cityu_2026_recalculated".
+  "detail.cityuRecalc.note": { en: "CityU changed this programme's weighting for 2026. These figures are CityU's 2025 admission scores recalculated with the new weighting — the same one used for your score, so they compare directly.", zh: "城大在 2026 年更改了此課程的科目比重。以下是城大以新比重重新計算的 2025 年收生分數，與你的分數用同一比重，可直接比較。" },
+  "detail.cityuRecalc.source": { en: "CityUHK JUPAS admissions", zh: "香港城市大學 JUPAS 收生資訊" },
+  // HKBU programmes that INTRODUCED subject weighting for 2026 (had none in
+  // 2025, per the Sep-2025 GER/PER PDF — authoritative over HKBU's own online
+  // Score Calculator). Both the student score and the benchmark are on the
+  // 2026 weighting: median/LQ are OUR estimates from HKBU's published grade
+  // profiles of 2025 admits. HKBU's published mean is hidden for these
+  // programmes — it was computed under the old unweighted formula and would
+  // read too low next to weighted scores. Programmes whose existing weighting
+  // merely changed keep the 2025 basis (year-change pill discloses).
+  // Driven by score_basis = "hkbu_2026_simulated".
+  "detail.hkbuSim.note": { en: "HKBU introduced subject weighting for this programme for 2026. The LQ and median here re-score the grades of the students admitted in 2025 with that new weighting — a JUPASCal estimate, not official HKBU numbers.", zh: "浸大在 2026 年為此課程新增科目比重。此處的 LQ 及中位數是把 2025 年獲取錄學生的成績以新比重重新計分，屬 JUPASCal 估算，並非浸大官方數字。" },
+  "detail.hkbuSim.meanNote": { en: "HKBU's published average score is not shown here — it was calculated under the old formula, before this weighting, and would read misleadingly low next to weighted scores.", zh: "此處不顯示浸大公佈的平均分：該數字以舊計分方法（未計新比重）計算，與加權後的分數並列會偏低而造成誤導。" },
+  "detail.hkbuSim.source": { en: "HKBU JUPAS admissions", zh: "香港浸會大學 JUPAS 收生資訊" },
+  // Every HKBU benchmark is estimated: HKBU publishes the admitted students'
+  // GRADES (median + LQ profiles), not score totals. This block explains the
+  // estimate the same way the CUHK/HKUST notes do, and shows the published
+  // profiles so the reader can check the arithmetic themselves.
+  "detail.hkbuEst.note": { en: "HKBU doesn't publish admission score totals — only the DSE grades of the students admitted at the 2025 median and lower quartile. The LQ and median here are a JUPASCal estimate built from those grades, not official HKBU numbers.", zh: "浸大不公佈收生總分，只公佈 2025 年中位數及下四分位獲取錄學生的文憑試各科等第。此處的 LQ 及中位數是 JUPASCal 根據該等成績估算，並非浸大官方數字。" },
+  "detail.hkbuEst.method": { en: "How: each grade converts to points, the programme's weighting applies, and the best five are summed — the same method as your score, so the two line up. HKBU doesn't name the electives, so any elective weighting goes to the best-scoring slot; the estimate can run slightly high.", zh: "估算方法：把各科等第換算成分數、套用課程比重，取最佳五科相加，與你的分數計法相同，可直接對照。浸大不註明選修科是哪一科，選修科比重一律當作落在分數最高的一科，故估算或會略為偏高。" },
+  "detail.hkbuEst.profileMedian": { en: "HKBU's published median admit: {grades}", zh: "浸大公佈的中位數取錄成績：{grades}" },
+  "detail.hkbuEst.profileLq": { en: "Lower quartile admit: {grades}", zh: "下四分位取錄成績：{grades}" },
+  "detail.hkbuEst.chi": { en: "Chi", zh: "中文" },
+  "detail.hkbuEst.eng": { en: "Eng", zh: "英文" },
+  "detail.hkbuEst.math": { en: "Maths", zh: "數學" },
+  "detail.hkbuEst.electives": { en: "electives", zh: "選修" },
   // CUHK programmes that gained a CORE-subject weighting for 2026 where CUHK did NOT
   // publish a recalculated total. We estimate the benchmark by applying the 2026
   // weighting to CUHK's published subject-grade profiles of past admitted students

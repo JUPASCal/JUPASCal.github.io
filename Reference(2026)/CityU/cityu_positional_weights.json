@@ -1,0 +1,176 @@
+{
+ "_comment": "CityU School of Energy & Environment POSITIONAL elective weightings, read visually 2026-07-12 from 2026_JUPAS_AdmissionScoreFormulaAndScores.pdf p6-7 (the 2025 PDF and the VLM 2025 transcription show the same scheme and values, so both years get the same model — this also keeps year_changes quiet). Official cells: 'x2.5 Biology/Chemistry/Physics in 1st Elective', 'x1.5 Biology/Chemistry/Geography/M1/M2/Physics in 2nd Elective', 'x1 other elective subjects'; JS1053 adds 'x2.5 Economics/BAFS in 2nd Elective'. The scrape and VLM flattened the positional qualifiers into per-subject weights, wrongly weighting a 3rd+ elective (user-reported, JS1050). Encoding: ordered best_of pools; pools CONSUME their picks (calculator pool-claiming), and pools sharing a `slot` tag compete for ONE elective position — JS1053's 2nd elective is x2.5 for Econ/BAFS OR x1.5 for the science list, never both. Note the engine picks slot fillers to the student's benefit (pool order = weight order), where CityU's own calculator may assign positions strictly by score rank; the divergence is a small benefit-of-doubt corner (e.g. Econ L3 preferred x2.5 over a 5** Physics x1.5 for the 2nd slot).",
+ "_verified": "2026-07-12 visual read of the official 2026 PDF tables",
+ "JS1050": {
+  "subject_weights_2025": {
+   "English Language": 2.0,
+   "Mathematics (Compulsory Part)": 2.5
+  },
+  "best_of_weights_2025": [
+   {
+    "count": 1,
+    "weight": 2.5,
+    "subjects": ["Biology", "Chemistry", "Physics"],
+    "slot": "elective-1"
+   },
+   {
+    "count": 1,
+    "weight": 1.5,
+    "subjects": ["Biology", "Chemistry", "Geography", "Mathematics Extended Part (Module 1)", "Mathematics Extended Part (Module 2)", "Physics"],
+    "slot": "elective-2"
+   }
+  ],
+  "subject_weights_2025_raw": "English Language (x2.0), Mathematics (Compulsory Part) (x2.5), Biology / Chemistry / Physics in 1st Elective (x2.5), Biology / Chemistry / Geography / M1/M2 / Physics in 2nd Elective (x1.5), other elective subjects (x1)",
+  "subject_weights_2026": {
+   "English Language": 2.0,
+   "Mathematics (Compulsory Part)": 2.5
+  },
+  "best_of_weights_2026": [
+   {
+    "count": 1,
+    "weight": 2.5,
+    "subjects": ["Biology", "Chemistry", "Physics"],
+    "slot": "elective-1"
+   },
+   {
+    "count": 1,
+    "weight": 1.5,
+    "subjects": ["Biology", "Chemistry", "Geography", "Mathematics Extended Part (Module 1)", "Mathematics Extended Part (Module 2)", "Physics"],
+    "slot": "elective-2"
+   }
+  ],
+  "subject_weights_2026_raw": "English Language (x2.0), Mathematics (Compulsory Part) (x2.5), Biology / Chemistry / Physics in 1st Elective (x2.5), Biology / Chemistry / Geography / M1/M2 / Physics in 2nd Elective (x1.5), other elective subjects (x1)"
+ },
+ "JS1051": {
+  "subject_weights_2025": {
+   "English Language": 2.0,
+   "Mathematics (Compulsory Part)": 2.5
+  },
+  "best_of_weights_2025": [
+   {
+    "count": 1,
+    "weight": 2.5,
+    "subjects": ["Biology", "Chemistry", "Physics"],
+    "slot": "elective-1"
+   },
+   {
+    "count": 1,
+    "weight": 1.5,
+    "subjects": ["Biology", "Chemistry", "Geography", "Mathematics Extended Part (Module 1)", "Mathematics Extended Part (Module 2)", "Physics"],
+    "slot": "elective-2"
+   }
+  ],
+  "subject_weights_2025_raw": "English Language (x2.0), Mathematics (Compulsory Part) (x2.5), Biology / Chemistry / Physics in 1st Elective (x2.5), Biology / Chemistry / Geography / M1/M2 / Physics in 2nd Elective (x1.5), other elective subjects (x1)",
+  "subject_weights_2026": {
+   "English Language": 2.0,
+   "Mathematics (Compulsory Part)": 2.5
+  },
+  "best_of_weights_2026": [
+   {
+    "count": 1,
+    "weight": 2.5,
+    "subjects": ["Biology", "Chemistry", "Physics"],
+    "slot": "elective-1"
+   },
+   {
+    "count": 1,
+    "weight": 1.5,
+    "subjects": ["Biology", "Chemistry", "Geography", "Mathematics Extended Part (Module 1)", "Mathematics Extended Part (Module 2)", "Physics"],
+    "slot": "elective-2"
+   }
+  ],
+  "subject_weights_2026_raw": "English Language (x2.0), Mathematics (Compulsory Part) (x2.5), Biology / Chemistry / Physics in 1st Elective (x2.5), Biology / Chemistry / Geography / M1/M2 / Physics in 2nd Elective (x1.5), other elective subjects (x1)"
+ },
+ "JS1052": {
+  "subject_weights_2025": {
+   "English Language": 2.0,
+   "Mathematics (Compulsory Part)": 2.5
+  },
+  "best_of_weights_2025": [
+   {
+    "count": 1,
+    "weight": 2.5,
+    "subjects": ["Biology", "Chemistry", "Physics"],
+    "slot": "elective-1"
+   },
+   {
+    "count": 1,
+    "weight": 1.5,
+    "subjects": ["Biology", "Chemistry", "Geography", "Mathematics Extended Part (Module 1)", "Mathematics Extended Part (Module 2)", "Physics"],
+    "slot": "elective-2"
+   }
+  ],
+  "subject_weights_2025_raw": "English Language (x2.0), Mathematics (Compulsory Part) (x2.5), Biology / Chemistry / Physics in 1st Elective (x2.5), Biology / Chemistry / Geography / M1/M2 / Physics in 2nd Elective (x1.5), other elective subjects (x1)",
+  "subject_weights_2026": {
+   "English Language": 2.0,
+   "Mathematics (Compulsory Part)": 2.5
+  },
+  "best_of_weights_2026": [
+   {
+    "count": 1,
+    "weight": 2.5,
+    "subjects": ["Biology", "Chemistry", "Physics"],
+    "slot": "elective-1"
+   },
+   {
+    "count": 1,
+    "weight": 1.5,
+    "subjects": ["Biology", "Chemistry", "Geography", "Mathematics Extended Part (Module 1)", "Mathematics Extended Part (Module 2)", "Physics"],
+    "slot": "elective-2"
+   }
+  ],
+  "subject_weights_2026_raw": "English Language (x2.0), Mathematics (Compulsory Part) (x2.5), Biology / Chemistry / Physics in 1st Elective (x2.5), Biology / Chemistry / Geography / M1/M2 / Physics in 2nd Elective (x1.5), other elective subjects (x1)"
+ },
+ "JS1053": {
+  "subject_weights_2025": {
+   "English Language": 2.0,
+   "Mathematics (Compulsory Part)": 2.5
+  },
+  "best_of_weights_2025": [
+   {
+    "count": 1,
+    "weight": 2.5,
+    "subjects": ["Biology", "Chemistry", "Physics"],
+    "slot": "elective-1"
+   },
+   {
+    "count": 1,
+    "weight": 2.5,
+    "subjects": ["Economics", "Business, Accounting and Financial Studies"],
+    "slot": "elective-2"
+   },
+   {
+    "count": 1,
+    "weight": 1.5,
+    "subjects": ["Biology", "Chemistry", "Geography", "Mathematics Extended Part (Module 1)", "Mathematics Extended Part (Module 2)", "Physics"],
+    "slot": "elective-2"
+   }
+  ],
+  "subject_weights_2025_raw": "English Language (x2.0), Mathematics (Compulsory Part) (x2.5), Biology / Chemistry / Physics in 1st Elective (x2.5), Economics / Business, Accounting and Financial Studies in 2nd Elective (x2.5), Biology / Chemistry / Geography / M1/M2 / Physics in 2nd Elective (x1.5), other elective subjects (x1)",
+  "subject_weights_2026": {
+   "English Language": 2.0,
+   "Mathematics (Compulsory Part)": 2.5
+  },
+  "best_of_weights_2026": [
+   {
+    "count": 1,
+    "weight": 2.5,
+    "subjects": ["Biology", "Chemistry", "Physics"],
+    "slot": "elective-1"
+   },
+   {
+    "count": 1,
+    "weight": 2.5,
+    "subjects": ["Economics", "Business, Accounting and Financial Studies"],
+    "slot": "elective-2"
+   },
+   {
+    "count": 1,
+    "weight": 1.5,
+    "subjects": ["Biology", "Chemistry", "Geography", "Mathematics Extended Part (Module 1)", "Mathematics Extended Part (Module 2)", "Physics"],
+    "slot": "elective-2"
+   }
+  ],
+  "subject_weights_2026_raw": "English Language (x2.0), Mathematics (Compulsory Part) (x2.5), Biology / Chemistry / Physics in 1st Elective (x2.5), Economics / Business, Accounting and Financial Studies in 2nd Elective (x2.5), Biology / Chemistry / Geography / M1/M2 / Physics in 2nd Elective (x1.5), other elective subjects (x1)"
+ }
+}

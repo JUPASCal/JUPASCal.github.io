@@ -32,6 +32,9 @@ export type BestOfPool = {
   count: number;
   subjects: string[];
   weight: number;
+  // Pools sharing a slot tag compete for ONE positional slot — the first pool
+  // to claim a candidate wins it (CityU "in 2nd Elective" alternatives).
+  slot?: string;
   [key: string]: unknown;
 };
 
@@ -55,6 +58,10 @@ export type Scores2025 = {
   mean?: number | null;
   expected_score?: number | null;
   score_type?: "actual" | "estimated" | string;
+  // HKBU programmes rescored on the 2026 weighting (score_basis =
+  // "hkbu_2026_simulated"): the official mean was computed under the OLD
+  // formula and can't be re-based, so it's parked here instead of `mean`.
+  mean_official_2025_basis?: number | null;
 };
 
 export type ScoreConversionTable = {

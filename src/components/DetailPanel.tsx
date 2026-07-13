@@ -35,6 +35,30 @@ function isHkustSimulatedScore(programme: Programme): boolean {
 
 const HKUST_JUPAS_URL = "https://join.hkust.edu.hk/admissions/jupas";
 const CUHK_JUPAS_URL = "https://admission.cuhk.edu.hk/jupas/";
+const CITYU_JUPAS_URL = "https://www.cityu.edu.hk/admo/jupas-admissions";
+const HKBU_JUPAS_URL = "https://admissions.hkbu.edu.hk/admissions/hkdse.html";
+
+// One line of an HKBU published admit grade profile ("Chi 4 · Eng 3 · Maths 4 ·
+// electives 4 / 4 / 3"). CSD is skipped — it carries no score. Returns null
+// when the profile is absent so the caller can drop the row.
+function hkbuProfileLine(profile: Record<string, string> | null | undefined, t: Translate): string | null {
+  if (!profile) return null;
+  const parts: string[] = [];
+  const cores: [string, string][] = [
+    ["CHIN", t("detail.hkbuEst.chi")],
+    ["ENGL", t("detail.hkbuEst.eng")],
+    ["MATH", t("detail.hkbuEst.math")],
+  ];
+  for (const [key, label] of cores) {
+    if (profile[key]) parts.push(`${label} ${profile[key]}`);
+  }
+  const electives = Object.keys(profile)
+    .filter((key) => key.startsWith("Elective"))
+    .sort()
+    .map((key) => profile[key]);
+  if (electives.length) parts.push(`${t("detail.hkbuEst.electives")} ${electives.join(" / ")}`);
+  return parts.length ? parts.join(" · ") : null;
+}
 
 type Props = {
   results: (ProgrammeResult | null)[];
@@ -455,6 +479,46 @@ export function DetailPanel({ results, activeCode, reviewRequest, onActiveCodeCh
               </a>
             </div>
           ) : null}
+          {programme.score_basis === "cityu_2026_recalculated" ? (
+            <div className="simulated-scores-note">
+              <p>{t("detail.cityuRecalc.note")}</p>
+              <a
+                className="simulated-scores-source"
+                href={CITYU_JUPAS_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {t("detail.cityuRecalc.source")} ↗
+              </a>
+            </div>
+          ) : null}
+          {programme.institution === "HKBU" && programme.scores_2025?.score_type === "estimated" ? (
+            <div className="simulated-scores-note">
+              <p>{t(programme.score_basis === "hkbu_2026_simulated" ? "detail.hkbuSim.note" : "detail.hkbuEst.note")}</p>
+              <p className="simulated-scores-formula">{t("detail.hkbuEst.method")}</p>
+              {programme.score_basis === "hkbu_2026_simulated" ? (
+                <p className="simulated-scores-formula">{t("detail.hkbuSim.meanNote")}</p>
+              ) : null}
+              {hkbuProfileLine(programme.score_grades_2025?.median, t) ? (
+                <p className="simulated-scores-formula">
+                  {t("detail.hkbuEst.profileMedian", { grades: hkbuProfileLine(programme.score_grades_2025?.median, t)! })}
+                </p>
+              ) : null}
+              {hkbuProfileLine(programme.score_grades_2025?.lq, t) ? (
+                <p className="simulated-scores-formula">
+                  {t("detail.hkbuEst.profileLq", { grades: hkbuProfileLine(programme.score_grades_2025?.lq, t)! })}
+                </p>
+              ) : null}
+              <a
+                className="simulated-scores-source"
+                href={HKBU_JUPAS_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {t("detail.hkbuSim.source")} ↗
+              </a>
+            </div>
+          ) : null}
           {programme.score_basis === "cuhk_2026_simulated" ? (
             <div className="simulated-scores-note">
               <p>{t("detail.cuhkSim.note")}</p>
@@ -471,9 +535,6 @@ export function DetailPanel({ results, activeCode, reviewRequest, onActiveCodeCh
           ) : null}
           {programme.score_basis === "restructured" && programme.restructured_from ? (
             <p className="warning">{t("detail.restructured.note", { from: programme.restructured_from })}</p>
-          ) : null}
-          {programme.scores_2025?.score_type === "estimated" ? (
-            <p className="warning">{t("detail.estimatedNotePre")}<b>{t("detail.estimatedNoteBold")}</b>{t("detail.estimatedNotePost")}</p>
           ) : null}
           {typeof programme.scores_2025?.lq === "number" && typeof programme.scores_2025?.median === "number" && programme.scores_2025.lq > programme.scores_2025.median ? (
             <p className="muted benchmark-caveat">{t("detail.lqCaveat")}</p>

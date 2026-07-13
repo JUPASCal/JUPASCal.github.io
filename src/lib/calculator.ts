@@ -263,12 +263,26 @@ export function calculateScore(studentGrades: StudentGrades, programme: Programm
     .sort((a, b) => b.weightedScore - a.weightedScore);
   for (let i = aplMax; i < aplCandidates.length; i++) aplCandidates[i].used = true;
 
+  // Pools are POSITIONAL: they apply in data order and CONSUME their picks — a
+  // candidate claimed by an earlier pool cannot fill a later pool's slot (CityU
+  // JS1050-53 "x2.5 in 1st Elective / x1.5 in 2nd Elective": the science that
+  // took the x2.5 first-elective slot must not also eat the x1.5 second-elective
+  // slot). Pools sharing a `slot` tag compete for ONE position: once a pool
+  // claims a candidate for that slot, later pools with the same tag are skipped
+  // (JS1053's 2nd elective is x2.5 for Econ/BAFS OR x1.5 for the science list,
+  // never both). All other multi-pool programmes have disjoint untagged pools,
+  // for which claiming is a no-op.
+  const poolClaimed = new Set<CandidateScore>();
+  const claimedSlots = new Set<string>();
   for (const pool of bestOfPools) {
+    if (pool.slot && claimedSlots.has(pool.slot)) continue;
     const poolCandidates = candidates
-      .filter((candidate) => includesM12Aware(pool.subjects, candidate.subject))
+      .filter((candidate) => !poolClaimed.has(candidate) && includesM12Aware(pool.subjects, candidate.subject))
       .sort((a, b) => b.weightedScore - a.weightedScore);
     for (let index = 0; index < Math.min(pool.count, poolCandidates.length); index++) {
       const candidate = poolCandidates[index];
+      poolClaimed.add(candidate);
+      if (pool.slot) claimedSlots.add(pool.slot);
       if (pool.weight > candidate.multiplier) {
         candidate.multiplier = pool.weight;
         candidate.weightedScore = candidate.basePoints * candidate.multiplier;

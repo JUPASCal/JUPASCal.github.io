@@ -73,5 +73,63 @@
    "Urdu: Urdu (International)": 1.5,
    "Visual Arts": 1.5
   }
+ },
+ "JS6901": {
+  "_note": "Bachelor of Science. formula (both years) 'Eng + 1.5 x Math + 1.5 x Best Sci Subject(b) + Best 2 Subjects with WEIGHTING 6'. WEIGHTING 6 (2025 booklet p4) = x1.5 {Bio, Chem, M1 or 2, Phys} and applies to the BEST 2 slots, on top of the reserved Best-Sci slot — i.e. EVERY counted science subject gets x1.5, not just one (user-reported: Phys+Chem+M2 all x1.5 on HKU's own calculator; our single count-1 pool weighted only one, under-scoring ~5.5 pts). Encoded FLAT like JS6298's WEIGHTING 2, replacing the count-1 pool. Footnote b: the reserved slot itself is Bio/Chem/Phys only (not M1/M2) -> compulsory_subject_pool. 2026 formula identical ('with Weighting1', subject_weight 'X 1.5: Biology / Chemistry / Mathematics Extended Part (Module 1 or 2) / Physics').",
+  "subject_weights_2025": {
+   "Mathematics (Compulsory Part)": 1.5,
+   "Biology": 1.5,
+   "Chemistry": 1.5,
+   "Mathematics Extended Part (Module 1)": 1.5,
+   "Mathematics Extended Part (Module 2)": 1.5,
+   "Physics": 1.5
+  },
+  "best_of_weights_2025": [],
+  "subject_weights_2026": {
+   "Mathematics (Compulsory Part)": 1.5,
+   "Biology": 1.5,
+   "Chemistry": 1.5,
+   "Mathematics Extended Part (Module 1)": 1.5,
+   "Mathematics Extended Part (Module 2)": 1.5,
+   "Physics": 1.5
+  },
+  "best_of_weights_2026": [],
+  "add_calculation_constraints": [
+   {
+    "type": "compulsory_subject_pool",
+    "count": 1,
+    "subjects": ["Biology", "Chemistry", "Physics"],
+    "description": "Formula reserves one slot for the best science subject (Biology / Chemistry / Physics)"
+   }
+  ]
+ },
+ "JS6119": {
+  "_note": "BEd & BSc. Same structure as JS6901 with WEIGHTING 4 (2025 booklet p3) = x1.5 {Bio, Chem, M1 or 2, Phys} on the Best 2 slots; 2026 formula identical ('with Weighting1'). See JS6901 _note.",
+  "subject_weights_2025": {
+   "Mathematics (Compulsory Part)": 1.5,
+   "Biology": 1.5,
+   "Chemistry": 1.5,
+   "Mathematics Extended Part (Module 1)": 1.5,
+   "Mathematics Extended Part (Module 2)": 1.5,
+   "Physics": 1.5
+  },
+  "best_of_weights_2025": [],
+  "subject_weights_2026": {
+   "Mathematics (Compulsory Part)": 1.5,
+   "Biology": 1.5,
+   "Chemistry": 1.5,
+   "Mathematics Extended Part (Module 1)": 1.5,
+   "Mathematics Extended Part (Module 2)": 1.5,
+   "Physics": 1.5
+  },
+  "best_of_weights_2026": [],
+  "add_calculation_constraints": [
+   {
+    "type": "compulsory_subject_pool",
+    "count": 1,
+    "subjects": ["Biology", "Chemistry", "Physics"],
+    "description": "Formula reserves one slot for the best science subject (Biology / Chemistry / Physics)"
+   }
+  ]
  }
 }

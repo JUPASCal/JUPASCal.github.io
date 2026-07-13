@@ -541,13 +541,29 @@ def extract_logic_from_formula(formula_text, institution=None):
     # instead derived authoritatively from the JS-extract `formula_steps`
     # (type=='required') in the HKUST block.
     if institution != "HKUST":
-        if re.search(r'\bEng(?:lish)?\b', f, re.IGNORECASE):
+        # Compulsory-core detection reads a CLEANED copy of the formula text.
+        # Three phrasings mention a subject WITHOUT requiring it, and each has
+        # produced a false compulsory constraint (user-reported, JS1211):
+        #   - CityU's caveat parenthetical "(If a student takes both Mathematics
+        #     and M1/M2, only one subject will be included)" is a counting rule
+        #     (handled by maths_m1m2_as_one), not a formula term;
+        #   - "Best N from A / B / M1 / M2" pool memberships (HKU JS6688) are a
+        #     selection — no single member is compulsory;
+        #   - "Math / M1 / M2" slash groups (HKU JS6858) are ONE slot filled by
+        #     the best of the three, so neither Math nor M1/M2 is individually
+        #     compulsory (the best_of pool carries the x2 weighting).
+        # Additive "2 x Math + 2 x M1 / M2" formulas (JS6224/6729/6884) survive
+        # the cleaning: there "M1 / M2" is its own term and IS compulsory.
+        f_core = re.sub(r'\(\s*If[^)]*\)', '', f, flags=re.IGNORECASE)
+        f_core = re.sub(r'Best\s+\d+\s+(?:Subjects?\s+)?from[^+]+', '', f_core, flags=re.IGNORECASE)
+        f_core = re.sub(r'\bMaths?\s*/\s*M1\s*/\s*M2\b', '', f_core, flags=re.IGNORECASE)
+        if re.search(r'\bEng(?:lish)?\b', f_core, re.IGNORECASE):
             compulsory.append("English Language")
-        if re.search(r'\bMaths?\b', f, re.IGNORECASE):
+        if re.search(r'\bMaths?\b', f_core, re.IGNORECASE):
             compulsory.append("Mathematics (Compulsory Part)")
-        if re.search(r'\bM1\b|\bM2\b', f, re.IGNORECASE):
+        if re.search(r'\bM1\b|\bM2\b', f_core, re.IGNORECASE):
             compulsory.append("Mathematics Extended Part (Module 1 or 2)")
-        if re.search(r'\bChin(?:ese)?\b', f, re.IGNORECASE):
+        if re.search(r'\bChin(?:ese)?\b', f_core, re.IGNORECASE):
             compulsory.append("Chinese Language")
 
     # 4. Detect PolyU style: English & Chinese + Best 3
@@ -1073,11 +1089,33 @@ def parse_specified_elective(spec):
 # extra_eligibility, CategoryA elect1) don't rot, but still re-confirm the code
 # exists. `verified` records when/against-what each was checked.
 CURATED_PROGRAMME_RULES = {
-    # — 2025 SCORING-weight corrections (source PDF row-wrap / copied from 2026) —
-    "JS2340": {  # HKBU BFA Acting — 2025 PDF row is "-" (no weighting); unify fell back to 2026 (ENG x1.5 …)
-        "verified": "2026-06 · HKBU 2025 Weighting.pdf",
-        "set_weights_2025": {},
-        "expect_weights_2025": {"English Language": 1.5, "Music": 1.2, "Visual Arts": 1.2},
+    # (JS2340's former set_weights_2025={} rule is retired: the HKBU block now
+    # keeps an explicit empty 2025 dict as authoritative, and the §5 HKBU
+    # 2026-basis step intentionally scores weight-introduced programmes on the
+    # 2026 weights with a re-simulated benchmark — see hkbu_2026_simulated.)
+    # — 2025 SCORING-weight evenness patch —
+    "JS2940": {  # HKBU Innovation in Health & Social Well-Being — the 2025 PDF cell
+        # lists MATH + MAT1 (x1.5) but not MAT2; the Sep-2025 2026 cell adds MAT2
+        # (x1.5). M1/M2 are mutually exclusive per student and the benchmark
+        # estimator uses max(M1,M2) (already 1.5), so scoring 2025 without MAT2
+        # would arbitrarily penalise M2-takers vs M1-takers (the report-7/8 class
+        # of complaint) while changing no benchmark. Patch MAT2=1.5 into 2025 —
+        # after this w2025 == w2026, so the §5 hkbu step correctly skips it.
+        "verified": "2026-07-12 · Sep-2025 GER/PER PDF vs HKBU 2025 Weighting.pdf",
+        "set_weights_2025": {
+            "English Language": 2.0,
+            "Mathematics (Compulsory Part)": 1.5,
+            "Mathematics Extended Part (Module 1)": 1.5,
+            "Mathematics Extended Part (Module 2)": 1.5,
+            "Health Management and Social Care": 1.5,
+        },
+        "set_weights_2025_raw": "ENG (x 2), MATH (x 1.5), MAT1 (x 1.5), MAT2 (x 1.5), HMSC^ (x 1.5)",
+        "expect_weights_2025": {
+            "English Language": 2.0,
+            "Mathematics (Compulsory Part)": 1.5,
+            "Mathematics Extended Part (Module 1)": 1.5,
+            "Health Management and Social Care": 1.5,
+        },
     },
     # (JS2940 was previously patched HMSC→1.1 from a tester report, but the official
     # HKBU 2025 Weighting.pdf — confirmed by word-coordinate row matching on BOTH
@@ -1135,7 +1173,10 @@ def apply_curated_overrides(programmes):
         # Apply patches.
         if "set_weights_2025" in rule:
             p["subject_weights_2025"] = dict(rule["set_weights_2025"])
-            p["subject_weights_2025_raw"] = "-"
+            if "set_weights_2025_raw" in rule:
+                p["subject_weights_2025_raw"] = rule["set_weights_2025_raw"]
+            elif not rule["set_weights_2025"]:
+                p["subject_weights_2025_raw"] = "-"
         if "patch_weights_2025" in rule:
             w = dict(p.get("subject_weights_2025") or {})
             for k, v in rule["patch_weights_2025"].items():
@@ -2380,9 +2421,14 @@ def unify_data():
                 obj["subject_weights_2026"] = {normalize_subject(k): float(v) for k, v in sw2026.items()}
                 obj["subject_weights_2026_raw"] = entry.get('weights_raw')
                 
-                # Weights 2025
+                # Weights 2025. An explicit EMPTY dict is authoritative "no
+                # weighting" (2025 PDF row "-") and must NOT fall back to the
+                # 2026 copy — that fallback hid weighting INTRODUCED for 2026
+                # (JS2340/JS2960) from year-change detection and silently fed
+                # the benchmark estimator 2026 weights. Fall back only when the
+                # scrape carries no 2025 field at all.
                 sw2025 = entry.get('subject_weights_2025')
-                if sw2025 and isinstance(sw2025, dict):
+                if isinstance(sw2025, dict):
                     obj["subject_weights_2025"] = {normalize_subject(k): float(v) for k, v in sw2025.items()}
                 else:
                     obj["subject_weights_2025"] = obj["subject_weights_2026"].copy()
@@ -2843,29 +2889,68 @@ def unify_data():
     # best_of empty / weights incomplete for JS6224 (W7), JS6999 (W8), JS6602
     # (W10). These pools were VLM-read from the 2025 subject-weightings booklet
     # and are supplied via hku_weight_corrections.json. Runs before year-changes.
-    _hku_corr_path = "Reference(2026)/HKU/hku_weight_corrections.json"
-    if os.path.exists(_hku_corr_path):
-        with open(_hku_corr_path, encoding="utf-8") as _hf:
-            _hku_corr = json.load(_hf)
-        _hku_applied = 0
-        for _code, _fix in _hku_corr.items():
+    def _apply_weight_corrections(_path, _label):
+        """Apply a per-programme weight-corrections JSON (VLM-verified) onto the
+        unified map. Supports, per programme entry: subject_weights_2025/2026
+        (replace; keys canonicalized), best_of_weights_2025/2026 (replace; an
+        optional `slot` tag marks pools that compete for ONE positional slot —
+        see the calculator's pool-claiming logic), subject_weights_2025_raw/
+        2026_raw (replace), and add_calculation_constraints (append if absent)."""
+        if not os.path.exists(_path):
+            return
+        with open(_path, encoding="utf-8") as _cfh:
+            _corr = json.load(_cfh)
+        _n = 0
+        for _code, _fix in _corr.items():
             if _code.startswith("_"):
                 continue
             _obj = unified_map.get(_code)
             if not _obj:
-                print(f"  WARNING: HKU correction for {_code} but no such programme")
+                print(f"  WARNING: {_label} correction for {_code} but no such programme")
                 continue
-            if "subject_weights_2025" in _fix:
-                _obj["subject_weights_2025"] = {normalize_subject(k): float(v)
-                                                for k, v in _fix["subject_weights_2025"].items()}
-            if "best_of_weights_2025" in _fix:
-                _obj["best_of_weights_2025"] = [
-                    {"count": p["count"], "weight": float(p["weight"]),
-                     "subjects": [normalize_subject(s) for s in p["subjects"]]}
-                    for p in _fix["best_of_weights_2025"]
-                ]
-            _hku_applied += 1
-        print(f"HKU weight corrections applied: {_hku_applied} programme(s)")
+            for _yr in ("2025", "2026"):
+                if f"subject_weights_{_yr}" in _fix:
+                    _obj[f"subject_weights_{_yr}"] = {normalize_subject(k): float(v)
+                                                      for k, v in _fix[f"subject_weights_{_yr}"].items()}
+                if f"best_of_weights_{_yr}" in _fix:
+                    _obj[f"best_of_weights_{_yr}"] = [
+                        {"count": p["count"], "weight": float(p["weight"]),
+                         "subjects": [normalize_subject(s) for s in p["subjects"]],
+                         **({"slot": p["slot"]} if "slot" in p else {})}
+                        for p in _fix[f"best_of_weights_{_yr}"]
+                    ]
+                if f"subject_weights_{_yr}_raw" in _fix:
+                    _obj[f"subject_weights_{_yr}_raw"] = _fix[f"subject_weights_{_yr}_raw"]
+            for _con in _fix.get("add_calculation_constraints", []):
+                _cc = dict(_con)
+                if "subjects" in _cc:
+                    _cc["subjects"] = [normalize_subject(s) for s in _cc["subjects"]]
+                if _cc not in _obj["calculation_constraints"]:
+                    _obj["calculation_constraints"].append(_cc)
+            _n += 1
+        print(f"{_label} weight corrections applied: {_n} programme(s)")
+
+    _apply_weight_corrections("Reference(2026)/HKU/hku_weight_corrections.json", "HKU")
+
+    # 4b-i-cityu. CityU positional elective weightings. The School of Energy &
+    # Environment programmes (JS1050/1051/1052/1053) weight electives BY
+    # POSITION — "x2.5 Biology/Chemistry/Physics in 1st Elective", "x1.5 (list)
+    # in 2nd Elective", and JS1053 adds "x2.5 Economics/BAFS in 2nd Elective" —
+    # but both the 2026 scrape and the 2025 VLM transcription flattened the
+    # positional qualifiers into per-subject weights, wrongly weighting a 3rd+
+    # elective (user-reported, JS1050). The corrections encode the official
+    # cells as ordered, slot-tagged best_of pools; the scheme and values are
+    # identical in the 2025 and 2026 PDFs, so both years get the same model
+    # (which also keeps year_changes quiet for these programmes).
+    _apply_weight_corrections("Reference(2026)/CityU/cityu_positional_weights.json", "CityU positional")
+
+    # 4b-i-hkbu. HKBU updated 2026 weightings. HKBU re-issued its GER/PER PDF
+    # (Sep-2025 edition; the May edition is archived as
+    # 2026-GER-PERs.superseded-2026-07.pdf) with changed weighting cells for
+    # JS2660 / JS2940 / JS2960. HKBU confirmed by phone that the PDF overrides
+    # its own online Score Calculator. Applied BEFORE year_changes so the
+    # "Weighting changed" pills reflect the corrected 2026 weights.
+    _apply_weight_corrections("Reference(2026)/HKBU/hkbu_weight_corrections.json", "HKBU")
 
     # 4b-i-restructure. Restructured-programme disclosure. A programme that
     # replaces a discontinued one carries its predecessor's admission score as a
@@ -2892,6 +2977,36 @@ def unify_data():
             _obj["year_changes"] = yc
             _yc_count += 1
     print(f"Year-over-year changes flagged: {_yc_count} programme(s)")
+
+    # 4b-iii. CityU score-basis alignment: SCORE CityU on the 2026 weights.
+    # CityU's published admission scores are RECALCULATED under the CURRENT
+    # cycle's formula — the 2026 "Admission Score Formula and Admissions Scores"
+    # PDF header reads "calculated based on the 2026 programme-specific main
+    # admission score formula and the HKDSE results of the JUPAS applicants with
+    # Main Round offers in 2025 entry" (the 2025 PDF says the same, one year
+    # shifted). Contrast proof: JS1216 is 35/33.5 in the 2025 PDF (weighted 2025
+    # formula) but 20/18 in the 2026 PDF (2026 dropped its weightings) — same
+    # programme, adjacent cohorts. Our scores_2025 benchmarks come from the 2026
+    # PDF, so the student score must use the 2026 weights or the comparison is
+    # invalid (user-reported: JS1071/72/74 scored English x2 against a published
+    # x1.5 basis; JS1216 scored weighted against an unweighted 20/18). The true
+    # 2025 weightings (cityu_2025_weights_vlm.json) still feed the year_changes
+    # diff ABOVE — they are overwritten here, after the diff, for scoring only.
+    # Programmes whose weights actually differ get a score_basis flag so the
+    # DetailPanel discloses the basis (mirrors CUHK's cuhk_2026_recalculated).
+    _cityu_realigned = 0
+    for _obj in unified_map.values():
+        if _obj.get("institution") != "CityUHK":
+            continue
+        _same = (_obj.get("subject_weights_2025") == _obj.get("subject_weights_2026")
+                 and _obj.get("best_of_weights_2025") == _obj.get("best_of_weights_2026"))
+        if not _same:
+            _obj["score_basis"] = "cityu_2026_recalculated"
+            _cityu_realigned += 1
+        _obj["subject_weights_2025"] = json.loads(json.dumps(_obj.get("subject_weights_2026") or {}))
+        _obj["best_of_weights_2025"] = json.loads(json.dumps(_obj.get("best_of_weights_2026") or []))
+        _obj["subject_weights_2025_raw"] = _obj.get("subject_weights_2026_raw")
+    print(f"CityU 2026-basis alignment: 2025 scoring fields mirrored from 2026; {_cityu_realigned} programme(s) flagged cityu_2026_recalculated")
 
     # 4c. Merge non-academic admission requirements (interview arrangements)
     # scraped per-institution into each programme as an `interview` object.
@@ -3054,6 +3169,54 @@ def unify_data():
     apply_apl_policy(final_unified)
 
     expand_m1m2_weights(final_unified)
+
+    # 5-hkbu. HKBU score-basis alignment + benchmark re-simulation — ONLY for
+    # programmes whose weighting was INTRODUCED for 2026 from none (empty 2025
+    # weights, non-empty 2026: JS2340, JS2960 per the Sep-2025 GER/PER update).
+    # There the whole score composition changes for every applicant and the
+    # published mean is plainly unweighted, so we score on subject_weights_2026
+    # and RE-ESTIMATE the median/LQ benchmarks from HKBU's published
+    # (weight-independent) grade profiles under the same weights — the
+    # cuhk_2026_simulated pattern. The published MEAN cannot be re-based (a
+    # scalar computed under the old formula), so it moves to
+    # mean_official_2025_basis: an unweighted mean next to weighted student
+    # scores would read systematically low.
+    #
+    # Programmes whose existing weighting merely CHANGED for 2026 (JS2660 HMSC
+    # x1.1->x1.3, JS2950 +CHI x1.25) deliberately KEEP the 2025 basis (the
+    # Year-Labeling default): the benchmark delta (~+0.8/+1.0) is within the
+    # profile estimator's own noise, student-vs-cohort shifts largely cancel,
+    # and the published mean stays coherent — the year-change pill and the
+    # "2026 applicant reference" panel disclose the new weighting. (JS2940's
+    # 2026-only MAT2 x1.5 is handled as a curated 2025 evenness patch instead —
+    # benchmark identical either way; see CURATED_PROGRAMME_RULES.)
+    # Runs LAST among weight-touching steps — after curated overrides and
+    # expand_m1m2_weights — and after year_changes, so the pills survive.
+    _hkbu_simulated = 0
+    for _obj in final_unified:
+        if _obj.get("institution") != "HKBU":
+            continue
+        if _obj.get("subject_weights_2025") or not _obj.get("subject_weights_2026"):
+            continue
+        _obj["subject_weights_2025"] = json.loads(json.dumps(_obj.get("subject_weights_2026") or {}))
+        _obj["best_of_weights_2025"] = json.loads(json.dumps(_obj.get("best_of_weights_2026") or []))
+        _obj["subject_weights_2025_raw"] = _obj.get("subject_weights_2026_raw")
+        _obj["score_basis"] = "hkbu_2026_simulated"
+        _grades = _obj.get("score_grades_2025") or {}
+        _conv = ((_obj.get("score_conversion_table") or {}).get("category_a")) or {}
+        _sc = _obj.setdefault("scores_2025", {})
+        _med = estimate_hkbu_score_from_grades(_grades.get("median"), _obj["subject_weights_2025"], _conv)
+        _lq = estimate_hkbu_score_from_grades(_grades.get("lq"), _obj["subject_weights_2025"], _conv)
+        if _med is not None:
+            _sc["median"] = _med
+        if _lq is not None:
+            _sc["lq"] = _lq
+        if _med is not None or _lq is not None:
+            _sc["score_type"] = "estimated"
+        if _sc.get("mean") is not None:
+            _sc["mean_official_2025_basis"] = _sc.pop("mean")
+        _hkbu_simulated += 1
+    print(f"HKBU 2026-basis simulation (introduced-from-none only): {_hkbu_simulated} programme(s) (score_basis=hkbu_2026_simulated)")
 
     # 5a. Archive any programme present in the PREVIOUS build but gone now
     # (removed/restructured by JUPAS) so its data is never lost — a cumulative

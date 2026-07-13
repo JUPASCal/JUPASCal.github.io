@@ -1,0 +1,39 @@
+{
+ "_comment": "HKBU 2026-entry weighting corrections from the UPDATED GER/PER PDF (footer 'Sep 2025'; replaces the May edition, archived as 2026-GER-PERs.superseded-2026-07.pdf). A user phoned HKBU: the PDF is authoritative and overrides HKBU's own online Score Calculator. Read visually 2026-07-12 (the PDF text layer row-wraps weight cells between rows — do not trust text extraction). Only the programmes whose cells changed vs the May edition are listed; 2025 weights are untouched (the 2025 Weighting PDF stands). Token map: MATH=Mathematics (Compulsory Part), MAT1/MAT2=M1/M2, CHIS=Chinese History, EREL=Ethics and Religious Studies, D&AT=Design and Applied Technology, I&CT=ICT, HMSC=Health Management and Social Care.",
+ "_verified": "2026-07-12 visual read of the Sep-2025 GER/PER PDF",
+ "JS2660": {
+  "_note": "Social Work. HMSC x1.1 -> x1.3 in the Sep-2025 edition (2025-entry weight stays x1.1).",
+  "subject_weights_2026": {
+   "English Language": 2.0,
+   "Health Management and Social Care": 1.3
+  },
+  "subject_weights_2026_raw": "ENG (x 2), HMSC^ (x 1.3)"
+ },
+ "JS2940": {
+  "_note": "Innovation in Health and Social Well-Being. Sep-2025 edition adds MAT2 (x 1.5) alongside MATH/MAT1 (the May cell listed MATH, MAT1 only).",
+  "subject_weights_2026": {
+   "English Language": 2.0,
+   "Mathematics (Compulsory Part)": 1.5,
+   "Mathematics Extended Part (Module 1)": 1.5,
+   "Mathematics Extended Part (Module 2)": 1.5,
+   "Health Management and Social Care": 1.5
+  },
+  "subject_weights_2026_raw": "ENG (x 2), MATH (x 1.5), MAT1 (x 1.5), MAT2 (x 1.5), HMSC^ (x 1.5)"
+ },
+ "JS2960": {
+  "_note": "Digital Futures and Humanities. May edition: no weighting ('-'). Sep-2025 edition introduces ENG (x 1.5) and MATH/MAT1/MAT2/CHIS/EREL/GEOG/HIST/D&AT/I&CT (x 1.1) — the user-reported case.",
+  "subject_weights_2026": {
+   "English Language": 1.5,
+   "Mathematics (Compulsory Part)": 1.1,
+   "Mathematics Extended Part (Module 1)": 1.1,
+   "Mathematics Extended Part (Module 2)": 1.1,
+   "Chinese History": 1.1,
+   "Ethics and Religious Studies": 1.1,
+   "Geography": 1.1,
+   "History": 1.1,
+   "Design and Applied Technology": 1.1,
+   "Information and Communication Technology": 1.1
+  },
+  "subject_weights_2026_raw": "ENG (x 1.5), MATH, MAT1, MAT2, CHIS, EREL, GEOG, HIST, D&AT, I&CT (x 1.1)"
+ }
+}
