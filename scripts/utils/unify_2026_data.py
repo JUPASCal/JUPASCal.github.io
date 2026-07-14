@@ -3205,6 +3205,10 @@ def unify_data():
     # for scoring only, with the official 2025 values preserved for display.
     # Source: Reference(2026)/EdUHK/eduhk_weight_corrections.json.
     _eduhk_recalc_path = "Reference(2026)/EdUHK/eduhk_weight_corrections.json"
+    _eduhk_apl_disp = {}
+    if os.path.exists("Reference(2026)/EdUHK/eduhk_apl_weights.json"):
+        with open("Reference(2026)/EdUHK/eduhk_apl_weights.json", encoding="utf-8") as _adf:
+            _eduhk_apl_disp = json.load(_adf)
     _eduhk_realigned = 0
     if os.path.exists(_eduhk_recalc_path):
         with open(_eduhk_recalc_path, encoding="utf-8") as _ef:
@@ -3218,6 +3222,19 @@ def unify_data():
                 continue
             _obj["score_basis"] = "eduhk_2026_recalculated"
             _obj["subject_weights_2025_official"] = json.loads(json.dumps(_obj.get("subject_weights_2025") or {}))
+            # Expand the display-only "Specified ApL subject(s)" placeholder in the
+            # 2025-official snapshot into the real ApL subjects (the scoring maps
+            # already expand it; the pre-mirror 2025 snapshot kept the raw
+            # placeholder, which rendered literally in the "official 2025" note).
+            _off = _obj["subject_weights_2025_official"]
+            _ph_keys = [_k for _k in _off if "Specified ApL" in _k]
+            if _ph_keys:
+                _apl_subs = [canon_apl(_nm) for _nm in (_eduhk_apl_disp.get(_code) or {}).get("apl_weighted_1_5", [])]
+                _apl_subs = [_s for _s in _apl_subs if _s]
+                for _pk in _ph_keys:
+                    _wv = _off.pop(_pk)
+                    for _s in _apl_subs:
+                        _off[_s] = _wv
             _obj["best_of_weights_2025_official"] = json.loads(json.dumps(_obj.get("best_of_weights_2025") or []))
             _obj["subject_weights_2025_official_raw"] = _obj.get("subject_weights_2025_raw")
             _obj["subject_weights_2025"] = json.loads(json.dumps(_obj.get("subject_weights_2026") or {}))
