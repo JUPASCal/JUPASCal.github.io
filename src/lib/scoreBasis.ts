@@ -12,6 +12,7 @@ const BASES_2026 = new Set([
   "cityu_2026_recalculated",
   "cuhk_2026_recalculated",
   "cuhk_2026_simulated",
+  "eduhk_2026_recalculated",
   "hkbu_2026_simulated",
 ]);
 

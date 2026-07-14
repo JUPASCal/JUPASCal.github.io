@@ -125,9 +125,18 @@ function isHkustSimulatedScore(programme: Programme): boolean {
 }
 
 const HKUST_JUPAS_URL = "https://join.hkust.edu.hk/admissions/jupas";
-const CUHK_JUPAS_URL = "https://admission.cuhk.edu.hk/jupas/";
-const CITYU_JUPAS_URL = "https://www.cityu.edu.hk/admo/jupas-admissions";
-const HKBU_JUPAS_URL = "https://admissions.hkbu.edu.hk/admissions/hkdse.html";
+// CUHK's per-programme requirements + score page — where the 2026-recalculated
+// 2025 benchmarks (JS4725's "(1)" footnote) and published admission scores live.
+const CUHK_JUPAS_URL =
+  "https://admission.cuhk.edu.hk/application/jupas/programme-specific-requirements-and-score-calculator/";
+// CityU's JUPAS admission page — carries the score formulae + weighted
+// median/LQ admission-score reference (recalculated under the current formula).
+const CITYU_JUPAS_URL = "https://www.cityu.edu.hk/admo/admissions/jupas-admission";
+// HKBU's HKDSE admissions page — the mean/median/LQ admission scores + calculator.
+const HKBU_JUPAS_URL = "https://admissions.hkbu.edu.hk/en/hkdse.html";
+// EdUHK's JUPAS entrance requirements + admission-scores page (the af_2025 PDF's
+// "Reference scores with 2026 entry weightings" originate here).
+const EDUHK_JUPAS_URL = "https://www.apply.eduhk.hk/ug/jupas";
 
 // The TRUE 2025 weighting facts for programmes whose scoring fields were
 // mirrored onto the 2026 basis (CityU recalculated / HKBU simulated) — shown
@@ -621,6 +630,19 @@ export function DetailPanel({ results, activeCode, reviewRequest, onActiveCodeCh
                 rel="noopener noreferrer"
               >
                 {t("detail.cityuRecalc.source")} ↗
+              </a>
+            </div>
+          ) : null}
+          {programme.score_basis === "eduhk_2026_recalculated" ? (
+            <div className="simulated-scores-note">
+              <p>{t("detail.eduhkRecalc.note")}</p>
+              <a
+                className="simulated-scores-source"
+                href={EDUHK_JUPAS_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {t("detail.eduhkRecalc.source")} ↗
               </a>
             </div>
           ) : null}

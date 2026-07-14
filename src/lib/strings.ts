@@ -437,7 +437,7 @@ export const STRINGS = {
   // are 2026-formula-based (like the HKUST simulated scores) — and we score you with
   // the 2026 formula to match. Driven by programme.score_basis = "cuhk_2026_recalculated".
   "detail.cuhkRecalc.note": { en: "CUHK changed this programme's formula for 2026. These figures are CUHK's 2025 admission scores recalculated with the new formula — the same one used for your score, so they compare directly.", zh: "中大在 2026 年更改了此課程的計分方法。以上是中大用新方法重算的 2025 年收生分數，與你的分數用同一方法，可直接比較。" },
-  "detail.cuhkRecalc.source": { en: "CUHK JUPAS admissions", zh: "香港中文大學 JUPAS 收生資訊" },
+  "detail.cuhkRecalc.source": { en: "CUHK programme requirements & score calculator", zh: "中大課程要求及計分器" },
   // CityU republishes past admission scores RECALCULATED under the CURRENT
   // cycle's formula (stated in the header of its "Admission Score Formula and
   // Admissions Scores" PDF every year), so ALL CityU benchmarks are on the 2026
@@ -446,6 +446,13 @@ export const STRINGS = {
   // Driven by programme.score_basis = "cityu_2026_recalculated".
   "detail.cityuRecalc.note": { en: "CityU changed this programme's weighting for 2026. These figures are CityU's 2025 admission scores recalculated with the new weighting — the same one used for your score, so they compare directly.", zh: "城大在 2026 年更改了此課程的科目比重。以上是城大以新比重重新計算的 2025 年收生分數，與你的分數用同一比重，可直接比較。" },
   "detail.cityuRecalc.source": { en: "CityUHK JUPAS admissions", zh: "香港城市大學 JUPAS 收生資訊" },
+  // EdUHK changed the subject weighting on a few programmes for 2026 and, for
+  // exactly those, published the 2025 admission scores recalculated with the new
+  // weighting ("Reference scores with 2026 entry weightings" in its af_2025 PDF).
+  // We score those on the 2026 weights and show the recalculated benchmark.
+  // Driven by programme.score_basis = "eduhk_2026_recalculated".
+  "detail.eduhkRecalc.note": { en: "EdUHK changed this programme's subject weighting for 2026. These figures are EdUHK's 2025 admission scores recalculated with the new weighting — the same one used for your score, so they compare directly.", zh: "教大在 2026 年更改了此課程的科目比重。以上是教大以新比重重新計算的 2025 年收生分數，與你的分數用同一比重，可直接比較。" },
+  "detail.eduhkRecalc.source": { en: "EdUHK JUPAS admissions", zh: "香港教育大學 JUPAS 收生資訊" },
   // HKBU programmes that INTRODUCED subject weighting for 2026 (had none in
   // 2025, per the Sep-2025 GER/PER PDF — authoritative over HKBU's own online
   // Score Calculator). Both the student score and the benchmark are on the
