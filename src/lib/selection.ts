@@ -411,15 +411,33 @@ export function selectionSalienceKey(salience: SelectionSalience): string {
 }
 
 
+// Current JUPAS entry cycle (build-time define; auto-updates on the annual refresh).
+const CURRENT_CYCLE = parseInt(__ADMISSION_CYCLE__, 10) || 2026;
+
+// Drop PAST-cycle calendar years from displayed interview/selection text. LingU's
+// scrape carries the source year (e.g. "26 June 2025"), which is stale for the
+// current cycle and which we have no updated official date to replace; keep the
+// current cycle (CityU "…2026年…" is correct). A trailing 年 is consumed with the
+// year so a dropped CJK year leaves no dangling character. MUST run AFTER the
+// INTERVIEW_TRANSLATIONS lookup — that dict is keyed on the full string including
+// the year, so stripping first would break the translation. No regex lookbehind
+// (iOS Safari < 16.4 compatibility): \b handles the digit/CJK boundary.
+function stripStaleYear(text: string): string {
+  return text
+    .replace(/\b20\d{2}年?/g, (m) => (parseInt(m, 10) >= CURRENT_CYCLE ? m : ""))
+    .replace(/\s{2,}/g, " ")
+    .trim();
+}
+
 export function translateSelectionText(text: string | null | undefined, lang: Lang): string {
   if (!text) return "";
-  if (lang !== "zh") return text;
+  if (lang !== "zh") return stripStaleYear(text);
   const trimmed = text.trim();
   const key = trimmed.toLowerCase().replace(/\s+/g, " ").replace(/–/g, "-");
   if (INTERVIEW_TRANSLATIONS[key]) {
-    return INTERVIEW_TRANSLATIONS[key];
+    return stripStaleYear(INTERVIEW_TRANSLATIONS[key]);
   }
-  
+
   if (trimmed.includes("Before results:") || trimmed.includes("After results:")) {
     return trimmed.split(" · ").map(part => {
       if (part.startsWith("Before results: ")) {
@@ -434,5 +452,5 @@ export function translateSelectionText(text: string | null | undefined, lang: La
     }).join(" · ");
   }
 
-  return trimmed;
+  return stripStaleYear(trimmed);
 }
