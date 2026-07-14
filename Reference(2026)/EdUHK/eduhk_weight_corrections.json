@@ -1,0 +1,9 @@
+{
+  "_comment": "EdUHK 2026-basis recalculated benchmarks. For the four programmes whose subject weighting changed for 2026, EdUHK's 'EdUHK 2025 Admission Scores Reference for JUPAS Entrants' booklet publishes, in the Remarks column, the 2025 admission scores RECALCULATED with the 2026 entry weightings ('Reference scores with 2026 entry weightings'). unify_2026_data.py mirrors these programmes' 2025 scoring fields onto the 2026 weights and swaps in these recalculated LQ/median benchmarks, so a 2026-formula-scored student compares on the same basis — the same model as CUHK's cuhk_2026_recalculated and CityU's cityu_2026_recalculated. The main LQ/median columns of the PDF (2025-entry weightings) are what we replace. Edit this file (not the unified JSON) when a new cycle's PDF changes.",
+  "_source": "Reference(2026)/EdUHK/af_2025_EdUHK.pdf",
+  "_verified": "2026-07-13 from af_2025_EdUHK.pdf (The Education University of Hong Kong – 2025 JUPAS Admissions Scores, pp.1-3)",
+  "JS8007": { "lq": 23, "median": 23 },
+  "JS8011": { "lq": 24.6, "median": 25.2 },
+  "JS8013": { "lq": 21.8, "median": 22 },
+  "JS8702": { "lq": 23, "median": 23.2 }
+}

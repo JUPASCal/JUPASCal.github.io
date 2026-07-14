@@ -23,7 +23,7 @@
   },
 
   "JS4725": {
-    "_note": "Biotechnology, Entrepreneurship and Healthcare Management. 2025 had NO weighting; 2026 introduced best-2-of-Eng/Bio/Chem x1.5 with Best-of-Bio/Chem forced in. CUHK published the 2025 admission scores RECALCULATED with the 2026 formula (programme page, footnote '(1)'), which is what we compare a 2026-formula-scored student against. best_of_weights_2025 is deliberately kept = 2026 (x1.5 pool) so the score and this recalculated benchmark share the 2026 basis (same model as HKUST simulated scores). score_basis drives the DetailPanel explanation note. Elective-weighted, so we CANNOT self-simulate (electives are anonymised in the grade profiles) — hence we use CUHK's official published recalc.",
+    "_note": "Biotechnology, Entrepreneurship and Healthcare Management. 2025 had NO weighting; 2026 introduced best-2-of-Eng/Bio/Chem x1.5 with Best-of-Bio/Chem forced in. CUHK published the 2025 admission scores RECALCULATED with the 2026 formula, footnote '(1)' on the Programme-specific Requirements and Score Calculator page (https://admission.cuhk.edu.hk/application/jupas/programme-specific-requirements-and-score-calculator/), which is what we compare a 2026-formula-scored student against. best_of_weights_2025 is deliberately kept = 2026 (x1.5 pool) so the score and this recalculated benchmark share the 2026 basis (same model as HKUST simulated scores). score_basis drives the DetailPanel explanation note. Elective-weighted, so we CANNOT self-simulate (electives are anonymised in the grade profiles) — hence we use CUHK's official published recalc.",
     "score_basis": "cuhk_2026_recalculated",
     "scores_2025": {
       "uq": 33.75,

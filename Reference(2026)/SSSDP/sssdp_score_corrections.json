@@ -1,0 +1,7 @@
+{
+  "_comment": "SSSDP 2025 admission scores that af_2025_SSSDP.pdf publishes in per-institution table formats the bulk extractor missed: JSSC02 (Chu Hai College, Architecture) is in a grade-breakdown table with Upper/Lower Quarter rows (p.2); JSSU55 (HKMU, Physiotherapy) is in HKMU's Median/Lower list (p.4). Both are auto-included by unify (absent from the per-school feed → scores land null), so the scores are injected here. Source: Reference(2026)/SSSDP/af_2025_SSSDP.pdf. NOTE: JSSU66 and JSSV14 are genuinely NEW 2026 programmes with no 2025 admission score (JSSV14 is literally 'Not Applicable' in the PDF), correctly left null.",
+  "_source": "Reference(2026)/SSSDP/af_2025_SSSDP.pdf",
+  "_verified": "2026-07-13 from af_2025_SSSDP.pdf (SSSDP Institutions 2025 JUPAS Admissions Scores)",
+  "JSSC02": { "uq": 16, "lq": 12 },
+  "JSSU55": { "median": 22, "lq": 20 }
+}

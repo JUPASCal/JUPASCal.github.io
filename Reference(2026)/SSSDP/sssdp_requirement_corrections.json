@@ -1,0 +1,9 @@
+{
+  "_comment": "SSSDP programme-specific entrance requirements that differ from the universal baseline, transcribed from the JUPAS per-programme pages (jupas.edu.hk/en/programme/sssdp/<CODE>/, 'Programme Entrance Requirements' tab) already scraped into data/raw/jupas_programme_details_2026.json (requirements.programme_core / programme_electives). A full comparison of all 57 SSSDP programmes against that scrape found ONLY these 5 discrepancies — the other ~52 are 'any 1 elective subject', already modelled by the baseline. JSST03's Health Care Practice (a Cat-B ApL, Attained-with-Distinction-I alternative) is intentionally omitted from elect1 (ApL is handled by apl_policy, not the Cat-A elective pool). Source: data/raw/jupas_programme_details_2026.json.",
+  "_verified": "2026-07-13 vs scraped JUPAS programme pages",
+  "JSSH02": { "math": "3" },
+  "JSST03": { "elect1": { "count": 1, "subjects": ["Chemistry", "Biology", "Physics"], "grade": "3" } },
+  "JSST08": { "elect1": { "count": 1, "subjects": ["Chemistry", "Physics", "Biology"], "grade": "2" } },
+  "JSSV05": { "elect1": { "count": 1, "subjects": ["Biology", "Chemistry", "Physics", "Mathematics Extended Part (Module 1)", "Mathematics Extended Part (Module 2)"], "grade": "2" } },
+  "JSSV10": { "elect1": { "count": 1, "subjects": ["Biology", "Chemistry", "Physics", "Mathematics Extended Part (Module 1)", "Mathematics Extended Part (Module 2)"], "grade": "2" } }
+}

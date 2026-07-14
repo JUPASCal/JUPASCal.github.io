@@ -123,8 +123,8 @@ formula) is no longer comparable to a 2026-formula-scored student. Three cases, 
 routed through `Reference(2026)/CUHK/cuhk_weight_corrections.json`:
 
 1. **Official recalc published** — CUHK prints the 2025 scores recalculated with the
-   2026 formula on the programme page (a "(1)" footnote), e.g. **JS4725** (UQ 33.75 /
-   Med 33 / LQ 32.44 / 2026 exp 32). Use those directly; keep `subject_weights`/
+   2026 formula on the [Programme-specific Requirements and Score Calculator](https://admission.cuhk.edu.hk/application/jupas/programme-specific-requirements-and-score-calculator/)
+   page (a "(1)" footnote), e.g. **JS4725** (UQ 33.75 / Med 33 / LQ 32.44 / 2026 exp 32). Use those directly; keep `subject_weights`/
    `best_of_weights_2025` = 2026 so the student is scored on the same basis. This is the
    same model as the HKUST School of Engineering simulated scores
    (`[[hkust-simulated-scores-6th-bonus]]`). `score_basis: "cuhk_2026_recalculated"`.
