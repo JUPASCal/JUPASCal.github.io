@@ -50,8 +50,10 @@
     .hint {
       flex: 0 0 auto; padding: 7px clamp(12px,3vw,24px);
       background: var(--surface); border-top: 1px solid var(--line);
-      color: var(--muted); font-size: 0.74rem; line-height: 1.45; text-align: center;
+      color: var(--muted); font-size: 0.74rem; line-height: 1.6; text-align: center;
     }
+    .hint a { color: var(--accent); font-weight: 650; text-decoration: none; }
+    .hint a:hover { text-decoration: underline; }
     @media (max-width: 560px) { .brand small { display: none; } }
   </style>
 </head>
@@ -72,9 +74,9 @@
   </header>
 
   <p class="notice">
-    此網上 Excel 使用 Microsoft + GitHub 的免費功能，設有同時瀏覽／使用人數上限。如你能使用電腦版 Excel，請從
+    此網上 Excel 使用 Microsoft + GitHub 的免費功能，設有同時瀏覽／使用人數上限。如未能顯示，可從下方
     <a href="https://drive.google.com/drive/folders/1PmyDrmQ2CumbWrqY7NRqa0Ol-M9VnkFz" target="_blank" rel="noopener">Google Drive</a>
-    下載使用，把名額留給有需要的同學。所有輸入的資料均不會被保存。
+    下載。
   </p>
 
   <main>
@@ -88,8 +90,12 @@
   </main>
 
   <p class="hint">
-    使用 <strong>Ctrl + 滑鼠滾輪</strong> 放大／縮小。如未能顯示，請按上方連結下載，或
-    <a href="https://1drv.ms/x/c/02874402b22fbb6c/IQRp7hpZ2Qw4TLxeNxbK9KSuAfyW-WyrULzlsPO3LuMhg2U" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none">在 OneDrive 開啟</a>。
+    <strong>Ctrl + 滑鼠滾輪</strong> 可放大／縮小 · 請定期按 <strong>F5</strong> 刷新以取得最新版本 ·
+    ⚠️ 所有輸入的資料<strong>不會被保存</strong>，刷新頁面（F5）或關閉後將會清除。<br />
+    如未能顯示，請從
+    <a href="https://drive.google.com/drive/folders/1PmyDrmQ2CumbWrqY7NRqa0Ol-M9VnkFz" target="_blank" rel="noopener">Google Drive</a>
+    下載，或
+    <a href="https://1drv.ms/x/c/02874402b22fbb6c/IQRp7hpZ2Qw4TLxeNxbK9KSuAfyW-WyrULzlsPO3LuMhg2U" target="_blank" rel="noopener">在 OneDrive 開啟</a>。
   </p>
 </body>
 </html>
