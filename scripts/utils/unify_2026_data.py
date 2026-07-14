@@ -1033,11 +1033,21 @@ def build_hkbu_elective(grade, constraint, default_cat_a=False):
 
 def build_generic_elective(grade, constraint=None):
     if not grade: return None
+    # A constraint naming a specific subject list ("in Biology / Chemistry /
+    # Physics", "One of: X / Y") is an ENFORCEABLE restriction — parse it into a
+    # canonical pool so eligibility actually requires one of those subjects at
+    # `grade`, not just any elective. Non-subject constraints ("Any 3 other
+    # subjects", a bare level) have no "/" → stay a display-only note on an "Any"
+    # pool. (EdUHK e.g. JS8011 "Level 3 in Biology/Chemistry/Physics".)
+    pool = None
+    if constraint and "/" in str(constraint):
+        body = re.sub(r"^\s*(in|one of)\b\s*:?\s*", "", str(constraint).strip(), flags=re.I)
+        pool = parse_specified_elective("One of: " + body)
     return {
         "count": 1,
-        "subjects": ["Any"],
+        "subjects": pool or ["Any"],
         "grade": str(grade).strip("#"),
-        "note": constraint or ""
+        "note": "" if pool else (constraint or ""),
     }
 
 def parse_specified_elective(spec):
@@ -1065,6 +1075,12 @@ def parse_specified_elective(spec):
             out.append("Mathematics Extended Part (Module 2)")
         elif u == "ICT":
             out.append("Information and Communication Technology")
+        elif tok.strip().lower().rstrip("s") == "combined science":
+            # Bare "Combined Science" isn't a canonical subject (only the three
+            # strand pairs are) → expand so any strand a student took matches.
+            out.extend(["Combined Science: Biology + Chemistry",
+                        "Combined Science: Biology + Physics",
+                        "Combined Science: Physics + Chemistry"])
         else:
             out.append(normalize_subject(tok))
     # De-dupe preserving order; drop empties.
@@ -1136,6 +1152,21 @@ CURATED_PROGRAMME_RULES = {
     "JS4601": {"verified": "2026 · CUHK footnote", "category_c_policy": "elective_cat_a_only"},
     "JS4648": {"verified": "2026 · CUHK footnote", "category_c_policy": "elective_cat_a_only"},
     "JS4719": {"verified": "2026 · CUHK footnote", "category_c_policy": "elective_cat_a_only"},
+    # CityU: 2026 Entrance-Requirements PDF remark — "Unspecified electives may
+    # include Category A subjects, M1/M2 (except JS1801) and Category C other
+    # language subjects (except for JS1200, JS1201, JS1217, JS1300, JS1801,
+    # JS1805, JS1806 and JS1807)". So the 'any' elective slot on these must NOT
+    # accept Cat C. (For JS1200/1217/1801 both electives are already specific, so
+    # this is defensive; it actually tightens JS1201/1300/1805/1806/1807, which
+    # have an 'any' slot.) Verified page-by-page against the official PDF.
+    "JS1200": {"verified": "2026 · CityU Entrance Req PDF remark", "category_c_policy": "elective_cat_a_only"},
+    "JS1201": {"verified": "2026 · CityU Entrance Req PDF remark", "category_c_policy": "elective_cat_a_only"},
+    "JS1217": {"verified": "2026 · CityU Entrance Req PDF remark", "category_c_policy": "elective_cat_a_only"},
+    "JS1300": {"verified": "2026 · CityU Entrance Req PDF remark", "category_c_policy": "elective_cat_a_only"},
+    "JS1801": {"verified": "2026 · CityU Entrance Req PDF remark", "category_c_policy": "elective_cat_a_only"},
+    "JS1805": {"verified": "2026 · CityU Entrance Req PDF remark", "category_c_policy": "elective_cat_a_only"},
+    "JS1806": {"verified": "2026 · CityU Entrance Req PDF remark", "category_c_policy": "elective_cat_a_only"},
+    "JS1807": {"verified": "2026 · CityU Entrance Req PDF remark", "category_c_policy": "elective_cat_a_only"},
     # — Extra admission gate (stable rule) —
     "JS4502": {  # CUHK MBChB-GPS — total >= 40 in 6 with 5** in any 4
         "verified": "2026 · CUHK MBChB-GPS Note 3",
@@ -2883,6 +2914,62 @@ def unify_data():
             _corr_applied += 1
         print(f"CUHK VLM corrections applied: {_corr_applied} programme(s)")
 
+    # 4a3. SSSDP admission scores the af_2025_SSSDP.pdf publishes in per-institution
+    # table formats the bulk extractor missed (Chu Hai College's Upper/Lower Quarter
+    # grade table; HKMU's Median/Lower list). These programmes are auto-included
+    # above (absent from the per-school feed) so their scores land null — inject
+    # the published values here. JSSU66/JSSV14 are genuinely NEW 2026 programmes
+    # (no 2025 score; JSSV14 is "Not Applicable" in the PDF), correctly left null.
+    # Source: Reference(2026)/SSSDP/sssdp_score_corrections.json.
+    _sssdp_sc_path = "Reference(2026)/SSSDP/sssdp_score_corrections.json"
+    if os.path.exists(_sssdp_sc_path):
+        with open(_sssdp_sc_path, encoding="utf-8") as _ssf:
+            _sssdp_sc = json.load(_ssf)
+        _sssdp_n = 0
+        for _code, _sc in _sssdp_sc.items():
+            if _code.startswith("_"):
+                continue
+            _obj = unified_map.get(_code)
+            if not _obj:
+                print(f"  WARNING: SSSDP score correction for {_code} but no such programme")
+                continue
+            _obj.setdefault("scores_2025", {}).update({_k: float(_v) for _k, _v in _sc.items()})
+            _sssdp_n += 1
+        print(f"SSSDP score corrections applied: {_sssdp_n} programme(s)")
+
+    # 4a4. SSSDP programme-specific entrance requirements. Our per-school SSSDP
+    # feed carries no requirement data, so SSSDP requirements come from the
+    # universal baseline — which misses the few programmes with a specific
+    # elective-subject pool (and one core-level difference). These are transcribed
+    # from the JUPAS per-programme pages already scraped into
+    # jupas_requirements.programme_electives; a full 57-programme comparison found
+    # only these to differ. Source: Reference(2026)/SSSDP/sssdp_requirement_corrections.json.
+    _sssdp_req_path = "Reference(2026)/SSSDP/sssdp_requirement_corrections.json"
+    if os.path.exists(_sssdp_req_path):
+        with open(_sssdp_req_path, encoding="utf-8") as _srf:
+            _sssdp_req = json.load(_srf)
+        _sssdp_req_n = 0
+        for _code, _fix in _sssdp_req.items():
+            if _code.startswith("_"):
+                continue
+            _obj = unified_map.get(_code)
+            if not _obj:
+                print(f"  WARNING: SSSDP requirement correction for {_code} but no such programme")
+                continue
+            _mr = _obj.setdefault("min_requirements_2026", {})
+            for _k, _v in _fix.items():
+                if _k in ("chi", "eng", "math", "csd"):
+                    _mr[_k] = _v
+                elif _k == "elect1":
+                    _mr["elect1"] = {
+                        "count": _v.get("count", 1),
+                        "subjects": [normalize_subject(_s) for _s in _v["subjects"]],
+                        "grade": str(_v["grade"]),
+                        "note": "",
+                    }
+            _sssdp_req_n += 1
+        print(f"SSSDP requirement corrections applied: {_sssdp_req_n} programme(s)")
+
     # 4b-i-hku. HKU footnote WEIGHTING-n pools. The HKU formula-text scrape
     # references "with WEIGHTING n" but does NOT carry the pool composition (it
     # lives in a separate PDF footnote box), so parse_hku_formula_weights leaves
@@ -2989,6 +3076,44 @@ def unify_data():
                 _or_n += 1
         print(f"OR-alternative requirements applied: {_or_n} programme(s)")
 
+    # 4b-i-retake. HKDSE retake / repeater penalty (CUHK + HKU). TWO different
+    # models, kept per-programme so the web app + Excel both surface them:
+    #   HKU  → 10% off the RETAKE SUBJECT only (per-subject), for EVERY programme;
+    #          `consideration` says how previous/combined sittings are counted.
+    #   CUHK → a band (5%-or-less / 6%-to-10%) off the WHOLE admission score, only
+    #          for the listed programmes (rest: best-of-3-sittings, no penalty).
+    # The CUHK bands are VLM-verified from the official table image (the PDF text
+    # layer mis-tags the Wingdings ticks). Source: data/raw/retake_2026.json.
+    _retake_path = "data/raw/retake_2026.json"
+    if os.path.exists(_retake_path):
+        with open(_retake_path, encoding="utf-8") as _f:
+            _rt = json.load(_f)
+        _cuhk_rt, _hku_rt = _rt.get("cuhk", {}), _rt.get("hku", {})
+        _cuhk_progs, _hku_progs = _cuhk_rt.get("programmes", {}), _hku_rt.get("programmes", {})
+        _rt_n = 0
+        for _code, _obj in unified_map.items():
+            if _code in _cuhk_progs:
+                _obj["retake"] = {
+                    "penalty": _cuhk_progs[_code],
+                    "scope": "admission_score",     # % off the whole final score (全Cert)
+                    "policy_en": _cuhk_rt.get("policy_en"),
+                    "source": _cuhk_rt.get("source"),
+                }
+                _rt_n += 1
+            elif _obj.get("institution") == "HKU":
+                _r = {
+                    "penalty": _hku_rt.get("penalty", "10%"),
+                    "scope": "retake_subject",       # 10% off the repeated subject only
+                    "policy_en": _hku_rt.get("policy_en"),
+                    "source": _hku_rt.get("source"),
+                }
+                _cons = _hku_progs.get(_code)
+                if _cons:
+                    _r["consideration"] = _cons
+                _obj["retake"] = _r
+                _rt_n += 1
+        print(f"Retake / repeater penalty applied: {_rt_n} programme(s)")
+
     # 4b-i-hkust. HKUST School of Engineering moved to PER-DEPARTMENT weightings
     # for 2026 (2025 was UNIFORM across all Engineering: English x2 + Math x2 +
     # best science [Bio/Chem/Physics] x2 + ICT x1 + best-2-other with M1/2 x1.5).
@@ -3068,6 +3193,41 @@ def unify_data():
         _obj["formula_2025"] = _obj.get("formula_2026")
         _obj["formula_2025_id"] = _obj.get("formula_2026_id")
     print(f"CityU 2026-basis alignment: 2025 scoring fields mirrored from 2026; {_cityu_realigned} programme(s) flagged cityu_2026_recalculated")
+
+    # 4b-i-eduhk. EdUHK 2026-basis realignment. For the handful of EdUHK
+    # programmes whose subject weighting changed for 2026, EdUHK's af_2025 PDF
+    # publishes the 2025 admission scores RECALCULATED with the 2026 weightings
+    # ("Reference scores with 2026 entry weightings" in the Remarks column) —
+    # exactly the CUHK JS4725 / CityU pattern. Mirror those programmes' 2025
+    # scoring fields onto the 2026 weights and swap in the recalculated LQ/median
+    # benchmark, so a 2026-formula-scored student compares on the same basis. The
+    # true 2025 weights already fed the year_changes diff ABOVE; overwritten here
+    # for scoring only, with the official 2025 values preserved for display.
+    # Source: Reference(2026)/EdUHK/eduhk_weight_corrections.json.
+    _eduhk_recalc_path = "Reference(2026)/EdUHK/eduhk_weight_corrections.json"
+    _eduhk_realigned = 0
+    if os.path.exists(_eduhk_recalc_path):
+        with open(_eduhk_recalc_path, encoding="utf-8") as _ef:
+            _eduhk_recalc = json.load(_ef)
+        for _code, _sc in _eduhk_recalc.items():
+            if _code.startswith("_"):
+                continue
+            _obj = unified_map.get(_code)
+            if not _obj:
+                print(f"  WARNING: EdUHK recalc for {_code} but no such programme")
+                continue
+            _obj["score_basis"] = "eduhk_2026_recalculated"
+            _obj["subject_weights_2025_official"] = json.loads(json.dumps(_obj.get("subject_weights_2025") or {}))
+            _obj["best_of_weights_2025_official"] = json.loads(json.dumps(_obj.get("best_of_weights_2025") or []))
+            _obj["subject_weights_2025_official_raw"] = _obj.get("subject_weights_2025_raw")
+            _obj["subject_weights_2025"] = json.loads(json.dumps(_obj.get("subject_weights_2026") or {}))
+            _obj["best_of_weights_2025"] = json.loads(json.dumps(_obj.get("best_of_weights_2026") or []))
+            _obj["subject_weights_2025_raw"] = _obj.get("subject_weights_2026_raw")
+            _obj["formula_2025"] = _obj.get("formula_2026")
+            _obj["formula_2025_id"] = _obj.get("formula_2026_id")
+            _obj.setdefault("scores_2025", {}).update({"lq": _sc["lq"], "median": _sc["median"]})
+            _eduhk_realigned += 1
+    print(f"EdUHK 2026-basis alignment: {_eduhk_realigned} programme(s) flagged eduhk_2026_recalculated")
 
     # 4c. Merge non-academic admission requirements (interview arrangements)
     # scraped per-institution into each programme as an `interview` object.

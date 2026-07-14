@@ -213,6 +213,20 @@ export type Programme = {
   restructured_from?: string;
   score_grades_2025?: Record<string, Record<string, string> | null>;
   offer_statistics?: OfferStatistic[];
+  // HKDSE retake / repeater penalty (CUHK + HKU only; from data/raw/retake_2026.json).
+  // Two different models:
+  //   scope "retake_subject"  – HKU: 10% off the REPEATED SUBJECT only (per-subject),
+  //                             applied to every HKU programme. `consideration` says
+  //                             how previous/combined sittings are counted.
+  //   scope "admission_score" – CUHK: a band ("5% or less" / "6% to 10%") off the
+  //                             WHOLE admission score, for the listed programmes only.
+  retake?: {
+    penalty: string;                                  // "10%" | "5% or less" | "6% to 10%"
+    scope: "retake_subject" | "admission_score";
+    consideration?: string;                           // HKU only
+    policy_en?: string | null;
+    source?: string | null;
+  } | null;
   quota?: number | null;
   // Joint-admission intake shared across several programmes: the combined total
   // + the JS codes that share it (so the UI can say "N places shared across M").
