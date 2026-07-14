@@ -807,6 +807,7 @@ export function DetailPanel({ results, activeCode, reviewRequest, onActiveCodeCh
                 weights={programme.subject_weights_2025 || {}}
                 pools={programme.best_of_weights_2025 || []}
                 steps={programme.institution === "HKUST" ? programme.hkust_formula_steps : undefined}
+                defaultOpen={basisYear === "2026"}
                 t={t}
                 lang={lang}
               />
@@ -1440,6 +1441,7 @@ function FormulaBlock({
   weights,
   pools,
   steps,
+  defaultOpen,
   t,
   lang,
 }: {
@@ -1451,11 +1453,15 @@ function FormulaBlock({
   weights: Record<string, number>;
   pools: Array<{ count: number; subjects: string[]; weight: number }>;
   steps?: HkustFormulaStep[];
+  // Show the weight breakdown expanded by default — used for recalculated /
+  // simulated programmes, where the plain formula line ("Best 5") doesn't convey
+  // the weighting the score actually uses (e.g. EdUHK best-of {BAFS, Econ}).
+  defaultOpen?: boolean;
   t: Translate;
   lang: Lang;
 }) {
   const hasWeights = (steps && steps.length > 0) || Object.keys(weights).length > 0 || pools.length > 0;
-  const [weightsOpen, setWeightsOpen] = useState(false);
+  const [weightsOpen, setWeightsOpen] = useState(defaultOpen ?? false);
 
   return (
     <div className="formula-card">
