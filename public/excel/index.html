@@ -4,71 +4,51 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>完整試算表 (Excel) | JUPAS Cal 收生計分器</title>
-  <meta name="description" content="JUPAS Cal 的完整 Excel 版計分器：全港十間院校 422 個課程的收生分數、比重及加分制，可直接輸入試算。" />
+  <meta name="description" content="JUPAS Cal 的完整 Excel 版計分器：全港十間院校收生分數、比重及加分制，可直接輸入試算。" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <style>
     :root {
-      --bg: #f8f0ea;
-      --surface: #fffaf6;
-      --ink: #2c211c;
-      --muted: #8a7a70;
-      --accent: #c2452e;
-      --line: #e7d7cb;
+      --bg: #f8f0ea; --surface: #fffaf6; --ink: #2c211c;
+      --muted: #8a7a70; --accent: #c2452e; --line: #e7d7cb;
     }
     * { box-sizing: border-box; }
     html, body { height: 100%; margin: 0; }
     body {
-      display: flex;
-      flex-direction: column;
-      background: var(--bg);
-      color: var(--ink);
-      font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, -apple-system, sans-serif;
+      display: flex; flex-direction: column;
+      background: var(--bg); color: var(--ink);
+      font-family: "Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,-apple-system,sans-serif;
       -webkit-font-smoothing: antialiased;
     }
     header {
-      flex: 0 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 10px clamp(12px, 3vw, 24px);
-      background: var(--surface);
-      border-bottom: 1px solid var(--line);
+      flex: 0 0 auto; display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; padding: 10px clamp(12px,3vw,24px);
+      background: var(--surface); border-bottom: 1px solid var(--line);
     }
     .brand { display: flex; align-items: baseline; gap: 10px; min-width: 0; }
     .brand strong { font-size: 1.02rem; font-weight: 800; letter-spacing: -0.01em; }
     .brand strong span { color: var(--accent); }
     .brand small { color: var(--muted); font-size: 0.8rem; white-space: nowrap; }
     .back {
-      flex: 0 0 auto;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 7px 13px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: var(--bg);
-      color: var(--ink);
-      font-size: 0.85rem;
-      font-weight: 650;
-      text-decoration: none;
-      transition: background 0.15s, border-color 0.15s;
+      flex: 0 0 auto; display: inline-flex; align-items: center; gap: 6px;
+      padding: 7px 13px; border: 1px solid var(--line); border-radius: 999px;
+      background: var(--bg); color: var(--ink); font-size: 0.85rem; font-weight: 650;
+      text-decoration: none; transition: background .15s, border-color .15s, color .15s;
     }
     .back:hover { background: var(--surface); border-color: var(--accent); color: var(--accent); }
+    .notice {
+      flex: 0 0 auto; padding: 8px clamp(12px,3vw,24px);
+      background: #fdf3e7; border-bottom: 1px solid var(--line);
+      color: #7a5a3a; font-size: 0.8rem; line-height: 1.5;
+    }
+    .notice a { color: var(--accent); font-weight: 650; text-decoration: none; }
+    .notice a:hover { text-decoration: underline; }
     main { flex: 1 1 auto; min-height: 0; position: relative; }
     iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: var(--bg); }
     .hint {
-      flex: 0 0 auto;
-      padding: 7px clamp(12px, 3vw, 24px);
-      background: var(--surface);
-      border-top: 1px solid var(--line);
-      color: var(--muted);
-      font-size: 0.74rem;
-      line-height: 1.45;
-      text-align: center;
+      flex: 0 0 auto; padding: 7px clamp(12px,3vw,24px);
+      background: var(--surface); border-top: 1px solid var(--line);
+      color: var(--muted); font-size: 0.74rem; line-height: 1.45; text-align: center;
     }
-    .hint a { color: var(--accent); text-decoration: none; }
-    .hint a:hover { text-decoration: underline; }
     @media (max-width: 560px) { .brand small { display: none; } }
   </style>
 </head>
@@ -81,19 +61,25 @@
     <a class="back" href="/">← 返回計算器</a>
   </header>
 
+  <p class="notice">
+    此網上 Excel 使用 Microsoft + GitHub 的免費功能，設有同時瀏覽／使用人數上限。如你能使用電腦版 Excel，請
+    <a href="https://1drv.ms/x/c/02874402b22fbb6c/IQRp7hpZ2Qw4TLxeNxbK9KSuAfyW-WyrULzlsPO3LuMhg2U" target="_blank" rel="noopener">下載使用</a>，
+    把名額留給有需要的同學。所有輸入的資料均不會被保存。
+  </p>
+
   <main>
     <iframe
       title="JUPAS Cal 完整試算表 (Excel)"
       frameborder="0"
       scrolling="no"
-      src="https://1drv.ms/x/c/02874402b22fbb6c/IQRp7hpZ2Qw4TLxeNxbK9KSuAfyW-WyrULzlsPO3LuMhg2U?em=2&amp;AllowTyping=True&amp;wdHideGridlines=True&amp;wdDownloadButton=True&amp;wdInConfigurator=True&amp;wdInConfigurator=True&amp;edaebf=rslc0"
-      allowfullscreen>
+      allowfullscreen
+      src="https://1drv.ms/x/c/02874402b22fbb6c/IQRp7hpZ2Qw4TLxeNxbK9KSuAfyW-WyrULzlsPO3LuMhg2U?em=2&amp;AllowTyping=True&amp;wdHideGridlines=True&amp;wdHideHeaders=True&amp;wdDownloadButton=True&amp;wdInConfigurator=True&amp;wdInConfigurator=True">
     </iframe>
   </main>
 
   <p class="hint">
-    此為 Microsoft Excel 網頁嵌入版，數據與網頁計算器一致，僅供參考。
-    如未能顯示，請<a href="https://1drv.ms/x/c/02874402b22fbb6c/IQRp7hpZ2Qw4TLxeNxbK9KSuAfyW-WyrULzlsPO3LuMhg2U" target="_blank" rel="noopener">在 OneDrive 開啟</a>。
+    使用 <strong>Ctrl + 滑鼠滾輪</strong> 放大／縮小。如未能顯示，請按上方連結下載，或
+    <a href="https://1drv.ms/x/c/02874402b22fbb6c/IQRp7hpZ2Qw4TLxeNxbK9KSuAfyW-WyrULzlsPO3LuMhg2U" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none">在 OneDrive 開啟</a>。
   </p>
 </body>
 </html>
