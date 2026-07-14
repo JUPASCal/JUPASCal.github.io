@@ -24,10 +24,13 @@
       gap: 12px; padding: 10px clamp(12px,3vw,24px);
       background: var(--surface); border-bottom: 1px solid var(--line);
     }
-    .brand { display: flex; align-items: baseline; gap: 10px; min-width: 0; }
-    .brand strong { font-size: 1.02rem; font-weight: 800; letter-spacing: -0.01em; }
-    .brand strong span { color: var(--accent); }
-    .brand small { color: var(--muted); font-size: 0.8rem; white-space: nowrap; }
+    .brand { display: flex; align-items: center; gap: 9px; min-width: 0; color: var(--ink); }
+    .brand .logo-mark { height: 26px; width: auto; flex: 0 0 auto; }
+    .brand strong { font-size: 1.06rem; font-weight: 800; letter-spacing: -0.015em; }
+    .brand small {
+      color: var(--muted); font-size: 0.72rem; font-weight: 650; white-space: nowrap;
+      padding: 2px 8px; border: 1px solid var(--line); border-radius: 999px;
+    }
     .back {
       flex: 0 0 auto; display: inline-flex; align-items: center; gap: 6px;
       padding: 7px 13px; border: 1px solid var(--line); border-radius: 999px;
@@ -55,16 +58,23 @@
 <body>
   <header>
     <div class="brand">
-      <strong>JUPAS <span>Cal</span></strong>
-      <small>完整試算表 · Excel 版</small>
+      <svg class="logo-mark" viewBox="0 0 360 289" aria-hidden="true" focusable="false">
+        <path fill="currentColor" d="M172,33 176,33 312,103 173,172 36,103 171,34Z"/>
+        <path fill="currentColor" d="M90,149 172,189 182,186 257,149 257,208 241,220 216,233 200,238 180,241 158,240 137,235 113,224 90,208 90,150Z"/>
+        <path fill="#c2922e" d="M291,198 299,198 303,204 309,223 311,240 279,241 283,215 290,199Z"/>
+        <path fill="#c2922e" d="M293,169 303,173 306,179 305,186 298,192 292,192 286,188 284,178 285,175 292,170Z"/>
+        <path fill="#c2922e" d="M293,123 299,126 299,162 291,164 292,124Z"/>
+      </svg>
+      <strong>JUPASCal</strong>
+      <small>Excel 版</small>
     </div>
     <a class="back" href="/">← 返回計算器</a>
   </header>
 
   <p class="notice">
-    此網上 Excel 使用 Microsoft + GitHub 的免費功能，設有同時瀏覽／使用人數上限。如你能使用電腦版 Excel，請
-    <a href="https://1drv.ms/x/c/02874402b22fbb6c/IQRp7hpZ2Qw4TLxeNxbK9KSuAfyW-WyrULzlsPO3LuMhg2U" target="_blank" rel="noopener">下載使用</a>，
-    把名額留給有需要的同學。所有輸入的資料均不會被保存。
+    此網上 Excel 使用 Microsoft + GitHub 的免費功能，設有同時瀏覽／使用人數上限。如你能使用電腦版 Excel，請從
+    <a href="https://drive.google.com/drive/folders/1PmyDrmQ2CumbWrqY7NRqa0Ol-M9VnkFz" target="_blank" rel="noopener">Google Drive</a>
+    下載使用，把名額留給有需要的同學。所有輸入的資料均不會被保存。
   </p>
 
   <main>
