@@ -134,21 +134,16 @@
   ]
  },
  "JS6688": {
-  "_note": "Science Master Class. 2025 formula (booklet p4, VISUALLY verified 2026-07-13): 'Eng + Math + Best 2 from Biology / Chemistry / Physics / M1 / M2 + Best Subject with WEIGHTING 5', and the W5 badge sits on the trailing 'Best Subject' term only; W5 (2025 column) = x1.2 {Bio, Chem, M1 or 2, Phys}. So in 2025 Math is UNWEIGHTED, the reserved best-2 sci slots are UNWEIGHTED, and only the best REMAINING subject gets x1.2 when it is in the W5 set — the x1.3 our scrape carried is the 2026 value leaked back (2026 formula: 'Eng + 1.3 x Math + 1.3 x Best 2 from ... + Best Remaining Subject with Weighting1(x1.3)', i.e. effectively flat x1.3). Encoded with claiming pools: a weight-1.0 count-2 pool claims the reserved sci pair (no upgrade), then the x1.2 count-1 pool lands on the best remaining sci. The compulsory pool forces the two reserved sci into the Best-5.",
-  "subject_weights_2025": {},
-  "best_of_weights_2025": [
-   {
-    "count": 2,
-    "weight": 1.0,
-    "subjects": ["Biology", "Chemistry", "Mathematics Extended Part (Module 1 or 2)", "Physics"]
-   },
-   {
-    "count": 1,
-    "weight": 1.2,
-    "subjects": ["Biology", "Chemistry", "Mathematics Extended Part (Module 1 or 2)", "Physics"]
-   }
-  ],
-  "subject_weights_2025_raw": "X 1.2 (Best Remaining Subject only): Biology / Chemistry / Mathematics Extended Part (Module 1 or 2) / Physics",
+  "_note": "Science Master Class. CORRECTED 2026-07-14 (user-reported, same class as JS6901): HKU's own calculator applies WEIGHTING 5 (x1.2 {Bio, Chem, M1 or 2, Phys}) to EVERY counted science subject, NOT just the trailing 'Best Subject'. The 2025 booklet badge visually sits on 'Best Subject', but HKU scores all these sciences x1.2 — consistent with the 2026 formula being flat x1.3 on the same set. The prior model (count-2 x1.0 + count-1 x1.2 pools) under-weighted a student's top two sciences. Encoded FLAT like JS6901/JS6119. Math (Compulsory Part) stays UNWEIGHTED in 2025 — it is NOT in the W5 set; the 2026 formula separately ADDED '1.3 x Math'. The compulsory pool forces the two reserved sciences into the Best-5.",
+  "subject_weights_2025": {
+   "Biology": 1.2,
+   "Chemistry": 1.2,
+   "Mathematics Extended Part (Module 1)": 1.2,
+   "Mathematics Extended Part (Module 2)": 1.2,
+   "Physics": 1.2
+  },
+  "best_of_weights_2025": [],
+  "subject_weights_2025_raw": "X 1.2: Biology / Chemistry / Mathematics Extended Part (Module 1 or 2) / Physics",
   "subject_weights_2026": {
    "Mathematics (Compulsory Part)": 1.3,
    "Biology": 1.3,
