@@ -447,7 +447,11 @@ export function calculateScore(studentGrades: StudentGrades, programme: Programm
       .filter((candidate) => !candidate.used && (candidate.subject.includes("Module 1") || candidate.subject.includes("Module 2") || candidate.subject === "Mathematics Extended Part (Module 1 or 2)"))
       .sort((a, b) => b.weightedScore - a.weightedScore)[0];
     if (unusedM12) {
-      const worstSubject = selectedSubjects.filter((subject) => !subject.isCompulsory && !subject.isBonus).sort((a, b) => a.weightedScore - b.weightedScore)[0];
+      // "the worst one of the 6 subjects" — ALL counted subjects, INCLUDING the
+      // compulsory core (Chinese/English/Math). The old filter excluded compulsory
+      // subjects, so a low core grade (e.g. Chinese L4) could never be the "worst",
+      // and M1/M2 was wrongly dropped when the worst *elective* already tied it.
+      const worstSubject = selectedSubjects.filter((subject) => !subject.isBonus).sort((a, b) => a.weightedScore - b.weightedScore)[0];
       if (worstSubject) {
         const originalWorstScore = worstSubject.weightedScore;
         const halfReplacementScore = originalWorstScore / 2 + unusedM12.weightedScore / 2;
