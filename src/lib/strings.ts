@@ -185,6 +185,10 @@ export const STRINGS = {
   "filters.tip.drag.t": { en: " to reorder your priorities.", zh: "即可調整優先次序。" },
   "filters.tip.remove.b": { en: "Long-press", zh: "長按" },
   "filters.tip.remove.t": { en: " a Selected chip to remove it.", zh: "已選項目即可移除。" },
+  // "Above UQ" band-filter notice (only HKU & CUHK publish a real UQ, so the list looks sparse).
+  "filters.uqNotice.text": { en: "Only HKU and CUHK publish upper-quartile (UQ) scores, so few programmes match this filter.", zh: "只有港大及中大公佈上四分位（UQ）分數，因此符合此篩選的課程不多。" },
+  "filters.uqNotice.dontShow": { en: "Don't show again", zh: "不再顯示" },
+  "filters.uqNotice.dismiss": { en: "Dismiss", zh: "關閉" },
   // Desktop-console Browse help popover (the ⓘ next to the "Select programmes"
   // heading). Covers the desktop-only controls: sort via headers, View/Select
   // mode, the tick-box / left-of-row select target, and the row badges.

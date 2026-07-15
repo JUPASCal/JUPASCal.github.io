@@ -1792,14 +1792,14 @@ function CalculatorApp() {
           <circle cx="8" cy="4.6" r="0.9" fill="currentColor" />
           <path d="M8 7v5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
         </svg>
-        Only HKU and CUHK publish upper-quartile (UQ) scores, so few programmes match this filter.
+        {t("filters.uqNotice.text")}
       </p>
       <div className="filter-notice-actions">
         <button type="button" className="filter-notice-link is-primary" onClick={dontShowUqNoticeAgain}>
-          Don't show again
+          {t("filters.uqNotice.dontShow")}
         </button>
         <button type="button" className="filter-notice-link" onClick={() => setUqNoticeDismissed(true)}>
-          Dismiss
+          {t("filters.uqNotice.dismiss")}
         </button>
       </div>
     </div>

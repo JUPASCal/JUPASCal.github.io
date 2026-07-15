@@ -1614,18 +1614,18 @@ html:has(.advisor-console) body {
   color: var(--muted);
 }
 
-/* Browse feature-tour ⓘ, inline after the heading count. Reuses .step2-info-*
-   styling; only the anchor differs — it opens below-LEFT (the button sits on the
-   left of the panel, not the top-right corner the mobile popover anchors to). */
+/* Browse feature-tour ⓘ. Pushed to the far top-right of the panel header
+   (margin-inline-start:auto eats the row's free space), so it anchors to the
+   top-right corner like the mobile popover — the pop opens below-RIGHT. */
 .console-browse .browse-help {
   position: relative;
   display: inline-flex;
   align-self: center;
-  margin-inline-start: calc(-1 * var(--space-1));
+  margin-inline-start: auto;
 }
 .console-browse .browse-help-pop {
-  left: 0;
-  right: auto;
+  right: 0;
+  left: auto;
 }
 
 /* (3) hide the "Programme search" label text */
