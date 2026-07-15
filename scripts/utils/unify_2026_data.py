@@ -2967,6 +2967,21 @@ def unify_data():
                         "grade": str(_v["grade"]),
                         "note": "",
                     }
+                elif _k == "formula" and _v == "3C1X":
+                    # 3-core + best-1-elective (Best 4), CSD not scored. SSSDP's
+                    # universal baseline defaults every programme to Best-5; only
+                    # JSSC02 is Best-4. parseFormulaCount ignores SSSDP, so the
+                    # count is driven by formula_id=best4; compulsory Chi/Eng/Math
+                    # force the three cores (CSD "Attained"=0 never enters best-4).
+                    for _yr in ("2025", "2026"):
+                        _obj[f"formula_{_yr}"] = "Chinese + English + Mathematics + Best 1 Elective"
+                        _obj[f"formula_{_yr}_id"] = "best4"
+                    _core = {"type": "compulsory_subjects",
+                             "subjects": ["Chinese Language", "English Language", "Mathematics (Compulsory Part)"],
+                             "description": "3 core subjects + best 1 elective (Best 4); CSD not scored"}
+                    _cc = _obj.setdefault("calculation_constraints", [])
+                    if _core not in _cc:
+                        _cc.append(_core)
             _sssdp_req_n += 1
         print(f"SSSDP requirement corrections applied: {_sssdp_req_n} programme(s)")
 

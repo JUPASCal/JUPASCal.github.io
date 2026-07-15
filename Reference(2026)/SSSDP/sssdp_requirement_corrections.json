@@ -1,6 +1,8 @@
 {
   "_comment": "SSSDP programme-specific entrance requirements that differ from the universal baseline, transcribed from the JUPAS per-programme pages (jupas.edu.hk/en/programme/sssdp/<CODE>/, 'Programme Entrance Requirements' tab) already scraped into data/raw/jupas_programme_details_2026.json (requirements.programme_core / programme_electives). A full comparison of all 57 SSSDP programmes against that scrape found ONLY these 5 discrepancies — the other ~52 are 'any 1 elective subject', already modelled by the baseline. JSST03's Health Care Practice (a Cat-B ApL, Attained-with-Distinction-I alternative) is intentionally omitted from elect1 (ApL is handled by apl_policy, not the Cat-A elective pool). Source: data/raw/jupas_programme_details_2026.json.",
   "_verified": "2026-07-13 vs scraped JUPAS programme pages",
+  "_formula_note": "JSSC02 (Chu Hai, Architecture) scores 3C+1X = Chinese + English + Math + Best 1 Elective (Best 4), CSD not scored — user-reported 2026-07-14. All 57 SSSDP default to the universal Best-5 baseline; JSSC02 is the ONLY one that is Best-4 (confirmed). Source: af_2025_SSSDP.pdf.",
+  "JSSC02": { "formula": "3C1X" },
   "JSSH02": { "math": "3" },
   "JSST03": { "elect1": { "count": 1, "subjects": ["Chemistry", "Biology", "Physics"], "grade": "3" } },
   "JSST08": { "elect1": { "count": 1, "subjects": ["Chemistry", "Physics", "Biology"], "grade": "2" } },
