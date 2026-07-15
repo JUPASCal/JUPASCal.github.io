@@ -46,6 +46,7 @@ const POLICIES: Record<string, Policy> = {
     french: { C2: 8.5, C1: 7, B2: 5.5, B1: 4, A2: 3 },
     german: { C2: 8.5, C1: 7, B2: 5.5, B1: 4, A2: 3 },
     spanish: { C2: 8.5, C1: 7, B2: 5.5, B1: 4, A2: 3 },
+    urdu: { "A++": 8.5, "A+": 8.5, A: 7, "B++": 5.5, "B+": 5.5, B: 4, C: 3, D: 2, E: 2 },
   },
   CUHK: {
     japanese: { N1: 7, N2: 5.5, N3: 4 },
