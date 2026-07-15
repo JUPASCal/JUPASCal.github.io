@@ -319,6 +319,9 @@ export function calculateScore(studentGrades: StudentGrades, programme: Programm
   const selectedSubjects: CandidateScore[] = [];
   let totalScore = 0;
   let targetCount = getTargetCount(programme, year, constraints);
+  // Slots a `reserve` pool held empty (applicant lacks the required subject) —
+  // tracked at function scope so the bonus gates below still see the full base.
+  let reservedSlots = 0;
 
   // HKUST sequential formula (graded per-slot pools) — walk the recipe directly
   // instead of the generic weighted Best-N. better-of programmes keep the generic
@@ -343,12 +346,22 @@ export function calculateScore(studentGrades: StudentGrades, programme: Programm
     const poolCandidates = candidates
       .filter((candidate) => !candidate.used && includesM12Aware(pool.subjects || [], candidate.subject))
       .sort((a, b) => b.weightedScore - a.weightedScore);
+    let filled = 0;
     for (let index = 0; index < Math.min(Number(pool.count || 0), poolCandidates.length); index++) {
       if (selectedSubjects.length >= targetCount) break;
       const candidate = poolCandidates[index];
       candidate.used = true;
       selectedSubjects.push(candidate);
       totalScore += candidate.weightedScore;
+      filled += 1;
+    }
+    // A `reserve` pool HOLDS its unfilled slot(s) at 0 rather than backfilling
+    // with another subject — matches how the formula reserves e.g. the M1/M2
+    // slot for an applicant who lacks the required M1/M2 (a Flexible-Admission
+    // reference score). Only flagged pools reserve; the rest still backfill.
+    if ((pool as { reserve?: boolean }).reserve) {
+      const shortfall = Number(pool.count || 0) - filled;
+      if (shortfall > 0) { targetCount -= shortfall; reservedSlots += shortfall; }
     }
   }
 
@@ -378,7 +391,9 @@ export function calculateScore(studentGrades: StudentGrades, programme: Programm
 
   let bonusCandidates = candidates.filter((candidate) => !candidate.used).sort((a, b) => b.weightedScore - a.weightedScore);
   const bonus6 = getBonusConstraint(constraints, "bonus_6th");
-  if (bonus6 && selectedSubjects.length === 5) {
+  // A reserved (unfilled) slot still counts toward the base for the bonus gate —
+  // the "Nth-best" bonus applies once the base slots are accounted for, held or not.
+  if (bonus6 && selectedSubjects.length + reservedSlots === 5) {
     let eligible = bonusCandidates;
     if (bonus6.polyu_style) {
       const gradeToVal: Record<string, number> = { "5**": 7, "5*": 6, "5": 5, "4": 4, "3": 3, "2": 2, "1": 1 };
@@ -398,7 +413,7 @@ export function calculateScore(studentGrades: StudentGrades, programme: Programm
   }
 
   const bonus7 = getBonusConstraint(constraints, "bonus_7th");
-  if (bonus7 && selectedSubjects.length === 6) {
+  if (bonus7 && selectedSubjects.length + reservedSlots === 6) {
     const bonusSubject = bonusCandidates[0];
     if (bonusSubject) {
       const bonusPoints = bonusSubject.weightedScore * Number(bonus7.multiplier || 0);

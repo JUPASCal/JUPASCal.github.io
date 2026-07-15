@@ -3034,6 +3034,39 @@ def unify_data():
 
     _apply_weight_corrections("Reference(2026)/HKU/hku_weight_corrections.json", "HKU")
 
+    # 4b-i-m1m2reserve. M1/M2 slot RESERVATION for Flexible-Admission accuracy.
+    # HKU/CUHK score an applicant who lacks the required M1/M2 with the M1/M2 slot
+    # HELD at 0 (not backfilled by another subject), so a Flexible-Admission
+    # candidate's reference score reflects the real formula. Mark the M1/M2 pools
+    # `reserve`; for the fixed-weight HKU formulas that carry M1/M2 as a plain
+    # compulsory subject (JS6729/JS6884, "N x M1/M2 + Best K"), convert it to a
+    # reserving best-1-of-M1/M2 pool. Only these pools reserve (the calculator
+    # backfills every other compulsory pool). JS6224 EXCLUDED — its 2026 formula
+    # dropped M1/M2 (year-labeling); enforcing 2025-M1/M2 there is ambiguous.
+    _M12_SET = {"Mathematics Extended Part (Module 1)", "Mathematics Extended Part (Module 2)",
+                "Mathematics Extended Part (Module 1 or 2)"}
+    for _code in ("JS4361", "JS6688", "JS6729", "JS6884"):
+        _obj = unified_map.get(_code)
+        if not _obj:
+            print(f"  WARNING: M1/M2-reserve target {_code} not found")
+            continue
+        _ccs = _obj.setdefault("calculation_constraints", [])
+        _has_m12_pool = False
+        for _cc in _ccs:
+            if _cc.get("type") == "compulsory_subject_pool" and any(_s in _M12_SET for _s in (_cc.get("subjects") or [])):
+                _cc["reserve"] = True
+                _has_m12_pool = True
+        if not _has_m12_pool:
+            for _cc in _ccs:
+                if _cc.get("type") == "compulsory_subjects":
+                    _cc["subjects"] = [_s for _s in _cc["subjects"] if _s not in _M12_SET]
+            _ccs.append({
+                "type": "compulsory_subject_pool", "count": 1,
+                "subjects": ["Mathematics Extended Part (Module 1)", "Mathematics Extended Part (Module 2)"],
+                "reserve": True,
+                "description": "M1/M2 slot reserved — held at 0 if the applicant lacks M1/M2 (Flexible Admission)",
+            })
+
     # 4b-i-cityu. CityU positional elective weightings. The School of Energy &
     # Environment programmes (JS1050/1051/1052/1053) weight electives BY
     # POSITION — "x2.5 Biology/Chemistry/Physics in 1st Elective", "x1.5 (list)
