@@ -1,0 +1,22 @@
+{
+  "_comment": "EdUHK best-of-pool SHAPE corrections (VLM-verified). The EdUHK weight-column scraper splits a single 'The best ONE subject of {A, B, C or D} (x1.5)' clause into separate dict keys; unify's generic parser can then mis-read it as MULTIPLE best_of pools plus a stray FLAT weight, which over-weights more than one subject. These corrections restore the true single combined pool (2026) and the true flat weighting (2025). Applied via _apply_weight_corrections BEFORE year_changes and the EdUHK 2026-basis mirror, so both the year-change diff and the mirrored scoring use the corrected shape. The 'Specified ApL subject(s)' placeholder is kept verbatim in the flat map — apply_apl_policy expands it to the real ApL subjects (from eduhk_apl_weights.json) at the end of the run, so it does NOT need enumerating here. Edit THIS file (not the unified JSON) when a cycle's PDF changes.",
+  "_source": "Reference(2026)/EdUHK/EdUHK_Entrance_Requirements_and_Admission_Score_Calculation.pdf (subject-weighting column) + Reference(2026)/EdUHK/EdUHK_2026_Data.json subject_weights_raw/subject_weights_2025_raw",
+  "_verified": "2026-07-16 — 2026: 'The best one subject of Chinese History, Economics, Geography or History (x1.5)'; 2025: each of Chinese History/Economics/Geography/History (x1.5). Reported: a student with Chinese History 5 + Economics 4 wrongly got BOTH x1.5.",
+  "JS8013": {
+    "_note": "BSocSc Sociology & Community Studies + BEd (Primary Humanities). 2026 rule = best ONE of {Chinese History, Economics, Geography, History} x1.5 + Specified ApL x1.5. Scraper split it into best_of [{Chinese History},{Geography,History}] and leaked Economics into the flat map.",
+    "best_of_weights_2026": [
+      {"count": 1, "weight": 1.5, "subjects": ["Chinese History", "Economics", "Geography", "History"]}
+    ],
+    "subject_weights_2026": {"Specified ApL subject(s)": 1.5},
+    "subject_weights_2026_raw": "The best one subject of Chinese History, Economics, Geography or History (x1.5); Specified ApL subject(s) (x1.5)",
+    "best_of_weights_2025": [],
+    "subject_weights_2025": {
+      "Chinese History": 1.5,
+      "Economics": 1.5,
+      "Geography": 1.5,
+      "History": 1.5,
+      "Specified ApL subject(s)": 1.5
+    },
+    "subject_weights_2025_raw": "Chinese History (x1.5), Economics (x1.5), Geography (x1.5), History (x1.5); Specified ApL subject(s) (x1.5)"
+  }
+}

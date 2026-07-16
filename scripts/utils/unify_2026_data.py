@@ -3111,6 +3111,18 @@ def unify_data():
     # "Weighting changed" pills reflect the corrected 2026 weights.
     _apply_weight_corrections("Reference(2026)/HKBU/hkbu_weight_corrections.json", "HKBU")
 
+    # 4b-i-eduhk. EdUHK best-of-pool SHAPE corrections. The EdUHK weight-column
+    # scraper splits a single "The best ONE subject of {A, B, C or D} (x1.5)"
+    # clause into separate dict keys, which the generic parser can then mis-read
+    # as MULTIPLE best_of pools plus a stray FLAT weight — over-weighting more
+    # than one subject (reported for JS8013: Chinese History 5 + Economics 4 both
+    # got x1.5, but only the best ONE of the four should). Restore the single
+    # combined pool (2026) + true flat weighting (2025). Applied BEFORE
+    # year_changes and the 2026-basis mirror so both the diff and the mirrored
+    # scoring use the corrected shape. The "Specified ApL subject(s)" placeholder
+    # is expanded to the real ApL subjects later by apply_apl_policy.
+    _apply_weight_corrections("Reference(2026)/EdUHK/eduhk_pool_corrections.json", "EdUHK pool")
+
     # 4b-i-restructure. Restructured-programme disclosure. A programme that
     # replaces a discontinued one carries its predecessor's admission score as a
     # proxy (it has no history of its own yet). Flag it so the DetailPanel says
