@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent, type ReactNode } from "react";
 import { institutionLabel } from "../lib/institutions";
-import { PRIORITY_SLOTS } from "../lib/slots";
+import { slotLabel } from "../lib/slots";
 import { getSlotRisk, riskMeta, riskLabelKey } from "../lib/analysis";
 import { useLang, pickName, type Lang, type Translate } from "../lib/i18n";
 import { SlotMovePicker } from "./SlotMovePicker";
@@ -10,15 +10,10 @@ import "./PreferencePlanner.css";
 
 // Minimum slot rows always shown (A1–A3) so the band-A structure reads even
 // before the user adds anything. Beyond that the list grows with the picks —
-// there is NO upper cap (JUPAS allows up to 20 choices; we label A1–A3, B1–B3,
-// then C1, C2, …).
+// there is NO upper cap (JUPAS allows up to 20 choices). Labels come from the
+// canonical slotLabel (official JUPAS banding: A1–A3, B4–B6, C7–C10, D11–D15,
+// E16–E20 — the number is the overall choice rank, not a per-band count).
 const MIN_VISIBLE = 3;
-
-function slotLabel(index: number): string {
-  return index < PRIORITY_SLOTS.length
-    ? PRIORITY_SLOTS[index]
-    : `C${index - PRIORITY_SLOTS.length + 1}`;
-}
 
 type Props = {
   results: (ProgrammeResult | null)[];
