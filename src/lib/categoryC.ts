@@ -176,12 +176,18 @@ export function categoryCBasePoints(
 //                           HKBU JS2620/2110/2120/2410/2420.
 //   "elective_cat_a_only" – Cat C can't satisfy an elective (Cat-A-only electives);
 //                           e.g. CUHK JS4550/4601/4648/4719.
+//   "score_excluded"      – Cat C dropped from the score, but may still satisfy an
+//                           elective for eligibility; the 30 HKU programmes whose
+//                           scoring formula lacks the "a"/"c" Cat-C footnote
+//                           (e.g. JS6456 MBBS, JS6107 Dental).
 // See docs/manuals/CATEGORY_C_LANGUAGE_RULES.md.
 
-// True unless the programme ignores Category C languages entirely. Used by the
-// calculator to drop Cat C subjects from the scoring candidates.
+// True unless the programme drops Category C languages from the score. Used by the
+// calculator to skip Cat C subjects among the scoring candidates. Note "score_excluded"
+// returns false here (not scored) yet still lets Cat C satisfy an elective — that path
+// is governed separately by categoryCCanSatisfyElective.
 export function acceptsCategoryC(programme: Programme): boolean {
-  return programme.category_c_policy !== "none";
+  return programme.category_c_policy !== "none" && programme.category_c_policy !== "score_excluded";
 }
 
 export function categoryCCanSatisfyElective(

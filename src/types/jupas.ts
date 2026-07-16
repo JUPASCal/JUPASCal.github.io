@@ -163,8 +163,11 @@ export type Programme = {
   // table) so the rule isn't a hardcoded JS-code list in the runtime:
   //   "none"                – Cat C ignored entirely (both eligibility & scoring)
   //   "elective_cat_a_only" – Cat C can't satisfy an elective (may still score)
+  //   "score_excluded"      – Cat C not counted in the score, but may still satisfy
+  //                           an elective for eligibility (HKU programmes whose
+  //                           scoring formula lacks the "a"/"c" Cat-C footnote)
   //   undefined             – standard (Cat C per the institution's score policy)
-  category_c_policy?: "none" | "elective_cat_a_only";
+  category_c_policy?: "none" | "elective_cat_a_only" | "score_excluded";
   // Category B (Applied Learning) acceptance — DATA-DRIVEN (emitted by unify):
   //   "none"   – ApL not counted at all (e.g. HKU: supporting info only)
   //   "any"    – any ApL subject is accepted

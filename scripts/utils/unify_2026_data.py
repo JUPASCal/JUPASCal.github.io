@@ -1167,6 +1167,30 @@ CURATED_PROGRAMME_RULES = {
     "JS1805": {"verified": "2026 · CityU Entrance Req PDF remark", "category_c_policy": "elective_cat_a_only"},
     "JS1806": {"verified": "2026 · CityU Entrance Req PDF remark", "category_c_policy": "elective_cat_a_only"},
     "JS1807": {"verified": "2026 · CityU Entrance Req PDF remark", "category_c_policy": "elective_cat_a_only"},
+    # HKU: Category C is counted in the score ONLY where the programme's scoring
+    # formula carries the "a" ("may include M1/M2 or Cat C, whichever higher") or
+    # "c" ("may include M1/M2 and Cat C") footnote. The 30 programmes below carry
+    # NO such footnote, so Cat C must be dropped from the Best-N score — but HKU
+    # still accepts a Cat C language toward the "Any" elective for eligibility, so
+    # this is "score_excluded" (score-only), NOT "none". VLM-verified page-by-page
+    # against HKU-JUPAS-Admissions-Information-2026.pdf (all 5 formula tables); the
+    # remaining 27 HKU programmes DO carry the a/c footnote and keep Cat C. ("b" is
+    # unrelated — it only defines "Sci Subject" = Bio/Chem/Physics.)
+    **{code: {"verified": "2026 · HKU JUPAS Admissions PDF — no a/c Cat-C footnote on scoring formula",
+              "category_c_policy": "score_excluded"}
+       for code in (
+        "JS6078", "JS6406",                                              # Law
+        "JS6298",                                                        # Arts (BASc AI&DataSc)
+        "JS6755", "JS6767", "JS6781", "JS6793", "JS6808",                # Business School
+        "JS6846", "JS6860", "JS6884", "JS6896",                          #   (all 9)
+        "JS6107",                                                        # Dentistry (BDS)
+        "JS6119", "JS6157",                                              # Education
+        "JS6456", "JS6494", "JS6626", "JS6949",                          # Medicine (MBBS/Pharmacy/…)
+        "JS6688", "JS6858", "JS6901",                                    # Science
+        "JS6810",                                                        # Social Sciences (Govt&Laws)
+        "JS6200", "JS6224", "JS6248", "JS6729", "JS6779", "JS6999",      # Computing & Data Science
+        "JS6602",                                                        # Innovation (BSc IT)
+       )},
     # — Extra admission gate (stable rule) —
     "JS4502": {  # CUHK MBChB-GPS — total >= 40 in 6 with 5** in any 4
         "verified": "2026 · CUHK MBChB-GPS Note 3",
