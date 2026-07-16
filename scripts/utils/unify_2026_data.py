@@ -379,18 +379,54 @@ def parse_hkust_weights(other_subjects_text):
             
     return best_of, flat
 
+# PolyU lists each scored Category C Other Language under several source spellings
+# (e.g. "Japanese #", "Japanese-Language Proficiency Test") — all carry the SAME
+# per-programme weight. Collapse them to the app's canonical Cat C subject key so
+# the weight isn't silently dropped (a non-canonical key never matches in scoring →
+# a Japanese N1 scored ×1 instead of PolyU's ×5). Other "CatC"-tagged rows are
+# ApL/vocational courses (Tech Basics, Applied Psychology, …) or unmodelled
+# languages (Hindi); those are left to apply_apl_policy and are not scored here.
+_POLYU_CATC_LANG = [
+    (re.compile(r'\bfrench\b', re.I),        "French: Advanced Diploma of French Language Studies / Diploma of French Language Studies"),
+    (re.compile(r'\bgerman\b|goethe', re.I), "German: Goethe-Certificate"),
+    (re.compile(r'\bspanish\b', re.I),       "Spanish: Diploma of Spanish as a Foreign Language"),
+    (re.compile(r'\bjapanese\b', re.I),      "Japanese: Japanese-Language Proficiency Test"),
+    (re.compile(r'\bkorean\b', re.I),        "Korean: Test of Proficiency in Korean II"),
+    (re.compile(r'\burdu\b', re.I),          "Urdu: Urdu (International)"),
+]
+
+def _polyu_catc_canonical(name):
+    """Canonical Cat C key for a PolyU Category-C source name, or None if it isn't
+    one of the six scored Other Languages (ApL/vocational 'CatC' course, or Hindi)."""
+    for pat, canon in _POLYU_CATC_LANG:
+        if pat.search(name):
+            return canon
+    return None
+
 def parse_polyu_weights_string(w_str):
-    """Parse PolyU compact string format: 'Subj (W=X, CatY); ...'"""
+    """Parse PolyU compact string format: 'Subj (W=X, CatY); ...'. Cat A → canonical
+    Cat-A key; a Cat C Other Language → canonical Cat C key (keeping PolyU's explicit
+    per-programme language weight); Cat B and Cat-C ApL/vocational rows are skipped
+    (weighted separately by apply_apl_policy)."""
     if not w_str or w_str in ["", "--", "-"]: return {}
     weights = {}
-    parts = w_str.split(';')
-    for p in parts:
-        # Matches "Subject Name (W=7, CatA)" or similar
+    for p in w_str.split(';'):
         m = re.search(r'^(.*?)\s*\(W=([\d.]+)', p.strip())
-        if m:
-            subj = normalize_subject(m.group(1).strip())
-            weight = float(m.group(2))
-            weights[subj] = weight
+        if not m:
+            continue
+        name = m.group(1).strip()
+        weight = float(m.group(2))
+        cat_m = re.search(r'Cat([ABC])\b', p)
+        cat = cat_m.group(1) if cat_m else 'A'
+        if cat == 'C':
+            canon = _polyu_catc_canonical(name)
+            if canon:
+                weights[canon] = weight  # explicit Other-Language weight, canonicalized
+            # else: ApL/vocational or unmodelled language — not scored via subject_weights
+        elif cat == 'B':
+            continue  # ApL — apply_apl_policy assigns its weight
+        else:
+            weights[normalize_subject(name)] = weight  # Cat A (or unlabelled → treat as Cat A)
     return weights
 
 def get_conversion_table(institution, is_medicine=False):

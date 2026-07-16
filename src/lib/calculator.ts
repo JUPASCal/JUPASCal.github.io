@@ -61,9 +61,9 @@ function includesM12Aware(subjects: string[] = [], candidate: string) {
 // The programme's most common subject weight — the "standard elective" weight on
 // this programme's scale (1 for most institutions; 7 for PolyU's uniform ×7 model).
 // Used as the default multiplier for a subject not explicitly listed (ApL).
-function modalWeight(weights: Record<string, number>): number {
+function modalWeight(values: number[]): number {
   const counts = new Map<number, number>();
-  for (const w of Object.values(weights)) counts.set(w, (counts.get(w) ?? 0) + 1);
+  for (const w of values) counts.set(w, (counts.get(w) ?? 0) + 1);
   let best = 1;
   let bestCount = 0;
   for (const [w, c] of counts) {
@@ -205,17 +205,23 @@ export function calculateScore(studentGrades: StudentGrades, programme: Programm
   const constraints = programme.calculation_constraints || [];
   const convTable = programme.score_conversion_table.category_a || {};
   const catCTable = programme.score_conversion_table.category_c || {};
-  // Weight for an ApL subject (never listed in the weights map): treat it as a
-  // STANDARD elective. Two weight-map shapes exist:
-  //   • DENSE (PolyU): every Cat-A subject is listed on a uniform scale (×5/7/10)
-  //     — an unlisted subject has no natural ×1 default, so ApL takes the modal
-  //     (standard-elective) weight, else it'd be ~7× under-credited and never count.
-  //   • SPARSE (CityU/LingU/HKUST): only the specially-weighted subjects are listed;
-  //     any unlisted elective defaults to ×1 — so ApL (a non-preferred elective)
-  //     is ×1 too. Using the modal of the few listed subjects would over-credit it.
-  const catACovered = CAT_A_SUBJECTS.filter((subject) => subject in weights).length;
-  const denseWeightMap = catACovered >= CAT_A_SET.size * 0.6;
-  const aplDefaultWeight = denseWeightMap ? modalWeight(weights) : 1;
+  // Weight for an elective NOT explicitly listed in the weights map — an Applied
+  // Learning (Cat B) subject, or a Category C Other Language on a programme that
+  // doesn't single that language out. Treat it as a STANDARD elective. Two shapes:
+  //   • DENSE (PolyU): every Cat-A subject is listed on a uniform scale (×5/7/10),
+  //     so an unlisted elective has no natural ×1 default. ApL takes the modal
+  //     (standard-elective) weight; a Cat-C Other Language takes the BASE (lowest)
+  //     tier — PolyU weights languages at its base elective weight (a Japanese N1
+  //     was wrongly scoring ×1 instead of ×5). Where PolyU DOES single out a
+  //     language, unify parses that explicit weight in and the lookup above wins.
+  //   • SPARSE (CityU/LingU/HKUST/CUHK/HKU): only specially-weighted subjects are
+  //     listed; any unlisted elective (ApL or Cat-C) defaults to ×1.
+  // Both defaults derive from the Cat-A weights ONLY, so parsed Cat-C/ApL keys in
+  // the map never skew them.
+  const catAWeights = CAT_A_SUBJECTS.filter((subject) => subject in weights).map((subject) => weights[subject]);
+  const denseWeightMap = catAWeights.length >= CAT_A_SET.size * 0.6;
+  const aplDefaultWeight = denseWeightMap ? modalWeight(catAWeights) : 1;
+  const catCDefaultWeight = denseWeightMap ? Math.min(...catAWeights) : 1;
   const candidates: CandidateScore[] = [];
 
   for (const [subject, grade] of Object.entries(studentGrades)) {
@@ -237,7 +243,9 @@ export function calculateScore(studentGrades: StudentGrades, programme: Programm
       : isCategoryBSubject(subject)
         ? categoryBBasePoints(programme, subject, grade) ?? 0
         : convTable[grade] ?? 0;
-    let multiplier = weights[subject] || (isCategoryBSubject(subject) ? aplDefaultWeight : 1);
+    let multiplier = weights[subject]
+      || (isCategoryBSubject(subject) ? aplDefaultWeight
+        : isCategoryCSubject(subject) ? catCDefaultWeight : 1);
     if (subject === "Mathematics Extended Part (Module 1 or 2)") {
       multiplier = weights["Mathematics Extended Part (Module 1)"] || weights["Mathematics Extended Part (Module 2)"] || 1;
     }
