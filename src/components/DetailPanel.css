@@ -1348,23 +1348,10 @@
 }
 
 
-/* Band B offer box, sits under the Band A figures. A soft alert tint (no edge
-   stripes) flags the programmes that effectively admit from Band A only. */
-.offers-bandb {
-  display: grid;
-  gap: 3px;
-  margin-top: var(--space-3);
-  padding: var(--space-2) var(--space-3);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  background: var(--surface-strong);
-}
-
-.offers-bandb .formula-text {
-  margin: 0;
-}
-
-.offers-bandb.is-none {
+/* Band B offer card — a separate box under the Band A offers card. When the
+   programme gave no Band B offers on record, a soft alert tint (no edge stripes)
+   flags that it effectively admits from Band A only. */
+.offers-bandb-card.is-none {
   border-color: color-mix(in srgb, var(--alert) 40%, var(--line));
   background: color-mix(in srgb, var(--alert) 8%, var(--surface-strong));
 }

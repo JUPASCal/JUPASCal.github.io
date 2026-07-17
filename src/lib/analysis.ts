@@ -777,11 +777,12 @@ export function analyzePortfolio(rawPicks: (ProgrammeResult | null)[], t: Transl
     }
   }
 
-  // 8. Band B reality check — a programme placed in a Band B slot (B4-B6) that
-  //    gave zero Band B offers on record admits from Band A only, so the slot is
-  //    very unlikely to convert. Uses the per-band OFFER statistics.
+  // 8. Band B reality check — a programme placed BELOW Band A (any B/C/D/E slot)
+  //    that gave zero Band B offers on record admits from Band A only, so the
+  //    slot is very unlikely to convert (a competitive programme like Medicine
+  //    put at C8 is the classic case). Uses the per-band OFFER statistics.
   const bandBNoTake = picks.filter((p) => {
-    if (!slotLabel(p.index).startsWith("B")) return false;
+    if (p.index < A_SLOT_COUNT) return false;
     const { known, takes } = takesBandB(p.result.programme);
     return known && !takes;
   });

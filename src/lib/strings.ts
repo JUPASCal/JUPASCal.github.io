@@ -960,7 +960,7 @@ export const STRINGS = {
   "find.scoreCaveat.detail.many": { en: "An LQ above the median isn't a bug – these programmes likely weigh more than your score (interview, portfolio, etc.).", zh: "LQ 高於中位數並非系統錯誤 – 這些課程或會較重視分數以外的因素（如面試、作品集等）。" },
   "find.bandBNoTake.title.one": { en: "{slots} admits from Band A only", zh: "{slots} 只從 Band A 收生" },
   "find.bandBNoTake.title.many": { en: "{slots} admit from Band A only", zh: "{slots} 只從 Band A 收生" },
-  "find.bandBNoTake.detail": { en: "No Band B applicant was offered a place here in recent years, so a Band B choice is very unlikely to convert. Move it to Band A, or use the slot for a programme that does take Band B.", zh: "這些課程近年沒有 Band B 申請人獲取錄，放於 Band B 幾乎無法獲派。宜改放 Band A，或改選會收 Band B 的課程。" },
+  "find.bandBNoTake.detail": { en: "No Band B applicant was offered a place here in recent years, so putting it below Band A is very unlikely to convert. Move it to Band A, or use the slot for a programme that does take Band B.", zh: "這些課程近年沒有 Band B 申請人獲取錄，放在 Band A 以下幾乎無法獲派。宜改放 Band A，或改選會收 Band B 的課程。" },
   "verdict.none.head": { en: "No programmes picked yet", zh: "尚未選擇任何課程" },
   "verdict.none.sub": { en: "Pick a few programmes to see your chances.", zh: "選擇數個課程後，即可查看你的取錄機會。" },
   "verdict.noBandA.head": { en: "Use your Band A choices", zh: "善用 Band A 志願" },

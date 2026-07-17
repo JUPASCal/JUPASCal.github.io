@@ -1170,6 +1170,7 @@ function OffersBlock({ programme }: { programme: Programme }) {
   }
 
   return (
+    <>
     <section className="offers-card formula-card">
       <div className="offers-card-eyebrow">
         <span>{t("detail.bandAOffers", { year: latestYear })}</span>
@@ -1181,22 +1182,6 @@ function OffersBlock({ programme }: { programme: Programme }) {
         {t("detail.offersOfApps", { offers: latestOffers, apps: latestApps.toLocaleString() })}
       </p>
       {competition ? <small>{competition}</small> : null}
-
-      {bandStats.hasData ? (
-        <div className={"offers-bandb" + (bandStats.totalOffersB === 0 ? " is-none" : "")}>
-          <div className="offers-card-eyebrow">
-            <span>{t("detail.bandBOffers", { year: latestYear })}</span>
-            {bandStats.totalOffersB > 0 && bandStats.bandB.rate !== null ? (
-              <b className="tally-badge offers-tally">{t("detail.rate", { rate: bandStats.bandB.rate.toFixed(1) })}</b>
-            ) : null}
-          </div>
-          <p className="formula-text">
-            {bandStats.totalOffersB === 0
-              ? t("detail.bandBNever", { n: bandStats.yearsWithData })
-              : t("detail.bandBOfApps", { offers: bandStats.bandB.offers, apps: bandStats.bandB.apps.toLocaleString() })}
-          </p>
-        </div>
-      ) : null}
 
       <hr className="weight-divider" />
       <button
@@ -1239,6 +1224,23 @@ function OffersBlock({ programme }: { programme: Programme }) {
         </div>
       ) : null}
     </section>
+
+    {bandStats.hasData ? (
+      <section className={"offers-card formula-card offers-bandb-card" + (bandStats.totalOffersB === 0 ? " is-none" : "")}>
+        <div className="offers-card-eyebrow">
+          <span>{t("detail.bandBOffers", { year: latestYear })}</span>
+          {bandStats.totalOffersB > 0 && bandStats.bandB.rate !== null ? (
+            <b className="tally-badge offers-tally">{t("detail.rate", { rate: bandStats.bandB.rate.toFixed(1) })}</b>
+          ) : null}
+        </div>
+        <p className="formula-text">
+          {bandStats.totalOffersB === 0
+            ? t("detail.bandBNever", { n: bandStats.yearsWithData })
+            : t("detail.bandBOfApps", { offers: bandStats.bandB.offers, apps: bandStats.bandB.apps.toLocaleString() })}
+        </p>
+      </section>
+    ) : null}
+    </>
   );
 }
 
