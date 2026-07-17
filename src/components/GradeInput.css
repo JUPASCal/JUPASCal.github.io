@@ -662,26 +662,28 @@
 }
 
 
-/* ── HKDSE retaker checklist ─────────────────────────────────────────────
-   Plain boxed section (no edge stripes / glows). Checked items get a soft
-   accent tint, mirroring .grade-summary-cell.filled. */
+/* ── HKDSE retaker ───────────────────────────────────────────────────────
+   A toggle reveals a full-width TABLE of the entered subjects; the candidate
+   ticks the ones they retook. Plain boxed rows (no edge stripes / glows); a
+   selected row gets a soft accent tint. */
 .retake-block {
   display: grid;
   gap: var(--space-3);
 }
 
+/* Toggle: checkbox + label + count pill, all on ONE centred row. */
 .retake-toggle {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: var(--space-2);
   cursor: pointer;
 }
 
-.retake-toggle input[type="checkbox"] {
-  margin-top: 2px;
-  width: 16px;
-  height: 16px;
+.retake-toggle-box {
+  width: 18px;
+  height: 18px;
   flex: none;
+  margin: 0;
   accent-color: var(--accent);
   cursor: pointer;
 }
@@ -690,17 +692,14 @@
   cursor: default;
 }
 
-.retake-toggle-label {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: var(--space-2);
-  font-size: 0.85rem;
+.retake-toggle-text {
+  font-size: 0.9rem;
   font-weight: 700;
-  line-height: 1.3;
+  line-height: 1.2;
 }
 
 .retake-count {
+  flex: none;
   font-style: normal;
   font-size: 0.72rem;
   font-weight: 800;
@@ -723,41 +722,52 @@
   color: var(--muted);
 }
 
-.retake-list {
+/* The subject table: one bordered card, full-width rows, hairline dividers. */
+.retake-table {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: var(--space-1);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--row-bg);
 }
 
-.retake-item {
+.retake-row {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
-  padding: 6px 10px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: var(--row-bg);
-  font-size: 0.76rem;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-height: 44px;
+  padding: 0 12px;
+  border-top: 1px solid var(--line);
+  font-size: 0.84rem;
   font-weight: 600;
   cursor: pointer;
 }
 
-.retake-item input[type="checkbox"] {
-  width: 15px;
-  height: 15px;
+.retake-row:first-child {
+  border-top: 0;
+}
+
+.retake-row-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.retake-row-box {
+  width: 20px;
+  height: 20px;
   flex: none;
+  margin: 0;
   accent-color: var(--accent);
   cursor: pointer;
 }
 
-.retake-item.checked {
-  border-color: color-mix(in srgb, var(--accent) 38%, var(--line));
+.retake-row.checked {
   background: var(--active);
   color: var(--accent);
 }
 
-.retake-item span {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.retake-row.checked .retake-row-name {
+  font-weight: 700;
 }

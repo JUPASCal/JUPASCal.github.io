@@ -320,16 +320,15 @@ export const GradeInput = memo(({ grades, onChange, onReset, retakenSubjects = [
               <label className="retake-toggle">
                 <input
                   type="checkbox"
+                  className="retake-toggle-box"
                   checked={retakerOn}
                   disabled={readOnly || (!retakerOn && enteredSubjects.length === 0)}
                   onChange={toggleRetaker}
                 />
-                <span className="retake-toggle-label">
-                  {t("grade.retake.toggle")}
-                  {retakenSubjects.length > 0 ? (
-                    <em className="retake-count">{t("grade.retake.summary", { n: retakenSubjects.length })}</em>
-                  ) : null}
-                </span>
+                <span className="retake-toggle-text">{t("grade.retake.toggle")}</span>
+                {retakenSubjects.length > 0 ? (
+                  <em className="retake-count">{t("grade.retake.summary", { n: retakenSubjects.length })}</em>
+                ) : null}
               </label>
               {retakerOn ? (
                 <div className="retake-body">
@@ -337,16 +336,17 @@ export const GradeInput = memo(({ grades, onChange, onReset, retakenSubjects = [
                   {enteredSubjects.length === 0 ? (
                     <p className="retake-empty">{t("grade.retake.none")}</p>
                   ) : (
-                    <div className="retake-list" role="group" aria-label={t("grade.retake.pickAria")}>
+                    <div className="retake-table" role="group" aria-label={t("grade.retake.pickAria")}>
                       {enteredSubjects.map((subject) => (
-                        <label key={subject} className={retakenSet.has(subject) ? "retake-item checked" : "retake-item"}>
+                        <label key={subject} className={retakenSet.has(subject) ? "retake-row checked" : "retake-row"}>
+                          <span className="retake-row-name">{localizedSubject(subject, lang)}</span>
                           <input
                             type="checkbox"
+                            className="retake-row-box"
                             checked={retakenSet.has(subject)}
                             disabled={readOnly}
                             onChange={() => toggleRetakenSubject(subject)}
                           />
-                          <span>{localizedShortSubject(subject, lang)}</span>
                         </label>
                       ))}
                     </div>
