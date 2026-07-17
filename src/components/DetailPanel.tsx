@@ -1135,6 +1135,7 @@ function AuditRows({ candidates, formula, basisYear, t, lang }: { candidates: Ca
 function OffersBlock({ programme }: { programme: Programme }) {
   const { t } = useLang();
   const [open, setOpen] = useState(false);
+  const [openB, setOpenB] = useState(false);
   const stats = programme.offer_statistics || [];
 
   const appsByYear = new Map<number, OfferStatistic>();
@@ -1238,6 +1239,47 @@ function OffersBlock({ programme }: { programme: Programme }) {
             ? t("detail.bandBNever", { n: bandStats.yearsWithData })
             : t("detail.bandBOfApps", { offers: bandStats.bandB.offers, apps: bandStats.bandB.apps.toLocaleString() })}
         </p>
+
+        <hr className="weight-divider" />
+        <button
+          type="button"
+          className={"weight-toggle" + (openB ? " open" : "")}
+          aria-expanded={openB}
+          onClick={() => setOpenB((v) => !v)}
+        >
+          {openB ? t("detail.hideHistory", { n: years.length }) : t("detail.showHistory", { n: years.length })}
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <polyline points="3,5 8,11 13,5" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </button>
+
+        {openB ? (
+          <div className="offers-body">
+            <div className="offers-table" role="table" aria-label={t("detail.offerHistoryAria")}>
+              <div className="offers-table-head" role="row">
+                <span role="columnheader">{t("detail.col.year")}</span>
+                <span role="columnheader">{t("detail.col.bandBApps")}</span>
+                <span role="columnheader">{t("detail.col.offers")}</span>
+                <span role="columnheader">{t("detail.col.rate")}</span>
+              </div>
+              {years.map((year) => {
+                const appN = (appsByYear.get(year)?.["Band B"] as number | undefined) ?? 0;
+                const offerN = (offersByYear.get(year)?.["Band B"] as number | undefined) ?? 0;
+                const rate = appN > 0 ? (offerN / appN) * 100 : null;
+                return (
+                  <div className="offers-table-row" role="row" key={year}>
+                    <span role="cell" className="offers-table-year">{year}</span>
+                    <span role="cell" className="offers-table-cell"><b>{appN}</b></span>
+                    <span role="cell" className="offers-table-cell"><b>{offerN}</b></span>
+                    <span role="cell" className="offers-table-cell accent">
+                      <b>{rate !== null ? `${rate.toFixed(1)}%` : "–"}</b>
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ) : null}
       </section>
     ) : null}
     </>

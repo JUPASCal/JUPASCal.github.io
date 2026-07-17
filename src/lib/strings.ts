@@ -621,6 +621,7 @@ export const STRINGS = {
   "detail.offerHistoryAria": { en: "Band A offer history by year", zh: "按年份列出的 Band A 取錄紀錄" },
   "detail.col.year": { en: "Year", zh: "年份" },
   "detail.col.bandAApps": { en: "Band A apps", zh: "Band A 申請人" },
+  "detail.col.bandBApps": { en: "Band B apps", zh: "Band B 申請人" },
   "detail.col.offers": { en: "Offers", zh: "取錄人數" },
   "detail.col.rate": { en: "Rate", zh: "取錄率" },
   "detail.eligibility": { en: "Eligibility", zh: "入學資格" },
