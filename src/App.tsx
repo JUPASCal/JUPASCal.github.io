@@ -1,7 +1,7 @@
 import { useDeferredValue, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import type { PointerEvent as ReactPointerEvent } from "react";
-import { useMediaQuery } from "./lib/useMediaQuery";
+import { useMediaQuery, isMobileDevice } from "./lib/useMediaQuery";
 import { AboutPage } from "./components/AboutPage";
 import { AppHeader } from "./components/AppHeader";
 import { DetailPanel } from "./components/DetailPanel";
@@ -100,8 +100,8 @@ const INITIAL_NAV: NavSnapshot = (() => {
 // (preview) mode – that would force the social ShareView over the AnalysisView.
 function initialShareIsOwn(profiles: Profile[]): boolean {
   if (!IS_SHARED_VIEW || !INITIAL_HASH_STATE) return false;
-  const incoming = encodeProfileHash(INITIAL_HASH_STATE.grades, INITIAL_HASH_STATE.pickedCodes);
-  return profiles.some((p) => encodeProfileHash(p.grades || {}, p.pickedCodes ?? []) === incoming);
+  const incoming = encodeProfileHash(INITIAL_HASH_STATE.grades, INITIAL_HASH_STATE.pickedCodes, undefined, INITIAL_HASH_STATE.retakenSubjects);
+  return profiles.some((p) => encodeProfileHash(p.grades || {}, p.pickedCodes ?? [], undefined, p.retakenSubjects) === incoming);
 }
 
 // First-run mobile landing flag. The welcome screen (MobileWelcome) is a
@@ -234,6 +234,7 @@ function CalculatorApp() {
       name: INITIAL_HASH_STATE.name || "Shared plan",
       grades: INITIAL_HASH_STATE.grades,
       pickedCodes: INITIAL_HASH_STATE.pickedCodes,
+      retakenSubjects: INITIAL_HASH_STATE.retakenSubjects,
     };
   });
   const activeProfile = profiles.find((p) => p.id === activeProfileId) || profiles[0];
@@ -244,6 +245,8 @@ function CalculatorApp() {
   const grades = displayProfile.grades;
   const deferredGrades = useDeferredValue(grades);
   const pickedCodes = displayProfile.pickedCodes ?? [];
+  const retakenSubjects = displayProfile.retakenSubjects ?? [];
+  const deferredRetakenSubjects = useDeferredValue(retakenSubjects);
 
   function setPickedCodes(
     updater: (string | null)[] | ((current: (string | null)[]) => (string | null)[]),
@@ -425,7 +428,7 @@ function CalculatorApp() {
       // this same profile – so the strings match. Robust against any
       // decode-roundtrip quirks the object compare below could trip on.
       const incomingHash = window.location.hash.slice(1);
-      const ownHash = encodeProfileHash(ownGrades, ownPicks, own.name);
+      const ownHash = encodeProfileHash(ownGrades, ownPicks, own.name, own.retakenSubjects);
       const ownGradesKeys = Object.keys(ownGrades);
       const stateGradesKeys = Object.keys(state!.grades);
       const gradesMatch = ownGradesKeys.length === stateGradesKeys.length
@@ -444,6 +447,7 @@ function CalculatorApp() {
         name: state!.name || (state!.sharing ? "Shared plan" : "URL preview"),
         grades: state!.grades,
         pickedCodes: state!.pickedCodes,
+        retakenSubjects: state!.retakenSubjects,
       });
       setShareViewMode(state!.sharing === true ? (state!.mode ?? "advisor") : null);
       // New URL = fresh context, re-show the banner regardless of
@@ -582,13 +586,14 @@ function CalculatorApp() {
         false,
         activeProfile.name,
         shareViewMode,
+        activeProfile.retakenSubjects,
       ).then((url) => {
         // Preserve history.state so a back-nav sentinel marker on the current
         // entry survives this URL re-write (see the mobile back-button trap).
         window.history.replaceState(window.history.state, "", url);
       });
     } else {
-      writeHashState(activeProfile.grades, activeProfile.pickedCodes ?? [], activeProfile.name);
+      writeHashState(activeProfile.grades, activeProfile.pickedCodes ?? [], activeProfile.name, activeProfile.retakenSubjects);
     }
   }, [profiles, activeProfileId, shareViewMode, sharedViewActive, activeProfile]);
 
@@ -601,6 +606,7 @@ function CalculatorApp() {
       false,
       activeProfile.name,
       mode,
+      activeProfile.retakenSubjects,
     );
     window.history.pushState({ jcOwn: true }, "", url);
     inShareRef.current = true; // race-free: set here, not via render
@@ -618,6 +624,7 @@ function CalculatorApp() {
       false,
       activeProfile.name,
       "advisor",
+      activeProfile.retakenSubjects,
     );
     try {
       if (navigator.clipboard?.writeText) await navigator.clipboard.writeText(url);
@@ -723,6 +730,7 @@ function CalculatorApp() {
       name,
       grades: previewProfile.grades,
       pickedCodes: previewProfile.pickedCodes,
+      retakenSubjects: previewProfile.retakenSubjects,
     };
     setProfiles((prev) => [...prev, newProfile]);
     setActiveProfileId(newId);
@@ -952,7 +960,11 @@ function CalculatorApp() {
     return sorted;
   }, [programmes]);
 
-  const isDesktop = useMediaQuery("(min-width: 921px)");
+  // Desktop layout requires BOTH a wide viewport AND not-a-phone. A phone (incl.
+  // an installed Android PWA reporting a ≥921px layout width) always gets mobile;
+  // iPad-landscape / real desktops keep the width-based path. See isMobileDevice.
+  const isWideViewport = useMediaQuery("(min-width: 921px)");
+  const isDesktop = isWideViewport && !isMobileDevice();
 
   // ── Mobile back-button navigation ──────────────────────────────────────
   // In this single-page app the step flow and the Step-3 sub-views (compare /
@@ -1022,7 +1034,7 @@ function CalculatorApp() {
       // so a copy/share/reload from here isn't stale. replaceState fires no
       // events and scheduleWrite re-applies the jcOwn marker.
       const ap = activeProfileRef.current;
-      writeHashState(ap.grades, ap.pickedCodes ?? [], ap.name);
+      writeHashState(ap.grades, ap.pickedCodes ?? [], ap.name, ap.retakenSubjects);
     };
     window.addEventListener("popstate", onPopNav);
     return () => window.removeEventListener("popstate", onPopNav);
@@ -1071,14 +1083,14 @@ function CalculatorApp() {
   }, [programmes]);
 
   // Ask the worker to recompute whenever the programmes load or the
-  // (deferred) grades settle. deferredGrades naturally throttles this
-  // to typing pauses; the token lets us discard stale responses.
+  // (deferred) grades / retaken set settle. The deferred values naturally
+  // throttle this to interaction pauses; the token discards stale responses.
   useEffect(() => {
     const worker = workerRef.current;
     if (!worker || programmes.length === 0) return;
     const token = ++computeTokenRef.current;
-    worker.postMessage({ type: "compute", grades: deferredGrades, token });
-  }, [programmes, deferredGrades]);
+    worker.postMessage({ type: "compute", grades: deferredGrades, retakenSubjects: deferredRetakenSubjects, token });
+  }, [programmes, deferredGrades, deferredRetakenSubjects]);
 
   const selectedOnlyFilterKey = selectedOnly ? pickedCodes.join("|") : "";
   const filteredResults = useMemo(() => {
@@ -1176,6 +1188,19 @@ function CalculatorApp() {
     }
     setProfiles((prev) =>
       prev.map((p) => (p.id === activeProfileId ? { ...p, grades: nextGrades } : p))
+    );
+  }
+
+  // Retaken-subject set for the HKDSE repeater penalty. Kept pruned to subjects
+  // the candidate actually has a grade for (you can only retake what you sat) —
+  // GradeInput hands back an already-pruned list, and clearing a grade drops it.
+  function setRetakenSubjects(next: string[]) {
+    if (sharedViewActive) {
+      setPreviewProfile((prev) => (prev ? { ...prev, retakenSubjects: next } : prev));
+      return;
+    }
+    setProfiles((prev) =>
+      prev.map((p) => (p.id === activeProfileId ? { ...p, retakenSubjects: next } : p))
     );
   }
 
@@ -1380,6 +1405,7 @@ function CalculatorApp() {
       profileName: displayProfile.name,
       results: pickedResults,
       grades: displayProfile.grades,
+      isRetaker: retakenSubjects.length > 0,
       profiles: sharedViewActive ? undefined : profiles,
       activeProfileId: sharedViewActive ? undefined : activeProfileId,
       onProfileChange: sharedViewActive ? undefined : setActiveProfileId,
@@ -1403,7 +1429,7 @@ function CalculatorApp() {
       // that opens the analysis dashboard when the recipient opens it.
       onBuildAdvisorUrl: sharedViewActive
         ? undefined
-        : () => buildShareUrl(activeProfile.grades, activeProfile.pickedCodes ?? [], false, activeProfile.name, "advisor"),
+        : () => buildShareUrl(activeProfile.grades, activeProfile.pickedCodes ?? [], false, activeProfile.name, "advisor", activeProfile.retakenSubjects),
       // Switch the social recap → advisor analysis for the same plan (works for
       // both an owned share and a received one — displayProfile drives both, and
       // the owner's URL re-syncs via the shareViewMode effect).
@@ -1635,6 +1661,7 @@ function CalculatorApp() {
         const idx = suggestionSlotIndexByCode[code];
         if (idx != null) setSlotCode(idx, code);
       }}
+      isRetaker={retakenSubjects.length > 0}
     />
   ) : null;
 
@@ -1662,6 +1689,7 @@ function CalculatorApp() {
             onProfileChange={sharedViewActive ? undefined : setActiveProfileId}
             onRename={sharedViewActive ? undefined : (name: string) => renameProfile(activeProfileId, name)}
             isReceivedShare={sharedViewActive}
+            isRetaker={retakenSubjects.length > 0}
             onOpenDetail={openProgrammeDetail}
             onEdit={closeAnalysis}
             alternativesSlot={
@@ -1686,6 +1714,7 @@ function CalculatorApp() {
             onActiveCodeChange={setActiveCode}
             onRemove={removePickedCode}
             readOnly={readOnly}
+            isRetaker={retakenSubjects.length > 0}
           />
         ) : (
           <MobileComparison
@@ -1823,7 +1852,9 @@ function CalculatorApp() {
           onSaveAsProfile={sharedViewActive ? savePreviewAsProfile : undefined}
           grades={grades}
           onGradesChange={setGrades}
-          onGradesReset={() => setGrades({})}
+          onGradesReset={() => { setGrades({}); setRetakenSubjects([]); }}
+          retakenSubjects={retakenSubjects}
+          onRetakenChange={setRetakenSubjects}
           pickedResults={pickedResults}
           pickedCount={pickedCount}
           activeCode={activeResult?.programme.jupas_code}
@@ -1863,7 +1894,7 @@ function CalculatorApp() {
 
         <div className={`stepper-content vt-${stepDirection}`}>
           <div className={step === 1 ? "stepper-panel active" : "stepper-panel"}>
-            <GradeInput grades={grades} onChange={setGrades} onReset={() => setGrades({})} readOnly={readOnly} />
+            <GradeInput grades={grades} onChange={setGrades} onReset={() => { setGrades({}); setRetakenSubjects([]); }} retakenSubjects={retakenSubjects} onRetakenChange={setRetakenSubjects} readOnly={readOnly} />
           </div>
 
           {/* Render heavy panel content ONLY for the active step. The
@@ -2295,7 +2326,7 @@ function loadProfiles(): Profile[] {
   // default profile from the URL state so they don't lose it.
   const hash = readHashState();
   if (hash && !hash.sharing && (Object.keys(hash.grades).length > 0 || hash.pickedCodes.length > 0)) {
-    return [{ id: "default", name: defaultProfileName(), grades: hash.grades, pickedCodes: hash.pickedCodes }];
+    return [{ id: "default", name: defaultProfileName(), grades: hash.grades, pickedCodes: hash.pickedCodes, retakenSubjects: hash.retakenSubjects }];
   }
   return [{ id: "default", name: defaultProfileName(), grades: {}, pickedCodes: [] }];
 }
@@ -2333,7 +2364,13 @@ function sanitizeProfiles(rawProfiles: unknown): Profile[] {
     const id = typeof candidate.id === "string" && candidate.id.trim() ? candidate.id.trim().slice(0, 80) : `profile-${index + 1}`;
     const name = typeof candidate.name === "string" && candidate.name.trim() ? candidate.name.trim().slice(0, 60) : `${defaultProfileName()} ${index + 1}`;
     const picks = Array.isArray(candidate.pickedCodes) ? sanitizeStoredPickedCodes(candidate.pickedCodes) : [];
-    return [{ id, name, grades: sanitizeGrades(candidate.grades), pickedCodes: picks }];
+    const grades = sanitizeGrades(candidate.grades);
+    // Retaken marks only make sense for subjects the profile still has a grade
+    // for; drop anything stale so it can't silently penalise a phantom subject.
+    const retaken = Array.isArray(candidate.retakenSubjects)
+      ? [...new Set(candidate.retakenSubjects.filter((s): s is string => typeof s === "string" && s in grades))]
+      : [];
+    return [{ id, name, grades, pickedCodes: picks, ...(retaken.length ? { retakenSubjects: retaken } : {}) }];
   });
 }
 

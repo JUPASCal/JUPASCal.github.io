@@ -3198,12 +3198,22 @@ def unify_data():
 
     # 4b-i-retake. HKDSE retake / repeater penalty (CUHK + HKU). TWO different
     # models, kept per-programme so the web app + Excel both surface them:
-    #   HKU  → 10% off the RETAKE SUBJECT only (per-subject), for EVERY programme;
-    #          `consideration` says how previous/combined sittings are counted.
+    #   HKU  → 10% off the RETAKE SUBJECT only (per-subject). The score penalty
+    #          applies to a SHORT explicit list ONLY (see HKU_RETAKE_PENALTY_CODES);
+    #          HKU's source states "Penalty will be imposed on subjects which were
+    #          retaken" on exactly those programmes. Every OTHER HKU programme keeps
+    #          `consideration` (how previous/combined sittings are counted) for the
+    #          combined-cert warning but carries NO penalty (`penalty` = None).
     #   CUHK → a band (5%-or-less / 6%-to-10%) off the WHOLE admission score, only
     #          for the listed programmes (rest: best-of-3-sittings, no penalty).
     # The CUHK bands are VLM-verified from the official table image (the PDF text
     # layer mis-tags the Wingdings ticks). Source: data/raw/retake_2026.json.
+    #
+    # HKU_RETAKE_PENALTY_CODES: the 4 programmes whose accordionHTML carries the
+    # explicit penalty sentence (JS6107/6456/6494/6949) PLUS JS6626 — MBBS
+    # (Distinguished MedScholar), the same MBBS penalty regime as JS6456 with a
+    # higher ceiling; HKU simply omitted the sentence for the new programme.
+    HKU_RETAKE_PENALTY_CODES = {"JS6107", "JS6456", "JS6494", "JS6949", "JS6626"}
     _retake_path = "data/raw/retake_2026.json"
     if os.path.exists(_retake_path):
         with open(_retake_path, encoding="utf-8") as _f:
@@ -3211,6 +3221,7 @@ def unify_data():
         _cuhk_rt, _hku_rt = _rt.get("cuhk", {}), _rt.get("hku", {})
         _cuhk_progs, _hku_progs = _cuhk_rt.get("programmes", {}), _hku_rt.get("programmes", {})
         _rt_n = 0
+        _rt_pen = 0
         for _code, _obj in unified_map.items():
             if _code in _cuhk_progs:
                 _obj["retake"] = {
@@ -3220,9 +3231,13 @@ def unify_data():
                     "source": _cuhk_rt.get("source"),
                 }
                 _rt_n += 1
+                _rt_pen += 1
             elif _obj.get("institution") == "HKU":
+                _penalised = _code in HKU_RETAKE_PENALTY_CODES
                 _r = {
-                    "penalty": _hku_rt.get("penalty", "10%"),
+                    # Score penalty only on the explicit list; the rest are
+                    # warning-only (consideration text but no deduction).
+                    "penalty": _hku_rt.get("penalty", "10%") if _penalised else None,
                     "scope": "retake_subject",       # 10% off the repeated subject only
                     "policy_en": _hku_rt.get("policy_en"),
                     "source": _hku_rt.get("source"),
@@ -3230,9 +3245,14 @@ def unify_data():
                 _cons = _hku_progs.get(_code)
                 if _cons:
                     _r["consideration"] = _cons
-                _obj["retake"] = _r
-                _rt_n += 1
-        print(f"Retake / repeater penalty applied: {_rt_n} programme(s)")
+                # Skip HKU programmes that have neither a penalty nor a
+                # consideration to surface — nothing for the app to show.
+                if _penalised or _cons:
+                    _obj["retake"] = _r
+                    _rt_n += 1
+                    if _penalised:
+                        _rt_pen += 1
+        print(f"Retake / repeater: {_rt_n} programme(s) tagged, {_rt_pen} with a score penalty")
 
     # 4b-i-hkust. HKUST School of Engineering moved to PER-DEPARTMENT weightings
     # for 2026 (2025 was UNIFORM across all Engineering: English x2 + Math x2 +

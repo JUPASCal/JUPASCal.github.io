@@ -37,6 +37,9 @@ type AnalysisBodyProps = {
   // name + grades live in the left rail, so the in-body heading name, grades
   // summary and bottom detail CTA are all hidden (rows stay clickable).
   variant?: "page" | "inline" | "console";
+  // The candidate is a HKDSE retaker — surfaces retake-penalty + combined-cert
+  // findings in the analysis (the latter even for warning-only programmes).
+  isRetaker?: boolean;
   // Reserved slot rendered after the findings (the Advisor Console feeds the
   // alternative-suggestions block here). Ignored by page/inline.
   alternativesSlot?: ReactNode;
@@ -110,6 +113,7 @@ export function AnalysisView({
   onShare,
   pickedCount,
   onGoToStep,
+  isRetaker,
 }: Props) {
   const { t, lang } = useLang();
   async function handleEdit() {
@@ -159,6 +163,7 @@ export function AnalysisView({
         onSaveAsProfile={onSaveAsProfile}
         onOpenDetail={onOpenDetail}
         onEdit={handleEdit}
+        isRetaker={isRetaker}
       />
 
       {/* Floating action bar, mirroring the Step 1-3 footer: Back returns to
@@ -196,13 +201,14 @@ export function AnalysisBody({
   onEdit,
   variant = "page",
   alternativesSlot,
+  isRetaker = false,
 }: AnalysisBodyProps) {
   const { t, lang } = useLang();
   const isConsole = variant === "console";
   // Band B and below are collapsed by default – Band A is what matters.
   const [showLower, setShowLower] = useState(false);
   const [linkCopied, setLinkCopied] = useState(false);
-  const analysis = useMemo(() => analyzePortfolio(results, t, lang), [results, t, lang]);
+  const analysis = useMemo(() => analyzePortfolio(results, t, lang, isRetaker), [results, t, lang, isRetaker]);
   const { total, eligibleCount, bandA, bandB, findings, verdict } = analysis;
   // "Strong" here = green for its slot (safe/fair): a genuine shot. Amber/
   // orange/red picks (risky / highly risky / unsafe) don't count toward it.

@@ -11,6 +11,7 @@ import { build } from "esbuild";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
+import { buildDefines } from "./utils/build_defines.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const STAGING = resolve(HERE, ".."); // repo root (app now lives at root)
@@ -18,7 +19,7 @@ const DATA = resolve(STAGING, "data/processed/JUPAS_2026_Unified_Data.json");
 const ALL = process.argv.includes("--all");
 
 async function loadModule(entry) {
-  const res = await build({ entryPoints: [entry], bundle: true, write: false, format: "esm", platform: "node", logLevel: "silent" });
+  const res = await build({ entryPoints: [entry], bundle: true, write: false, format: "esm", platform: "node", logLevel: "silent", define: buildDefines });
   return import("data:text/javascript;base64," + Buffer.from(res.outputFiles[0].text).toString("base64"));
 }
 const { getSelection } = await loadModule(resolve(STAGING, "src/lib/selection.ts"));

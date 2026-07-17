@@ -2746,3 +2746,57 @@
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
+
+
+/* ── Retake / repeater note (under the hero score) ───────────────────────
+   Plain boxed rows (no edge stripes / glows — see the DetailPanel design
+   language). The left-hand pill carries the tone; the card stays neutral. */
+.retake-detail-note {
+  margin: 10px 0 0;
+  display: grid;
+  gap: 8px;
+}
+
+.retake-note-row {
+  padding: 8px 11px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--surface-strong);
+}
+
+.retake-note-row p {
+  margin: 6px 0 0;
+  font-size: 0.76rem;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+.retake-note-tag {
+  display: inline-block;
+  padding: 1px 9px;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: #fff;
+  background: var(--bad);
+}
+
+.retake-note-row.estimated .retake-note-tag,
+.retake-note-row.consider.warning .retake-note-tag {
+  background: var(--alert);
+}
+
+.retake-note-row.consider.info .retake-note-tag {
+  background: var(--warn);
+}
+
+.retake-was,
+.retake-source {
+  font-style: normal;
+  color: color-mix(in srgb, var(--muted) 80%, transparent);
+}
+
+.retake-source {
+  display: inline;
+}

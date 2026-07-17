@@ -21,7 +21,7 @@ import type { Programme, ProgrammeResult, StudentGrades } from "../types/jupas";
 //    small – the main thread re-attaches each programme by code.
 
 type LoadRequest = { type: "load"; dataUrl: string; versionUrl: string };
-type ComputeRequest = { type: "compute"; grades: StudentGrades; token: number };
+type ComputeRequest = { type: "compute"; grades: StudentGrades; retakenSubjects?: string[]; token: number };
 type Request = LoadRequest | ComputeRequest;
 
 // ProgrammeResult minus the (heavy, already-on-main) programme object.
@@ -71,8 +71,9 @@ self.onmessage = async (event: MessageEvent<Request>) => {
 
   if (msg.type === "compute") {
     const grades = visibleGrades(msg.grades);
+    const retakenSubjects = msg.retakenSubjects ?? [];
     const results: SlimResult[] = loadedProgrammes.map((programme) => {
-      const full = buildProgrammeResult(programme, grades);
+      const full = buildProgrammeResult(programme, grades, retakenSubjects);
       return {
         code: programme.jupas_code,
         calculation: full.calculation,

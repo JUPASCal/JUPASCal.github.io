@@ -17,6 +17,7 @@ import { build } from "esbuild";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
+import { buildDefines } from "./utils/build_defines.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const STAGING = resolve(HERE, ".."); // repo root (app now lives at root)
@@ -28,6 +29,7 @@ async function loadModule(entry) {
   const res = await build({
     entryPoints: [entry], bundle: true, write: false,
     format: "esm", platform: "node", logLevel: "silent",
+    define: buildDefines,
   });
   return import("data:text/javascript;base64," + Buffer.from(res.outputFiles[0].text).toString("base64"));
 }

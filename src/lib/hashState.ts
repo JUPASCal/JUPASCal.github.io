@@ -1,7 +1,7 @@
 import type { StudentGrades } from "../types/jupas";
 import { isCategoryCGrade, normalizeCategoryCGrade } from "./categoryC";
 import { canonicalCategoryBGrade, isCategoryBGrade, isCategoryBSubject } from "./categoryB";
-import { CAT_A_SUBJECTS, CAT_B_SUBJECTS, CAT_C_SUBJECTS, CORE_SUBJECTS, M12_SUBJECT } from "./subjects";
+import { CAT_A_SUBJECTS, CAT_B_SUBJECTS, CAT_C_SUBJECTS, CORE_SUBJECTS, M12_SUBJECT, M1_SUBJECT, M2_SUBJECT } from "./subjects";
 import { trimTrailingNulls } from "./arrays";
 
 const MAX_HASH_LENGTH = 4096;
@@ -17,6 +17,9 @@ const VALID_GRADES = new Set(["5**", "5*", "5", "4", "3", "2", "1", "A", "B", "C
 export const PROGRAMME_CODE_PATTERN = /^JS[A-Z0-9]{4}$/;
 const SLOT_SUBJECT_PATTERN = /^(elective-[1-4]|cat-c|cat-b):subject$/;
 const VALID_SUBJECTS = new Set([...CORE_SUBJECTS, M12_SUBJECT, ...CAT_A_SUBJECTS, ...CAT_C_SUBJECTS, ...CAT_B_SUBJECTS]);
+// Retaken-subject names also include the SPECIFIC extended-maths modules (the
+// grade is stored under M1/M2, not the combined key), so accept those too.
+const VALID_RETAKE_SUBJECTS = new Set([...VALID_SUBJECTS, M1_SUBJECT, M2_SUBJECT]);
 const CAT_C_SET = new Set<string>(CAT_C_SUBJECTS);
 const CAT_B_SET = new Set<string>(CAT_B_SUBJECTS);
 
@@ -66,6 +69,10 @@ const TAG_EXT_GRADES = 2;
 // stored as TEXT (not an index) so a shared link still decodes after the ApL
 // catalog changes — same robustness guarantee as the programme-code packing.
 const TAG_APL = 3;
+// Retaken subjects (HKDSE repeater). Payload = a sequence of
+// [1-byte subjLen][subj UTF-8] records. Subject stored as TEXT (like TAG_APL)
+// so a shared link round-trips independent of the subject-ID catalog.
+const TAG_RETAKE = 4;
 const SUBJECT_ID_LIST: readonly string[] = [
   "Chinese Language",
   "English Language",
@@ -119,6 +126,8 @@ export type HashState = {
   pickedCodes: (string | null)[];
   sharing: boolean;
   showScores?: boolean;
+  /** Canonical names of subjects the candidate retook (HKDSE repeater). */
+  retakenSubjects?: string[];
   /** Profile name (active profile when URL was generated). Optional –
    *  carried through the URL so a recipient saving the preview can
    *  default to the sender's name instead of "Imported plan". */
@@ -329,6 +338,8 @@ function encodeBinary(state: HashState): string {
   if (extBytes.length > 0) writeTLV(w, TAG_EXT_GRADES, extBytes);
   const aplBytes = encodeAplGrades(aplGrades);
   if (aplBytes.length > 0) writeTLV(w, TAG_APL, aplBytes);
+  const retakeBytes = encodeRetakenSubjects(state.retakenSubjects || []);
+  if (retakeBytes.length > 0) writeTLV(w, TAG_RETAKE, retakeBytes);
 
   return BINARY_PREFIX + bytesToBase64Url(w.finish());
 }
@@ -387,6 +398,7 @@ function decodeBinary(payload: string): HashState | null {
     let name: string | undefined;
     const extRawGrades: Record<string, unknown> = {};
     const aplRawGrades: Record<string, string> = {};
+    let retakenSubjects: string[] | undefined;
     while (r.bytesLeft() >= 2) {
       const tag = r.read(8);
       if (tag === 0) break; // padding / end of tail
@@ -405,6 +417,8 @@ function decodeBinary(payload: string): HashState | null {
         Object.assign(extRawGrades, decodeExtendedGrades(buf));
       } else if (tag === TAG_APL) {
         Object.assign(aplRawGrades, decodeAplGrades(buf));
+      } else if (tag === TAG_RETAKE) {
+        retakenSubjects = decodeRetakenSubjects(buf);
       }
       // Unknown tags: payload already consumed, loop continues.
     }
@@ -414,8 +428,12 @@ function decodeBinary(payload: string): HashState | null {
     Object.assign(grades, aplRawGrades);
     reassignElectiveSlots(grades);
 
+    // Only keep retaken marks for subjects that actually decoded a grade — a
+    // stale mark (subject dropped) is meaningless and would never penalise.
+    if (retakenSubjects) retakenSubjects = retakenSubjects.filter((s) => s in grades);
+
     if (Object.keys(grades).length === 0 && pickedCodes.length === 0) return null;
-    return { grades, pickedCodes, sharing, showScores, name, mode };
+    return { grades, pickedCodes, sharing, showScores, name, mode, ...(retakenSubjects && retakenSubjects.length ? { retakenSubjects } : {}) };
   } catch (e) {
     console.error("Failed to decode binary hash", e);
     return null;
@@ -482,6 +500,35 @@ function decodeAplGrades(bytes: Uint8Array): Record<string, string> {
     // Only accept a recognised ApL subject + result level (stored canonically).
     const canonical = canonicalCategoryBGrade(grade);
     if (CAT_B_SET.has(subject) && canonical) out[subject] = canonical;
+  }
+  return out;
+}
+
+// TAG_RETAKE payload: a sequence of [subjLen][subj UTF-8] records. Subjects
+// stored as text so the link round-trips independent of the subject catalog.
+function encodeRetakenSubjects(subjects: string[]): Uint8Array {
+  if (subjects.length === 0) return new Uint8Array();
+  const bytes: number[] = [];
+  const encoder = new TextEncoder();
+  for (const subject of subjects) {
+    if (!VALID_RETAKE_SUBJECTS.has(subject)) continue;
+    const sBytes = encoder.encode(subject).slice(0, MAX_SUBJECT_LENGTH);
+    if (bytes.length + 1 + sBytes.length > 255) break;
+    bytes.push(sBytes.length & 0xFF, ...sBytes);
+  }
+  return new Uint8Array(bytes);
+}
+
+function decodeRetakenSubjects(bytes: Uint8Array): string[] {
+  const out: string[] = [];
+  const decoder = new TextDecoder();
+  let i = 0;
+  while (i + 1 <= bytes.length) {
+    const sLen = bytes[i++];
+    if (i + sLen > bytes.length) break;
+    const subject = decoder.decode(bytes.slice(i, i + sLen));
+    i += sLen;
+    if (VALID_RETAKE_SUBJECTS.has(subject) && !out.includes(subject)) out.push(subject);
   }
   return out;
 }
@@ -590,13 +637,14 @@ export function writeHashState(
   grades: StudentGrades,
   pickedCodes: (string | null)[],
   name?: string,
+  retakenSubjects?: string[],
 ) {
   const hasContent = Object.keys(grades).length > 0 || pickedCodes.some(Boolean);
   if (!hasContent) {
     scheduleWrite(null);
     return;
   }
-  scheduleWrite({ grades, pickedCodes, sharing: false, showScores: false, name });
+  scheduleWrite({ grades, pickedCodes, sharing: false, showScores: false, name, retakenSubjects });
 }
 
 // Pure encoder (no side effects) for the non-sharing calc-URL hash a
@@ -608,8 +656,9 @@ export function encodeProfileHash(
   grades: StudentGrades,
   pickedCodes: (string | null)[],
   name?: string,
+  retakenSubjects?: string[],
 ): string {
-  return encodeHash({ grades, pickedCodes, sharing: false, showScores: false, name });
+  return encodeHash({ grades, pickedCodes, sharing: false, showScores: false, name, retakenSubjects });
 }
 
 // `buildShareUrl` stays a Promise so consumers that already `await` it
@@ -620,8 +669,9 @@ export function buildShareUrl(
   showScores = false,
   name?: string,
   mode?: "advisor" | "social",
+  retakenSubjects?: string[],
 ): Promise<string> {
-  const hash = encodeHash({ grades, pickedCodes, sharing: true, showScores, name, mode });
+  const hash = encodeHash({ grades, pickedCodes, sharing: true, showScores, name, mode, retakenSubjects });
   const base = `${window.location.origin}${window.location.pathname}${window.location.search}`;
   return Promise.resolve(hash ? `${base}#${hash}` : base);
 }

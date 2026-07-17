@@ -16,8 +16,8 @@ export type Filters = {
   interview: InterviewFilter;
 };
 
-export function buildProgrammeResult(programme: Programme, grades: StudentGrades): ProgrammeResult {
-  const calculation = calculateScore(grades, programme, hasHistoricalScores(programme) ? "2025" : "2026");
+export function buildProgrammeResult(programme: Programme, grades: StudentGrades, retakenSubjects: string[] = []): ProgrammeResult {
+  const calculation = calculateScore(grades, programme, hasHistoricalScores(programme) ? "2025" : "2026", retakenSubjects);
   const eligibility = applyExtraEligibility(
     checkEligibility(grades, programme.min_requirements_2026, programme),
     programme,

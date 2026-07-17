@@ -12,6 +12,11 @@ type Props = {
   grades: StudentGrades;
   onChange: (grades: StudentGrades) => void;
   onReset: () => void;
+  // HKDSE retaker: canonical names of subjects the candidate retook, and a
+  // setter. Drives the retake / repeater penalty (CUHK + HKU). Optional so
+  // non-retaker callers (and older code paths) can omit it.
+  retakenSubjects?: string[];
+  onRetakenChange?: (subjects: string[]) => void;
   // View mode: disables every grade button + elective select and hides
   // the Reset/Done footer actions. Users can still scroll through the
   // panel to see what the shared profile has entered.
@@ -24,6 +29,25 @@ type Props = {
 };
 
 const ELECTIVE_SLOTS = ["elective-1", "elective-2", "elective-3", "elective-4"];
+
+// The subjects the candidate has actually entered a grade for, in display order
+// (cores, extended maths, electives, Cat-C language, ApL). Used by the retaker
+// checklist — you can only retake a subject you sat, so nothing else is offered.
+function enteredSubjectList(grades: StudentGrades): string[] {
+  const out: string[] = [];
+  const push = (subject?: string) => {
+    if (subject && grades[subject] && grades[subject] !== "U" && !out.includes(subject)) out.push(subject);
+  };
+  for (const subject of CORE_SUBJECTS) push(subject);
+  // Extended maths is stored under the specific module key that holds the grade.
+  push(M1_SUBJECT);
+  push(M2_SUBJECT);
+  push(M12_SUBJECT);
+  for (const slot of ELECTIVE_SLOTS) push(grades[`${slot}:subject`]);
+  push(grades["cat-c:subject"]);
+  push(grades["cat-b:subject"]);
+  return out;
+}
 
 // ApL results are long ("Attained with Distinction (II)"); the calculator stores
 // the full value but the grade buttons show a compact tier. (II) is the higher
@@ -43,7 +67,7 @@ const APL_SUMMARY_LABELS: Record<string, string> = {
   "U": "U",
 };
 
-export const GradeInput = memo(({ grades, onChange, onReset, readOnly = false, headerToggles = false, collapsed: controlledCollapsed, onCollapsedChange }: Props) => {
+export const GradeInput = memo(({ grades, onChange, onReset, retakenSubjects = [], onRetakenChange, readOnly = false, headerToggles = false, collapsed: controlledCollapsed, onCollapsedChange }: Props) => {
   const { t, lang } = useLang();
   const [internalCollapsed, setInternalCollapsed] = useState(false);
   const collapsed = controlledCollapsed ?? internalCollapsed;
@@ -67,6 +91,41 @@ export const GradeInput = memo(({ grades, onChange, onReset, readOnly = false, h
     return () => observer.disconnect();
   }, []);
   const slotSubjects = ELECTIVE_SLOTS.map((slot) => grades[`${slot}:subject`] || "");
+
+  // Retaker checklist. `retakerExpanded` lets the user open the section before
+  // ticking anything; it's also implicitly open whenever any subject is marked.
+  const [retakerExpanded, setRetakerExpanded] = useState(false);
+  const enteredSubjects = enteredSubjectList(grades);
+  const retakenSet = new Set(retakenSubjects);
+  const retakerOn = retakerExpanded || retakenSubjects.length > 0;
+
+  // Prune retaken subjects the candidate no longer has a grade for (cleared a
+  // grade, switched M1↔M2, or changed an elective) so stale marks never linger
+  // in the profile / share URL. The length guard stops a re-render loop.
+  useEffect(() => {
+    if (!onRetakenChange) return;
+    const entered = new Set(enteredSubjectList(grades));
+    const pruned = retakenSubjects.filter((subject) => entered.has(subject));
+    if (pruned.length !== retakenSubjects.length) onRetakenChange(pruned);
+  }, [grades, retakenSubjects, onRetakenChange]);
+
+  function toggleRetaker() {
+    if (retakerOn) {
+      setRetakerExpanded(false);
+      onRetakenChange?.([]);
+    } else {
+      setRetakerExpanded(true);
+    }
+  }
+
+  function toggleRetakenSubject(subject: string) {
+    if (!onRetakenChange) return;
+    onRetakenChange(
+      retakenSet.has(subject)
+        ? retakenSubjects.filter((s) => s !== subject)
+        : [...retakenSubjects, subject],
+    );
+  }
 
   function setGrade(subject: string, grade: string) {
     const next = { ...grades };
@@ -254,6 +313,49 @@ export const GradeInput = memo(({ grades, onChange, onReset, readOnly = false, h
               />
           </div>
         </div>
+        {onRetakenChange || retakenSubjects.length ? (
+          <>
+            <hr className="grade-section-divider" />
+            <div className="retake-block">
+              <label className="retake-toggle">
+                <input
+                  type="checkbox"
+                  checked={retakerOn}
+                  disabled={readOnly || (!retakerOn && enteredSubjects.length === 0)}
+                  onChange={toggleRetaker}
+                />
+                <span className="retake-toggle-label">
+                  {t("grade.retake.toggle")}
+                  {retakenSubjects.length > 0 ? (
+                    <em className="retake-count">{t("grade.retake.summary", { n: retakenSubjects.length })}</em>
+                  ) : null}
+                </span>
+              </label>
+              {retakerOn ? (
+                <div className="retake-body">
+                  <p className="retake-hint">{t("grade.retake.hint")}</p>
+                  {enteredSubjects.length === 0 ? (
+                    <p className="retake-empty">{t("grade.retake.none")}</p>
+                  ) : (
+                    <div className="retake-list" role="group" aria-label={t("grade.retake.pickAria")}>
+                      {enteredSubjects.map((subject) => (
+                        <label key={subject} className={retakenSet.has(subject) ? "retake-item checked" : "retake-item"}>
+                          <input
+                            type="checkbox"
+                            checked={retakenSet.has(subject)}
+                            disabled={readOnly}
+                            onChange={() => toggleRetakenSubject(subject)}
+                          />
+                          <span>{localizedShortSubject(subject, lang)}</span>
+                        </label>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ) : null}
+            </div>
+          </>
+        ) : null}
         {readOnly ? null : (
           <div className="grade-footer-actions">
             <button className="grade-reset-button" type="button" onClick={reset}>

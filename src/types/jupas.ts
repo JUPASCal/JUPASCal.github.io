@@ -9,6 +9,10 @@ export type Profile = {
   // Profile-scoped picks. Optional for migration from pre-per-profile
   // localStorage shapes – reads should treat `undefined` as `[]`.
   pickedCodes?: (string | null)[];
+  // Canonical names of subjects this candidate RETOOK (HKDSE repeater). Drives
+  // the retake / repeater penalty (CUHK + HKU). Optional — absent means the
+  // candidate is not flagged as a retaker.
+  retakenSubjects?: string[];
 };
 
 export type RequirementPool = {
@@ -218,13 +222,17 @@ export type Programme = {
   offer_statistics?: OfferStatistic[];
   // HKDSE retake / repeater penalty (CUHK + HKU only; from data/raw/retake_2026.json).
   // Two different models:
-  //   scope "retake_subject"  – HKU: 10% off the REPEATED SUBJECT only (per-subject),
-  //                             applied to every HKU programme. `consideration` says
-  //                             how previous/combined sittings are counted.
+  //   scope "retake_subject"  – HKU: 10% off the REPEATED SUBJECT only (per-subject).
+  //                             The SCORE penalty applies to a short explicit list
+  //                             (Medicine/BioMed etc.); those carry `penalty:"10%"`.
+  //                             Every other HKU programme carries `penalty:null` and
+  //                             only a `consideration` — how previous/combined
+  //                             sittings are counted — for the combined-cert warning.
   //   scope "admission_score" – CUHK: a band ("5% or less" / "6% to 10%") off the
   //                             WHOLE admission score, for the listed programmes only.
+  // `penalty === null` means "no score deduction, informational warning only".
   retake?: {
-    penalty: string;                                  // "10%" | "5% or less" | "6% to 10%"
+    penalty: string | null;                           // "10%" | "5% or less" | "6% to 10%" | null
     scope: "retake_subject" | "admission_score";
     consideration?: string;                           // HKU only
     policy_en?: string | null;
@@ -279,6 +287,25 @@ export type CandidateScore = {
   used: boolean;
   isBonus: boolean;
   bonusValue?: string;
+  // This selected subject had a HKDSE retake penalty applied (HKU per-subject
+  // model). `weightedScore` is already the post-penalty value.
+  retakePenalized?: boolean;
+};
+
+// The HKDSE retake / repeater penalty actually applied to a computed score.
+// Present only when the student is a retaker AND the programme penalises it.
+export type RetakePenalty = {
+  scope: "retake_subject" | "admission_score";
+  // Score before the penalty (so the UI can show the struck-through original).
+  preScore: number;
+  // Points removed (preScore − totalScore, always ≥ 0).
+  deducted: number;
+  // CUHK only: the source band ("5% or less" / "6% to 10%"). We apply its
+  // worst-case upper bound, so `estimated` is true for the admission_score model.
+  band?: string;
+  estimated?: boolean;
+  // HKU only: which selected subjects were penalised (the retaken ones).
+  subjects?: string[];
 };
 
 export type CalculationResult = {
@@ -290,6 +317,8 @@ export type CalculationResult = {
   // ApL subjects the student holds that this programme recognises but does NOT
   // quantify into the score (CUHK advisory-only) — surfaced as an advantage note.
   recognizedApL?: string[];
+  // Set when a retake penalty was applied — `totalScore` is already net of it.
+  retakePenalty?: RetakePenalty;
 };
 
 export type EligibilityDetail = {

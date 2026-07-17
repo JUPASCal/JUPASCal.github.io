@@ -7,11 +7,12 @@ import { useLang, pickName, type Lang, type Translate } from "../lib/i18n";
 import { localizedShortSubject, localizedSubject } from "../lib/subjectsI18n";
 import { SUBJECTS } from "../lib/strings";
 import { describeFormula } from "../lib/formulaText";
+import { programmeConsideration } from "../lib/retake";
 import { scoringBasisYear } from "../lib/scoreBasis";
 import { getSelection, selectionTypeKey, selectionTimingKey, selectionSalienceKey, translateSelectionText } from "../lib/selection";
 import { loadProgrammeDetails, type DescBlock, type ProgrammeDetail } from "../lib/programmeDetails";
 import { localizeElectiveNote, localizeAdmissionNote } from "../lib/requirementI18n";
-import type { CandidateScore, EligibilityDetail, HkustFormulaStep, OfferStatistic, Programme, ProgrammeResult, YearChanges } from "../types/jupas";
+import type { CalculationResult, CandidateScore, EligibilityDetail, HkustFormulaStep, OfferStatistic, Programme, ProgrammeResult, YearChanges } from "../types/jupas";
 import "./DetailPanel.css";
 
 // "Preferred subjects" are a soft, non-binding preference the institution lists
@@ -200,6 +201,10 @@ type Props = {
   // resolves which slot a swap targets. Omit on mobile (the footer handles it).
   onAddToPlan?: (code: string) => void;
   onSwapToSlot?: (code: string) => void;
+  // The candidate is a HKDSE retaker (marked ≥1 retaken subject). Enables the
+  // combined-cert / sitting-combination warnings, which apply to a programme
+  // even when it carries no score penalty (warning-only HKU programmes).
+  isRetaker?: boolean;
 };
 
 function scrollParentFor(node: HTMLElement | null): HTMLElement | null {
@@ -214,7 +219,60 @@ function scrollParentFor(node: HTMLElement | null): HTMLElement | null {
   return null;
 }
 
-export function DetailPanel({ results, activeCode, reviewRequest, onActiveCodeChange, onRemove, readOnly = false, previewCode, suggestionSlots, onAddToPlan, onSwapToSlot }: Props) {
+// i18n key for each classified sitting-combination rule ("" = no localized
+// sentence, just show the raw source quote).
+const CONSIDER_SENTENCE_KEY: Record<string, string> = {
+  single: "retake.consider.single",
+  latest: "retake.consider.latest",
+  years: "retake.consider.years",
+  sittings: "retake.consider.sittings",
+  other: "",
+};
+
+// Retake-penalty + combined-cert reminder shown under the hero score. The
+// penalty note appears whenever this score was actually penalised; the
+// consideration note appears for any retaker on a programme that states how it
+// combines sittings (HKU) — including programmes with no score penalty.
+function RetakeDetailNote({ programme, penalty, isRetaker, t, lang }: {
+  programme: Programme;
+  penalty: CalculationResult["retakePenalty"];
+  isRetaker: boolean;
+  t: Translate;
+  lang: Lang;
+}) {
+  const consideration = isRetaker ? programmeConsideration(programme) : null;
+  if (!penalty && !consideration) return null;
+  const sentenceKey = consideration ? CONSIDER_SENTENCE_KEY[consideration.kind] : "";
+  return (
+    <div className="retake-detail-note">
+      {penalty ? (
+        <div className={"retake-note-row penalty" + (penalty.estimated ? " estimated" : "")}>
+          <span className="retake-note-tag">{t("retake.penalty.title")}</span>
+          <p>
+            {penalty.scope === "retake_subject"
+              ? t("retake.penalty.hku", {
+                  pts: penalty.deducted.toFixed(2),
+                  subjects: (penalty.subjects ?? []).map((s) => localizedShortSubject(s, lang)).join(t("common.listSep")),
+                })
+              : t("retake.penalty.cuhk", { pts: penalty.deducted.toFixed(2), band: penalty.band ?? "" })}{" "}
+            <em className="retake-was">{t("retake.penalty.was", { score: penalty.preScore.toFixed(2) })}</em>
+          </p>
+        </div>
+      ) : null}
+      {consideration ? (
+        <div className={"retake-note-row consider " + consideration.severity}>
+          <span className="retake-note-tag">{t("retake.consider.title")}</span>
+          <p>
+            {sentenceKey ? `${t(sentenceKey)} ` : ""}
+            <em className="retake-source">{t("retake.consider.source", { text: consideration.text })}</em>
+          </p>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+export function DetailPanel({ results, activeCode, reviewRequest, onActiveCodeChange, onRemove, readOnly = false, previewCode, suggestionSlots, onAddToPlan, onSwapToSlot, isRetaker = false }: Props) {
   const { t, lang } = useLang();
   const [auditOpen, setAuditOpen] = useState(false);
   // Programme name is clamped (2 lines / 1 secondary line) by default; tapping
@@ -550,6 +608,7 @@ export function DetailPanel({ results, activeCode, reviewRequest, onActiveCodeCh
               {t("detail.aplAdvisoryPost")}
             </p>
           ) : null}
+          <RetakeDetailNote programme={programme} penalty={calculation.retakePenalty} isRetaker={isRetaker} t={t} lang={lang} />
           {(() => {
             // The institution's published 2025 admission scores (LQ/Median/UQ) are
             // ALWAYS shown — they exist regardless of whether the student has entered

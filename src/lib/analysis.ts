@@ -1,6 +1,8 @@
 import { slotLabel } from "./slots";
 import { effectiveBenchmarks } from "./results";
 import { getSelection, selectionTypeKey, type SelectionItem, type SelectionType } from "./selection";
+import { classifyConsideration } from "./retake";
+import { institutionLabel } from "./institutions";
 import type { Lang, Translate } from "./i18n";
 import type { OfferStatistic, Programme, ProgrammeResult } from "../types/jupas";
 
@@ -286,7 +288,7 @@ function humanList(items: string[], lang: Lang): string {
   return `${lower.slice(0, -1).join(", ")}, and ${lower[lower.length - 1]}`;
 }
 
-export function analyzePortfolio(rawPicks: (ProgrammeResult | null)[], t: Translate, lang: Lang): PortfolioAnalysis {
+export function analyzePortfolio(rawPicks: (ProgrammeResult | null)[], t: Translate, lang: Lang, isRetaker = false): PortfolioAnalysis {
   const picks: PickChance[] = [];
   rawPicks.forEach((result, index) => {
     if (!result) return;
@@ -731,6 +733,47 @@ export function analyzePortfolio(rawPicks: (ProgrammeResult | null)[], t: Transl
       detail: t(many ? "find.scoreCaveat.detail.many" : "find.scoreCaveat.detail.one"),
       slots: refs,
     });
+  }
+
+  // 7. Retaker / repeater. (a) Score penalties actually applied to a pick, and
+  //    (b) sitting-combination ("combined certs") rules — the latter only for a
+  //    flagged retaker, and even on programmes with no score penalty (the
+  //    warning-only HKU picks, e.g. "best single sitting" / "latest results").
+  for (const p of picks) {
+    const rp = p.result.calculation.retakePenalty;
+    if (!rp) continue;
+    findings.push({
+      id: `retake-penalty-${p.result.programme.jupas_code}`,
+      severity: "warning",
+      title: t("retake.analysis.penaltyTitle", { code: p.result.programme.jupas_code }),
+      detail: t("retake.analysis.penaltyBody", {
+        inst: institutionLabel(p.result.programme.institution),
+        pts: rp.deducted.toFixed(2),
+        score: p.result.calculation.totalScore.toFixed(2),
+      }),
+      slots: [slotRef(p)],
+    });
+  }
+  if (isRetaker) {
+    const CONSIDER_KEY: Record<string, string> = {
+      single: "retake.consider.single",
+      latest: "retake.consider.latest",
+      years: "retake.consider.years",
+      sittings: "retake.consider.sittings",
+      other: "",
+    };
+    for (const p of picks) {
+      const consideration = classifyConsideration(p.result.programme.retake?.consideration);
+      if (!consideration) continue;
+      const sentence = CONSIDER_KEY[consideration.kind] ? t(CONSIDER_KEY[consideration.kind]) + " " : "";
+      findings.push({
+        id: `retake-consider-${p.result.programme.jupas_code}`,
+        severity: consideration.severity,
+        title: t("retake.analysis.considerTitle", { code: p.result.programme.jupas_code }),
+        detail: `${sentence}${t("retake.consider.source", { text: consideration.text })}`,
+        slots: [slotRef(p)],
+      });
+    }
   }
 
   findings.sort((a, b) => SEVERITY_ORDER[a.severity] - SEVERITY_ORDER[b.severity]);

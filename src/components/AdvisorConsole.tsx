@@ -31,6 +31,8 @@ type Props = {
   grades: StudentGrades;
   onGradesChange: (grades: StudentGrades) => void;
   onGradesReset: () => void;
+  retakenSubjects: string[];
+  onRetakenChange: (subjects: string[]) => void;
 
   // Plan
   pickedResults: (ProgrammeResult | null)[];
@@ -77,6 +79,8 @@ export function AdvisorConsole({
   grades,
   onGradesChange,
   onGradesReset,
+  retakenSubjects,
+  onRetakenChange,
   pickedResults,
   pickedCount,
   activeCode,
@@ -136,6 +140,8 @@ export function AdvisorConsole({
             grades={grades}
             onChange={onGradesChange}
             onReset={onGradesReset}
+            retakenSubjects={retakenSubjects}
+            onRetakenChange={onRetakenChange}
             readOnly={readOnly}
             headerToggles
             collapsed={gradeCollapsed}
@@ -216,6 +222,7 @@ export function AdvisorConsole({
                 results={pickedResults}
                 grades={grades}
                 isReceivedShare={isReceivedShare}
+                isRetaker={retakenSubjects.length > 0}
                 onOpenDetail={openDetail}
                 onEdit={() => setMainView("analyze")}
                 allResults={allResults}

@@ -147,6 +147,17 @@ export const STRINGS = {
   "grade.sum.lang": { en: "Lang", zh: "語言" },
   "grade.sum.apl": { en: "ApL", zh: "應用" },
 
+  // – Retaker / repeater (HKDSE 重讀) –
+  "grade.retake.title": { en: "HKDSE retaker", zh: "文憑試重讀生" },
+  "grade.retake.toggle": { en: "I retook one or more subjects", zh: "我有重考一科或以上" },
+  "grade.retake.hint": {
+    en: "CUHK and HKU adjust scores for repeaters. Tick each subject you sat in an earlier year and retook — new subjects you never took before aren’t affected.",
+    zh: "中大及港大會對重讀生調整分數。請勾選你曾於較早年份應考並重考的科目——從未修讀過的新科目不受影響。",
+  },
+  "grade.retake.pickAria": { en: "Retaken subjects", zh: "重考科目" },
+  "grade.retake.none": { en: "Enter your grades first, then mark any subjects you retook.", zh: "請先輸入成績，再標示你重考的科目。" },
+  "grade.retake.summary": { en: "{n} retaken", zh: "重考 {n} 科" },
+
   // – Score scale / benchmark band labels –
   "band.aboveUq": { en: "Above UQ", zh: "高於 UQ" },
   "band.aboveMed": { en: "Above MED", zh: "高於中位" },
@@ -424,6 +435,43 @@ export const STRINGS = {
   // benchmarks are already on the 2026 basis (CityU recalculated, HKBU
   // simulated, CUHK recalc/sim, HKUST Engineering), else "2025".
   "detail.calcBasis": { en: "Calculated based on {year} formula", zh: "按 {year} 年公式計算" },
+
+  // – Retake / repeater penalty + combined-cert warnings (DetailPanel + Analysis) –
+  "retake.penalty.title": { en: "Retake penalty applied", zh: "已計入重考扣分" },
+  "retake.penalty.was": { en: "was {score}", zh: "原為 {score}" },
+  "retake.penalty.hku": {
+    en: "HKU takes 10% off each retaken subject. −{pts} for {subjects}.",
+    zh: "港大就每個重考科目扣減 10%。{subjects} 共扣 {pts} 分。",
+  },
+  "retake.penalty.cuhk": {
+    en: "Estimated worst case: −{pts}. CUHK cuts a repeater’s whole score by up to {band}.",
+    zh: "估算最壞情況：扣 {pts} 分。中大就重讀生的總分最多扣減 {band}。",
+  },
+  "retake.penalty.cuhkShort": { en: "up to {band} off total", zh: "總分最多扣 {band}" },
+  "retake.consider.title": { en: "Combined results (repeaters)", zh: "重讀生成績合併" },
+  "retake.consider.single": {
+    en: "Counts only your best SINGLE sitting — results from different years can’t be combined.",
+    zh: "只計算你最佳的「單次」考試成績，不同年份的成績不能合併。",
+  },
+  "retake.consider.latest": {
+    en: "Uses your LATEST result for each subject (not your best across years).",
+    zh: "就每科採用你「最近一次」的成績（而非跨年最佳）。",
+  },
+  "retake.consider.years": {
+    en: "Combines your best results across specific years only.",
+    zh: "只合併「特定年份」的最佳成績。",
+  },
+  "retake.consider.sittings": {
+    en: "Combines your best results across the stated sittings.",
+    zh: "會合併指定考試場次的最佳成績。",
+  },
+  "retake.consider.source": { en: "Official: “{text}”", zh: "官方：「{text}」" },
+  "retake.analysis.penaltyTitle": { en: "{code}: retake penalty on your score", zh: "{code}：分數已計入重考扣分" },
+  "retake.analysis.penaltyBody": {
+    en: "As a repeater, {inst} lowers your score for this programme by {pts} (to {score}). It’s already reflected in the band above.",
+    zh: "作為重讀生，{inst} 會將你此課程的分數扣減 {pts}（至 {score}），已反映於上方評級。",
+  },
+  "retake.analysis.considerTitle": { en: "{code}: repeater result rules", zh: "{code}：重讀生成績規則" },
   "detail.noData2025": { en: "No 2025 admission data – comparing against 2026 logic only", zh: "暫無 2025 年收生數據 – 只與 2026 年計分邏輯比較" },
   "detail.tapBreakdownHide": { en: "Hide subject breakdown", zh: "隱藏科目細項" },
   "detail.tapBreakdownShow": { en: "Tap to see subject breakdown", zh: "點選查看科目細項" },

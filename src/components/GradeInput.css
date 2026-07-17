@@ -660,3 +660,104 @@
       grid-template-columns: 1fr;
     }
 }
+
+
+/* ── HKDSE retaker checklist ─────────────────────────────────────────────
+   Plain boxed section (no edge stripes / glows). Checked items get a soft
+   accent tint, mirroring .grade-summary-cell.filled. */
+.retake-block {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.retake-toggle {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  cursor: pointer;
+}
+
+.retake-toggle input[type="checkbox"] {
+  margin-top: 2px;
+  width: 16px;
+  height: 16px;
+  flex: none;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.retake-toggle input:disabled {
+  cursor: default;
+}
+
+.retake-toggle-label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2);
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.retake-count {
+  font-style: normal;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--active);
+  color: var(--accent);
+}
+
+.retake-body {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.retake-hint,
+.retake-empty {
+  margin: 0;
+  font-size: 0.74rem;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+.retake-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: var(--space-1);
+}
+
+.retake-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 6px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--row-bg);
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.retake-item input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+  flex: none;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.retake-item.checked {
+  border-color: color-mix(in srgb, var(--accent) 38%, var(--line));
+  background: var(--active);
+  color: var(--accent);
+}
+
+.retake-item span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

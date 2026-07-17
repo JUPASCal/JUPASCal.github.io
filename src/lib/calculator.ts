@@ -12,6 +12,7 @@ import type {
 import { acceptsCategoryC, categoryCBasePoints, categoryCCanSatisfyElective, isCategoryCGrade, isCategoryCSubject } from "./categoryC";
 import { categoryBAccepted, categoryBAdvisory, categoryBBasePoints, categoryBCanSatisfyElective, isCategoryBSubject } from "./categoryB";
 import { canonicalSubject, CAT_A_SUBJECTS, SUBJECT_EXPANSIONS } from "./subjects";
+import { cuhkWorstCaseFactor, HKU_RETAKE_RATE } from "./retake";
 
 const CAT_A_SET = new Set(CAT_A_SUBJECTS);
 
@@ -187,7 +188,14 @@ function scoreHkustSteps(
   }
 }
 
-export function calculateScore(studentGrades: StudentGrades, programme: Programme, year: "2025" | "2026" = "2025"): CalculationResult {
+export function calculateScore(
+  studentGrades: StudentGrades,
+  programme: Programme,
+  year: "2025" | "2026" = "2025",
+  // Canonical names of subjects the student RETOOK (HKDSE repeater). Drives the
+  // retake penalty at the end — empty/undefined means "not a retaker", no penalty.
+  retakenSubjects: string[] = [],
+): CalculationResult {
   if (!programme?.score_conversion_table) {
     return { totalScore: 0, selected: [], allCandidates: [], score_type: "actual" };
   }
@@ -485,6 +493,56 @@ export function calculateScore(studentGrades: StudentGrades, programme: Programm
         .map(([subject]) => subject)
     : [];
 
+  // --- HKDSE retake / repeater penalty -------------------------------------
+  // Applied AFTER the base score is finalised, so it never perturbs subject
+  // selection. Two models (programme.retake, narrowed in unify 4b-i-retake):
+  //   retake_subject (HKU explicit list) — 10% off each SELECTED subject the
+  //     student retook. A brand-new subject (never sat before) is untouched.
+  //   admission_score (CUHK listed progs) — the WHOLE score is banded down if
+  //     the student retook ANYTHING; the specific subject is irrelevant. The
+  //     band is a range, so we apply its worst-case upper bound and flag it.
+  let retakePenalty: CalculationResult["retakePenalty"];
+  const retake = programme.retake;
+  if (retake?.penalty && retakenSubjects.length) {
+    const retakenSet = new Set(retakenSubjects.map(canonicalSubject));
+    const wasRetaken = (subject: string) => retakenSet.has(canonicalSubject(subject));
+    if (retake.scope === "retake_subject") {
+      const penalisedSubjects: string[] = [];
+      let deducted = 0;
+      for (const candidate of selectedSubjects) {
+        if (!wasRetaken(candidate.subject)) continue;
+        const cut = candidate.weightedScore * HKU_RETAKE_RATE;
+        deducted += cut;
+        candidate.weightedScore -= cut;
+        candidate.retakePenalized = true;
+        penalisedSubjects.push(candidate.subject);
+      }
+      if (deducted > 0) {
+        const preScore = totalScore;
+        totalScore -= deducted;
+        retakePenalty = {
+          scope: "retake_subject",
+          preScore: Number(preScore.toFixed(3)),
+          deducted: Number(deducted.toFixed(3)),
+          subjects: penalisedSubjects,
+        };
+      }
+    } else if (retake.scope === "admission_score") {
+      const factor = cuhkWorstCaseFactor(retake.penalty);
+      if (factor < 1 && totalScore > 0) {
+        const preScore = totalScore;
+        totalScore *= factor;
+        retakePenalty = {
+          scope: "admission_score",
+          preScore: Number(preScore.toFixed(3)),
+          deducted: Number((preScore - totalScore).toFixed(3)),
+          band: retake.penalty,
+          estimated: true,
+        };
+      }
+    }
+  }
+
   return {
     totalScore: Number(totalScore.toFixed(3)),
     formula: programme[`formula_${year}`],
@@ -492,6 +550,7 @@ export function calculateScore(studentGrades: StudentGrades, programme: Programm
     allCandidates: candidates,
     score_type: programme.scores_2025?.score_type || "actual",
     ...(recognizedApL.length ? { recognizedApL } : {}),
+    ...(retakePenalty ? { retakePenalty } : {}),
   };
 }
 
