@@ -8,6 +8,7 @@ import { localizedShortSubject, localizedSubject } from "../lib/subjectsI18n";
 import { SUBJECTS } from "../lib/strings";
 import { describeFormula } from "../lib/formulaText";
 import { programmeConsideration } from "../lib/retake";
+import { getBandOfferStats } from "../lib/offers";
 import { scoringBasisYear } from "../lib/scoreBasis";
 import { getSelection, selectionTypeKey, selectionTimingKey, selectionSalienceKey, translateSelectionText } from "../lib/selection";
 import { loadProgrammeDetails, type DescBlock, type ProgrammeDetail } from "../lib/programmeDetails";
@@ -1150,6 +1151,9 @@ function OffersBlock({ programme }: { programme: Programme }) {
   const latestApps = (appsByYear.get(latestYear)?.["Band A"] as number | undefined) ?? 0;
   const latestOffers = (offersByYear.get(latestYear)?.["Band A"] as number | undefined) ?? 0;
   const latestRate = latestApps > 0 ? (latestOffers / latestApps) * 100 : null;
+  // Band B offer profile (same maps, "Band B" column) — the honest signal for
+  // whether a Band B placement is worth a slot. Shown as a box under Band A.
+  const bandStats = getBandOfferStats(programme);
 
   let competition: string | null = null;
   if (latestOffers > 0 && latestApps > 0) {
@@ -1177,6 +1181,22 @@ function OffersBlock({ programme }: { programme: Programme }) {
         {t("detail.offersOfApps", { offers: latestOffers, apps: latestApps.toLocaleString() })}
       </p>
       {competition ? <small>{competition}</small> : null}
+
+      {bandStats.hasData ? (
+        <div className={"offers-bandb" + (bandStats.totalOffersB === 0 ? " is-none" : "")}>
+          <div className="offers-card-eyebrow">
+            <span>{t("detail.bandBOffers", { year: latestYear })}</span>
+            {bandStats.totalOffersB > 0 && bandStats.bandB.rate !== null ? (
+              <b className="tally-badge offers-tally">{t("detail.rate", { rate: bandStats.bandB.rate.toFixed(1) })}</b>
+            ) : null}
+          </div>
+          <p className="formula-text">
+            {bandStats.totalOffersB === 0
+              ? t("detail.bandBNever", { n: bandStats.yearsWithData })
+              : t("detail.bandBOfApps", { offers: bandStats.bandB.offers, apps: bandStats.bandB.apps.toLocaleString() })}
+          </p>
+        </div>
+      ) : null}
 
       <hr className="weight-divider" />
       <button

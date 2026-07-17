@@ -2,6 +2,7 @@ import { slotLabel } from "./slots";
 import { effectiveBenchmarks } from "./results";
 import { getSelection, selectionTypeKey, type SelectionItem, type SelectionType } from "./selection";
 import { classifyConsideration } from "./retake";
+import { takesBandB } from "./offers";
 import { institutionLabel } from "./institutions";
 import type { Lang, Translate } from "./i18n";
 import type { OfferStatistic, Programme, ProgrammeResult } from "../types/jupas";
@@ -774,6 +775,26 @@ export function analyzePortfolio(rawPicks: (ProgrammeResult | null)[], t: Transl
         slots: [slotRef(p)],
       });
     }
+  }
+
+  // 8. Band B reality check — a programme placed in a Band B slot (B4-B6) that
+  //    gave zero Band B offers on record admits from Band A only, so the slot is
+  //    very unlikely to convert. Uses the per-band OFFER statistics.
+  const bandBNoTake = picks.filter((p) => {
+    if (!slotLabel(p.index).startsWith("B")) return false;
+    const { known, takes } = takesBandB(p.result.programme);
+    return known && !takes;
+  });
+  if (bandBNoTake.length > 0) {
+    const refs = bandBNoTake.map(slotRef);
+    const many = refs.length > 1;
+    findings.push({
+      id: "band-b-no-take",
+      severity: "warning",
+      title: t(many ? "find.bandBNoTake.title.many" : "find.bandBNoTake.title.one", { slots: listSlots(refs, lang) }),
+      detail: t("find.bandBNoTake.detail"),
+      slots: refs,
+    });
   }
 
   findings.sort((a, b) => SEVERITY_ORDER[a.severity] - SEVERITY_ORDER[b.severity]);
