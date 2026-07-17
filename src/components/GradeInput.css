@@ -625,7 +625,11 @@
 
 
     .grade-panel:not(.mobile-collapsed) .grade-panel-body {
-      max-height: 1200px;
+      /* No fixed cap: the mobile stepper never collapses this panel (its Done /
+         collapse triggers are hidden), so a fixed max-height only ever CLIPS the
+         lower content. The retaker table pushed the body past the old 1200px cap,
+         hiding it behind the sticky footer. `none` lets the body fit any height. */
+      max-height: none;
       opacity: 1;
       margin-top: var(--space-4);
     }
