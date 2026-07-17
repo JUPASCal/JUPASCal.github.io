@@ -176,20 +176,28 @@
 }
 
 
+/* Shown-count line + "select all shown" pill on ONE row, so the filters header
+   stays compact and the results list gets more vertical room. Wraps only if the
+   two genuinely don't fit. */
+.filters-count-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  margin-top: var(--space-2);
+}
+
 .filters-title-count {
-  grid-column: 1 / -1;
-  margin: var(--space-2) 0 0;
+  margin: 0;
   font-size: 0.78rem;
   color: var(--muted);
 }
 
 
-/* "Select all shown" bulk-pick — sits under the shown-count line and toggles
-   to "Unselect all shown" once every displayed programme is picked. */
+/* "Select all shown" bulk-pick — sits next to the shown-count and toggles to
+   "Unselect all shown" once every displayed programme is picked. */
 .select-all-shown {
-  grid-column: 1 / -1;
-  justify-self: start;
-  margin-top: 4px;
+  margin: 0;
   font-size: 0.72rem;
   padding: 2px 10px;
   min-height: 25px;
@@ -824,8 +832,14 @@
     }
 
 
-    .stepper-panel .filters-sticky-group .filters-title-count {
+    /* Tighter gap above the count+select-all row on the mobile stepper. The row
+       owns the top margin so the count and pill stay vertically centred. */
+    .stepper-panel .filters-sticky-group .filters-count-row {
       margin-top: var(--space-1);
+    }
+
+    .stepper-panel .filters-sticky-group .filters-title-count {
+      margin-top: 0;
       font-size: 0.78rem;
     }
 

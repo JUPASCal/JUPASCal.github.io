@@ -106,12 +106,16 @@ export function FiltersBar({ filters, open, institutions, total, shown, selected
         <div className="filters-title">
           {showStepEyebrow ? <p className="eyebrow">{t("filters.eyebrow")}</p> : null}
           <h2>{t("filters.title")}</h2>
-          <p className="filters-title-count">{t("filters.count", { shown, total })}</p>
-          {onSelectAllShown && shown > 0 ? (
-            <button type="button" className="pill select-all-shown" onClick={onSelectAllShown}>
-              {allShownSelected ? t("filters.unselectAllShown") : t("filters.selectAllShown")}
-            </button>
-          ) : null}
+          {/* Count + "select all shown" share one row so the filter header
+              stays short and more of the results list is visible. */}
+          <div className="filters-count-row">
+            <p className="filters-title-count">{t("filters.count", { shown, total })}</p>
+            {onSelectAllShown && shown > 0 ? (
+              <button type="button" className="pill select-all-shown" onClick={onSelectAllShown}>
+                {allShownSelected ? t("filters.unselectAllShown") : t("filters.selectAllShown")}
+              </button>
+            ) : null}
+          </div>
           {/* Desktop console: a ⓘ next to the heading opens a feature tour of the
               Browse tab (the mobile flow gets the same via .step2-info below). One
               button per viewport, so they share the infoOpen state + popover CSS. */}
